@@ -1,0 +1,43 @@
+name: Refresh ESPN Data
+
+on:
+  schedule:
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Fetch ESPN game data
+        run: python scripts/fetch_data.py
+
+      - name: Recompute transitive analysis
+        run: python scripts/compute_transitive.py
+
+      - name: Copy to public/data
+        run: |
+          mkdir -p public/data
+          cp data/graph_data.json public/data/graph_data.json
+          cp data/transitive_analysis.json public/data/transitive_analysis.json
+
+      - name: Commit updated data
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/ public/data/
+          git diff --quiet && git diff --staged --quiet || \
+            git commit -m "chore: refresh ESPN + transitive data $(date -u +'%Y-%m-%d')"
+          git push
