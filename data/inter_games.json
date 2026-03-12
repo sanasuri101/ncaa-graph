@@ -1335,6 +1335,21 @@
     "venue": "Moody Coliseum (Dallas)"
   },
   {
+    "id": "401851174",
+    "date": "2026-03-11",
+    "name": "SMU Mustangs at Louisville Cardinals",
+    "team1_id": "97",
+    "team1_name": "Louisville Cardinals",
+    "team1_score": "62",
+    "team1_winner": true,
+    "team2_id": "2567",
+    "team2_name": "SMU Mustangs",
+    "team2_score": "58",
+    "team2_winner": false,
+    "neutral": true,
+    "venue": "Spectrum Center"
+  },
+  {
     "id": "401819874",
     "date": "2025-11-24",
     "name": "Iowa State Cyclones at St. John's Red Storm",
@@ -1890,6 +1905,36 @@
     "venue": "Crisler Center"
   },
   {
+    "id": "401823494",
+    "date": "2025-11-23",
+    "name": "Queens University Royals at Furman Paladins",
+    "team1_id": "231",
+    "team1_name": "Furman Paladins",
+    "team1_score": "90",
+    "team1_winner": true,
+    "team2_id": "2511",
+    "team2_name": "Queens University Royals",
+    "team2_score": "79",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "Timmons Arena"
+  },
+  {
+    "id": "401817492",
+    "date": "2025-11-28",
+    "name": "Queens University Royals at Virginia Cavaliers",
+    "team1_id": "258",
+    "team1_name": "Virginia Cavaliers",
+    "team1_score": "94",
+    "team1_winner": true,
+    "team2_id": "2511",
+    "team2_name": "Queens University Royals",
+    "team2_score": "69",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "John Paul Jones Arena"
+  },
+  {
     "id": "401826885",
     "date": "2025-11-04",
     "name": "Florida Gators at Arizona Wildcats",
@@ -2130,21 +2175,6 @@
     "venue": "McLeod Center"
   },
   {
-    "id": "401823494",
-    "date": "2025-11-23",
-    "name": "Queens University Royals at Furman Paladins",
-    "team1_id": "231",
-    "team1_name": "Furman Paladins",
-    "team1_score": "90",
-    "team1_winner": true,
-    "team2_id": "2511",
-    "team2_name": "Queens University Royals",
-    "team2_score": "79",
-    "team2_winner": false,
-    "neutral": false,
-    "venue": "Timmons Arena"
-  },
-  {
     "id": "401822735",
     "date": "2025-11-08",
     "name": "VCU Rams at Utah State Aggies",
@@ -2323,21 +2353,6 @@
     "team2_winner": false,
     "neutral": false,
     "venue": "Coleman Coliseum"
-  },
-  {
-    "id": "401817492",
-    "date": "2025-11-28",
-    "name": "Queens University Royals at Virginia Cavaliers",
-    "team1_id": "258",
-    "team1_name": "Virginia Cavaliers",
-    "team1_score": "94",
-    "team1_winner": true,
-    "team2_id": "2511",
-    "team2_name": "Queens University Royals",
-    "team2_score": "69",
-    "team2_winner": false,
-    "neutral": false,
-    "venue": "John Paul Jones Arena"
   },
   {
     "id": "401806379",
