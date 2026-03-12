@@ -45,13 +45,14 @@ window.addEventListener('DOMContentLoaded', async () => {
     META        = data.meta || {};
 
     initGraph();
-    populateStats();
-    populateRankings();
+    try { populateStats(); } catch(e) { console.error('populateStats failed:', e); }
+    try { populateRankings(); } catch(e) { console.error('populateRankings failed:', e); }
     bindUI();
     hideLoading();
-    validateBracketIntegrity();
+    try { validateBracketIntegrity(); } catch(e) { console.error('validateBracketIntegrity failed:', e); }
   } catch (err) {
-    document.getElementById('loading-overlay').innerHTML =
+    const overlay = document.getElementById('loading-overlay');
+    if (overlay) overlay.innerHTML =
       `<div style="color:#f87171;font-size:.85rem;text-align:center;padding:20px">
         Failed to load data.<br><span style="font-size:.72rem;color:#5a7a96">${err.message}</span>
        </div>`;
@@ -504,7 +505,7 @@ function bindSearch() {
 
   input.addEventListener('input', () => {
     const q = input.value.trim().toLowerCase();
-    if (q.length < 2) { dropdown.innerHTML = ''; dropdown.style.display = 'none'; return; }
+    if (q.length < 1) { dropdown.innerHTML = ''; dropdown.style.display = 'none'; return; }
 
     const matches = ALL_NODES.filter(n =>
       n.label.toLowerCase().includes(q) || n.full_name.toLowerCase().includes(q)
