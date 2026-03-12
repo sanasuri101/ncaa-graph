@@ -14,7 +14,7 @@
 'use strict';
 
 let TRANS_DATA   = null;
-let TRANS_LOADED = false;
+// Transitive path analysis renderer
 
 // ── Data loader ───────────────────────────────────────────────────────────────
 async function loadTransitiveData() {
@@ -46,7 +46,8 @@ function setupPathsInput(side) {
   const inp  = document.getElementById(`paths-input-${side}`);
   const drop = document.getElementById(`paths-drop-${side}`);
   const sel  = document.getElementById(`paths-sel-${side}`);
-  if (!inp) return;
+  if (!inp || inp.dataset.bound === '1') return; // already wired
+  inp.dataset.bound = '1';
 
   inp.addEventListener('input', () => {
     const q = inp.value.trim().toLowerCase();
@@ -72,6 +73,9 @@ function setupPathsInput(side) {
       });
       drop.appendChild(item);
     });
+    const rect = inp.getBoundingClientRect();
+    drop.style.top  = (rect.bottom + 3) + 'px';
+    drop.style.left = rect.left + 'px';
     drop.style.display = 'block';
   });
 
@@ -160,6 +164,14 @@ async function runTransitiveAnalysisForIds(aId, bId) {
 
   if (!aId || !bId || aId === bId) {
     out.innerHTML = '<div class="trans-intro"><div class="trans-intro-body">Select two different teams to compare.</div></div>';
+    return;
+  }
+
+  const nodeA = ALL_NODES.find(n => n.id === aId);
+  const nodeB = ALL_NODES.find(n => n.id === bId);
+
+  if (!nodeA || !nodeB) {
+    out.innerHTML = '<div class="trans-error">Team data not loaded yet. Please wait a moment and try again.</div>';
     return;
   }
 

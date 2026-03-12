@@ -45,12 +45,14 @@ window.addEventListener('DOMContentLoaded', async () => {
     META        = data.meta || {};
 
     initGraph();
-    populateStats();
-    populateRankings();
+    try { populateStats(); } catch(e) { console.error('populateStats failed:', e); }
+    try { populateRankings(); } catch(e) { console.error('populateRankings failed:', e); }
     bindUI();
     hideLoading();
+    try { validateBracketIntegrity(); } catch(e) { console.error('validateBracketIntegrity failed:', e); }
   } catch (err) {
-    document.getElementById('loading-overlay').innerHTML =
+    const overlay = document.getElementById('loading-overlay');
+    if (overlay) overlay.innerHTML =
       `<div style="color:#f87171;font-size:.85rem;text-align:center;padding:20px">
         Failed to load data.<br><span style="font-size:.72rem;color:#5a7a96">${err.message}</span>
        </div>`;
@@ -148,7 +150,16 @@ function applyFilters() {
   // ── Not-played edges ──
   if (currentView === 'notplayed' || currentView === 'both') {
     let np = NP_EDGES;
-    if (rv !== 'all' && rv !== 'same' && rv !== 'cross') {
+    if (rv === 'same') {
+      // Keep only NP pairs where both teams are in the same region
+      const regionOf = {};
+      ALL_NODES.forEach(n => { regionOf[n.id] = n.region; });
+      np = np.filter(x => regionOf[x.from] && regionOf[x.from] === regionOf[x.to]);
+    } else if (rv === 'cross') {
+      const regionOf = {};
+      ALL_NODES.forEach(n => { regionOf[n.id] = n.region; });
+      np = np.filter(x => regionOf[x.from] && regionOf[x.from] !== regionOf[x.to]);
+    } else if (rv !== 'all') {
       np = np.filter(x => scopedIds.has(x.from) && scopedIds.has(x.to));
     }
     edges = edges.concat(np);
@@ -190,7 +201,10 @@ function changeLayout() {
     ALL_NODES.forEach(n => { rCount[n.region] = (rCount[n.region] || 0) + 1; });
 
     network.setOptions({ physics: { enabled: false } });
+    // Only move nodes currently in the dataset — vis.js throws if you moveNode on a hidden node
+    const visibleIds = new Set(nodesDS.getIds());
     ALL_NODES.forEach(n => {
+      if (!visibleIds.has(n.id)) return;
       rIdx[n.region] = (rIdx[n.region] || 0) + 1;
       const idx  = rIdx[n.region];
       const tot  = rCount[n.region];
@@ -338,28 +352,49 @@ function renderEdgeDetail(edge, box) {
     const rcW = REGION_COLORS[w?.region] ?? '#b0a898';
     const rcL = REGION_COLORS[l?.region] ?? '#b0a898';
     const [scoreW, scoreL] = edge.label.split('-').map(s => s.trim());
+
+    // Check for rematches between these two teams
+    const allMatchups = ALL_EDGES.filter(e =>
+      (e.from === edge.from && e.to === edge.to) ||
+      (e.from === edge.to   && e.to === edge.from)
+    ).sort((a, b) => a.date.localeCompare(b.date));
+
+    const rematchBadge = allMatchups.length > 1
+      ? `<div class="d-rematch-badge">${allMatchups.length} games played — showing all below</div>`
+      : '';
+
+    const gameCards = allMatchups.map(e => {
+      const ew  = ALL_NODES.find(n => n.id === e.from);
+      const el  = ALL_NODES.find(n => n.id === e.to);
+      const rcEw = REGION_COLORS[ew?.region] ?? '#b0a898';
+      const rcEl = REGION_COLORS[el?.region] ?? '#b0a898';
+      const [sw, sl] = e.label.split('-').map(s => s.trim());
+      const isThisEdge = e === edge || (e.from === edge.from && e.to === edge.to && e.date === edge.date);
+      return `
+        <div class="d-matchup-card played ${isThisEdge ? 'highlighted-game' : ''}">
+          <div class="d-matchup-label">${e.same_region ? 'Same-region' : 'Cross-region'} · ${e.date}</div>
+          <div class="d-matchup-teams">
+            <div class="d-matchup-team winner-side">
+              <div class="d-wl-badge w-badge">W</div>
+              <div class="d-matchup-dot" style="background:${rcEw}"></div>
+              <div class="d-matchup-name">${ew?.label ?? '—'}</div>
+            </div>
+            <div class="d-score-col">
+              <div class="d-score-main">${sw}<span class="d-score-dash">–</span>${sl}</div>
+              <div class="d-score-margin">+${e.margin}</div>
+            </div>
+            <div class="d-matchup-team loser-side">
+              <div class="d-wl-badge l-badge">L</div>
+              <div class="d-matchup-dot" style="background:${rcEl}"></div>
+              <div class="d-matchup-name">${el?.label ?? '—'}</div>
+            </div>
+          </div>
+        </div>`;
+    }).join('');
+
     box.innerHTML = `
-      <div class="d-matchup-card played">
-        <div class="d-matchup-label">${edge.same_region ? 'Same-region' : 'Cross-region'} · ${edge.date}</div>
-        <div class="d-matchup-teams">
-          <div class="d-matchup-team winner-side">
-            <div class="d-wl-badge w-badge">W</div>
-            <div class="d-matchup-dot" style="background:${rcW}"></div>
-            <div class="d-matchup-name">${w?.label ?? '—'}</div>
-            <div class="d-matchup-sub" style="color:${rcW}">${w?.region ?? ''} #${w?.seed ?? '?'}</div>
-          </div>
-          <div class="d-score-col">
-            <div class="d-score-main">${scoreW}<span class="d-score-dash">–</span>${scoreL}</div>
-            <div class="d-score-margin">+${edge.margin}</div>
-          </div>
-          <div class="d-matchup-team loser-side">
-            <div class="d-wl-badge l-badge">L</div>
-            <div class="d-matchup-dot" style="background:${rcL}"></div>
-            <div class="d-matchup-name">${l?.label ?? '—'}</div>
-            <div class="d-matchup-sub" style="color:${rcL}">${l?.region ?? ''} #${l?.seed ?? '?'}</div>
-          </div>
-        </div>
-      </div>
+      ${rematchBadge}
+      ${gameCards}
       <div class="style-bars-container" id="style-bars-${edge.from}-${edge.to}"></div>`;
 
     if (w && l) renderStyleBars(w, l, `style-bars-${edge.from}-${edge.to}`);
@@ -368,8 +403,9 @@ function renderEdgeDetail(edge, box) {
 
 // ── Rankings ───────────────────────────────────────────────────────────────────
 function populateRankings() {
-  const maxW = Math.max(...ALL_NODES.map(n => n.wins_vs_field));
-  const maxL = Math.max(...ALL_NODES.map(n => n.losses_vs_field));
+  if (!ALL_NODES.length) return;
+  const maxW = Math.max(...ALL_NODES.map(n => n.wins_vs_field))   || 1;
+  const maxL = Math.max(...ALL_NODES.map(n => n.losses_vs_field)) || 1;
 
   const byWins   = [...ALL_NODES].sort((a, b) => b.wins_vs_field   - a.wins_vs_field);
   const byLosses = [...ALL_NODES].sort((a, b) => b.losses_vs_field - a.losses_vs_field);
@@ -455,8 +491,10 @@ function populateStats() {
 
   if (META.generated_at) {
     const d = new Date(META.generated_at);
+    const dateStr = d.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
+    const timeStr = d.toLocaleTimeString('en-US', { hour:'numeric', minute:'2-digit', timeZoneName:'short' });
     document.getElementById('last-updated').textContent =
-      `Updated ${d.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' })}`;
+      `ESPN data: ${dateStr} ${timeStr} · includes regular season + conf tournaments`;
   }
 }
 
@@ -467,28 +505,44 @@ function bindSearch() {
 
   input.addEventListener('input', () => {
     const q = input.value.trim().toLowerCase();
-    if (q.length < 2) { dropdown.innerHTML = ''; return; }
+    if (q.length < 1) { dropdown.innerHTML = ''; dropdown.style.display = 'none'; return; }
 
     const matches = ALL_NODES.filter(n =>
       n.label.toLowerCase().includes(q) || n.full_name.toLowerCase().includes(q)
     ).slice(0, 8);
 
+    if (!matches.length) { dropdown.innerHTML = ''; dropdown.style.display = 'none'; return; }
+
+    // Build content first, then position and show — avoids empty-box flash
     dropdown.innerHTML = matches.map(n => `
-      <div class="search-item" onclick="focusTeam('${n.id}');document.getElementById('search').value='';document.getElementById('search-dropdown').innerHTML=''">
+      <div class="search-item" onclick="focusTeam('${n.id}');document.getElementById('search').value='';document.getElementById('search-dropdown').style.display='none'">
         <div>${n.full_name}</div>
         <div class="search-meta">${n.region} · Seed ${n.seed} · ${n.wins_vs_field}W-${n.losses_vs_field}L</div>
       </div>`).join('');
+    const rect = input.getBoundingClientRect();
+    dropdown.style.top  = (rect.bottom + 4) + 'px';
+    dropdown.style.left = rect.left + 'px';
+    dropdown.style.display = 'block';
   });
 
   document.addEventListener('click', e => {
-    if (!e.target.closest('.search-group')) dropdown.innerHTML = '';
+    if (!e.target.closest('.search-group')) { dropdown.innerHTML = ''; dropdown.style.display = 'none'; }
   });
 }
 
 function focusTeam(id) {
-  network.selectNodes([id]);
-  network.focus(id, { scale: 1.5, animation: { duration: 400, easingFunction: 'easeInOutQuad' } });
-  onNetworkClick({ nodes: [id], edges: [] });
+  if (!id) return;
+  // Ensure node is visible — reset custom selection if active
+  if (typeof customActive !== 'undefined' && customActive) clearCustom();
+  // Switch to Detail tab first so content renders
+  switchTab('detail');
+  const box = document.getElementById('detail-box');
+  renderTeamDetail(id, box);
+  // Then focus in graph
+  try {
+    network.selectNodes([id]);
+    network.focus(id, { scale: 1.5, animation: { duration: 400, easingFunction: 'easeInOutQuad' } });
+  } catch(e) {}
 }
 
 // ── Tabs ──────────────────────────────────────────────────────────────────────
@@ -517,7 +571,9 @@ function bindUI() {
 
   bindSearch();
   initCustomSelector();
-  if (typeof initPathsPicker === 'function') initPathsPicker();
+  initSidebarResize();
+  // Do NOT call initPathsPicker here — paths-input-a/b are in a hidden tab
+  // and dataset.bound would prevent re-wiring when the tab opens
 }
 
 function hideLoading() {
@@ -525,6 +581,40 @@ function hideLoading() {
   overlay.style.opacity = '0';
   overlay.style.transition = 'opacity .4s';
   setTimeout(() => overlay.remove(), 400);
+}
+
+function validateBracketIntegrity() {
+  const regionCounts = {};
+  const regionSeeds  = {};
+  ALL_NODES.forEach(n => {
+    regionCounts[n.region] = (regionCounts[n.region] || 0) + 1;
+    if (!regionSeeds[n.region]) regionSeeds[n.region] = [];
+    regionSeeds[n.region].push(n.seed);
+  });
+
+  const issues = [];
+  for (const [region, seeds] of Object.entries(regionSeeds)) {
+    const counts = {};
+    seeds.forEach(s => { counts[s] = (counts[s] || 0) + 1; });
+    const dups = Object.entries(counts).filter(([, n]) => n > 1).map(([s]) => `#${s}`);
+    if (dups.length) issues.push(`${region}: duplicate seeds ${dups.join(', ')}`);
+    if (seeds.length !== 16) issues.push(`${region}: ${seeds.length} teams (expected 16)`);
+  }
+
+  if (issues.length) {
+    const banner = document.createElement('div');
+    banner.id = 'bracket-warning';
+    banner.style.cssText = `
+      background:#b89030;color:#fff;font-size:.75rem;padding:5px 16px;
+      display:flex;align-items:center;gap:8px;font-family:var(--font-body);
+    `;
+    banner.innerHTML = `
+      <span style="font-weight:600">⚠ Pre-Selection bracket:</span>
+      <span>Seedings are projections only — official bracket releases March 15. ${issues.join(' · ')}</span>
+      <button onclick="this.parentElement.remove()" style="margin-left:auto;background:none;border:none;color:#fff;cursor:pointer;font-size:.9rem">✕</button>
+    `;
+    document.querySelector('.toolbar').before(banner);
+  }
 }
 
 // ── Custom team selector ──────────────────────────────────────────────────────
@@ -562,6 +652,10 @@ function initCustomSelector() {
       });
       drop.appendChild(item);
     });
+
+    const rect = inp.getBoundingClientRect();
+    drop.style.top  = (rect.bottom + 4) + 'px';
+    drop.style.left = rect.left + 'px';
     drop.style.display = 'block';
   });
 
@@ -602,7 +696,7 @@ function renderCustom() {
     clearBtn.style.display  = 'none';
     // Restore ALL_NODES / ALL_EDGES fully
     applyFilters();
-    document.getElementById('summary').textContent =
+    document.getElementById('sub-stats').textContent =
       `${ALL_NODES.length} bracket teams · ${ALL_EDGES.length} inter-bracket matchups · ${NOT_PLAYED.length} pairs never met`;
     return;
   }
@@ -665,7 +759,7 @@ function renderCustom() {
 
   const playedCnt = CUSTOM_EDGES.length;
   const npCnt     = CUSTOM_NP.length;
-  document.getElementById('summary').textContent =
+  document.getElementById('sub-stats').textContent =
     `${CUSTOM_SELECTION.size} teams selected · ${playedCnt} games played · ${npCnt} pairs never met`;
 }
 
@@ -680,4 +774,42 @@ function applyCustomView() {
   nodesDS.add(CUSTOM_NODES);
   edgesDS.clear();
   edgesDS.add(edges);
+}
+
+// ── Sidebar drag resize ───────────────────────────────────────────────────────
+function initSidebarResize() {
+  const handle  = document.getElementById('sidebar-resize-handle');
+  const sidebar = document.getElementById('sidebar');
+  if (!handle || !sidebar) return;
+
+  let dragging = false;
+  let startX   = 0;
+  let startW   = 0;
+
+  handle.addEventListener('mousedown', e => {
+    dragging = true;
+    startX   = e.clientX;
+    startW   = sidebar.offsetWidth;
+    handle.classList.add('dragging');
+    document.body.style.cursor    = 'col-resize';
+    document.body.style.userSelect = 'none';
+    e.preventDefault();
+  });
+
+  document.addEventListener('mousemove', e => {
+    if (!dragging) return;
+    const dx    = e.clientX - startX; // drag right = wider sidebar
+    const newW  = Math.max(180, Math.min(420, startW + dx));
+    sidebar.style.width = newW + 'px';
+  });
+
+  document.addEventListener('mouseup', () => {
+    if (!dragging) return;
+    dragging = false;
+    handle.classList.remove('dragging');
+    document.body.style.cursor     = '';
+    document.body.style.userSelect = '';
+    // Let vis.js re-fit to new canvas size
+    if (network) setTimeout(() => network.redraw(), 50);
+  });
 }

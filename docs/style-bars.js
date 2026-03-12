@@ -31,6 +31,7 @@ async function renderStyleBars(nodeW, nodeL, containerId) {
   const rcL = REGION_COLORS[nodeL.region] ?? '#b84545';
 
   const allTeams = Object.values(tv.teams).map(t => t.torvik).filter(Boolean);
+  if (!allTeams.length) return; // no data to normalize against
 
   const metrics = [
     {

@@ -15,7 +15,7 @@
 'use strict';
 
 let FORM_DATA   = null;
-let FORM_LOADED = false;
+// Recent form sparkline renderer
 
 // ── Loader ────────────────────────────────────────────────────────────────────
 async function loadFormData() {
@@ -32,7 +32,9 @@ async function loadFormData() {
 
 // ── Main entry — call this from the team detail panel ─────────────────────────
 async function renderSparkline(teamId, containerEl) {
-  const data = await loadFormData();
+  const raw = await loadFormData();
+  // Support both old format (flat dict) and new format ({generated_at, teams})
+  const data = raw?.teams ?? raw;
   if (!data || !data[teamId]) {
     containerEl.innerHTML = '<div class="spark-unavail">Form data unavailable</div>';
     return;
@@ -130,7 +132,7 @@ function clearGameDetail(teamId) {
 // ── Trend line — running win% over the game sequence ─────────────────────────
 function drawTrendLine(teamId, games) {
   const canvas = document.getElementById(`spark-trend-${teamId}`);
-  if (!canvas || games.length < 3) return;
+  if (!canvas || games.length < 2) return;  // need at least 2 points for a line
 
   const ctx = canvas.getContext('2d');
   const W   = canvas.width;
@@ -143,9 +145,10 @@ function drawTrendLine(teamId, games) {
     return slice.filter(g => g.won).length / slice.length;
   });
 
-  const padX = 4;
-  const padY = 4;
-  const stepX = (W - padX * 2) / (pts.length - 1);
+  const padX  = 4;
+  const padY  = 4;
+  // Guard: if only 1 point, stepX would be Infinity — render as single dot instead
+  const stepX = pts.length > 1 ? (W - padX * 2) / (pts.length - 1) : 0;
 
   // Gradient under the line
   const grad = ctx.createLinearGradient(0, 0, 0, H);

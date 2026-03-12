@@ -74,10 +74,12 @@ function renderScatter() {
   ctx.clearRect(0, 0, W, H);
 
   if (!SCATTER_POINTS.length) {
+    ctx.fillStyle = '#f5f2ed';
+    ctx.fillRect(0, 0, W, H);
     ctx.fillStyle = '#5a7a96';
-    ctx.font = '13px Barlow, sans-serif';
+    ctx.font = '13px DM Sans, sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('Torvik data unavailable', W / 2, H / 2);
+    ctx.fillText('Torvik data unavailable — check back after the daily refresh.', W / 2, H / 2);
     return;
   }
 
@@ -233,10 +235,10 @@ function getPointColor(p, mode) {
     return '#6b7280';
   }
   if (mode === 'em') {
-    // Green (elite) → red (poor)
     const maxEM = Math.max(...SCATTER_POINTS.map(p => p.em));
     const minEM = Math.min(...SCATTER_POINTS.map(p => p.em));
-    const t     = (p.em - minEM) / (maxEM - minEM);
+    const range = maxEM - minEM;
+    const t     = range > 0 ? (p.em - minEM) / range : 0.5;
     return lerpColor('#ef4444', '#34d399', t);
   }
   return '#94a3b8';
@@ -256,6 +258,7 @@ function bindScatterEvents() {
   const canvas  = document.getElementById('scatter-canvas');
   const tooltip = document.getElementById('scatter-tooltip');
 
+  // Canvas handlers use assignment — safe to re-run on every open
   canvas.onmousemove = (e) => {
     const rect  = canvas.getBoundingClientRect();
     const scaleX = canvas.width  / rect.width;
@@ -296,10 +299,13 @@ function bindScatterEvents() {
   canvas.onclick = (e) => {
     if (HOVERED_IDX < 0) return;
     const p = SCATTER_POINTS[HOVERED_IDX];
-    // Focus team in main graph and open detail panel
     toggleScatter();
     setTimeout(() => focusTeam(p.node.id), 200);
   };
+
+  // Overlay click and keydown are global — guard so they only attach once
+  if (bindScatterEvents._globalsBound) return;
+  bindScatterEvents._globalsBound = true;
 
   // Close on overlay background click
   document.getElementById('scatter-overlay').addEventListener('click', (e) => {

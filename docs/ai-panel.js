@@ -28,10 +28,20 @@ function toggleAIPanel() {
 
 function populateTeamSelect() {
   const sel = document.getElementById('stats-team-select');
+  if (!sel) return;
+
+  // If data not loaded yet, retry after a short wait
+  if (!ALL_NODES || ALL_NODES.length === 0) {
+    sel.innerHTML = '<option value="">Loading teams...</option>';
+    setTimeout(populateTeamSelect, 500);
+    return;
+  }
+
   const sorted = [...ALL_NODES].sort((a, b) => a.full_name.localeCompare(b.full_name));
+  sel.innerHTML = '<option value="">Select a team...</option>';
   sorted.forEach(n => {
     const opt = document.createElement('option');
-    opt.value  = n.id;       // ESPN team ID
+    opt.value       = n.id;
     opt.textContent = `${n.full_name} (${n.region}, #${n.seed})`;
     sel.appendChild(opt);
   });
@@ -50,7 +60,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Chat: send on Enter (Shift+Enter = newline)
+  // Auto-fetch stats when team is selected
+  document.getElementById('stats-team-select').addEventListener('change', () => {
+    const sel = document.getElementById('stats-team-select');
+    if (sel.value) fetchTeamStats();
+  });
   document.getElementById('chat-input').addEventListener('keydown', e => {
     if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChat(); }
   });
@@ -170,6 +184,11 @@ async function fetchTeamStats() {
     });
     const get = (cat, name) => statsMap[`${cat}:${name}`]?.displayValue ?? '—';
 
+    const pct = (cat, name) => {
+      const v = get(cat, name);
+      return v === '—' ? '—' : v + '%';
+    };
+
     // Fetch season record
     let record = `${node.wins_vs_field}W vs bracket field`;
     try {
@@ -191,7 +210,7 @@ async function fetchTeamStats() {
         <div class="stat-cell torvik-cell"><div class="sv" style="color:var(--midwest)">${tv.adj_de}</div><div class="sl">AdjDE</div></div>
         <div class="stat-cell torvik-cell"><div class="sv">${(tv.barthag * 100).toFixed(1)}%</div><div class="sl">Barthag</div></div>
         <div class="stat-cell torvik-cell"><div class="sv">${tv.wab > 0 ? '+' : ''}${parseFloat(tv.wab).toFixed(1)}</div><div class="sl">WAB</div></div>
-        <div class="stat-cell torvik-cell"><div class="sv">${tv.adj_tempo ?? '—'}</div><div class="sl">Tempo Rk</div></div>
+        <div class="stat-cell torvik-cell"><div class="sv">${tv.adj_tempo != null ? (tv.adj_tempo >= 0.8 ? 'Fast' : tv.adj_tempo >= 0.6 ? 'Mod.' : 'Slow') + ' (' + tv.adj_tempo.toFixed(2) + ')' : '—'}</div><div class="sl">Pace</div></div>
         <div class="stat-cell torvik-cell"><div class="sv">${tv.luck > 0 ? '+' : ''}${parseFloat(tv.luck).toFixed(3)}</div><div class="sl">Luck</div></div>
         <div class="stat-cell torvik-cell"><div class="sv">${tv.two_p != null ? tv.two_p + '%' : '—'}</div><div class="sl">2P%</div></div>
         <div class="stat-cell torvik-cell"><div class="sv">${tv.three_p != null ? tv.three_p + '%' : '—'}</div><div class="sl">3P%</div></div>
@@ -210,10 +229,10 @@ async function fetchTeamStats() {
           <div class="stat-cell"><div class="sv">${get('general','avgRebounds')}</div><div class="sl">RPG</div></div>
           <div class="stat-cell"><div class="sv">${get('offensive','avgAssists')}</div><div class="sl">APG</div></div>
           <div class="stat-cell"><div class="sv">${get('offensive','avgTurnovers')}</div><div class="sl">TOPG</div></div>
-          <div class="stat-cell"><div class="sv">${get('offensive','fieldGoalPct')}%</div><div class="sl">FG%</div></div>
-          <div class="stat-cell"><div class="sv">${get('offensive','threePointFieldGoalPct')}%</div><div class="sl">3P%</div></div>
-          <div class="stat-cell"><div class="sv">${get('offensive','twoPointFieldGoalPct')}%</div><div class="sl">2P%</div></div>
-          <div class="stat-cell"><div class="sv">${get('offensive','freeThrowPct')}%</div><div class="sl">FT%</div></div>
+          <div class="stat-cell"><div class="sv">${pct('offensive','fieldGoalPct')}</div><div class="sl">FG%</div></div>
+          <div class="stat-cell"><div class="sv">${pct('offensive','threePointFieldGoalPct')}</div><div class="sl">3P%</div></div>
+          <div class="stat-cell"><div class="sv">${pct('offensive','twoPointFieldGoalPct')}</div><div class="sl">2P%</div></div>
+          <div class="stat-cell"><div class="sv">${pct('offensive','freeThrowPct')}</div><div class="sl">FT%</div></div>
           <div class="stat-cell"><div class="sv">${get('general','assistTurnoverRatio')}</div><div class="sl">AST/TO</div></div>
           <div class="stat-cell"><div class="sv">${get('defensive','avgSteals')}</div><div class="sl">SPG</div></div>
           <div class="stat-cell"><div class="sv">${get('defensive','avgBlocks')}</div><div class="sl">BPG</div></div>
@@ -262,7 +281,7 @@ async function runNewsAI(prompt) {
       system: systemPrompt(),
       tools: [{ type: 'web_search_20250305', name: 'web_search' }],
     });
-    output.innerHTML = `<div class="ai-text-block">${escapeHtml(text)}</div>`;
+    output.innerHTML = `<div class="ai-text-block">${renderMarkdown(text)}</div>`;
   } catch (err) {
     output.innerHTML = `<div class="ai-error">${escapeHtml(err.message)}</div>`;
   } finally {
@@ -289,17 +308,30 @@ async function sendChat() {
   // Remove empty state
   messagesEl.querySelectorAll('.chat-empty').forEach(el => el.remove());
 
-  // User bubble
-  messagesEl.innerHTML += `<div class="chat-bubble-user">${escapeHtml(msg)}</div>`;
+  // User bubble — use DOM append, not innerHTML +=
+  const userBubble = document.createElement('div');
+  userBubble.className = 'chat-bubble-user';
+  userBubble.textContent = msg;
+  messagesEl.appendChild(userBubble);
 
   // Thinking indicator
-  const thinkId = 'think_' + Date.now();
-  messagesEl.innerHTML += `<div class="chat-bubble-ai" id="${thinkId}"><div class="chat-bubble-ai-body">${loadingHTML('Thinking...')}</div></div>`;
+  const thinkEl = document.createElement('div');
+  thinkEl.className = 'chat-bubble-ai';
+  thinkEl.innerHTML = `<div class="chat-bubble-ai-body">${loadingHTML('Thinking...')}</div>`;
+  messagesEl.appendChild(thinkEl);
   messagesEl.scrollTop = messagesEl.scrollHeight;
 
   document.getElementById('chat-send-btn').disabled = true;
 
   chatHistory.push({ role: 'user', content: msg });
+  if (chatHistory.length > 20) {
+    chatHistory.splice(0, chatHistory.length - 20);
+    // Show notice so user knows earlier context is gone
+    const notice = document.createElement('div');
+    notice.className = 'chat-context-notice';
+    notice.textContent = 'Earlier messages dropped from AI context (20 message limit)';
+    messagesEl.appendChild(notice);
+  }
 
   try {
     const reply = await callClaude(key, null, {
@@ -310,14 +342,14 @@ async function sendChat() {
 
     chatHistory.push({ role: 'assistant', content: reply });
 
-    document.getElementById(thinkId).outerHTML =
-      `<div class="chat-bubble-ai">
-         <div class="chat-bubble-ai-label">Scout</div>
-         <div class="chat-bubble-ai-body">${escapeHtml(reply)}</div>
-       </div>`;
+    thinkEl.innerHTML = `
+      <div class="chat-bubble-ai-label">Scout</div>
+      <div class="chat-bubble-ai-body">${renderMarkdown(reply)}</div>`;
   } catch (err) {
-    document.getElementById(thinkId).outerHTML =
-      `<div class="chat-msg assistant"><div class="ai-error">${escapeHtml(err.message)}</div></div>`;
+    // Roll back the user message so history stays alternating user/assistant
+    // Without this, next send would create two consecutive user messages → API 400
+    chatHistory.pop();
+    thinkEl.innerHTML = `<div class="ai-error">${escapeHtml(err.message)}</div>`;
   } finally {
     document.getElementById('chat-send-btn').disabled = false;
     messagesEl.scrollTop = messagesEl.scrollHeight;
@@ -360,6 +392,10 @@ async function callClaude(apiKey, singlePrompt, opts = {}) {
   }
 
   const data = await res.json();
+
+  if (!data.content) {
+    throw new Error(data.error?.message ?? 'Unexpected API response — no content returned');
+  }
 
   // Collect all text blocks (tool_use blocks are skipped)
   const text = data.content
@@ -428,4 +464,20 @@ function escapeHtml(str) {
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;');
+}
+
+// Render basic markdown — bold, bullets, numbered lists, newlines
+function renderMarkdown(text) {
+  return escapeHtml(text)
+    // Bold **text**
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    // Italic *text*
+    .replace(/\*(.+?)\*/g, '<em>$1</em>')
+    // Numbered list lines: "1. foo"
+    .replace(/^(\d+)\. (.+)$/gm, '<div class="md-li md-oli"><span class="md-ln">$1.</span>$2</div>')
+    // Bullet list lines: "- foo" or "• foo"
+    .replace(/^[-•] (.+)$/gm, '<div class="md-li"><span class="md-dot">·</span>$1</div>')
+    // Newlines to <br> (but not after list items which already have block display)
+    .replace(/\n\n/g, '<br><br>')
+    .replace(/\n/g, '<br>');
 }

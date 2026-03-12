@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-eval' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com; img-src 'self' data:;">
 <title>NCAA 2025-26 · Head-to-Head Graph</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -141,7 +142,8 @@
   </div>
 
   <!-- LEFT: graph sidebar -->
-  <aside class="sidebar">
+  <div class="resize-handle" id="sidebar-resize-handle"></div>
+  <aside class="sidebar" id="sidebar">
     <div class="sidebar-tabs">
       <button class="stab active" data-tab="overview">Overview</button>
       <button class="stab" data-tab="rankings">Rankings</button>
@@ -283,8 +285,8 @@
         <select id="stats-team-select">
           <option value="">Select a team...</option>
         </select>
-        <button class="ai-action-btn" id="stats-fetch-btn" onclick="fetchTeamStats()">
-          Fetch Stats
+        <button class="ai-action-btn" id="stats-fetch-btn" onclick="fetchTeamStats()" title="Refresh stats">
+          ↻
         </button>
       </div>
       <div id="stats-output" class="ai-output">
