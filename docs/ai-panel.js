@@ -362,7 +362,7 @@ function insertHint(text) {
 
 // ── OpenRouter API call ───────────────────────────────────────────────────────
 const WORKER_URL = 'https://lively-dust-2d6b.sriramanasuri.workers.dev';
-const OPENROUTER_MODEL = 'meta-llama/llama-3.3-70b-instruct:free';
+const OPENROUTER_MODEL = 'openrouter/free';
 
 async function callClaude(_unusedKey, singlePrompt, opts = {}) {
   const messages = opts.messages ?? [{ role: 'user', content: singlePrompt }];
