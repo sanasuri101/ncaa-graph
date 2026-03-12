@@ -549,8 +549,10 @@ function focusTeam(id) {
 function switchTab(tab) {
   document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
   document.querySelectorAll('.stab').forEach(el => el.classList.remove('active'));
-  document.getElementById(`tab-${tab}`).classList.add('active');
-  document.querySelector(`.stab[data-tab="${tab}"]`).classList.add('active');
+  const tabEl = document.getElementById(`tab-${tab}`);
+  const stabEl = document.querySelector(`.stab[data-tab="${tab}"]`);
+  if (tabEl) tabEl.classList.add('active');
+  if (stabEl) stabEl.classList.add('active');
   if (tab === 'transitive' && typeof populateTransSelects === 'function') populateTransSelects();
 }
 
