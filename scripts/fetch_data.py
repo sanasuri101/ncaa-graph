@@ -1,7 +1,11 @@
 #!/usr/bin/env python3
 """
-fetch_data.py — pulls 2025-26 regular season schedules for all 64 bracket teams
-from the ESPN hidden API and writes data/graph_data.json + data/inter_games.json.
+fetch_data.py — pulls 2025-26 regular season + conference tournament schedules
+for all 64 bracket teams from the ESPN hidden API.
+
+Writes: data/graph_data.json, data/inter_games.json, data/recent_form.json,
+        data/bracket_teams.json, public/data/graph_data.json,
+        public/data/recent_form.json
 
 Run manually:   python scripts/fetch_data.py
 Auto-refresh:   GitHub Actions workflow (.github/workflows/refresh.yml)
@@ -13,6 +17,7 @@ import subprocess
 import sys
 import time
 from collections import Counter
+from datetime import datetime, timezone
 from pathlib import Path
 
 # ── paths ────────────────────────────────────────────────────────────────────
@@ -38,7 +43,7 @@ BRACKET_TEAMS = [
     {"bracket_name": "Villanova",      "espn_id": "222",    "displayName": "Villanova Wildcats",            "region": "East",    "seed": 7},
     {"bracket_name": "NC State",       "espn_id": "152",    "displayName": "NC State Wolfpack",             "region": "East",    "seed": 10},
     {"bracket_name": "Michigan State", "espn_id": "127",    "displayName": "Michigan State Spartans",       "region": "East",    "seed": 2},
-    {"bracket_name": "Queens",         "espn_id": "2429",   "displayName": "Charlotte 49ers",               "region": "East",    "seed": 15},
+    {"bracket_name": "Queens",         "espn_id": "2511",   "displayName": "Queens University Royals",      "region": "East",    "seed": 15},
     # South
     {"bracket_name": "Florida",        "espn_id": "57",     "displayName": "Florida Gators",                "region": "South",   "seed": 1},
     {"bracket_name": "Furman",         "espn_id": "231",    "displayName": "Furman Paladins",               "region": "South",   "seed": 16},
@@ -131,7 +136,10 @@ def fetch_all_games() -> tuple[list, list]:
             f"/mens-college-basketball/teams/{tid}/schedule?season=2026"
         )
         data = fetch(url)
-        reg = [e for e in data.get("events", []) if e.get("seasonType", {}).get("type") == 2]
+        # seasonType 2 = regular season, 3 = postseason (conf tournaments)
+        # NCAA tournament (also type 3) doesn't start until March 20, after Selection Sunday
+        # So including type 3 now captures conf tourney inter-bracket games safely
+        reg = [e for e in data.get("events", []) if e.get("seasonType", {}).get("type") in (2, 3)]
 
         for e in reg:
             gid = e["id"]
@@ -320,7 +328,6 @@ def build_recent_form(all_games):
         }
     return recent_form
 
-
 def main():
     print("Fetching ESPN schedules for 64 bracket teams...")
     all_games, inter_games = fetch_all_games()
@@ -331,14 +338,20 @@ def main():
     graph       = build_graph(inter_games)
     recent_form = build_recent_form(all_games)
 
+    # Wrap recent_form with metadata so the UI can show a freshness timestamp
+    recent_form_out = {
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "teams": recent_form,
+    }
+
     (DATA_DIR / "graph_data.json").write_text(json.dumps(graph, indent=2))
     (DATA_DIR / "inter_games.json").write_text(json.dumps(inter_games, indent=2))
     (DATA_DIR / "bracket_teams.json").write_text(json.dumps(BRACKET_TEAMS, indent=2))
-    (DATA_DIR / "recent_form.json").write_text(json.dumps(recent_form, separators=(",", ":")))
+    (DATA_DIR / "recent_form.json").write_text(json.dumps(recent_form_out, separators=(",", ":")))
 
     pub = DATA_DIR.parent / "public" / "data"
     pub.mkdir(parents=True, exist_ok=True)
-    (pub / "recent_form.json").write_text(json.dumps(recent_form, separators=(",", ":")))
+    (pub / "recent_form.json").write_text(json.dumps(recent_form_out, separators=(",", ":")))
 
     print(f"Nodes: {len(graph['nodes'])}, Edges: {len(graph['edges'])}, Not-played: {len(graph['not_played'])}")
     print(f"\nWrote:\n  data/graph_data.json\n  data/inter_games.json\n  data/bracket_teams.json\n  data/recent_form.json")
