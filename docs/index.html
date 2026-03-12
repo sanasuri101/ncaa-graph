@@ -79,6 +79,24 @@
     <div id="search-dropdown"></div>
   </div>
   <div class="toolbar-sep"></div>
+  <div class="toolbar-group" id="custom-selector-group">
+    <span class="toolbar-label">CUSTOM</span>
+    <div class="custom-search-wrap">
+      <input type="text" id="custom-team-input" placeholder="Add teams..." autocomplete="off" spellcheck="false"/>
+      <div id="custom-dropdown"></div>
+    </div>
+    <button class="view-btn" id="custom-clear-btn" onclick="clearCustom()" title="Clear custom selection" style="display:none">✕ Clear</button>
+  </div>
+</div>
+
+<!-- Custom selection pills bar -->
+<div class="custom-pills-bar" id="custom-pills-bar" style="display:none">
+  <span class="toolbar-label" style="margin-right:6px;flex-shrink:0">SHOWING</span>
+  <div class="pills-wrap" id="custom-pills"></div>
+  <button class="view-btn" onclick="clearCustom()" style="margin-left:auto;flex-shrink:0">✕ Clear all</button>
+</div>
+
+<div class="toolbar" id="toolbar2" style="padding-top:0;height:auto;min-height:0;border-top:none;padding-bottom:4px;display:flex;align-items:center;padding-left:16px;gap:8px">
   <div class="toolbar-group">
     <button class="view-btn" id="scatter-btn" onclick="toggleScatter()" title="Efficiency scatter plot">
       ◎ Efficiency
@@ -195,18 +213,26 @@
     </div>
 
     <div class="tab-content" id="tab-transitive">
-      <div class="trans-picker-row">
-        <select id="trans-team-a" class="trans-select"><option value="">Team A...</option></select>
-        <span class="trans-vs">vs</span>
-        <select id="trans-team-b" class="trans-select"><option value="">Team B...</option></select>
+      <div class="paths-picker">
+        <div class="paths-search-wrap">
+          <input type="text" class="paths-team-input" id="paths-input-a" placeholder="Team A — type to search..." autocomplete="off" spellcheck="false"/>
+          <div class="paths-dropdown" id="paths-drop-a"></div>
+          <div class="paths-selected" id="paths-sel-a"></div>
+        </div>
+        <div class="paths-vs-divider">vs</div>
+        <div class="paths-search-wrap">
+          <input type="text" class="paths-team-input" id="paths-input-b" placeholder="Team B — type to search..." autocomplete="off" spellcheck="false"/>
+          <div class="paths-dropdown" id="paths-drop-b"></div>
+          <div class="paths-selected" id="paths-sel-b"></div>
+        </div>
+        <button class="paths-run-btn" id="paths-run-btn" onclick="runPathsFromInputs()">
+          Find Paths
+        </button>
       </div>
-      <button class="trans-analyze-btn" id="trans-analyze-btn" onclick="runTransitiveAnalysis()">
-        Find Paths
-      </button>
       <div id="trans-output">
         <div class="trans-intro">
-          <div class="trans-intro-title">Transitive Path Analysis</div>
-          <div class="trans-intro-body">For any two teams that never played each other, this traces indirect evidence: common opponents, 2-hop chains, and margin comparisons. Click any dashed edge in the graph, or select two teams above.</div>
+          <div class="trans-intro-title">Transitive Paths</div>
+          <div class="trans-intro-body">For any two teams that haven't played each other, this traces indirect evidence through common opponents. Click any dashed edge in the graph, or search two teams above.</div>
         </div>
       </div>
     </div>
@@ -214,15 +240,40 @@
 
   <!-- RIGHT: AI Scout panel -->
   <aside class="ai-panel" id="ai-panel">
-    <div class="ai-panel-header">
-      <div class="ai-panel-title">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="color:var(--accent)"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
-        AI Scout
+
+    <!-- Header -->
+    <div class="ai-scout-header">
+      <div class="ai-scout-brand">
+        <div class="ai-scout-wordmark">
+          <div class="ai-scout-icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
+          </div>
+          <div class="ai-scout-name">AI <span>Scout</span></div>
+        </div>
+        <button class="ai-key-btn" id="ai-key-btn" onclick="toggleKeyDrawer()">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
+          <span id="ai-key-label">Add key</span>
+        </button>
       </div>
-      <div class="ai-panel-modes">
-        <button class="ai-mode active" data-mode="stats" id="mode-stats">Stats</button>
-        <button class="ai-mode" data-mode="news" id="mode-news">News</button>
-        <button class="ai-mode" data-mode="chat" id="mode-chat">Chat</button>
+      <div class="ai-tab-row">
+        <button class="ai-tab active" data-mode="stats">Stats</button>
+        <button class="ai-tab" data-mode="news">News</button>
+        <button class="ai-tab" data-mode="chat">Chat</button>
+      </div>
+    </div>
+
+    <!-- Inline key drawer -->
+    <div class="ai-key-drawer" id="ai-key-drawer">
+      <div class="ai-key-drawer-title">Your Anthropic API key</div>
+      <div class="ai-key-drawer-desc">Stored only in your browser. Never sent anywhere except directly to Anthropic's API.</div>
+      <div class="ai-key-input-row">
+        <input type="password" id="ai-key-input" placeholder="sk-ant-..." autocomplete="off" spellcheck="false"/>
+        <button class="ai-key-save-btn" onclick="submitKey()">Save</button>
+      </div>
+      <div class="ai-key-msg" id="ai-key-msg"></div>
+      <div class="ai-key-foot">
+        <a href="https://console.anthropic.com" target="_blank" rel="noopener">Get a key →</a>
+        <button class="ai-key-clear" onclick="clearApiKey(); updateKeyStatus(); document.getElementById('ai-key-msg').textContent='Cleared.'; document.getElementById('ai-key-msg').style.color='var(--text-mute)'">Clear saved key</button>
       </div>
     </div>
 
@@ -237,14 +288,14 @@
         </button>
       </div>
       <div id="stats-output" class="ai-output">
-        <div class="ai-placeholder">Select a team to pull their 2025-26 season stats from ESPN.</div>
+        <div class="ai-placeholder">Select a team to load their 2025-26 stats.</div>
       </div>
     </div>
 
     <!-- NEWS MODE -->
     <div class="ai-mode-content" id="panel-news">
       <div class="ai-news-input">
-        <input type="text" id="news-url" placeholder="Paste article URL (ESPN, CBSSports, etc.)..." spellcheck="false" autocomplete="off"/>
+        <input type="text" id="news-url" placeholder="Paste article URL..." spellcheck="false" autocomplete="off"/>
         <button class="ai-action-btn" id="news-fetch-btn" onclick="fetchNewsArticle()">
           Summarize
         </button>
@@ -256,25 +307,25 @@
         <button class="preset-btn" onclick="fetchNewsSearch('college basketball upset alert 2026')">Upset alerts</button>
       </div>
       <div id="news-output" class="ai-output">
-        <div class="ai-placeholder">Paste any article link and AI will read and summarize it for you — or use the quick search buttons.</div>
+        <div class="ai-placeholder">Paste any article link or use quick search.</div>
       </div>
     </div>
 
     <!-- CHAT MODE -->
     <div class="ai-mode-content" id="panel-chat">
-      <div id="chat-messages"></div>
-      <div class="chat-input-area">
-        <div class="chat-input-row">
-          <textarea id="chat-input" placeholder="Ask about the bracket, matchups, upsets..." rows="2" spellcheck="false"></textarea>
-          <button class="ai-send-btn" id="chat-send-btn" onclick="sendChat()">
+      <div class="chat-area" id="chat-messages"></div>
+      <div class="chat-foot">
+        <div class="chat-input-wrap">
+          <textarea id="chat-input" placeholder="Ask about matchups, upsets, sleepers..." rows="2" spellcheck="false"></textarea>
+          <button class="chat-send" id="chat-send-btn" onclick="sendChat()">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13"/><path d="M22 2L15 22 11 13 2 9l20-7z"/></svg>
           </button>
         </div>
-      </div>
-      <div class="chat-hints">
-        <button class="hint-chip" onclick="insertHint('Who are the best teams I haven\'t seen play each other yet?')">Best unseen matchups</button>
-        <button class="hint-chip" onclick="insertHint('Which teams from the Midwest region have the most wins against ranked opponents?')">Midwest strength</button>
-        <button class="hint-chip" onclick="insertHint('Give me a sleeper pick from each region based on the data')">Sleeper picks</button>
+        <div class="chat-hints-row">
+          <button class="hint-pill" onclick="insertHint('Who are the best teams that haven\'t played each other yet?')">Best unseen matchups</button>
+          <button class="hint-pill" onclick="insertHint('Which Midwest teams have the best efficiency numbers?')">Midwest strength</button>
+          <button class="hint-pill" onclick="insertHint('Give me a sleeper pick from each region')">Sleeper picks</button>
+        </div>
       </div>
     </div>
   </aside>

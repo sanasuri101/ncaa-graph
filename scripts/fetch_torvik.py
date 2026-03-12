@@ -28,6 +28,7 @@ PUB_DIR.mkdir(exist_ok=True)
 
 YEAR = 2026
 URL  = f"https://barttorvik.com/{YEAR}_team_results.json"
+URL_GAMES = f"https://barttorvik.com/getgamestats.php?year={YEAR}&json=1"
 
 # Torvik name -> our bracket_name mapping for names that don't match exactly
 TORVIK_NAME_MAP = {
@@ -95,6 +96,67 @@ def fetch_torvik() -> dict:
     return out
 
 
+def fetch_shooting_splits() -> dict:
+    """
+    Aggregate per-game box scores from getgamestats to compute team shooting splits.
+    Returns {torvik_team_name: {two_p, three_p, ft_pct, efg}}.
+    Box score format: [date, espn_id, team_a, team_b, fgm, fga, 3pm, 3pa, ftm, fta, ...]
+    team_a stats start at index 4, team_b stats start at index 19.
+    """
+    req = urllib.request.Request(
+        URL_GAMES,
+        headers={
+            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
+            "Referer":    "https://barttorvik.com/",
+            "Accept":     "application/json, */*",
+        }
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=30) as resp:
+            rows = json.loads(resp.read())
+    except Exception as exc:
+        print(f"WARNING: Could not fetch game stats for shooting splits: {exc}", file=sys.stderr)
+        return {}
+
+    accum = {}  # team_name -> {fgm, fga, pm3, pa3, ftm, fta}
+    for row in rows:
+        try:
+            box = json.loads(row[29])
+        except (IndexError, json.JSONDecodeError, TypeError):
+            continue
+        if len(box) < 25:
+            continue
+        for team_name, offset in [(box[2], 4), (box[3], 19)]:
+            if not team_name:
+                continue
+            a = accum.setdefault(team_name, [0,0,0,0,0,0])
+            a[0] += box[offset]     # fgm
+            a[1] += box[offset+1]   # fga
+            a[2] += box[offset+2]   # 3pm
+            a[3] += box[offset+3]   # 3pa
+            a[4] += box[offset+4]   # ftm
+            a[5] += box[offset+5]   # fta
+
+    out = {}
+    for team, (fgm, fga, pm3, pa3, ftm, fta) in accum.items():
+        p2m = fgm - pm3
+        p2a = fga - pa3
+        out[team] = {
+            "two_p":   round(p2m / p2a * 100, 1) if p2a else None,
+            "three_p": round(pm3 / pa3 * 100, 1) if pa3 else None,
+            "ft_pct":  round(ftm / fta * 100, 1) if fta else None,
+            "efg":     round((fgm + 0.5 * pm3) / fga * 100, 1) if fga else None,
+        }
+    print(f"  Shooting splits: {len(out)} teams computed")
+    return out
+    path = DATA_DIR / "bracket_teams.json"
+    if not path.exists():
+        print(f"ERROR: {path} not found — run fetch_data.py first", file=sys.stderr)
+        sys.exit(1)
+    with open(path) as f:
+        return json.load(f)
+
+
 def load_bracket() -> list:
     path = DATA_DIR / "bracket_teams.json"
     if not path.exists():
@@ -104,7 +166,7 @@ def load_bracket() -> list:
         return json.load(f)
 
 
-def merge(bracket: list, torvik: dict) -> dict:
+def merge(bracket: list, torvik: dict, splits: dict) -> dict:
     """
     Merge Torvik stats into bracket team records.
     Returns {espn_id: {bracket metadata + torvik stats}}.
@@ -155,6 +217,10 @@ def merge(bracket: list, torvik: dict) -> dict:
                     "proj_barthag":  round(float(stats["proj_barthag"]), 4),
                     "sos_rank":      stats["sos_rank"],
                     "conf":          stats["conf"],
+                    "two_p":         splits.get(torvik_name, {}).get("two_p"),
+                    "three_p":       splits.get(torvik_name, {}).get("three_p"),
+                    "ft_pct":        splits.get(torvik_name, {}).get("ft_pct"),
+                    "efg":           splits.get(torvik_name, {}).get("efg"),
                 },
             }
 
@@ -168,8 +234,9 @@ def merge(bracket: list, torvik: dict) -> dict:
 def main():
     print(f"Fetching Torvik T-Rank stats for {YEAR}...")
     torvik  = fetch_torvik()
+    splits  = fetch_shooting_splits()
     bracket = load_bracket()
-    merged  = merge(bracket, torvik)
+    merged  = merge(bracket, torvik, splits)
 
     output = {
         "season":       YEAR,

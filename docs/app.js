@@ -117,6 +117,8 @@ function initGraph() {
 
 // ── Filters ───────────────────────────────────────────────────────────────────
 function applyFilters() {
+  if (customActive) { applyCustomView(); return; }
+
   const rv = document.getElementById('region-filter').value;
 
   // Nodes in scope for the selected region
@@ -238,43 +240,65 @@ function renderTeamDetail(nodeId, box) {
   const losses = ALL_EDGES.filter(e => e.to   === nodeId);
   const npCnt  = NOT_PLAYED.filter(np => np.a === nodeId || np.b === nodeId).length;
   const getName = id => ALL_NODES.find(n => n.id === id)?.label ?? id;
+  const rc = REGION_COLORS[node.region] ?? '#b0a898';
+  const bg = REGION_NODE_BG[node.region] ?? '#f0ece4';
 
   const wRows = wins.map(e => `
-    <div class="result-item">
-      <span class="opp">${getName(e.to)}</span>
-      <span class="score win-score">${e.label}</span>
-      <span class="date-chip">${e.date}</span>
+    <div class="d-result-row">
+      <div class="d-result-dot win-dot"></div>
+      <span class="d-result-opp">${getName(e.to)}</span>
+      <span class="d-result-score">${e.label}</span>
+      <span class="d-result-date">${e.date.slice(5)}</span>
     </div>`).join('');
 
   const lRows = losses.map(e => `
-    <div class="result-item">
-      <span class="opp">${getName(e.from)}</span>
-      <span class="score loss-score">${e.label}</span>
-      <span class="date-chip">${e.date}</span>
+    <div class="d-result-row">
+      <div class="d-result-dot loss-dot"></div>
+      <span class="d-result-opp">${getName(e.from)}</span>
+      <span class="d-result-score">${e.label}</span>
+      <span class="d-result-date">${e.date.slice(5)}</span>
     </div>`).join('');
 
-  const regionColor = REGION_COLORS[node.region] ?? '#b0a898';
-
   box.innerHTML = `
-    <div class="detail-team-header" style="border-left:3px solid ${regionColor};padding-left:10px;margin-bottom:12px">
-      <div class="detail-team-name">${node.full_name}</div>
-      <div class="detail-team-meta">#${node.seed} seed · ${node.region} Region</div>
+    <div class="d-team-card">
+      <div class="d-team-badge" style="background:${bg};border-color:${rc}">
+        <div class="d-team-badge-seed" style="color:${rc}">#${node.seed}</div>
+        <div class="d-team-badge-name">${node.label}</div>
+        <div class="d-team-badge-region" style="color:${rc}">${node.region}</div>
+      </div>
+      <div class="d-record-row">
+        <div class="d-record-cell">
+          <div class="d-record-val" style="color:var(--west)">${node.wins_vs_field}</div>
+          <div class="d-record-lbl">wins</div>
+        </div>
+        <div class="d-record-sep"></div>
+        <div class="d-record-cell">
+          <div class="d-record-val" style="color:var(--midwest)">${node.losses_vs_field}</div>
+          <div class="d-record-lbl">losses</div>
+        </div>
+        <div class="d-record-sep"></div>
+        <div class="d-record-cell">
+          <div class="d-record-val">${npCnt}</div>
+          <div class="d-record-lbl">never met</div>
+        </div>
+      </div>
     </div>
-    <div class="detail-stat-row">
-      <span class="detail-stat-label">W–L vs bracket field</span>
-      <span class="detail-stat-value" style="color:var(--text)">${node.wins_vs_field}W – ${node.losses_vs_field}L</span>
-    </div>
-    <div class="detail-stat-row">
-      <span class="detail-stat-label">Never played</span>
-      <span class="detail-stat-value">${npCnt} teams</span>
-    </div>
-    <div class="spark-container" id="spark-container-${nodeId}" style="margin:12px 0"></div>
+
+    <div class="spark-container" id="spark-container-${nodeId}" style="margin:10px 0 4px"></div>
+
     ${wins.length > 0 ? `
-      <div class="section-label" style="margin-top:12px">Wins (${wins.length})</div>
-      <div class="result-list">${wRows}</div>` : ''}
+      <div class="d-section-head">
+        <span class="d-section-dot" style="background:var(--west)"></span>
+        Wins <span class="d-section-cnt">${wins.length}</span>
+      </div>
+      <div class="d-result-list">${wRows}</div>` : ''}
+
     ${losses.length > 0 ? `
-      <div class="section-label" style="margin-top:10px">Losses (${losses.length})</div>
-      <div class="result-list">${lRows}</div>` : ''}
+      <div class="d-section-head" style="margin-top:10px">
+        <span class="d-section-dot" style="background:var(--midwest)"></span>
+        Losses <span class="d-section-cnt">${losses.length}</span>
+      </div>
+      <div class="d-result-list">${lRows}</div>` : ''}
   `;
 
   if (typeof renderSparkline === 'function') {
@@ -284,53 +308,56 @@ function renderTeamDetail(nodeId, box) {
 
 function renderEdgeDetail(edge, box) {
   if (edge.is_not_played) {
-    const a = ALL_NODES.find(n => n.id === edge.from);
-    const b = ALL_NODES.find(n => n.id === edge.to);
+    const a  = ALL_NODES.find(n => n.id === edge.from);
+    const b  = ALL_NODES.find(n => n.id === edge.to);
+    const rcA = REGION_COLORS[a?.region] ?? '#b0a898';
+    const rcB = REGION_COLORS[b?.region] ?? '#b0a898';
     box.innerHTML = `
-      <div class="detail-card">
-        <div class="detail-team-name" style="margin-bottom:12px">Not Yet Played</div>
-        <div class="detail-stat-row">
-          <span class="detail-stat-label">${a?.full_name ?? edge.from}</span>
+      <div class="d-matchup-card unplayed">
+        <div class="d-matchup-label">Haven't played</div>
+        <div class="d-matchup-teams">
+          <div class="d-matchup-team">
+            <div class="d-matchup-dot" style="background:${rcA}"></div>
+            <div class="d-matchup-name">${a?.label ?? edge.from}</div>
+            <div class="d-matchup-sub" style="color:${rcA}">${a?.region ?? ''} #${a?.seed ?? '?'}</div>
+          </div>
+          <div class="d-vs-col"><span class="d-vs-text">vs</span></div>
+          <div class="d-matchup-team">
+            <div class="d-matchup-dot" style="background:${rcB}"></div>
+            <div class="d-matchup-name">${b?.label ?? edge.to}</div>
+            <div class="d-matchup-sub" style="color:${rcB}">${b?.region ?? ''} #${b?.seed ?? '?'}</div>
+          </div>
         </div>
-        <div style="padding:4px 0;font-style:italic;font-family:var(--font-serif);color:var(--text-mute);font-size:.8rem">vs</div>
-        <div class="detail-stat-row">
-          <span class="detail-stat-label">${b?.full_name ?? edge.to}</span>
-        </div>
-        <div style="margin-top:10px;font-size:.68rem;color:var(--text-mute);font-style:italic;font-family:var(--font-serif)">
-          These teams did not meet in the 2025–26 regular season. Opening path analysis...
-        </div>
+        <div class="d-matchup-hint">Opening transitive path analysis →</div>
       </div>`;
-    // Auto-open transitive analysis for not-played pairs
     setTimeout(() => openTransitiveTab(edge.from, edge.to), 50);
+
   } else {
-    const w = ALL_NODES.find(n => n.id === edge.from);
-    const l = ALL_NODES.find(n => n.id === edge.to);
+    const w  = ALL_NODES.find(n => n.id === edge.from);
+    const l  = ALL_NODES.find(n => n.id === edge.to);
+    const rcW = REGION_COLORS[w?.region] ?? '#b0a898';
+    const rcL = REGION_COLORS[l?.region] ?? '#b0a898';
+    const [scoreW, scoreL] = edge.label.split('-').map(s => s.trim());
     box.innerHTML = `
-      <div class="detail-card">
-        <div class="detail-team-name" style="margin-bottom:12px">Game Result</div>
-        <div class="detail-stat-row">
-          <span class="detail-stat-label">Winner</span>
-          <span class="detail-stat-value" style="color:var(--west)">${w?.full_name ?? edge.from}</span>
-        </div>
-        <div class="detail-stat-row">
-          <span class="detail-stat-label">Loser</span>
-          <span class="detail-stat-value" style="color:var(--text-mute)">${l?.full_name ?? edge.to}</span>
-        </div>
-        <div class="detail-stat-row">
-          <span class="detail-stat-label">Score</span>
-          <span class="detail-stat-value" style="font-size:.85rem">${edge.label}</span>
-        </div>
-        <div class="detail-stat-row">
-          <span class="detail-stat-label">Date</span>
-          <span class="detail-stat-value">${edge.date}</span>
-        </div>
-        <div class="detail-stat-row">
-          <span class="detail-stat-label">Margin</span>
-          <span class="detail-stat-value">${edge.margin} pts</span>
-        </div>
-        <div class="detail-stat-row">
-          <span class="detail-stat-label">Type</span>
-          <span class="detail-stat-value">${edge.same_region ? 'Same-region' : 'Cross-region'}</span>
+      <div class="d-matchup-card played">
+        <div class="d-matchup-label">${edge.same_region ? 'Same-region' : 'Cross-region'} · ${edge.date}</div>
+        <div class="d-matchup-teams">
+          <div class="d-matchup-team winner-side">
+            <div class="d-wl-badge w-badge">W</div>
+            <div class="d-matchup-dot" style="background:${rcW}"></div>
+            <div class="d-matchup-name">${w?.label ?? '—'}</div>
+            <div class="d-matchup-sub" style="color:${rcW}">${w?.region ?? ''} #${w?.seed ?? '?'}</div>
+          </div>
+          <div class="d-score-col">
+            <div class="d-score-main">${scoreW}<span class="d-score-dash">–</span>${scoreL}</div>
+            <div class="d-score-margin">+${edge.margin}</div>
+          </div>
+          <div class="d-matchup-team loser-side">
+            <div class="d-wl-badge l-badge">L</div>
+            <div class="d-matchup-dot" style="background:${rcL}"></div>
+            <div class="d-matchup-name">${l?.label ?? '—'}</div>
+            <div class="d-matchup-sub" style="color:${rcL}">${l?.region ?? ''} #${l?.seed ?? '?'}</div>
+          </div>
         </div>
       </div>
       <div class="style-bars-container" id="style-bars-${edge.from}-${edge.to}"></div>`;
@@ -489,6 +516,8 @@ function bindUI() {
   });
 
   bindSearch();
+  initCustomSelector();
+  if (typeof initPathsPicker === 'function') initPathsPicker();
 }
 
 function hideLoading() {
@@ -496,4 +525,159 @@ function hideLoading() {
   overlay.style.opacity = '0';
   overlay.style.transition = 'opacity .4s';
   setTimeout(() => overlay.remove(), 400);
+}
+
+// ── Custom team selector ──────────────────────────────────────────────────────
+let CUSTOM_SELECTION = new Set(); // espn team IDs currently selected
+let CUSTOM_NODES     = [];        // node objects for custom teams (may include non-bracket)
+let CUSTOM_EDGES     = [];        // played edge objects for custom teams
+let CUSTOM_NP        = [];        // not-played edge objects for custom teams
+let customActive     = false;
+
+function initCustomSelector() {
+  const inp  = document.getElementById('custom-team-input');
+  const drop = document.getElementById('custom-dropdown');
+
+  inp.addEventListener('input', () => {
+    const q = inp.value.trim().toLowerCase();
+    drop.innerHTML = '';
+    if (q.length < 1) { drop.style.display = 'none'; return; }
+
+    const matches = ALL_NODES
+      .filter(n => n.full_name.toLowerCase().includes(q) || n.label.toLowerCase().includes(q))
+      .slice(0, 8);
+
+    if (!matches.length) { drop.style.display = 'none'; return; }
+
+    matches.forEach(n => {
+      const item = document.createElement('div');
+      item.className = 'search-item';
+      item.textContent = `${n.full_name} (${n.region} #${n.seed})`;
+      if (CUSTOM_SELECTION.has(n.id)) item.style.opacity = '0.4';
+      item.addEventListener('mousedown', e => {
+        e.preventDefault();
+        addToCustom(n.id);
+        inp.value = '';
+        drop.style.display = 'none';
+      });
+      drop.appendChild(item);
+    });
+    drop.style.display = 'block';
+  });
+
+  inp.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { drop.style.display = 'none'; inp.value = ''; }
+  });
+
+  document.addEventListener('click', e => {
+    if (!e.target.closest('#custom-selector-group')) drop.style.display = 'none';
+  });
+}
+
+function addToCustom(teamId) {
+  if (CUSTOM_SELECTION.has(teamId)) return;
+  CUSTOM_SELECTION.add(teamId);
+  renderCustom();
+}
+
+function removeFromCustom(teamId) {
+  CUSTOM_SELECTION.delete(teamId);
+  renderCustom();
+}
+
+function clearCustom() {
+  CUSTOM_SELECTION.clear();
+  renderCustom();
+}
+
+function renderCustom() {
+  const pillsBar  = document.getElementById('custom-pills-bar');
+  const pillsWrap = document.getElementById('custom-pills');
+  const clearBtn  = document.getElementById('custom-clear-btn');
+
+  if (CUSTOM_SELECTION.size === 0) {
+    // Restore full graph
+    customActive = false;
+    pillsBar.style.display  = 'none';
+    clearBtn.style.display  = 'none';
+    // Restore ALL_NODES / ALL_EDGES fully
+    applyFilters();
+    document.getElementById('summary').textContent =
+      `${ALL_NODES.length} bracket teams · ${ALL_EDGES.length} inter-bracket matchups · ${NOT_PLAYED.length} pairs never met`;
+    return;
+  }
+
+  customActive = true;
+  clearBtn.style.display = '';
+
+  // Build pills
+  pillsWrap.innerHTML = '';
+  CUSTOM_SELECTION.forEach(id => {
+    const node = ALL_NODES.find(n => n.id === id);
+    if (!node) return;
+    const rc = REGION_COLORS[node.region] || '#b0a898';
+    const pill = document.createElement('span');
+    pill.className = 'team-pill';
+    pill.style.borderColor = rc;
+    pill.innerHTML = `
+      <span class="pill-dot" style="background:${rc}"></span>
+      ${node.label}
+      <button class="pill-remove" onclick="removeFromCustom('${id}')">✕</button>
+    `;
+    pillsWrap.appendChild(pill);
+  });
+  pillsBar.style.display = 'flex';
+
+  // Filter nodes to selection
+  const selIds   = CUSTOM_SELECTION;
+  CUSTOM_NODES   = ALL_NODES.filter(n => selIds.has(n.id));
+
+  // Filter played edges — both endpoints must be in selection
+  CUSTOM_EDGES   = ALL_EDGES.filter(e => selIds.has(e.from) && selIds.has(e.to));
+
+  // Build not-played pairs from selection
+  const selArr   = [...selIds];
+  const playedPairs = new Set(CUSTOM_EDGES.map(e => [e.from, e.to].sort().join('|')));
+  CUSTOM_NP = [];
+  for (let i = 0; i < selArr.length; i++) {
+    for (let j = i + 1; j < selArr.length; j++) {
+      const key = [selArr[i], selArr[j]].sort().join('|');
+      if (!playedPairs.has(key)) {
+        const na = ALL_NODES.find(n => n.id === selArr[i]);
+        const nb = ALL_NODES.find(n => n.id === selArr[j]);
+        CUSTOM_NP.push({
+          id:            `cnp_${key}`,
+          from:          selArr[i],
+          to:            selArr[j],
+          color:         { color: '#ccc6b9', opacity: 0.5 },
+          dashes:        true,
+          width:         1,
+          arrows:        '',
+          label:         '',
+          title:         `${na?.label ?? selArr[i]} vs ${nb?.label ?? selArr[j]}: Never played`,
+          is_not_played: true,
+        });
+      }
+    }
+  }
+
+  applyCustomView();
+
+  const playedCnt = CUSTOM_EDGES.length;
+  const npCnt     = CUSTOM_NP.length;
+  document.getElementById('summary').textContent =
+    `${CUSTOM_SELECTION.size} teams selected · ${playedCnt} games played · ${npCnt} pairs never met`;
+}
+
+function applyCustomView() {
+  if (!customActive) return;
+
+  let edges = [];
+  if (currentView === 'played' || currentView === 'both') edges = edges.concat(CUSTOM_EDGES);
+  if (currentView === 'notplayed' || currentView === 'both') edges = edges.concat(CUSTOM_NP);
+
+  nodesDS.clear();
+  nodesDS.add(CUSTOM_NODES);
+  edgesDS.clear();
+  edgesDS.add(edges);
 }

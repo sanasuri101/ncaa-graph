@@ -30,63 +30,138 @@ async function loadTransitiveData() {
   }
 }
 
-// ── Populate team dropdowns in Paths tab ─────────────────────────────────────
-function populateTransSelects() {
-  if (TRANS_LOADED) return;
-  TRANS_LOADED = true;
+// ── Paths picker: searchable inputs ──────────────────────────────────────────
+let pathsSelA = null; // {id, full_name, region, seed}
+let pathsSelB = null;
 
-  const selA = document.getElementById('trans-team-a');
-  const selB = document.getElementById('trans-team-b');
-  const sorted = [...ALL_NODES].sort((a, b) => a.full_name.localeCompare(b.full_name));
+function initPathsPicker() {
+  setupPathsInput('a');
+  setupPathsInput('b');
 
-  sorted.forEach(n => {
-    [selA, selB].forEach(sel => {
-      const opt = document.createElement('option');
-      opt.value = n.id;
-      opt.textContent = `${n.full_name} (${n.region}, #${n.seed})`;
-      sel.appendChild(opt);
+  // Auto-run if both teams already selected (e.g. from clicking a dashed edge)
+  if (pathsSelA && pathsSelB) runTransitiveAnalysisForIds(pathsSelA.id, pathsSelB.id);
+}
+
+function setupPathsInput(side) {
+  const inp  = document.getElementById(`paths-input-${side}`);
+  const drop = document.getElementById(`paths-drop-${side}`);
+  const sel  = document.getElementById(`paths-sel-${side}`);
+  if (!inp) return;
+
+  inp.addEventListener('input', () => {
+    const q = inp.value.trim().toLowerCase();
+    drop.innerHTML = '';
+    if (q.length < 1) { drop.style.display = 'none'; return; }
+
+    const matches = [...ALL_NODES]
+      .filter(n => n.full_name.toLowerCase().includes(q) || n.label.toLowerCase().includes(q))
+      .slice(0, 7);
+
+    if (!matches.length) { drop.style.display = 'none'; return; }
+
+    matches.forEach(n => {
+      const item = document.createElement('div');
+      item.className = 'search-item';
+      const rc = REGION_COLORS[n.region] || '#b0a898';
+      item.innerHTML = `<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${rc};margin-right:7px;flex-shrink:0"></span>${n.full_name} <span style="color:var(--text-mute);font-size:.78rem">#${n.seed} ${n.region}</span>`;
+      item.addEventListener('mousedown', e => {
+        e.preventDefault();
+        selectPathsTeam(side, n);
+        inp.value = '';
+        drop.style.display = 'none';
+      });
+      drop.appendChild(item);
     });
+    drop.style.display = 'block';
   });
 
-  // Pre-select the last clicked not-played pair if available
-  selA.addEventListener('change', () => {
-    if (selA.value && selB.value && selA.value !== selB.value) runTransitiveAnalysis();
+  inp.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { drop.style.display = 'none'; }
   });
-  selB.addEventListener('change', () => {
-    if (selA.value && selB.value && selA.value !== selB.value) runTransitiveAnalysis();
+
+  document.addEventListener('click', e => {
+    if (!e.target.closest(`#paths-input-${side}`) && !e.target.closest(`#paths-drop-${side}`)) {
+      drop.style.display = 'none';
+    }
   });
 }
 
-// ── Entry point: called when Paths tab opens ─────────────────────────────────
+function selectPathsTeam(side, node) {
+  if (side === 'a') pathsSelA = node;
+  else              pathsSelB = node;
+
+  const sel = document.getElementById(`paths-sel-${side}`);
+  const rc  = REGION_COLORS[node.region] || '#b0a898';
+  sel.innerHTML = `
+    <span class="paths-sel-dot" style="background:${rc}"></span>
+    <span class="paths-sel-name">${node.full_name}</span>
+    <span class="paths-sel-meta">#${node.seed} ${node.region}</span>
+    <button class="paths-sel-clear" onclick="clearPathsSel('${side}')">✕</button>
+  `;
+  sel.classList.add('visible');
+
+  const inp = document.getElementById(`paths-input-${side}`);
+  if (inp) inp.placeholder = '';
+}
+
+function clearPathsSel(side) {
+  if (side === 'a') pathsSelA = null;
+  else              pathsSelB = null;
+  const sel = document.getElementById(`paths-sel-${side}`);
+  sel.innerHTML = '';
+  sel.classList.remove('visible');
+  const inp = document.getElementById(`paths-input-${side}`);
+  if (inp) inp.placeholder = side === 'a' ? 'Team A — type to search...' : 'Team B — type to search...';
+}
+
+function runPathsFromInputs() {
+  if (!pathsSelA || !pathsSelB) {
+    document.getElementById('trans-output').innerHTML =
+      '<div class="trans-intro"><div class="trans-intro-body">Select two different teams to compare.</div></div>';
+    return;
+  }
+  if (pathsSelA.id === pathsSelB.id) {
+    document.getElementById('trans-output').innerHTML =
+      '<div class="trans-intro"><div class="trans-intro-body">Pick two different teams.</div></div>';
+    return;
+  }
+  runTransitiveAnalysisForIds(pathsSelA.id, pathsSelB.id);
+}
+
+// ── Entry point: called when Paths tab opens ──────────────────────────────────
 function openTransitiveTab(aId, bId) {
-  // Switch to tab
   document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
   document.querySelectorAll('.stab').forEach(el => el.classList.remove('active'));
   document.getElementById('tab-transitive').classList.add('active');
   document.getElementById('trans-tab-btn').classList.add('active');
 
-  populateTransSelects();
+  initPathsPicker();
 
   if (aId && bId) {
-    document.getElementById('trans-team-a').value = aId;
-    document.getElementById('trans-team-b').value = bId;
-    runTransitiveAnalysis();
+    const na = ALL_NODES.find(n => n.id === aId);
+    const nb = ALL_NODES.find(n => n.id === bId);
+    if (na) selectPathsTeam('a', na);
+    if (nb) selectPathsTeam('b', nb);
+    runTransitiveAnalysisForIds(aId, bId);
   }
 }
 
+
 // ── Main analysis render ─────────────────────────────────────────────────────
 async function runTransitiveAnalysis() {
-  const aId = document.getElementById('trans-team-a').value;
-  const bId = document.getElementById('trans-team-b').value;
+  // Legacy: called from old selects — now delegates to ID-based version
+  const aId = pathsSelA?.id;
+  const bId = pathsSelB?.id;
+  if (aId && bId) runTransitiveAnalysisForIds(aId, bId);
+}
+
+async function runTransitiveAnalysisForIds(aId, bId) {
   const out  = document.getElementById('trans-output');
 
   if (!aId || !bId || aId === bId) {
     out.innerHTML = '<div class="trans-intro"><div class="trans-intro-body">Select two different teams to compare.</div></div>';
     return;
   }
-
-  const nodeA = ALL_NODES.find(n => n.id === aId);
-  const nodeB = ALL_NODES.find(n => n.id === bId);
 
   // Check if they actually played each other
   const playedEdge = ALL_EDGES.find(e =>
@@ -428,5 +503,5 @@ function hexWithAlpha(hex, alpha) {
 }
 
 window.openTransitiveTab = openTransitiveTab;
-window.populateTransSelects = populateTransSelects;
+window.populateTransSelects = function() { initPathsPicker(); };
 window.runTransitiveAnalysis = runTransitiveAnalysis;

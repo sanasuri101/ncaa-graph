@@ -41,10 +41,11 @@ function populateTeamSelect() {
 document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('ai-toggle').addEventListener('click', toggleAIPanel);
 
-  document.querySelectorAll('.ai-mode').forEach(btn => {
+  // New segmented tab row
+  document.querySelectorAll('.ai-tab').forEach(btn => {
     btn.addEventListener('click', () => {
       const mode = btn.dataset.mode;
-      document.querySelectorAll('.ai-mode').forEach(b => b.classList.toggle('active', b.dataset.mode === mode));
+      document.querySelectorAll('.ai-tab').forEach(b => b.classList.toggle('active', b.dataset.mode === mode));
       document.querySelectorAll('.ai-mode-content').forEach(el => el.classList.toggle('active', el.id === `panel-${mode}`));
     });
   });
@@ -54,9 +55,17 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChat(); }
   });
 
+  // Key drawer: submit on Enter
+  document.getElementById('ai-key-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') submitKey();
+    if (e.key === 'Escape') closeKeyDrawer();
+  });
+
   // Show empty state in chat
   document.getElementById('chat-messages').innerHTML =
     '<div class="chat-empty">Ask anything about the bracket —<br>matchups, stats, trends, predictions.</div>';
+
+  updateKeyStatus();
 });
 
 // ── API key management ───────────────────────────────────────────────────────
@@ -64,23 +73,60 @@ function getApiKey() {
   return localStorage.getItem('ANTHROPIC_KEY') || '';
 }
 
-function promptForKey() {
-  const key = prompt(
-    'Enter your Anthropic API key to use AI features.\n' +
-    'It will be stored only in your browser (localStorage).\n\n' +
-    'Get one free at console.anthropic.com',
-  );
-  if (key && key.startsWith('sk-')) {
+function saveApiKey(key) {
+  if (key && key.trim().startsWith('sk-')) {
     localStorage.setItem('ANTHROPIC_KEY', key.trim());
-    return key.trim();
+    return true;
   }
-  return null;
+  return false;
+}
+
+function clearApiKey() {
+  localStorage.removeItem('ANTHROPIC_KEY');
 }
 
 function requireKey() {
   const k = getApiKey();
   if (k) return k;
-  return promptForKey();
+  // Show the settings drawer instead of a browser prompt
+  openKeyDrawer();
+  return null;
+}
+
+// ── Settings drawer ──────────────────────────────────────────────────────────
+function toggleKeyDrawer() {
+  const drawer = document.getElementById('ai-key-drawer');
+  drawer.classList.toggle('open');
+  if (drawer.classList.contains('open')) {
+    setTimeout(() => document.getElementById('ai-key-input').focus(), 100);
+  }
+}
+
+function openKeyDrawer()  { document.getElementById('ai-key-drawer').classList.add('open'); }
+function closeKeyDrawer() { document.getElementById('ai-key-drawer').classList.remove('open'); }
+
+function submitKey() {
+  const val = document.getElementById('ai-key-input').value.trim();
+  const msg = document.getElementById('ai-key-msg');
+  if (!val.startsWith('sk-')) {
+    msg.textContent = 'Key should start with sk-ant- — check and try again.';
+    msg.style.color = 'var(--midwest)';
+    return;
+  }
+  saveApiKey(val);
+  msg.textContent = 'Key saved — stored only in your browser, never sent anywhere else.';
+  msg.style.color = 'var(--west)';
+  document.getElementById('ai-key-input').value = '';
+  updateKeyStatus();
+  setTimeout(closeKeyDrawer, 1200);
+}
+
+function updateKeyStatus() {
+  const has   = !!getApiKey();
+  const btn   = document.getElementById('ai-key-btn');
+  const label = document.getElementById('ai-key-label');
+  if (btn)   btn.classList.toggle('has-key', has);
+  if (label) label.textContent = has ? 'Key set ✓' : 'Add key';
 }
 
 // ── ESPN + Torvik Stats fetcher (no API key needed) ──────────────────────────
@@ -133,20 +179,24 @@ async function fetchTeamStats() {
     } catch (_) {}
 
     const tv     = tData?.teams?.[teamId]?.torvik ?? null;
-    const rgbMap = { East: '#3B82F6', West: '#10B981', South: '#F59E0B', Midwest: '#EF4444' };
-    const rc     = rgbMap[node.region] ?? '#94a3b8';
+    const rgbMap = { East: '#4a7fb5', West: '#3a8c6e', South: '#b89030', Midwest: '#b84545' };
+    const rc     = rgbMap[node.region] ?? '#b0a898';
 
     const tBlock = tv ? `
       <div class="stats-section-label">TORVIK T-RANK</div>
       <div class="stats-grid-2">
         <div class="stat-cell torvik-cell"><div class="sv torvik-rank">#${tv.rank}</div><div class="sl">T-Rank</div></div>
-        <div class="stat-cell torvik-cell"><div class="sv" style="color:#a78bfa">${tv.adj_em > 0 ? '+' : ''}${tv.adj_em}</div><div class="sl">AdjEM</div></div>
-        <div class="stat-cell torvik-cell"><div class="sv" style="color:#34d399">${tv.adj_oe}</div><div class="sl">AdjOE</div></div>
-        <div class="stat-cell torvik-cell"><div class="sv" style="color:#f87171">${tv.adj_de}</div><div class="sl">AdjDE</div></div>
+        <div class="stat-cell torvik-cell"><div class="sv" style="color:var(--accent)">${tv.adj_em > 0 ? '+' : ''}${tv.adj_em}</div><div class="sl">AdjEM</div></div>
+        <div class="stat-cell torvik-cell"><div class="sv" style="color:var(--west)">${tv.adj_oe}</div><div class="sl">AdjOE</div></div>
+        <div class="stat-cell torvik-cell"><div class="sv" style="color:var(--midwest)">${tv.adj_de}</div><div class="sl">AdjDE</div></div>
         <div class="stat-cell torvik-cell"><div class="sv">${(tv.barthag * 100).toFixed(1)}%</div><div class="sl">Barthag</div></div>
-        <div class="stat-cell torvik-cell"><div class="sv">${tv.wab > 0 ? '+' : ''}${tv.wab}</div><div class="sl">WAB</div></div>
+        <div class="stat-cell torvik-cell"><div class="sv">${tv.wab > 0 ? '+' : ''}${parseFloat(tv.wab).toFixed(1)}</div><div class="sl">WAB</div></div>
         <div class="stat-cell torvik-cell"><div class="sv">${tv.adj_tempo ?? '—'}</div><div class="sl">Tempo Rk</div></div>
-        <div class="stat-cell torvik-cell"><div class="sv">${tv.luck > 0 ? '+' : ''}${tv.luck}</div><div class="sl">Luck</div></div>
+        <div class="stat-cell torvik-cell"><div class="sv">${tv.luck > 0 ? '+' : ''}${parseFloat(tv.luck).toFixed(3)}</div><div class="sl">Luck</div></div>
+        <div class="stat-cell torvik-cell"><div class="sv">${tv.two_p != null ? tv.two_p + '%' : '—'}</div><div class="sl">2P%</div></div>
+        <div class="stat-cell torvik-cell"><div class="sv">${tv.three_p != null ? tv.three_p + '%' : '—'}</div><div class="sl">3P%</div></div>
+        <div class="stat-cell torvik-cell"><div class="sv">${tv.ft_pct != null ? tv.ft_pct + '%' : '—'}</div><div class="sl">FT%</div></div>
+        <div class="stat-cell torvik-cell"><div class="sv">${tv.efg != null ? tv.efg + '%' : '—'}</div><div class="sl">eFG%</div></div>
       </div>` : `<div class="torvik-missing">Torvik data unavailable for this team</div>`;
 
     output.innerHTML = `
@@ -156,16 +206,18 @@ async function fetchTeamStats() {
 
         <div class="stats-section-label">ESPN BOX STATS</div>
         <div class="stats-grid-2">
-          <div class="stat-cell"><div class="sv">${get('offensive','PTS')}</div><div class="sl">PPG</div></div>
+          <div class="stat-cell"><div class="sv">${get('offensive','avgPoints')}</div><div class="sl">PPG</div></div>
           <div class="stat-cell"><div class="sv">${get('general','avgRebounds')}</div><div class="sl">RPG</div></div>
-          <div class="stat-cell"><div class="sv">${get('offensive','AST')}</div><div class="sl">APG</div></div>
-          <div class="stat-cell"><div class="sv">${get('offensive','TO')}</div><div class="sl">TOPG</div></div>
-          <div class="stat-cell"><div class="sv">${get('offensive','FG%')}%</div><div class="sl">FG%</div></div>
-          <div class="stat-cell"><div class="sv">${get('offensive','3P%')}%</div><div class="sl">3P%</div></div>
-          <div class="stat-cell"><div class="sv">${get('offensive','FT%')}%</div><div class="sl">FT%</div></div>
+          <div class="stat-cell"><div class="sv">${get('offensive','avgAssists')}</div><div class="sl">APG</div></div>
+          <div class="stat-cell"><div class="sv">${get('offensive','avgTurnovers')}</div><div class="sl">TOPG</div></div>
+          <div class="stat-cell"><div class="sv">${get('offensive','fieldGoalPct')}%</div><div class="sl">FG%</div></div>
+          <div class="stat-cell"><div class="sv">${get('offensive','threePointFieldGoalPct')}%</div><div class="sl">3P%</div></div>
+          <div class="stat-cell"><div class="sv">${get('offensive','twoPointFieldGoalPct')}%</div><div class="sl">2P%</div></div>
+          <div class="stat-cell"><div class="sv">${get('offensive','freeThrowPct')}%</div><div class="sl">FT%</div></div>
           <div class="stat-cell"><div class="sv">${get('general','assistTurnoverRatio')}</div><div class="sl">AST/TO</div></div>
-          <div class="stat-cell"><div class="sv">${get('defensive','STL')}</div><div class="sl">SPG</div></div>
-          <div class="stat-cell"><div class="sv">${get('defensive','BLK')}</div><div class="sl">BPG</div></div>
+          <div class="stat-cell"><div class="sv">${get('defensive','avgSteals')}</div><div class="sl">SPG</div></div>
+          <div class="stat-cell"><div class="sv">${get('defensive','avgBlocks')}</div><div class="sl">BPG</div></div>
+          <div class="stat-cell"><div class="sv">${get('offensive','avgThreePointFieldGoalsMade')} / ${get('offensive','avgThreePointFieldGoalsAttempted')}</div><div class="sl">3PM/A</div></div>
         </div>
 
         ${tBlock}
@@ -238,11 +290,11 @@ async function sendChat() {
   messagesEl.querySelectorAll('.chat-empty').forEach(el => el.remove());
 
   // User bubble
-  messagesEl.innerHTML += `<div class="chat-msg user">${escapeHtml(msg)}</div>`;
+  messagesEl.innerHTML += `<div class="chat-bubble-user">${escapeHtml(msg)}</div>`;
 
   // Thinking indicator
   const thinkId = 'think_' + Date.now();
-  messagesEl.innerHTML += `<div class="chat-msg assistant" id="${thinkId}">${loadingHTML('Thinking...')}</div>`;
+  messagesEl.innerHTML += `<div class="chat-bubble-ai" id="${thinkId}"><div class="chat-bubble-ai-body">${loadingHTML('Thinking...')}</div></div>`;
   messagesEl.scrollTop = messagesEl.scrollHeight;
 
   document.getElementById('chat-send-btn').disabled = true;
@@ -259,9 +311,9 @@ async function sendChat() {
     chatHistory.push({ role: 'assistant', content: reply });
 
     document.getElementById(thinkId).outerHTML =
-      `<div class="chat-msg assistant">
-         <div class="msg-label">AI SCOUT</div>
-         ${escapeHtml(reply)}
+      `<div class="chat-bubble-ai">
+         <div class="chat-bubble-ai-label">Scout</div>
+         <div class="chat-bubble-ai-body">${escapeHtml(reply)}</div>
        </div>`;
   } catch (err) {
     document.getElementById(thinkId).outerHTML =
