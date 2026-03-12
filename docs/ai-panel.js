@@ -268,8 +268,7 @@ async function fetchNewsSearch(query) {
 }
 
 async function runNewsAI(prompt) {
-  const key = requireKey();
-  if (!key) return;
+  const key = WORKER_URL;
 
   const btn    = document.getElementById('news-fetch-btn');
   const output = document.getElementById('news-output');
@@ -297,8 +296,7 @@ async function sendChat() {
   const msg      = textarea.value.trim();
   if (!msg) return;
 
-  const key = requireKey();
-  if (!key) return;
+  const key = WORKER_URL;
 
   textarea.value = '';
   textarea.style.height = '';
@@ -362,49 +360,41 @@ function insertHint(text) {
   ta.focus();
 }
 
-// ── Anthropic API call ────────────────────────────────────────────────────────
-async function callClaude(apiKey, singlePrompt, opts = {}) {
+// ── OpenRouter API call ───────────────────────────────────────────────────────
+const WORKER_URL = 'https://lively-dust-2d6b.sriramanasuri.workers.dev';
+const OPENROUTER_MODEL = 'nvidia/nemotron-3-super-120b-a12b:free';
+
+async function callClaude(_unusedKey, singlePrompt, opts = {}) {
   const messages = opts.messages ?? [{ role: 'user', content: singlePrompt }];
 
+  const sys = opts.system ?? systemPrompt();
+  const fullMessages = [{ role: 'system', content: sys }, ...messages];
+
   const body = {
-    model:      'claude-sonnet-4-20250514',
+    model:      OPENROUTER_MODEL,
     max_tokens: 1024,
-    system:     opts.system ?? systemPrompt(),
-    messages,
+    messages:   fullMessages,
   };
 
-  if (opts.tools) body.tools = opts.tools;
-
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
+  const res = await fetch(WORKER_URL, {
     method:  'POST',
     headers: {
-      'Content-Type':      'application/json',
-      'x-api-key':         apiKey,
-      'anthropic-version': '2023-06-01',
+      'Content-Type':  'application/json',
+      // Authorization handled by Cloudflare Worker
+
     },
     body: JSON.stringify(body),
   });
 
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));
-    if (res.status === 401) throw new Error('Invalid API key. Click AI Scout again to re-enter.');
     throw new Error(err?.error?.message ?? `API error ${res.status}`);
   }
 
   const data = await res.json();
-
-  if (!data.content) {
-    throw new Error(data.error?.message ?? 'Unexpected API response — no content returned');
-  }
-
-  // Collect all text blocks (tool_use blocks are skipped)
-  const text = data.content
-    .filter(b => b.type === 'text')
-    .map(b => b.text)
-    .join('\n')
-    .trim();
-
-  return text || '(No response)';
+  const text = data.choices?.[0]?.message?.content?.trim();
+  if (!text) throw new Error('No response from model');
+  return text;
 }
 
 // ── System prompt with graph context ─────────────────────────────────────────
