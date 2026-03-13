@@ -93,16 +93,9 @@
 
 <!-- Custom selection pills bar -->
 <div class="custom-pills-bar" id="custom-pills-bar" style="display:none">
-  <span class="toolbar-label" style="margin-right:6px;flex-shrink:0">SHOWING</span>
+  <span class="pills-count-badge" id="pills-count-badge">0</span>
   <div class="pills-wrap" id="custom-pills"></div>
-  <div style="display:flex;gap:4px;margin-left:auto;flex-shrink:0;align-items:center">
-    <button class="view-btn pill-region-rm" onclick="removeRegionFromCustom('East')"   title="Remove East teams"    style="border-left:3px solid #4a7fb5">− East</button>
-    <button class="view-btn pill-region-rm" onclick="removeRegionFromCustom('West')"   title="Remove West teams"    style="border-left:3px solid #3a8c6e">− West</button>
-    <button class="view-btn pill-region-rm" onclick="removeRegionFromCustom('South')"  title="Remove South teams"   style="border-left:3px solid #b89030">− South</button>
-    <button class="view-btn pill-region-rm" onclick="removeRegionFromCustom('Midwest')" title="Remove Midwest teams" style="border-left:3px solid #b84545">− Midwest</button>
-    <button class="view-btn pill-region-rm" onclick="removeRegionFromCustom('bubble')" title="Remove bubble teams"  style="border-left:3px solid #7c3aed">− Bubble</button>
-    <button class="view-btn" onclick="clearCustom()" style="margin-left:4px">✕ Clear all</button>
-  </div>
+  <button class="view-btn pills-clear-btn" onclick="clearCustom()" style="flex-shrink:0;margin-left:4px">✕ Clear</button>
 </div>
 
 <div class="toolbar" id="toolbar2" style="padding-top:0;height:auto;min-height:0;border-top:none;padding-bottom:4px;display:flex;align-items:center;padding-left:16px;gap:8px">

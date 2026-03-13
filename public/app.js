@@ -745,6 +745,7 @@ function removeNodeFromGraph(nodeId) {
 function renderCustomPills() {
   const pillsBar  = document.getElementById('custom-pills-bar');
   const pillsWrap = document.getElementById('custom-pills');
+  const badge     = document.getElementById('pills-count-badge');
   if (CUSTOM_SELECTION.size === 0) {
     pillsBar.style.display = 'none';
     return;
@@ -764,6 +765,7 @@ function renderCustomPills() {
     `;
     pillsWrap.appendChild(pill);
   });
+  if (badge) badge.textContent = CUSTOM_SELECTION.size;
   pillsBar.style.display = 'flex';
 }
 
@@ -888,6 +890,8 @@ function renderCustom() {
     `;
     pillsWrap.appendChild(pill);
   });
+  const badge = document.getElementById('pills-count-badge');
+  if (badge) badge.textContent = CUSTOM_SELECTION.size;
   pillsBar.style.display = 'flex';
 
   // Filter nodes to selection

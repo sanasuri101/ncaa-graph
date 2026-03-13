@@ -1401,21 +1401,29 @@ section { margin-bottom: 20px; }
 .custom-pills-bar {
   display: flex;
   align-items: center;
-  padding: 6px 16px;
+  padding: 4px 10px;
   background: var(--surface2);
   border-bottom: 1px solid var(--border);
   gap: 6px;
   flex-wrap: nowrap;
-  overflow-x: auto;
+  max-height: 36px;
   min-height: 36px;
+  overflow: hidden;
+  flex-shrink: 0;
 }
 
 .pills-wrap {
   display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
+  gap: 5px;
+  flex-wrap: nowrap;
   align-items: center;
+  overflow-x: auto;
+  overflow-y: hidden;
+  flex: 1;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
+.pills-wrap::-webkit-scrollbar { display: none; }
 
 .team-pill {
   display: inline-flex;
@@ -3258,3 +3266,18 @@ section { margin-bottom: 20px; }
   color: var(--midwest); cursor: pointer; transition: background .15s;
 }
 .remove-from-graph-btn:hover { background: #fbe8e8; border-color: var(--midwest); }
+
+/* ── Pills count badge ───────────────────────────────────────────────────── */
+.pills-count-badge {
+  flex-shrink: 0;
+  background: var(--accent);
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: .68rem;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 10px;
+  min-width: 24px;
+  text-align: center;
+  line-height: 1.4;
+}
