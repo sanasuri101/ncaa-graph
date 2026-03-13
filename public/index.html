@@ -158,6 +158,7 @@
       <button class="stab" data-tab="rankings">Rankings</button>
       <button class="stab" data-tab="detail">Detail</button>
       <button class="stab" data-tab="transitive" id="trans-tab-btn" title="Transitive matchup paths">Paths</button>
+      <button class="stab" data-tab="bracket" onclick="initBracket()">Bracket</button>
     </div>
 
     <div class="tab-content active" id="tab-overview">
@@ -222,6 +223,8 @@
         <div class="detail-empty">Click a team or game edge to see details</div>
       </div>
     </div>
+
+    <div class="tab-content" id="tab-bracket"></div>
 
     <div class="tab-content" id="tab-transitive">
       <div class="paths-picker">
@@ -347,6 +350,7 @@
 <script src="scatter.js"></script>
 <script src="sparkline.js"></script>
 <script src="style-bars.js"></script>
+<script src="bracket.js"></script>
 <script src="ai-panel.js"></script>
 </body>
 </html>

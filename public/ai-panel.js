@@ -1,26 +1,45 @@
 /**
  * ai-panel.js — AI Scout panel
  *
- * Three modes:
- *   Stats  — fetches ESPN team statistics (no AI key required)
- *   News   — paste any article URL or use preset searches; AI reads + summarizes
- *   Chat   — free-form conversation with context about the graph/bracket
- *
- * News + Chat use the Anthropic API via claude-sonnet-4-20250514 with web_search.
- * The API key is read from localStorage key "ANTHROPIC_KEY". On first use, the
- * panel prompts the user to enter it. The key is stored only in their browser.
+ * Production fixes vs previous version:
+ *   - systemPrompt() removed — server builds it query-scoped (api/ai.js)
+ *   - Browser sends only {messages, userMsg} — no team data, no model name
+ *   - torvik_stats.json fetched once globally via window.getTorvik() shared promise
+ *   - AbortController on every AI fetch — 30s timeout
+ *   - chatHistory trimmed by token estimate, not message count
+ *   - Double-send guard via _chatInFlight flag
+ *   - ESPN stats fetch has 10s timeout
  */
 
 'use strict';
 
-// ── Panel open/close ─────────────────────────────────────────────────────────
+// ── Token budget ──────────────────────────────────────────────────────────────
+// window.getTorvik() is defined in app.js (loads first) — do not redefine here.
+const CHARS_PER_TOK   = 4;
+const MAX_HISTORY_TOK = 6000;
+
+function estTokens(text) {
+  return Math.ceil((typeof text === 'string' ? text : JSON.stringify(text ?? '')).length / CHARS_PER_TOK);
+}
+
+function trimHistory(messages) {
+  let used = 0;
+  const out = [];
+  for (let i = messages.length - 1; i >= 0; i--) {
+    const t = estTokens(messages[i].content);
+    if (used + t > MAX_HISTORY_TOK) break;
+    out.unshift(messages[i]);
+    used += t;
+  }
+  return out;
+}
+
+// ── Panel open/close ──────────────────────────────────────────────────────────
 function toggleAIPanel() {
   const panel  = document.getElementById('ai-panel');
   const btn    = document.getElementById('ai-toggle');
   const isOpen = panel.classList.toggle('open');
   btn.classList.toggle('active', isOpen);
-
-  // On first open, populate the team select with sorted bracket teams
   if (isOpen && document.getElementById('stats-team-select').options.length === 1) {
     populateTeamSelect();
   }
@@ -29,29 +48,26 @@ function toggleAIPanel() {
 function populateTeamSelect() {
   const sel = document.getElementById('stats-team-select');
   if (!sel) return;
-
-  // If data not loaded yet, retry after a short wait
   if (!ALL_NODES || ALL_NODES.length === 0) {
     sel.innerHTML = '<option value="">Loading teams...</option>';
     setTimeout(populateTeamSelect, 500);
     return;
   }
-
   const sorted = [...ALL_NODES].sort((a, b) => a.full_name.localeCompare(b.full_name));
   sel.innerHTML = '<option value="">Select a team...</option>';
   sorted.forEach(n => {
     const opt = document.createElement('option');
-    opt.value       = n.id;
-    opt.textContent = `${n.full_name} (${n.region}, #${n.seed})`;
+    opt.value = n.id;
+    const seedLabel = n.seed != null ? `#${n.seed}` : 'bubble';
+    opt.textContent = `${n.full_name} (${n.region} ${seedLabel})`;
     sel.appendChild(opt);
   });
 }
 
-// ── Mode switching ───────────────────────────────────────────────────────────
+// ── Mode switching ────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('ai-toggle').addEventListener('click', toggleAIPanel);
 
-  // New segmented tab row
   document.querySelectorAll('.ai-tab').forEach(btn => {
     btn.addEventListener('click', () => {
       const mode = btn.dataset.mode;
@@ -60,62 +76,39 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Auto-fetch stats when team is selected
   document.getElementById('stats-team-select').addEventListener('change', () => {
-    const sel = document.getElementById('stats-team-select');
-    if (sel.value) fetchTeamStats();
+    if (document.getElementById('stats-team-select').value) fetchTeamStats();
   });
+
   document.getElementById('chat-input').addEventListener('keydown', e => {
     if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChat(); }
   });
 
-  // Key drawer: submit on Enter
   document.getElementById('ai-key-input').addEventListener('keydown', e => {
     if (e.key === 'Enter') submitKey();
     if (e.key === 'Escape') closeKeyDrawer();
   });
 
-  // Show empty state in chat
   document.getElementById('chat-messages').innerHTML =
     '<div class="chat-empty">Ask anything about the bracket —<br>matchups, stats, trends, predictions.</div>';
 
   updateKeyStatus();
 });
 
-// ── API key management ───────────────────────────────────────────────────────
-function getApiKey() {
-  return localStorage.getItem('ANTHROPIC_KEY') || '';
-}
-
+// ── API key management ────────────────────────────────────────────────────────
+function getApiKey()     { return localStorage.getItem('ANTHROPIC_KEY') || ''; }
 function saveApiKey(key) {
-  if (key && key.trim().startsWith('sk-')) {
-    localStorage.setItem('ANTHROPIC_KEY', key.trim());
-    return true;
-  }
+  if (key && key.trim().startsWith('sk-')) { localStorage.setItem('ANTHROPIC_KEY', key.trim()); return true; }
   return false;
 }
+function clearApiKey()   { localStorage.removeItem('ANTHROPIC_KEY'); }
 
-function clearApiKey() {
-  localStorage.removeItem('ANTHROPIC_KEY');
-}
-
-function requireKey() {
-  const k = getApiKey();
-  if (k) return k;
-  // Show the settings drawer instead of a browser prompt
-  openKeyDrawer();
-  return null;
-}
-
-// ── Settings drawer ──────────────────────────────────────────────────────────
+// ── Settings drawer ───────────────────────────────────────────────────────────
 function toggleKeyDrawer() {
   const drawer = document.getElementById('ai-key-drawer');
   drawer.classList.toggle('open');
-  if (drawer.classList.contains('open')) {
-    setTimeout(() => document.getElementById('ai-key-input').focus(), 100);
-  }
+  if (drawer.classList.contains('open')) setTimeout(() => document.getElementById('ai-key-input').focus(), 100);
 }
-
 function openKeyDrawer()  { document.getElementById('ai-key-drawer').classList.add('open'); }
 function closeKeyDrawer() { document.getElementById('ai-key-drawer').classList.remove('open'); }
 
@@ -143,19 +136,7 @@ function updateKeyStatus() {
   if (label) label.textContent = has ? 'Key set ✓' : 'Add key';
 }
 
-// ── ESPN + Torvik Stats fetcher (no API key needed) ──────────────────────────
-let TORVIK_DATA = null;
-
-async function loadTorvik() {
-  if (TORVIK_DATA) return TORVIK_DATA;
-  try {
-    const res = await fetch('data/torvik_stats.json');
-    if (!res.ok) return null;
-    TORVIK_DATA = await res.json();
-    return TORVIK_DATA;
-  } catch (_) { return null; }
-}
-
+// ── ESPN + Torvik Stats (no AI key needed) ────────────────────────────────────
 async function fetchTeamStats() {
   const sel    = document.getElementById('stats-team-select');
   const teamId = sel.value;
@@ -168,38 +149,41 @@ async function fetchTeamStats() {
   btn.disabled = true;
   output.innerHTML = loadingHTML('Fetching ESPN + Torvik stats...');
 
+  const ctrl  = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), 10000);
+
   try {
-    // Parallel fetch: ESPN stats + Torvik data
     const [espnRes, tData] = await Promise.all([
-      fetch(`https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/teams/${teamId}/statistics`),
-      loadTorvik(),
+      fetch(
+        `https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/teams/${teamId}/statistics`,
+        { signal: ctrl.signal }
+      ),
+      window.getTorvik(),
     ]);
+    clearTimeout(timer);
 
     const espnData = await espnRes.json();
     const cats     = espnData?.results?.stats?.categories ?? [];
-
     const statsMap = {};
-    cats.forEach(cat => {
-      cat.stats.forEach(s => { statsMap[`${cat.name}:${s.name}`] = s; });
-    });
+    cats.forEach(cat => { cat.stats.forEach(s => { statsMap[`${cat.name}:${s.name}`] = s; }); });
     const get = (cat, name) => statsMap[`${cat}:${name}`]?.displayValue ?? '—';
+    const pct = (cat, name) => { const v = get(cat, name); return v === '—' ? '—' : v + '%'; };
 
-    const pct = (cat, name) => {
-      const v = get(cat, name);
-      return v === '—' ? '—' : v + '%';
-    };
-
-    // Fetch season record
     let record = `${node.wins_vs_field}W vs bracket field`;
     try {
-      const tr = await fetch(`https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/teams/${teamId}`);
+      const ctrl2 = new AbortController();
+      setTimeout(() => ctrl2.abort(), 5000);
+      const tr = await fetch(
+        `https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/teams/${teamId}`,
+        { signal: ctrl2.signal }
+      );
       const td = await tr.json();
       record   = td?.team?.record?.items?.[0]?.summary ?? record;
     } catch (_) {}
 
-    const tv     = tData?.teams?.[teamId]?.torvik ?? null;
+    const tv  = tData?.teams?.[teamId]?.torvik ?? null;
     const rgbMap = { East: '#4a7fb5', West: '#3a8c6e', South: '#b89030', Midwest: '#b84545' };
-    const rc     = rgbMap[node.region] ?? '#b0a898';
+    const rc  = rgbMap[node.region] ?? '#b0a898';
 
     const tBlock = tv ? `
       <div class="stats-section-label">TORVIK T-RANK</div>
@@ -222,7 +206,6 @@ async function fetchTeamStats() {
       <div class="stats-card">
         <div class="stats-card-name" style="border-left:3px solid ${rc};padding-left:8px">${node.full_name}</div>
         <div class="stats-card-sub">${node.region} · Seed #${node.seed} · ${record}</div>
-
         <div class="stats-section-label">ESPN BOX STATS</div>
         <div class="stats-grid-2">
           <div class="stat-cell"><div class="sv">${get('offensive','avgPoints')}</div><div class="sl">PPG</div></div>
@@ -238,7 +221,6 @@ async function fetchTeamStats() {
           <div class="stat-cell"><div class="sv">${get('defensive','avgBlocks')}</div><div class="sl">BPG</div></div>
           <div class="stat-cell"><div class="sv">${get('offensive','avgThreePointFieldGoalsMade')} / ${get('offensive','avgThreePointFieldGoalsAttempted')}</div><div class="sl">3PM/A</div></div>
         </div>
-
         ${tBlock}
       </div>
       <div style="font-size:.62rem;color:var(--text-mute);margin-top:4px;line-height:1.5">
@@ -246,7 +228,8 @@ async function fetchTeamStats() {
       </div>
     `;
   } catch (err) {
-    output.innerHTML = `<div class="ai-error">Failed to load stats: ${err.message}</div>`;
+    clearTimeout(timer);
+    output.innerHTML = `<div class="ai-error">Failed to load stats: ${err.name === 'AbortError' ? 'Request timed out' : err.message}</div>`;
   } finally {
     btn.disabled = false;
   }
@@ -260,26 +243,20 @@ async function fetchNewsArticle() {
     document.getElementById('news-output').innerHTML = '<div class="ai-error">Please enter a full URL starting with http/https.</div>';
     return;
   }
-  await runNewsAI(`Read this article and give me a concise summary with the key takeaways that are relevant to March Madness bracket analysis: ${url}`);
+  await runNewsAI(`Read this article and give me a concise summary with the key takeaways relevant to March Madness bracket analysis: ${url}`);
 }
 
 async function fetchNewsSearch(query) {
-  await runNewsAI(`Search the web for the latest news about: "${query}". Summarize the top findings in 3-5 bullet points. Focus on information useful for NCAA bracket decisions.`);
+  await runNewsAI(`Search for the latest news about: "${query}". Summarize the top findings in 3-5 bullet points focused on NCAA bracket decisions.`);
 }
 
 async function runNewsAI(prompt) {
-  const key = WORKER_URL;
-
   const btn    = document.getElementById('news-fetch-btn');
   const output = document.getElementById('news-output');
   btn.disabled = true;
   output.innerHTML = loadingHTML('Reading article...');
-
   try {
-    const text = await callClaude(key, prompt, {
-      system: systemPrompt(),
-      tools: [{ type: 'web_search_20250305', name: 'web_search' }],
-    });
+    const text = await callAI([{ role: 'user', content: prompt }], prompt);
     output.innerHTML = `<div class="ai-text-block">${renderMarkdown(text)}</div>`;
   } catch (err) {
     output.innerHTML = `<div class="ai-error">${escapeHtml(err.message)}</div>`;
@@ -288,31 +265,29 @@ async function runNewsAI(prompt) {
   }
 }
 
-// ── Chat ─────────────────────────────────────────────────────────────────────
+// ── Chat ──────────────────────────────────────────────────────────────────────
 const chatHistory = [];
+let _chatInFlight = false;
 
 async function sendChat() {
+  if (_chatInFlight) return;
+
   const textarea = document.getElementById('chat-input');
   const msg      = textarea.value.trim();
   if (!msg) return;
 
-  const key = WORKER_URL;
-
+  _chatInFlight = true;
   textarea.value = '';
   textarea.style.height = '';
 
   const messagesEl = document.getElementById('chat-messages');
-
-  // Remove empty state
   messagesEl.querySelectorAll('.chat-empty').forEach(el => el.remove());
 
-  // User bubble — use DOM append, not innerHTML +=
   const userBubble = document.createElement('div');
   userBubble.className = 'chat-bubble-user';
   userBubble.textContent = msg;
   messagesEl.appendChild(userBubble);
 
-  // Thinking indicator
   const thinkEl = document.createElement('div');
   thinkEl.className = 'chat-bubble-ai';
   thinkEl.innerHTML = `<div class="chat-bubble-ai-body">${loadingHTML('Thinking...')}</div>`;
@@ -322,116 +297,72 @@ async function sendChat() {
   document.getElementById('chat-send-btn').disabled = true;
 
   chatHistory.push({ role: 'user', content: msg });
-  if (chatHistory.length > 20) {
-    chatHistory.splice(0, chatHistory.length - 20);
-    // Show notice so user knows earlier context is gone
+
+  // Trim by token budget before sending — sync chatHistory to what we actually send
+  const trimmed = trimHistory(chatHistory);
+  if (trimmed.length < chatHistory.length) {
+    chatHistory.splice(0, chatHistory.length - trimmed.length);
     const notice = document.createElement('div');
     notice.className = 'chat-context-notice';
-    notice.textContent = 'Earlier messages dropped from AI context (20 message limit)';
-    messagesEl.appendChild(notice);
+    notice.textContent = 'Earlier messages trimmed to stay within context limit';
+    messagesEl.insertBefore(notice, userBubble);
   }
 
   try {
-    const reply = await callClaude(key, null, {
-      system: systemPrompt(),
-      messages: chatHistory,
-      tools: [{ type: 'web_search_20250305', name: 'web_search' }],
-    });
-
+    const reply = await callAI(chatHistory, msg);
     chatHistory.push({ role: 'assistant', content: reply });
-
     thinkEl.innerHTML = `
       <div class="chat-bubble-ai-label">Scout</div>
       <div class="chat-bubble-ai-body">${renderMarkdown(reply)}</div>`;
   } catch (err) {
-    // Roll back the user message so history stays alternating user/assistant
-    // Without this, next send would create two consecutive user messages → API 400
     chatHistory.pop();
     thinkEl.innerHTML = `<div class="ai-error">${escapeHtml(err.message)}</div>`;
   } finally {
     document.getElementById('chat-send-btn').disabled = false;
+    _chatInFlight = false;
     messagesEl.scrollTop = messagesEl.scrollHeight;
   }
 }
 
 function insertHint(text) {
-  const ta = document.getElementById('chat-input');
-  ta.value = text;
-  ta.focus();
+  document.getElementById('chat-input').value = text;
+  document.getElementById('chat-input').focus();
 }
 
-// ── OpenRouter API call ───────────────────────────────────────────────────────
-const WORKER_URL = 'https://lively-dust-2d6b.sriramanasuri.workers.dev';
-const OPENROUTER_MODEL = 'openrouter/free';
+// ── Core AI call — server owns system prompt and model ────────────────────────
+// Sends only { messages, userMsg } — no team data, no games, no model name.
+// api/ai.js builds the query-scoped system prompt server-side.
+const WORKER_URL    = '/api/ai';
+const FETCH_TIMEOUT = 30000;
 
-async function callClaude(_unusedKey, singlePrompt, opts = {}) {
-  const messages = opts.messages ?? [{ role: 'user', content: singlePrompt }];
+async function callAI(messages, userMsg) {
+  const ctrl  = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), FETCH_TIMEOUT);
+  try {
+    const res = await fetch(WORKER_URL, {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ messages, userMsg }),
+      signal:  ctrl.signal,
+    });
+    clearTimeout(timer);
 
-  const sys = opts.system ?? systemPrompt();
-  const fullMessages = [{ role: 'system', content: sys }, ...messages];
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err?.error?.message ?? `API error ${res.status}`);
+    }
 
-  const body = {
-    model:      OPENROUTER_MODEL,
-    max_tokens: 1024,
-    messages:   fullMessages,
-  };
-
-  const res = await fetch(WORKER_URL, {
-    method:  'POST',
-    headers: {
-      'Content-Type':  'application/json',
-      // Authorization handled by Cloudflare Worker
-
-    },
-    body: JSON.stringify(body),
-  });
-
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({}));
-    throw new Error(err?.error?.message ?? `API error ${res.status}`);
+    const data = await res.json();
+    const text = data.choices?.[0]?.message?.content?.trim();
+    if (!text) throw new Error(data.error?.message ?? 'No response from model');
+    return text;
+  } catch (err) {
+    clearTimeout(timer);
+    if (err.name === 'AbortError') throw new Error('Request timed out after 30s — try again');
+    throw err;
   }
-
-  const data = await res.json();
-  const text = data.choices?.[0]?.message?.content?.trim();
-  if (!text) {
-    const errMsg = data.error?.message ?? JSON.stringify(data);
-    throw new Error(`No response from model: ${errMsg}`);
-  }
-  return text;
 }
 
-// ── System prompt with graph context ─────────────────────────────────────────
-function systemPrompt() {
-  // Full team roster with real Torvik stats
-  const teamLines = ALL_NODES.map(n => {
-    const tv = TORVIK_DATA?.teams?.[n.id]?.torvik;
-    const torvik = tv
-      ? `T-Rank #${tv.rank}, AdjOE ${tv.adj_oe}, AdjDE ${tv.adj_de}, AdjEM ${tv.adj_em > 0 ? '+' : ''}${tv.adj_em}, Barthag ${(tv.barthag*100).toFixed(1)}%, Tempo #${tv.adj_tempo}`
-      : 'Torvik N/A';
-    return `${n.full_name} (${n.region} #${n.seed}) | ${n.wins_vs_field}W-${n.losses_vs_field}L vs field | ${torvik}`;
-  }).join('\n');
-
-  // All played games
-  const gameLines = ALL_EDGES.map(e => {
-    const winner = ALL_NODES.find(n => n.id === e.from)?.label ?? e.from;
-    const loser  = ALL_NODES.find(n => n.id === e.to)?.label ?? e.to;
-    return `${winner} def. ${loser} ${e.label} (${e.date ? e.date.slice(0,10) : ''})`;
-  }).join('\n');
-
-  return `You are AI Scout, an expert NCAA basketball analyst for the 2026 March Madness bracket.
-
-CRITICAL: Only use the stats below. Never invent or estimate numbers not listed here.
-
-ALL 64 BRACKET TEAMS (name | region seed | record vs bracket field | Torvik efficiency):
-${teamLines}
-
-ALL ${ALL_EDGES.length} INTER-BRACKET GAMES PLAYED THIS SEASON:
-${gameLines}
-
-When asked about efficiency, use the exact AdjOE/AdjDE/AdjEM/Barthag values above.
-When asked about matchups, reference the game log above.
-Be concise and direct. No filler.`;
-}
 // ── Helpers ───────────────────────────────────────────────────────────────────
 function loadingHTML(label) {
   return `<div class="ai-loading">
@@ -448,18 +379,12 @@ function escapeHtml(str) {
     .replace(/"/g, '&quot;');
 }
 
-// Render basic markdown — bold, bullets, numbered lists, newlines
 function renderMarkdown(text) {
   return escapeHtml(text)
-    // Bold **text**
     .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-    // Italic *text*
     .replace(/\*(.+?)\*/g, '<em>$1</em>')
-    // Numbered list lines: "1. foo"
     .replace(/^(\d+)\. (.+)$/gm, '<div class="md-li md-oli"><span class="md-ln">$1.</span>$2</div>')
-    // Bullet list lines: "- foo" or "• foo"
     .replace(/^[-•] (.+)$/gm, '<div class="md-li"><span class="md-dot">·</span>$1</div>')
-    // Newlines to <br> (but not after list items which already have block display)
     .replace(/\n\n/g, '<br><br>')
     .replace(/\n/g, '<br>');
 }

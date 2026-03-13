@@ -1,0 +1,10 @@
+{
+  "name": "ncaa-graph",
+  "version": "1.0.0",
+  "private": true,
+  "description": "NCAA 2025-26 head-to-head graph with AI Scout",
+  "engines": {
+    "node": ">=18"
+  },
+  "type": "module"
+}

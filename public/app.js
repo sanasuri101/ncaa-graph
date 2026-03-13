@@ -33,6 +33,24 @@ const REGION_NODE_BG = {
   bubble:  '#ddd6fe',
 };
 
+// ── Shared Torvik cache ────────────────────────────────────────────────────────────────────────────
+// One fetch for the whole app. scatter.js, style-bars.js, and ai-panel.js
+// previously each fetched torvik_stats.json independently on first use.
+// Now they all call: const tvData = await window.getTorvik()
+window._torvikPromise = null;
+window.getTorvik = function () {
+  if (!window._torvikPromise) {
+    window._torvikPromise = fetch('data/torvik_stats.json')
+      .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+      .catch(err => {
+        console.warn('torvik_stats.json failed to load:', err);
+        window._torvikPromise = null; // allow retry on next call
+        return null;
+      });
+  }
+  return window._torvikPromise;
+};
+
 // ── Boot ─────────────────────────────────────────────────────────────────────
 window.addEventListener('DOMContentLoaded', async () => {
   try {
@@ -431,11 +449,8 @@ function populateRankings() {
 }
 
 async function populateSeedDivergence() {
-  let tvData = null;
-  try {
-    const res = await fetch('data/torvik_stats.json');
-    tvData = await res.json();
-  } catch (e) { return; }
+  const tvData = await window.getTorvik();
+  if (!tvData) return;
 
   const teams = ALL_NODES.map(n => {
     const tv = tvData?.teams?.[n.id]?.torvik;

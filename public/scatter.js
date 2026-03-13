@@ -29,12 +29,7 @@ async function toggleScatter() {
 
   if (SCATTER_OPEN) {
     if (!TORVIK_SCATTER) {
-      try {
-        const res       = await fetch('data/torvik_stats.json');
-        TORVIK_SCATTER  = await res.json();
-      } catch (e) {
-        console.warn('Could not load Torvik data for scatter:', e);
-      }
+      TORVIK_SCATTER = await window.getTorvik();
     }
     buildScatterPoints();
     renderScatter();

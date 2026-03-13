@@ -9,11 +9,8 @@ let STYLE_TV_DATA = null;
 
 async function loadStyleData() {
   if (STYLE_TV_DATA) return STYLE_TV_DATA;
-  try {
-    const res     = await fetch('data/torvik_stats.json');
-    STYLE_TV_DATA = await res.json();
-    return STYLE_TV_DATA;
-  } catch (e) { return null; }
+  STYLE_TV_DATA = await window.getTorvik();
+  return STYLE_TV_DATA;
 }
 
 async function renderStyleBars(nodeW, nodeL, containerId) {
