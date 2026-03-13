@@ -14,6 +14,7 @@
 'use strict';
 
 let _chatInFlight = false;
+let chatHistory   = [];
 
 // ── Token budget ──────────────────────────────────────────────────────────────
 // window.getTorvik() is defined in app.js (loads first) — do not redefine here.
@@ -241,54 +242,31 @@ async function sendChat() {
 
   chatHistory.push({ role: 'user', content: msg });
 
-  const trimmed = trimHistory(chatHistory);
-  if (trimmed.length < chatHistory.length) {
-    chatHistory.splice(0, chatHistory.length - trimmed.length);
+  // Trim for the API call only — don't mutate chatHistory
+  const historyForApi = trimHistory(chatHistory);
+  if (historyForApi.length < chatHistory.length) {
     const notice = document.createElement('div');
     notice.className = 'chat-context-notice';
     notice.textContent = 'Earlier messages trimmed to stay within context limit';
     messagesEl.insertBefore(notice, userBubble);
   }
 
-  const thinkingSteps = [];
-
-  function onThinking(stepText) {
-    thinkingSteps.push(stepText);
-    // Render live thinking block while waiting for answer
-    thinkEl.innerHTML = `
-      <div class="thinking-block">
-        <div class="thinking-header">
-          <span class="thinking-spinner"></span>
-          <span class="thinking-label">Thinking</span>
-        </div>
-        <div class="thinking-steps">
-          ${thinkingSteps.map(s => `<div class="thinking-step">${escapeHtml(s)}</div>`).join('')}
-        </div>
-      </div>`;
-    messagesEl.scrollTop = messagesEl.scrollHeight;
-  }
-
   try {
-    const text = await callAI(chatHistory, msg, _chatAbortCtrl.signal, onThinking);
+    const { text, thinking } = await callAI(historyForApi, msg, _chatAbortCtrl.signal);
     chatHistory.push({ role: 'assistant', content: text });
-    thinkEl.classList.remove('thinking');
-    const thinkHtml = thinkingSteps.length ? `
+    const thinkHtml = thinking.length ? `
       <div class="thinking-block thinking-done">
         <div class="thinking-header">
           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
           <span class="thinking-label">Thought for a moment</span>
         </div>
         <div class="thinking-steps">
-          ${thinkingSteps.map(s => `<div class="thinking-step">${escapeHtml(s)}</div>`).join('')}
+          ${thinking.map(s => `<div class="thinking-step">${escapeHtml(s)}</div>`).join('')}
         </div>
       </div>` : '';
-    thinkEl.innerHTML = `
-      ${thinkHtml}
-      <div class="chat-bubble-ai-label">Scout</div>
-      <div class="chat-bubble-ai-body">${renderMarkdown(text)}</div>`;
+    thinkEl.innerHTML = `${thinkHtml}<div class="chat-bubble-ai-label">Scout</div><div class="chat-bubble-ai-body">${renderMarkdown(text)}</div>`;
   } catch (err) {
     chatHistory.pop();
-    thinkEl.classList.remove('thinking');
     if (err.name === 'AbortError') {
       thinkEl.remove();
       userBubble.remove();
@@ -308,14 +286,14 @@ function insertHint(text) {
   document.getElementById('chat-input').focus();
 }
 
-// ── Core AI call — reads SSE stream, calls onThinking live ──────────────────
+// ── Core AI call — single JSON response, abort supported ────────────────────
 const WORKER_URL    = '/api/ai';
 const FETCH_TIMEOUT = 30000;
 
-async function callAI(messages, userMsg, externalSignal, onThinking) {
+async function callAI(messages, userMsg, signal) {
   const ctrl  = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), FETCH_TIMEOUT);
-  externalSignal?.addEventListener('abort', () => ctrl.abort(), { once: true });
+  signal?.addEventListener('abort', () => ctrl.abort(), { once: true });
 
   try {
     const res = await fetch(WORKER_URL, {
@@ -325,43 +303,16 @@ async function callAI(messages, userMsg, externalSignal, onThinking) {
       signal:  ctrl.signal,
     });
     clearTimeout(timer);
-    if (!res.ok) throw new Error(`API error ${res.status}`);
-
-    // Parse SSE stream — each event is: data: {...} followed by double newline
-    const reader  = res.body.getReader();
-    const decoder = new TextDecoder();
-    let   buf     = '';
-
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      buf += decoder.decode(value, { stream: true });
-
-      // SSE events are separated by double newline
-      const events = buf.split('\n\n');
-      buf = events.pop(); // last incomplete chunk stays in buffer
-
-      for (const block of events) {
-        const line = block.trim();
-        if (!line.startsWith('data: ')) continue;
-        let evt;
-        try { evt = JSON.parse(line.slice(6)); } catch { continue; }
-
-        if (evt.type === 'thinking' && onThinking) {
-          onThinking(evt.text);
-        } else if (evt.type === 'done') {
-          return evt.text ?? '';
-        } else if (evt.type === 'error') {
-          throw new Error(evt.message ?? 'Unknown error');
-        }
-      }
+    if (!res.ok) {
+      const errData = await res.json().catch(() => ({}));
+      throw new Error(errData?.error?.message ?? `API error ${res.status}`);
     }
-    throw new Error('Stream ended without a response');
+    const data = await res.json();
+    if (data.error) throw new Error(data.error.message ?? 'Unknown error');
+    return { text: data.text || 'No response — please try again.', thinking: data.thinking ?? [] };
   } catch (err) {
     clearTimeout(timer);
-    if (err.name === 'AbortError') {
-      const e = new Error('aborted'); e.name = 'AbortError'; throw e;
-    }
+    if (err.name === 'AbortError') { const e = new Error('aborted'); e.name = 'AbortError'; throw e; }
     throw err;
   }
 }

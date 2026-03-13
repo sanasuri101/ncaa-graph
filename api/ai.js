@@ -273,11 +273,14 @@ function buildSystemPrompt(userMsg, graph, torvik) {
     return `${w}>${l} ${e.label} ${(e.date || '').slice(5, 10)}`;
   }).join('\n');
 
-  return `You are AI Scout, an expert NCAA basketball analyst for the 2026 March Madness bracket.
-Use get_team_stats, get_matchup, and get_standings tools to look up data — always call a tool before citing numbers.
-Never invent stats.
-${scope.length > 0 ? `\nQUICK CONTEXT:\n${teamLines}${gameLines ? `\n\nRECENT GAMES:\n${gameLines}` : ''}` : ''}
-Be concise. Cite exact stats.`;
+  return `You are AI Scout, an NCAA basketball analyst for the 2026 March Madness bracket.
+Only call tools when you need specific stats or matchup data not already in context.
+For general questions (rules, format, history) answer directly without tools.
+Never invent numbers — use get_team_stats, get_matchup, or get_standings if you need data.
+Be concise. One paragraph max unless a list is clearly better.${scope.length > 0 ? `
+
+CONTEXT FOR THIS QUERY:
+${teamLines}${gameLines ? `\n\nRECENT GAMES:\n${gameLines}` : ''}` : ''}`;
 }
 
 // ── Groq fetch with timeout + retry on 429/503 ────────────────────────────────
@@ -351,21 +354,13 @@ export default async function handler(req, res) {
     return;
   }
 
-  // SSE — browser EventSource protocol, flushes each event immediately
-  res.writeHead(200, {
-    ...CORS,
-    'Content-Type':  'text/event-stream',
-    'Cache-Control': 'no-cache',
-    'Connection':    'keep-alive',
-    'X-Accel-Buffering': 'no',
-  });
-
-  const emit = (type, data) => {
-    res.write(`data: ${JSON.stringify({ type, ...data })}\n\n`);
+  const send = (status, data) => {
+    res.writeHead(status, { 'Content-Type': 'application/json', ...CORS });
+    res.end(JSON.stringify(data));
   };
 
   const TOOL_LABELS = {
-    get_team_stats: (a) => `Looking up ${a.team_name ?? 'team'} stats`,
+    get_team_stats: (a) => `Looking up ${(a.team_names ?? []).join(', ') || 'team'} stats`,
     get_matchup:    (a) => `Analysing ${a.team_a ?? '?'} vs ${a.team_b ?? '?'}`,
     get_standings:  (a) => `Checking standings${a.region ? ' — ' + a.region : ''}`,
   };
@@ -376,14 +371,15 @@ export default async function handler(req, res) {
     const sysToks  = estTokens(system);
     const history  = trimHistory(body.messages, sysToks);
     let   messages = [{ role: 'system', content: system }, ...history];
+    const thinking = [];
 
     for (let iter = 0; iter < TOOL_MAX_ITER; iter++) {
       const groqRes  = await groqFetch({ model: MODEL, max_tokens: MAX_TOKENS, messages, tools: TOOLS, tool_choice: 'auto' }, groqKey);
       const groqData = await groqRes.json();
 
       if (!groqRes.ok) {
-        emit('error', { message: groqData?.error?.message ?? 'Groq error' });
-        res.end(); return;
+        send(groqRes.status, { error: { message: groqData?.error?.message ?? 'Groq error' } });
+        return;
       }
 
       const choice    = groqData.choices?.[0];
@@ -391,16 +387,15 @@ export default async function handler(req, res) {
       const toolCalls = choice?.message?.tool_calls;
 
       if (!toolCalls?.length || reason === 'length') {
-        emit('done', { text: choice?.message?.content ?? '' });
-        res.end(); return;
+        send(200, { text: choice?.message?.content ?? '', thinking });
+        return;
       }
 
       messages.push(choice.message);
       for (const tc of toolCalls) {
         let args = {};
         try { args = JSON.parse(tc.function.arguments); } catch {}
-        // Emit thinking step immediately — client sees it before next Groq call
-        emit('thinking', { text: TOOL_LABELS[tc.function.name]?.(args) ?? tc.function.name });
+        thinking.push(TOOL_LABELS[tc.function.name]?.(args) ?? tc.function.name);
         const result = dispatchTool(tc.function.name, args);
         messages.push({ role: 'tool', tool_call_id: tc.id, content: String(result) });
       }
@@ -414,11 +409,9 @@ export default async function handler(req, res) {
     const groqData   = await groqRes.json();
     const finalText  = groqData.choices?.[0]?.message?.content;
     const fallback   = !finalText ? messages.filter(m => m.role === 'tool').slice(-1)[0]?.content : null;
-    emit('done', { text: finalText || fallback || 'No response — please try again.' });
-    res.end();
+    send(200, { text: finalText || fallback || 'No response — please try again.', thinking });
 
   } catch (err) {
-    emit('error', { message: err.message });
-    res.end();
+    send(500, { error: { message: err.message } });
   }
 }
