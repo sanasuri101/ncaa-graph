@@ -29,7 +29,7 @@
       <span class="pill midwest">Midwest</span>
     </div>
     <div class="last-updated" id="last-updated"></div>
-    <button class="ai-toggle-btn" id="ai-toggle" title="AI Scout — stats, news, chat">
+    <button class="ai-toggle-btn" id="ai-toggle" title="AI Scout — stats, chat">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
       AI Scout
     </button>
@@ -86,9 +86,7 @@
       <input type="text" id="custom-team-input" placeholder="Add teams..." autocomplete="off" spellcheck="false"/>
       <div id="custom-dropdown"></div>
     </div>
-    <button class="view-btn" onclick="addAllBracketToCustom()" title="Add all 64 bracket teams">+ 64</button>
-    <button class="view-btn" onclick="addAllToCustom()" title="Add all 91 teams including bubble">+ 91</button>
-    <button class="view-btn" onclick="addRegionToCustom('bubble')" title="Add bubble teams">+ Bubble</button>
+    <button class="view-btn" onclick="addAllToCustom()" title="Add all 68 bracket teams">+ All 68</button>
     <button class="view-btn" id="custom-clear-btn" onclick="clearCustom()" title="Remove all teams from graph" style="display:none">✕ Clear</button>
   </div>
 </div>
@@ -269,7 +267,6 @@
       </div>
       <div class="ai-tab-row">
         <button class="ai-tab active" data-mode="stats">Stats</button>
-        <button class="ai-tab" data-mode="news">News</button>
         <button class="ai-tab" data-mode="chat">Chat</button>
       </div>
     </div>
@@ -288,25 +285,6 @@
       </div>
       <div id="stats-output" class="ai-output">
         <div class="ai-placeholder">Select a team to load their 2025-26 stats.</div>
-      </div>
-    </div>
-
-    <!-- NEWS MODE -->
-    <div class="ai-mode-content" id="panel-news">
-      <div class="ai-news-input">
-        <input type="text" id="news-url" placeholder="Paste article URL..." spellcheck="false" autocomplete="off"/>
-        <button class="ai-action-btn" id="news-fetch-btn" onclick="fetchNewsArticle()">
-          Summarize
-        </button>
-      </div>
-      <div class="ai-news-presets">
-        <span class="preset-label">Quick:</span>
-        <button class="preset-btn" onclick="fetchNewsSearch('Which bubble teams are most likely to make the tournament?')">Bubble watch →</button>
-        <button class="preset-btn" onclick="fetchNewsSearch('Which double-digit seeds are most dangerous upset picks?')">Upset picks →</button>
-        <button class="preset-btn" onclick="fetchNewsSearch('Which #1 seed has the easiest path to the Final Four?')">Easiest path →</button>
-      </div>
-      <div id="news-output" class="ai-output">
-        <div class="ai-placeholder">Paste any article link or use quick search.</div>
       </div>
     </div>
 

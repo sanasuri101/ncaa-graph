@@ -109,4 +109,3 @@ News and Chat modes use the Anthropic API. On first use, the panel prompts you t
 Get a free key at [console.anthropic.com](https://console.anthropic.com).
 
 To reset the key: open your browser console and run `localStorage.removeItem('ANTHROPIC_KEY')`.
- 

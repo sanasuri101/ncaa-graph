@@ -195,48 +195,6 @@ async function fetchTeamStats() {
   }
 }
 
-// ── News / article summarizer ─────────────────────────────────────────────────
-async function fetchNewsArticle() {
-  const url = document.getElementById('news-url').value.trim();
-  if (!url) return;
-  if (!url.startsWith('http')) {
-    document.getElementById('news-output').innerHTML = '<div class="ai-error">Please enter a full URL starting with http/https.</div>';
-    return;
-  }
-  // Ask the model to analyze the URL content in context of the bracket
-  const prompt = `An article was shared at this URL: ${url}
-Summarize what this article likely covers based on the URL, then give your own analysis of the relevant teams in our bracket. Use get_team_stats or get_matchup to pull real data on any teams mentioned.`;
-  await runNewsAI(prompt, url);
-}
-
-async function fetchNewsSearch(query) {
-  // Redirect to chat tab with the query pre-filled — no web search tool available
-  const chatInput = document.getElementById('chat-input');
-  document.querySelectorAll('.ai-tab').forEach(b => b.classList.toggle('active', b.dataset.mode === 'chat'));
-  document.querySelectorAll('.ai-mode-content').forEach(el => el.classList.toggle('active', el.id === 'panel-chat'));
-  chatInput.value = query;
-  chatInput.focus();
-}
-
-async function runNewsAI(prompt, userMsg) {
-  const btn    = document.getElementById('news-fetch-btn');
-  const output = document.getElementById('news-output');
-  btn.disabled = true;
-  output.innerHTML = loadingHTML('Analyzing...');
-  try {
-    const text = await callAI([{ role: 'user', content: prompt }], userMsg || prompt);
-    output.innerHTML = `<div class="ai-text-block">${renderMarkdown(text)}</div>`;
-  } catch (err) {
-    output.innerHTML = `<div class="ai-error">${escapeHtml(err.message)}</div>`;
-  } finally {
-    btn.disabled = false;
-  }
-}
-
-// ── Chat ──────────────────────────────────────────────────────────────────────
-const chatHistory = [];
-let _chatInFlight = false;
-
 async function sendChat() {
   if (_chatInFlight) return;
 
