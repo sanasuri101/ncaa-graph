@@ -1450,6 +1450,13 @@ section { margin-bottom: 20px; }
 }
 .pill-remove:hover { color: var(--midwest); }
 
+.pill-region-rm {
+  font-size: .68rem;
+  padding: 2px 6px;
+  opacity: .75;
+}
+.pill-region-rm:hover { opacity: 1; }
+
 /* ── Paths picker redesign ───────────────────────────────────────────────────── */
 .paths-picker {
   padding: 14px 0 12px;

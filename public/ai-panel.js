@@ -268,8 +268,7 @@ async function fetchNewsSearch(query) {
 }
 
 async function runNewsAI(prompt) {
-  const key = requireKey();
-  if (!key) return;
+  const key = WORKER_URL;
 
   const btn    = document.getElementById('news-fetch-btn');
   const output = document.getElementById('news-output');
@@ -297,8 +296,7 @@ async function sendChat() {
   const msg      = textarea.value.trim();
   if (!msg) return;
 
-  const key = requireKey();
-  if (!key) return;
+  const key = WORKER_URL;
 
   textarea.value = '';
   textarea.style.height = '';
@@ -362,94 +360,78 @@ function insertHint(text) {
   ta.focus();
 }
 
-// ── Anthropic API call ────────────────────────────────────────────────────────
-async function callClaude(apiKey, singlePrompt, opts = {}) {
+// ── OpenRouter API call ───────────────────────────────────────────────────────
+const WORKER_URL = 'https://lively-dust-2d6b.sriramanasuri.workers.dev';
+const OPENROUTER_MODEL = 'openrouter/free';
+
+async function callClaude(_unusedKey, singlePrompt, opts = {}) {
   const messages = opts.messages ?? [{ role: 'user', content: singlePrompt }];
 
+  const sys = opts.system ?? systemPrompt();
+  const fullMessages = [{ role: 'system', content: sys }, ...messages];
+
   const body = {
-    model:      'claude-sonnet-4-20250514',
+    model:      OPENROUTER_MODEL,
     max_tokens: 1024,
-    system:     opts.system ?? systemPrompt(),
-    messages,
+    messages:   fullMessages,
   };
 
-  if (opts.tools) body.tools = opts.tools;
-
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
+  const res = await fetch(WORKER_URL, {
     method:  'POST',
     headers: {
-      'Content-Type':      'application/json',
-      'x-api-key':         apiKey,
-      'anthropic-version': '2023-06-01',
+      'Content-Type':  'application/json',
+      // Authorization handled by Cloudflare Worker
+
     },
     body: JSON.stringify(body),
   });
 
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));
-    if (res.status === 401) throw new Error('Invalid API key. Click AI Scout again to re-enter.');
     throw new Error(err?.error?.message ?? `API error ${res.status}`);
   }
 
   const data = await res.json();
-
-  if (!data.content) {
-    throw new Error(data.error?.message ?? 'Unexpected API response — no content returned');
+  const text = data.choices?.[0]?.message?.content?.trim();
+  if (!text) {
+    const errMsg = data.error?.message ?? JSON.stringify(data);
+    throw new Error(`No response from model: ${errMsg}`);
   }
-
-  // Collect all text blocks (tool_use blocks are skipped)
-  const text = data.content
-    .filter(b => b.type === 'text')
-    .map(b => b.text)
-    .join('\n')
-    .trim();
-
-  return text || '(No response)';
+  return text;
 }
 
 // ── System prompt with graph context ─────────────────────────────────────────
 function systemPrompt() {
-  // Build a concise summary of the current graph state to give Claude context
-  const topWins = [...ALL_NODES]
-    .sort((a, b) => b.wins_vs_field - a.wins_vs_field)
-    .slice(0, 5)
-    .map(n => `${n.label} (${n.wins_vs_field}W-${n.losses_vs_field}L, ${n.region}, seed ${n.seed})`)
-    .join(', ');
+  // Full team roster with real Torvik stats
+  const teamLines = ALL_NODES.map(n => {
+    const tv = TORVIK_DATA?.teams?.[n.id]?.torvik;
+    const torvik = tv
+      ? `T-Rank #${tv.rank}, AdjOE ${tv.adj_oe}, AdjDE ${tv.adj_de}, AdjEM ${tv.adj_em > 0 ? '+' : ''}${tv.adj_em}, Barthag ${(tv.barthag*100).toFixed(1)}%, Tempo #${tv.adj_tempo}`
+      : 'Torvik N/A';
+    return `${n.full_name} (${n.region} #${n.seed}) | ${n.wins_vs_field}W-${n.losses_vs_field}L vs field | ${torvik}`;
+  }).join('\n');
 
-  const regions = ['East', 'West', 'South', 'Midwest'];
-  const regionSummary = regions.map(r => {
-    const rNodes = ALL_NODES.filter(n => n.region === r);
-    const rEdges = ALL_EDGES.filter(e => e.same_region && e.winner_region === r);
-    return `${r}: ${rNodes.length} teams, ${rEdges.length} intra-region games`;
-  }).join(' | ');
+  // All played games
+  const gameLines = ALL_EDGES.map(e => {
+    const winner = ALL_NODES.find(n => n.id === e.from)?.label ?? e.from;
+    const loser  = ALL_NODES.find(n => n.id === e.to)?.label ?? e.to;
+    return `${winner} def. ${loser} ${e.label} (${e.date ? e.date.slice(0,10) : ''})`;
+  }).join('\n');
 
-  // Pull top Torvik teams if data is loaded
-  let torvik_context = '';
-  if (TORVIK_DATA?.teams) {
-    const tv_ranked = Object.values(TORVIK_DATA.teams)
-      .filter(t => t.torvik)
-      .sort((a, b) => a.torvik.rank - b.torvik.rank)
-      .slice(0, 5)
-      .map(t => `${t.bracket_name} (T-Rank #${t.torvik.rank}, AdjEM=${t.torvik.adj_em > 0 ? '+' : ''}${t.torvik.adj_em}, barthag=${(t.torvik.barthag*100).toFixed(1)}%)`)
-      .join(', ');
-    torvik_context = `\n- Torvik T-Rank top 5: ${tv_ranked}`;
-  }
+  return `You are AI Scout, an expert NCAA basketball analyst for the 2026 March Madness bracket.
 
-  return `You are AI Scout, an expert NCAA college basketball analyst embedded in an interactive head-to-head graph of the 2026 March Madness bracket.
+CRITICAL: Only use the stats below. Never invent or estimate numbers not listed here.
 
-GRAPH DATA CONTEXT:
-- 64 bracket teams, 264 inter-bracket regular season games, 1,782 pairs that never played
-- Top teams by wins vs bracket field: ${topWins}
-- ${regionSummary}${torvik_context}
-- Season: 2025-26
+ALL 64 BRACKET TEAMS (name | region seed | record vs bracket field | Torvik efficiency):
+${teamLines}
 
-Key stats available per team: ESPN box stats (PPG, RPG, FG%, etc.) and Torvik T-Rank metrics (AdjOE, AdjDE, AdjEM, Barthag win probability, WAB, Luck, Tempo rank).
+ALL ${ALL_EDGES.length} INTER-BRACKET GAMES PLAYED THIS SEASON:
+${gameLines}
 
-Your role: help the user analyze matchups, predict tournament outcomes, find hidden patterns in the graph data, summarize news, and answer questions about any of the 64 teams. Reference specific T-Rank numbers when relevant.
-
-Be concise and direct. Use specific numbers. Reference actual scores when discussing games. Avoid generic filler. If you search the web, cite briefly.`;
+When asked about efficiency, use the exact AdjOE/AdjDE/AdjEM/Barthag values above.
+When asked about matchups, reference the game log above.
+Be concise and direct. No filler.`;
 }
-
 // ── Helpers ───────────────────────────────────────────────────────────────────
 function loadingHTML(label) {
   return `<div class="ai-loading">

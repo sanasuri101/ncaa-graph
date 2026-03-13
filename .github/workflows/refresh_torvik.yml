@@ -2,20 +2,26 @@ name: Refresh Torvik Stats
 
 on:
   schedule:
-    # 6:15 AM UTC daily — runs 15 min after the ESPN refresh so data stays in sync
-    - cron: '15 6 * * *'
-  workflow_dispatch:   # manual trigger from Actions tab
+    - cron: '0 7 * * *'   # 7am UTC daily — 1hr after ESPN refresh finishes
+  workflow_run:
+    workflows: ["Refresh ESPN Data"]
+    types: [completed]
+  workflow_dispatch:
 
 permissions:
   contents: write
 
 jobs:
   refresh:
+    # For workflow_run events only run if ESPN succeeded; always run for schedule/manual
+    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: main
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -25,11 +31,19 @@ jobs:
       - name: Fetch Torvik T-Rank stats
         run: python scripts/fetch_torvik.py
 
+      - name: Copy to public/data
+        run: |
+          mkdir -p public/data
+          cp data/torvik_stats.json public/data/torvik_stats.json
+          cp data/recent_form.json public/data/recent_form.json
+
       - name: Commit updated stats
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/torvik_stats.json public/data/torvik_stats.json
+          git pull --rebase origin main
+          git add data/torvik_stats.json public/data/torvik_stats.json \
+                  data/recent_form.json  public/data/recent_form.json
           git diff --quiet && git diff --staged --quiet || \
             git commit -m "chore: refresh Torvik stats $(date -u +'%Y-%m-%d')"
           git push

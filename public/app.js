@@ -21,6 +21,7 @@ const REGION_COLORS = {
   West:    '#3a8c6e',
   South:   '#b89030',
   Midwest: '#b84545',
+  bubble:  '#7c3aed',
 };
 
 // Organic node background fill colors — soft, like Pickle dots
@@ -29,6 +30,7 @@ const REGION_NODE_BG = {
   West:    '#b8ddd0',
   South:   '#ecddb0',
   Midwest: '#f0c8c8',
+  bubble:  '#ddd6fe',
 };
 
 // ── Boot ─────────────────────────────────────────────────────────────────────
@@ -276,7 +278,7 @@ function renderTeamDetail(nodeId, box) {
   box.innerHTML = `
     <div class="d-team-card">
       <div class="d-team-badge" style="background:${bg};border-color:${rc}">
-        <div class="d-team-badge-seed" style="color:${rc}">#${node.seed}</div>
+        <div class="d-team-badge-seed" style="color:${rc}">${node.seed != null ? '#' + node.seed : 'bubble'}</div>
         <div class="d-team-badge-name">${node.label}</div>
         <div class="d-team-badge-region" style="color:${rc}">${node.region}</div>
       </div>
@@ -333,13 +335,13 @@ function renderEdgeDetail(edge, box) {
           <div class="d-matchup-team">
             <div class="d-matchup-dot" style="background:${rcA}"></div>
             <div class="d-matchup-name">${a?.label ?? edge.from}</div>
-            <div class="d-matchup-sub" style="color:${rcA}">${a?.region ?? ''} #${a?.seed ?? '?'}</div>
+            <div class="d-matchup-sub" style="color:${rcA}">${a?.region ?? ''}${a?.seed != null ? ' #' + a.seed : ''}</div>
           </div>
           <div class="d-vs-col"><span class="d-vs-text">vs</span></div>
           <div class="d-matchup-team">
             <div class="d-matchup-dot" style="background:${rcB}"></div>
             <div class="d-matchup-name">${b?.label ?? edge.to}</div>
-            <div class="d-matchup-sub" style="color:${rcB}">${b?.region ?? ''} #${b?.seed ?? '?'}</div>
+            <div class="d-matchup-sub" style="color:${rcB}">${b?.region ?? ''}${b?.seed != null ? ' #' + b.seed : ''}</div>
           </div>
         </div>
         <div class="d-matchup-hint">Opening transitive path analysis →</div>
@@ -437,7 +439,7 @@ async function populateSeedDivergence() {
 
   const teams = ALL_NODES.map(n => {
     const tv = tvData?.teams?.[n.id]?.torvik;
-    if (!tv) return null;
+    if (!tv || n.seed == null) return null;
     const seedRankMid = (n.seed - 1) * 4 + 2.5;
     const div = seedRankMid - tv.rank;
     return { node: n, trank: tv.rank, adj_em: tv.adj_em, div };
@@ -509,7 +511,7 @@ function bindSearch() {
 
     const matches = ALL_NODES.filter(n =>
       n.label.toLowerCase().includes(q) || n.full_name.toLowerCase().includes(q)
-    ).slice(0, 8);
+    ).slice(0, 12);
 
     if (!matches.length) { dropdown.innerHTML = ''; dropdown.style.display = 'none'; return; }
 
@@ -549,8 +551,10 @@ function focusTeam(id) {
 function switchTab(tab) {
   document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
   document.querySelectorAll('.stab').forEach(el => el.classList.remove('active'));
-  document.getElementById(`tab-${tab}`).classList.add('active');
-  document.querySelector(`.stab[data-tab="${tab}"]`).classList.add('active');
+  const tabEl = document.getElementById(`tab-${tab}`);
+  const stabEl = document.querySelector(`.stab[data-tab="${tab}"]`);
+  if (tabEl) tabEl.classList.add('active');
+  if (stabEl) stabEl.classList.add('active');
   if (tab === 'transitive' && typeof populateTransSelects === 'function') populateTransSelects();
 }
 
@@ -635,14 +639,15 @@ function initCustomSelector() {
 
     const matches = ALL_NODES
       .filter(n => n.full_name.toLowerCase().includes(q) || n.label.toLowerCase().includes(q))
-      .slice(0, 8);
+      .slice(0, 12);
 
     if (!matches.length) { drop.style.display = 'none'; return; }
 
     matches.forEach(n => {
       const item = document.createElement('div');
       item.className = 'search-item';
-      item.textContent = `${n.full_name} (${n.region} #${n.seed})`;
+      const seedLabel = n.seed != null ? ` #${n.seed}` : '';
+      item.textContent = `${n.full_name} (${n.region}${seedLabel})`;
       if (CUSTOM_SELECTION.has(n.id)) item.style.opacity = '0.4';
       item.addEventListener('mousedown', e => {
         e.preventDefault();
@@ -681,6 +686,21 @@ function removeFromCustom(teamId) {
 
 function clearCustom() {
   CUSTOM_SELECTION.clear();
+  renderCustom();
+}
+
+function addRegionToCustom(region) {
+  ALL_NODES.filter(n => n.region === region).forEach(n => CUSTOM_SELECTION.add(n.id));
+  renderCustom();
+}
+
+function removeRegionFromCustom(region) {
+  ALL_NODES.filter(n => n.region === region).forEach(n => CUSTOM_SELECTION.delete(n.id));
+  renderCustom();
+}
+
+function addAllBracketToCustom() {
+  ALL_NODES.filter(n => n.region !== 'bubble').forEach(n => CUSTOM_SELECTION.add(n.id));
   renderCustom();
 }
 
