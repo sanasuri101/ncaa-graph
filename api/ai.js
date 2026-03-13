@@ -14,7 +14,7 @@ import { join }         from 'path';
 const GROQ_URL      = 'https://api.groq.com/openai/v1/chat/completions';
 const MODEL         = 'llama-3.3-70b-versatile';
 const MAX_TOKENS    = 2048;
-const GROQ_TPM_CAP  = 11000;
+const GROQ_TPM_CAP  = 14000;
 const CHARS_PER_TOK = 4;
 const TOOL_MAX_ITER = 3;
 const FETCH_TIMEOUT = 15000;
@@ -77,7 +77,7 @@ const TOOLS = [
             type: 'string',
             enum: ['East', 'West', 'South', 'Midwest', 'bubble', 'all'],
           },
-          limit: { type: 'number' },
+          limit: { anyOf: [{ type: 'number' }, { type: 'string' }], description: 'How many results (e.g. 10)' },
         },
         required: ['sort_by'],
       },
