@@ -98,6 +98,7 @@ function getData() {
   if (_cache) return _cache;
   const graph  = readJSON('graph_data.json');
   const torvik = readJSON('torvik_stats.json');
+  const form   = readJSON('recent_form.json');
 
   const nodeByName = {};
   graph.nodes.forEach(n => {
@@ -111,7 +112,7 @@ function getData() {
     (edgesByNode[e.to]   = edgesByNode[e.to]   || []).push(e);
   });
 
-  _cache = { graph, torvik, nodeByName, edgesByNode };
+  _cache = { graph, torvik, form, nodeByName, edgesByNode };
   return _cache;
 }
 
@@ -123,25 +124,55 @@ function resolveTeam(name, nodeByName) {
   return key ? nodeByName[key] : null;
 }
 
-function fmtTeam(node, torvik) {
+function fmtTeam(node, torvik, form) {
   const tv   = torvik?.teams?.[node.id]?.torvik;
   const seed = node.seed != null ? `#${node.seed}` : 'bubble';
-  const base = `${node.full_name} (${node.region} ${seed}) ${node.wins_vs_field}W-${node.losses_vs_field}L`;
+  const base = `${node.full_name} (${node.region} ${seed}, ${tv?.conf ?? '?'}) Season: ${tv?.record ?? node.wins_vs_field + '-' + node.losses_vs_field} | vs bracket field: ${node.wins_vs_field}W-${node.losses_vs_field}L`;
   if (!tv) return base + ' | no Torvik data';
-  return `${base} | T-Rank #${tv.rank} AdjEM ${tv.adj_em > 0 ? '+' : ''}${tv.adj_em} AdjOE ${tv.adj_oe} AdjDE ${tv.adj_de} Barthag ${(tv.barthag * 100).toFixed(1)}% WAB ${parseFloat(tv.wab).toFixed(1)}`;
+
+  const pace = tv.adj_tempo != null
+    ? (tv.adj_tempo >= 0.7 ? 'fast' : tv.adj_tempo >= 0.4 ? 'moderate' : 'slow') + ` (${tv.adj_tempo.toFixed(2)})`
+    : '?';
+
+  const shooting = [
+    tv.two_p  != null ? `2P%: ${tv.two_p}` : null,
+    tv.three_p != null ? `3P%: ${tv.three_p}` : null,
+    tv.ft_pct != null ? `FT%: ${tv.ft_pct}` : null,
+    tv.efg    != null ? `eFG%: ${tv.efg}`   : null,
+  ].filter(Boolean).join(' | ');
+
+  // Recent form from form file
+  const teamForm = form?.teams?.[node.id];
+  const formStr = teamForm
+    ? `Last10: ${teamForm.last10} | Streak: ${teamForm.streak}`
+    : '';
+
+  // Last 3 games
+  const recentGames = teamForm?.games?.slice(-3).map(g =>
+    `${g.date.slice(5)}: ${g.won ? 'W' : 'L'} ${g.score} vs ${g.opp.replace(/ (Blue Devils|Wildcats|Tar Heels|Bulldogs|Tigers|Volunteers|Gators|Trojans|Hurricanes|Ducks|Aztecs|Cowboys|Razorbacks|Sooners|Cornhuskers|Aggies|Longhorns|Jayhawks|Bruins|Bears|Beavers|Cougars|Gamecocks|Hoyas|Huskies|Crimson Tide|Commodores|Cardinal|Boilermakers|Scarlet Knights|Wolverines|Buckeyes|Badgers|Spartans|Hawkeyes|Illini|Gophers|Nittany Lions|Terrapins|Yellow Jackets|Blue Hens|Panthers|Mountaineers|Musketeers|Flyers|Rams|Owls|Eagles|Falcons|Blue Raiders|Miners|Pirates|Bearcats|Red Raiders|Lobos|Rebels|Wolf Pack|Shockers|Racers|Bison|Vikings|Pride|Penguins|Golden Eagles|Mean Green|Monarchs|Phoenix|Antelopes|Jackrabbits|Lumberjacks|Highlanders|Roadrunners|Flames|Chanticleers|Golden Flashes|Tigers|Lions|Saints|Seahawks|Nighthawks|Patriots|Colonials|Catamounts|Bulldogs|Penguins|Terriers|Ravens|Hornets|Aztecs|Aggies)$/, '').trim()}`
+  ).join('; ') ?? '';
+
+  return [
+    base,
+    `T-Rank #${tv.rank} | AdjEM: ${tv.adj_em > 0 ? '+' : ''}${tv.adj_em} | AdjOE: ${tv.adj_oe} | AdjDE: ${tv.adj_de}`,
+    `Barthag: ${(tv.barthag * 100).toFixed(1)}% | WAB: ${parseFloat(tv.wab).toFixed(1)} | SOS Rank: ${tv.sos_rank?.toFixed(2) ?? '?'} | Pace: ${pace}`,
+    shooting ? `Shooting — ${shooting}` : '',
+    formStr,
+    recentGames ? `Recent: ${recentGames}` : '',
+  ].filter(Boolean).join('\n  ');
 }
 
 // ── Tool implementations ──────────────────────────────────────────────────────
 function toolGetTeamStats({ team_names }) {
-  const { torvik, nodeByName } = getData();
+  const { torvik, form, nodeByName } = getData();
   return team_names.map(name => {
     const node = resolveTeam(name, nodeByName);
-    return node ? fmtTeam(node, torvik) : `${name}: not found`;
-  }).join('\n');
+    return node ? fmtTeam(node, torvik, form) : `${name}: not found`;
+  }).join('\n\n');
 }
 
 function toolGetMatchup({ team_a, team_b }) {
-  const { graph, torvik, nodeByName, edgesByNode } = getData();
+  const { graph, torvik, form, nodeByName, edgesByNode } = getData();
   const nodeA = resolveTeam(team_a, nodeByName);
   const nodeB = resolveTeam(team_b, nodeByName);
   if (!nodeA) return `Team not found: ${team_a}`;
@@ -149,8 +180,9 @@ function toolGetMatchup({ team_a, team_b }) {
 
   const lines = [
     `=== ${nodeA.full_name} vs ${nodeB.full_name} ===`,
-    fmtTeam(nodeA, torvik),
-    fmtTeam(nodeB, torvik),
+    fmtTeam(nodeA, torvik, form),
+    '',
+    fmtTeam(nodeB, torvik, form),
   ];
 
   const aEdges = edgesByNode[nodeA.id] || [];
@@ -203,10 +235,15 @@ function toolGetStandings({ sort_by, region = 'all', limit = 10 }) {
   };
 
   teams.sort((a, b) => val(b) - val(a));
+  const { form } = getData();
   return teams.slice(0, Math.min(limit, 25)).map((t, i) => {
-    const seed = t.node.seed != null ? `#${t.node.seed}` : 'bubble';
-    const tv_s = t.tv ? `T-Rank #${t.tv.rank} AdjEM ${t.tv.adj_em > 0 ? '+' : ''}${t.tv.adj_em}` : 'no Torvik';
-    return `${i + 1}. ${t.node.full_name} (${t.node.region} ${seed}) ${t.node.wins_vs_field}W-${t.node.losses_vs_field}L | ${tv_s}`;
+    const seed     = t.node.seed != null ? `#${t.node.seed}` : 'bubble';
+    const teamForm = form?.teams?.[t.node.id];
+    const formStr  = teamForm ? ` | ${teamForm.last10} L10 ${teamForm.streak}` : '';
+    const tv_s     = t.tv
+      ? `T-Rank #${t.tv.rank} AdjEM ${t.tv.adj_em > 0 ? '+' : ''}${t.tv.adj_em} AdjOE ${t.tv.adj_oe} AdjDE ${t.tv.adj_de} Barthag ${(t.tv.barthag * 100).toFixed(1)}%`
+      : 'no Torvik';
+    return `${i + 1}. ${t.node.full_name} (${t.node.region} ${seed}, ${t.tv?.conf ?? '?'}) ${t.tv?.record ?? t.node.wins_vs_field + '-' + t.node.losses_vs_field}${formStr} | ${tv_s}`;
   }).join('\n');
 }
 
