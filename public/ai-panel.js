@@ -327,9 +327,7 @@ async function callAI(messages, userMsg, externalSignal, onThinking) {
     clearTimeout(timer);
     if (!res.ok) throw new Error(`API error ${res.status}`);
 
-    // Parse SSE stream — each event is "data: {...}
-
-"
+    // Parse SSE stream — each event is: data: {...} followed by double newline
     const reader  = res.body.getReader();
     const decoder = new TextDecoder();
     let   buf     = '';
