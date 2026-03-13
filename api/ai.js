@@ -188,6 +188,7 @@ function toolGetMatchup({ team_a, team_b }) {
 }
 
 function toolGetStandings({ sort_by, region = 'all', limit = 10 }) {
+  limit = parseInt(limit, 10) || 10;
   const { graph, torvik } = getData();
   let teams = graph.nodes.map(n => ({ node: n, tv: torvik?.teams?.[n.id]?.torvik }));
   if (region !== 'all') teams = teams.filter(t => t.node.region === region);
@@ -209,8 +210,31 @@ function toolGetStandings({ sort_by, region = 'all', limit = 10 }) {
   }).join('\n');
 }
 
-function dispatchTool(name, args) {
+// ── Arg coercion — fixes Groq passing wrong types against the JSON schema ────
+function coerceArgs(name, raw) {
+  const args = { ...raw };
+  if (name === 'get_team_stats') {
+    // Accept string or array
+    if (typeof args.team_names === 'string') args.team_names = [args.team_names];
+    if (!Array.isArray(args.team_names))     args.team_names = [String(args.team_names ?? '')];
+    args.team_names = args.team_names.filter(Boolean);
+  }
+  if (name === 'get_matchup') {
+    args.team_a = String(args.team_a ?? args.team_1 ?? '').trim();
+    args.team_b = String(args.team_b ?? args.team_2 ?? '').trim();
+  }
+  if (name === 'get_standings') {
+    args.limit  = parseInt(args.limit, 10)  || 10;
+    args.region = args.region ?? 'all';
+    const validSortBy = ['adj_em', 'barthag', 'rank', 'wins_vs_field', 'seed'];
+    if (!validSortBy.includes(args.sort_by)) args.sort_by = 'barthag';
+  }
+  return args;
+}
+
+function dispatchTool(name, rawArgs) {
   try {
+    const args = coerceArgs(name, rawArgs);
     if (name === 'get_team_stats') return toolGetTeamStats(args);
     if (name === 'get_matchup')    return toolGetMatchup(args);
     if (name === 'get_standings')  return toolGetStandings(args);
@@ -274,12 +298,19 @@ function buildSystemPrompt(userMsg, graph, torvik) {
   }).join('\n');
 
   return `You are AI Scout, an NCAA basketball analyst for the 2026 March Madness bracket.
-Only call tools when you need specific stats or matchup data not already in context.
-For general questions (rules, format, history) answer directly without tools.
-Never invent numbers — use get_team_stats, get_matchup, or get_standings if you need data.
-Be concise. One paragraph max unless a list is clearly better.${scope.length > 0 ? `
 
-CONTEXT FOR THIS QUERY:
+TOOLS — only call when you need data not in context:
+- get_team_stats(team_names: string[]) — stats for specific teams
+- get_matchup(team_a, team_b) — head-to-head + common opponents between two teams
+- get_standings(sort_by, region?, limit?) — ranked list; sort_by must be one of: adj_em, barthag, rank, wins_vs_field, seed; limit must be a number
+
+RULES:
+- Answer general questions (rules, format, history) directly without tools
+- Never invent stats — call a tool if you need numbers
+- Be concise. One paragraph or a short list.
+- If a tool call fails, answer from what you already know${scope.length > 0 ? `
+
+CONTEXT:
 ${teamLines}${gameLines ? `\n\nRECENT GAMES:\n${gameLines}` : ''}` : ''}`;
 }
 
@@ -385,18 +416,26 @@ export default async function handler(req, res) {
       const choice    = groqData.choices?.[0];
       const reason    = choice?.finish_reason;
       const toolCalls = choice?.message?.tool_calls;
+      const content   = choice?.message?.content ?? '';
 
-      if (!toolCalls?.length || reason === 'length') {
-        send(200, { text: choice?.message?.content ?? '', thinking });
+      // If no valid tool calls (model failed to generate args, or gave text answer), return what we have
+      if (!toolCalls?.length || reason === 'length' || reason === 'stop') {
+        send(200, { text: content || (thinking.length ? 'Unable to complete — try rephrasing.' : ''), thinking });
         return;
       }
 
       messages.push(choice.message);
       for (const tc of toolCalls) {
         let args = {};
-        try { args = JSON.parse(tc.function.arguments); } catch {}
+        let parseOk = false;
+        try { args = JSON.parse(tc.function.arguments); parseOk = true; } catch {}
+        // If Groq generated unparseable args, return a clear error so the model can recover
+        if (!parseOk) {
+          messages.push({ role: 'tool', tool_call_id: tc.id, content: `Tool call failed: could not parse arguments. Please try a simpler query.` });
+          continue;
+        }
         thinking.push(TOOL_LABELS[tc.function.name]?.(args) ?? tc.function.name);
-        const result = dispatchTool(tc.function.name, args);
+        const result = dispatchTool(tc.function.name, args || {});
         messages.push({ role: 'tool', tool_call_id: tc.id, content: String(result) });
       }
 
