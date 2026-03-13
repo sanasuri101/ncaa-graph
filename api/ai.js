@@ -351,9 +351,17 @@ export default async function handler(req, res) {
     return;
   }
 
-  const send = (status, data) => {
-    res.writeHead(status, { 'Content-Type': 'application/json', ...CORS });
-    res.end(JSON.stringify(data));
+  // SSE — browser EventSource protocol, flushes each event immediately
+  res.writeHead(200, {
+    ...CORS,
+    'Content-Type':  'text/event-stream',
+    'Cache-Control': 'no-cache',
+    'Connection':    'keep-alive',
+    'X-Accel-Buffering': 'no',
+  });
+
+  const emit = (type, data) => {
+    res.write(`data: ${JSON.stringify({ type, ...data })}\n\n`);
   };
 
   const TOOL_LABELS = {
@@ -368,15 +376,14 @@ export default async function handler(req, res) {
     const sysToks  = estTokens(system);
     const history  = trimHistory(body.messages, sysToks);
     let   messages = [{ role: 'system', content: system }, ...history];
-    const thinking = [];
 
     for (let iter = 0; iter < TOOL_MAX_ITER; iter++) {
       const groqRes  = await groqFetch({ model: MODEL, max_tokens: MAX_TOKENS, messages, tools: TOOLS, tool_choice: 'auto' }, groqKey);
       const groqData = await groqRes.json();
 
       if (!groqRes.ok) {
-        send(groqRes.status, { error: { message: groqData?.error?.message ?? 'Groq error' } });
-        return;
+        emit('error', { message: groqData?.error?.message ?? 'Groq error' });
+        res.end(); return;
       }
 
       const choice    = groqData.choices?.[0];
@@ -384,15 +391,16 @@ export default async function handler(req, res) {
       const toolCalls = choice?.message?.tool_calls;
 
       if (!toolCalls?.length || reason === 'length') {
-        send(200, { text: choice?.message?.content ?? '', thinking });
-        return;
+        emit('done', { text: choice?.message?.content ?? '' });
+        res.end(); return;
       }
 
       messages.push(choice.message);
       for (const tc of toolCalls) {
         let args = {};
         try { args = JSON.parse(tc.function.arguments); } catch {}
-        thinking.push(TOOL_LABELS[tc.function.name]?.(args) ?? tc.function.name);
+        // Emit thinking step immediately — client sees it before next Groq call
+        emit('thinking', { text: TOOL_LABELS[tc.function.name]?.(args) ?? tc.function.name });
         const result = dispatchTool(tc.function.name, args);
         messages.push({ role: 'tool', tool_call_id: tc.id, content: String(result) });
       }
@@ -404,9 +412,13 @@ export default async function handler(req, res) {
     const trimmed    = [messages[0], ...trimHistory(messages.slice(1), sysToksNow)];
     const groqRes    = await groqFetch({ model: MODEL, max_tokens: MAX_TOKENS, messages: trimmed }, groqKey);
     const groqData   = await groqRes.json();
-    send(200, { text: groqData.choices?.[0]?.message?.content ?? '', thinking });
+    const finalText  = groqData.choices?.[0]?.message?.content;
+    const fallback   = !finalText ? messages.filter(m => m.role === 'tool').slice(-1)[0]?.content : null;
+    emit('done', { text: finalText || fallback || 'No response — please try again.' });
+    res.end();
 
   } catch (err) {
-    send(500, { error: { message: err.message } });
+    emit('error', { message: err.message });
+    res.end();
   }
 }

@@ -250,18 +250,36 @@ async function sendChat() {
     messagesEl.insertBefore(notice, userBubble);
   }
 
+  const thinkingSteps = [];
+
+  function onThinking(stepText) {
+    thinkingSteps.push(stepText);
+    // Render live thinking block while waiting for answer
+    thinkEl.innerHTML = `
+      <div class="thinking-block">
+        <div class="thinking-header">
+          <span class="thinking-spinner"></span>
+          <span class="thinking-label">Thinking</span>
+        </div>
+        <div class="thinking-steps">
+          ${thinkingSteps.map(s => `<div class="thinking-step">${escapeHtml(s)}</div>`).join('')}
+        </div>
+      </div>`;
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+  }
+
   try {
-    const { text, thinking } = await callAI(chatHistory, msg, _chatAbortCtrl.signal);
+    const text = await callAI(chatHistory, msg, _chatAbortCtrl.signal, onThinking);
     chatHistory.push({ role: 'assistant', content: text });
     thinkEl.classList.remove('thinking');
-    const thinkHtml = thinking.length ? `
+    const thinkHtml = thinkingSteps.length ? `
       <div class="thinking-block thinking-done">
         <div class="thinking-header">
           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
           <span class="thinking-label">Thought for a moment</span>
         </div>
         <div class="thinking-steps">
-          ${thinking.map(s => `<div class="thinking-step">${escapeHtml(s)}</div>`).join('')}
+          ${thinkingSteps.map(s => `<div class="thinking-step">${escapeHtml(s)}</div>`).join('')}
         </div>
       </div>` : '';
     thinkEl.innerHTML = `
@@ -290,14 +308,14 @@ function insertHint(text) {
   document.getElementById('chat-input').focus();
 }
 
-// ── Core AI call — returns {text, thinking[]} ────────────────────────────────
+// ── Core AI call — reads SSE stream, calls onThinking live ──────────────────
 const WORKER_URL    = '/api/ai';
 const FETCH_TIMEOUT = 30000;
 
-async function callAI(messages, userMsg, externalSignal) {
+async function callAI(messages, userMsg, externalSignal, onThinking) {
   const ctrl  = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), FETCH_TIMEOUT);
-  if (externalSignal) externalSignal.addEventListener('abort', () => ctrl.abort());
+  externalSignal?.addEventListener('abort', () => ctrl.abort(), { once: true });
 
   try {
     const res = await fetch(WORKER_URL, {
@@ -307,13 +325,40 @@ async function callAI(messages, userMsg, externalSignal) {
       signal:  ctrl.signal,
     });
     clearTimeout(timer);
-    if (!res.ok) {
-      const err = await res.json().catch(() => ({}));
-      throw new Error(err?.error?.message ?? `API error ${res.status}`);
+    if (!res.ok) throw new Error(`API error ${res.status}`);
+
+    // Parse SSE stream — each event is "data: {...}
+
+"
+    const reader  = res.body.getReader();
+    const decoder = new TextDecoder();
+    let   buf     = '';
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buf += decoder.decode(value, { stream: true });
+
+      // SSE events are separated by double newline
+      const events = buf.split('\n\n');
+      buf = events.pop(); // last incomplete chunk stays in buffer
+
+      for (const block of events) {
+        const line = block.trim();
+        if (!line.startsWith('data: ')) continue;
+        let evt;
+        try { evt = JSON.parse(line.slice(6)); } catch { continue; }
+
+        if (evt.type === 'thinking' && onThinking) {
+          onThinking(evt.text);
+        } else if (evt.type === 'done') {
+          return evt.text ?? '';
+        } else if (evt.type === 'error') {
+          throw new Error(evt.message ?? 'Unknown error');
+        }
+      }
     }
-    const data = await res.json();
-    if (data.error) throw new Error(data.error.message ?? 'Unknown error');
-    return { text: data.text ?? '', thinking: data.thinking ?? [] };
+    throw new Error('Stream ended without a response');
   } catch (err) {
     clearTimeout(timer);
     if (err.name === 'AbortError') {
