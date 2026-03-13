@@ -1406,8 +1406,8 @@ section { margin-bottom: 20px; }
   border-bottom: 1px solid var(--border);
   gap: 6px;
   flex-wrap: nowrap;
-  max-height: 36px;
-  min-height: 36px;
+  max-height: 42px;
+  min-height: 42px;
   overflow: hidden;
   flex-shrink: 0;
 }
@@ -1420,10 +1420,13 @@ section { margin-bottom: 20px; }
   overflow-x: auto;
   overflow-y: hidden;
   flex: 1;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
 }
-.pills-wrap::-webkit-scrollbar { display: none; }
+.pills-wrap::-webkit-scrollbar { height: 3px; }
+.pills-wrap::-webkit-scrollbar-track { background: transparent; }
+.pills-wrap::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+.pills-wrap::-webkit-scrollbar-thumb:hover { background: var(--text-mute); }
 
 .team-pill {
   display: inline-flex;
