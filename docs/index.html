@@ -56,6 +56,7 @@
       <option value="West">West</option>
       <option value="South">South</option>
       <option value="Midwest">Midwest</option>
+      <option value="bubble">Bubble</option>
       <option value="same">Same Region</option>
       <option value="cross">Cross Region</option>
     </select>
@@ -85,6 +86,8 @@
       <input type="text" id="custom-team-input" placeholder="Add teams..." autocomplete="off" spellcheck="false"/>
       <div id="custom-dropdown"></div>
     </div>
+    <button class="view-btn" onclick="addAllBracketToCustom()" title="Add all 64 bracket teams">+ Bracket</button>
+    <button class="view-btn" onclick="addRegionToCustom('bubble')" title="Add all bubble teams">+ Bubble</button>
     <button class="view-btn" id="custom-clear-btn" onclick="clearCustom()" title="Clear custom selection" style="display:none">✕ Clear</button>
   </div>
 </div>
@@ -93,7 +96,14 @@
 <div class="custom-pills-bar" id="custom-pills-bar" style="display:none">
   <span class="toolbar-label" style="margin-right:6px;flex-shrink:0">SHOWING</span>
   <div class="pills-wrap" id="custom-pills"></div>
-  <button class="view-btn" onclick="clearCustom()" style="margin-left:auto;flex-shrink:0">✕ Clear all</button>
+  <div style="display:flex;gap:4px;margin-left:auto;flex-shrink:0;align-items:center">
+    <button class="view-btn pill-region-rm" onclick="removeRegionFromCustom('East')"   title="Remove East teams"    style="border-left:3px solid #4a7fb5">− East</button>
+    <button class="view-btn pill-region-rm" onclick="removeRegionFromCustom('West')"   title="Remove West teams"    style="border-left:3px solid #3a8c6e">− West</button>
+    <button class="view-btn pill-region-rm" onclick="removeRegionFromCustom('South')"  title="Remove South teams"   style="border-left:3px solid #b89030">− South</button>
+    <button class="view-btn pill-region-rm" onclick="removeRegionFromCustom('Midwest')" title="Remove Midwest teams" style="border-left:3px solid #b84545">− Midwest</button>
+    <button class="view-btn pill-region-rm" onclick="removeRegionFromCustom('bubble')" title="Remove bubble teams"  style="border-left:3px solid #7c3aed">− Bubble</button>
+    <button class="view-btn" onclick="clearCustom()" style="margin-left:4px">✕ Clear all</button>
+  </div>
 </div>
 
 <div class="toolbar" id="toolbar2" style="padding-top:0;height:auto;min-height:0;border-top:none;padding-bottom:4px;display:flex;align-items:center;padding-left:16px;gap:8px">

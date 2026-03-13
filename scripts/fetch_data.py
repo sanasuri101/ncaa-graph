@@ -95,6 +95,34 @@ BRACKET_TEAMS = [
     {"bracket_name": "NDSU",           "espn_id": "2449",   "displayName": "North Dakota State Bison",      "region": "West",    "seed": 13},
     {"bracket_name": "Northern Iowa",  "espn_id": "2460",   "displayName": "Northern Iowa Panthers",        "region": "West",    "seed": 11},
     {"bracket_name": "NC A&T",         "espn_id": "2448",   "displayName": "North Carolina A&T Aggies",     "region": "West",    "seed": 16},
+    # Bubble / projected at-large teams (not yet officially seeded)
+    {"bracket_name": "Auburn",          "espn_id": "2",      "displayName": "Auburn Tigers",                 "region": "bubble",  "seed": None},
+    {"bracket_name": "Indiana",         "espn_id": "84",     "displayName": "Indiana Hoosiers",              "region": "bubble",  "seed": None},
+    {"bracket_name": "Ole Miss",        "espn_id": "145",    "displayName": "Ole Miss Rebels",               "region": "bubble",  "seed": None},
+    {"bracket_name": "South Carolina",  "espn_id": "2579",   "displayName": "South Carolina Gamecocks",      "region": "bubble",  "seed": None},
+    {"bracket_name": "Santa Clara",     "espn_id": "2541",   "displayName": "Santa Clara Broncos",           "region": "bubble",  "seed": None},
+    {"bracket_name": "McNeese",         "espn_id": "2377",   "displayName": "McNeese Cowboys",               "region": "bubble",  "seed": None},
+    {"bracket_name": "Howard",          "espn_id": "47",     "displayName": "Howard Bison",                  "region": "bubble",  "seed": None},
+    {"bracket_name": "Montana",         "espn_id": "149",    "displayName": "Montana Grizzlies",             "region": "bubble",  "seed": None},
+    {"bracket_name": "Bethune-Cookman", "espn_id": "2065",   "displayName": "Bethune-Cookman Wildcats",      "region": "bubble",  "seed": None},
+    {"bracket_name": "USC",            "espn_id": "30",     "displayName": "USC Trojans",                   "region": "bubble",  "seed": None},
+    {"bracket_name": "Washington",      "espn_id": "264",    "displayName": "Washington Huskies",            "region": "bubble",  "seed": None},
+    {"bracket_name": "Penn State",      "espn_id": "213",    "displayName": "Penn State Nittany Lions",      "region": "bubble",  "seed": None},
+    {"bracket_name": "Minnesota",       "espn_id": "135",    "displayName": "Minnesota Golden Gophers",      "region": "bubble",  "seed": None},
+    {"bracket_name": "LSU",             "espn_id": "99",     "displayName": "LSU Tigers",                    "region": "bubble",  "seed": None},
+    {"bracket_name": "Oklahoma",        "espn_id": "201",    "displayName": "Oklahoma Sooners",              "region": "bubble",  "seed": None},
+    {"bracket_name": "Virginia Tech",   "espn_id": "259",    "displayName": "Virginia Tech Hokies",          "region": "bubble",  "seed": None},
+    {"bracket_name": "California",      "espn_id": "25",     "displayName": "California Golden Bears",       "region": "bubble",  "seed": None},
+    {"bracket_name": "Stanford",        "espn_id": "24",     "displayName": "Stanford Cardinal",             "region": "bubble",  "seed": None},
+    {"bracket_name": "Pittsburgh",      "espn_id": "221",    "displayName": "Pittsburgh Panthers",           "region": "bubble",  "seed": None},
+    {"bracket_name": "Cincinnati",      "espn_id": "2132",   "displayName": "Cincinnati Bearcats",           "region": "bubble",  "seed": None},
+    {"bracket_name": "West Virginia",   "espn_id": "277",    "displayName": "West Virginia Mountaineers",   "region": "bubble",  "seed": None},
+    {"bracket_name": "Oklahoma State",  "espn_id": "197",    "displayName": "Oklahoma State Cowboys",        "region": "bubble",  "seed": None},
+    {"bracket_name": "Seton Hall",      "espn_id": "2550",   "displayName": "Seton Hall Pirates",            "region": "bubble",  "seed": None},
+    {"bracket_name": "Marquette",       "espn_id": "269",    "displayName": "Marquette Golden Eagles",       "region": "bubble",  "seed": None},
+    {"bracket_name": "New Mexico",      "espn_id": "167",    "displayName": "New Mexico Lobos",              "region": "bubble",  "seed": None},
+    {"bracket_name": "Dayton",          "espn_id": "2168",   "displayName": "Dayton Flyers",                 "region": "bubble",  "seed": None},
+    {"bracket_name": "Akron",           "espn_id": "2006",   "displayName": "Akron Zips",                    "region": "bubble",  "seed": None},
 ]
 
 REGION_COLORS = {
@@ -102,6 +130,7 @@ REGION_COLORS = {
     "West":    "#10B981",
     "South":   "#F59E0B",
     "Midwest": "#EF4444",
+    "bubble":  "#8B5CF6",
 }
 
 

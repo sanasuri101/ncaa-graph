@@ -224,13 +224,14 @@ async function runTransitiveAnalysisForIds(aId, bId) {
   }
 
   // If we're reading the flipped key, swap A/B interpretation
-  const teamA = flipped ? nodeB : nodeA;
-  const teamB = flipped ? nodeA : nodeB;
+  const teamA = nodeA;
+  const teamB = nodeB;
   const sigA  = flipped ? pair.b  : pair.a;
   const sigB  = flipped ? pair.a  : pair.b;
   const net   = flipped ? -pair.net : pair.net;
+  const verdict = pair.verdict === 'unclear' ? 'unclear' : (flipped ? (pair.verdict === 'a' ? 'b' : 'a') : pair.verdict);
 
-  renderTransitiveResult(teamA, teamB, sigA, sigB, pair.both_beat, pair.both_lost, net, pair.conf, pair.verdict === 'unclear' ? 'unclear' : (flipped ? (pair.verdict === 'a' ? 'b' : 'a') : pair.verdict), pair.n, out);
+  renderTransitiveResult(teamA, teamB, sigA, sigB, pair.both_beat, pair.both_lost, net, pair.conf, verdict, pair.n, out);
 }
 
 // ── Render ────────────────────────────────────────────────────────────────────

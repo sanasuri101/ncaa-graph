@@ -402,23 +402,35 @@ async function callClaude(_unusedKey, singlePrompt, opts = {}) {
 
 // ── System prompt with graph context ─────────────────────────────────────────
 function systemPrompt() {
-  // Compact team list with real Torvik stats only
+  // Full team roster with real Torvik stats
   const teamLines = ALL_NODES.map(n => {
     const tv = TORVIK_DATA?.teams?.[n.id]?.torvik;
     const torvik = tv
-      ? `TRank#${tv.rank} AdjEM${tv.adj_em > 0 ? '+' : ''}${tv.adj_em} AdjOE${tv.adj_oe} AdjDE${tv.adj_de} Barth${(tv.barthag*100).toFixed(0)}%`
-      : 'no torvik';
-    return `${n.full_name}|${n.region}#${n.seed}|${n.wins_vs_field}W${n.losses_vs_field}L|${torvik}`;
+      ? `T-Rank #${tv.rank}, AdjOE ${tv.adj_oe}, AdjDE ${tv.adj_de}, AdjEM ${tv.adj_em > 0 ? '+' : ''}${tv.adj_em}, Barthag ${(tv.barthag*100).toFixed(1)}%, Tempo #${tv.adj_tempo}`
+      : 'Torvik N/A';
+    return `${n.full_name} (${n.region} #${n.seed}) | ${n.wins_vs_field}W-${n.losses_vs_field}L vs field | ${torvik}`;
   }).join('\n');
 
-  return `You are AI Scout, a 2026 NCAA bracket analyst. Only use stats below — never invent numbers.
+  // All played games
+  const gameLines = ALL_EDGES.map(e => {
+    const winner = ALL_NODES.find(n => n.id === e.from)?.label ?? e.from;
+    const loser  = ALL_NODES.find(n => n.id === e.to)?.label ?? e.to;
+    return `${winner} def. ${loser} ${e.label} (${e.date ? e.date.slice(0,10) : ''})`;
+  }).join('\n');
 
-TEAMS (name|region#seed|record vs field|Torvik):
+  return `You are AI Scout, an expert NCAA basketball analyst for the 2026 March Madness bracket.
+
+CRITICAL: Only use the stats below. Never invent or estimate numbers not listed here.
+
+ALL 64 BRACKET TEAMS (name | region seed | record vs bracket field | Torvik efficiency):
 ${teamLines}
 
-Games played: ${ALL_EDGES.length} inter-bracket matchups this season.
-If asked about a specific game result, say you can reference it if given the teams.
-Be concise. Use exact numbers. No filler.`;
+ALL ${ALL_EDGES.length} INTER-BRACKET GAMES PLAYED THIS SEASON:
+${gameLines}
+
+When asked about efficiency, use the exact AdjOE/AdjDE/AdjEM/Barthag values above.
+When asked about matchups, reference the game log above.
+Be concise and direct. No filler.`;
 }
 // ── Helpers ───────────────────────────────────────────────────────────────────
 function loadingHTML(label) {

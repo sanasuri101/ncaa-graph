@@ -44,6 +44,11 @@ TORVIK_NAME_MAP = {
     "North Carolina A&T":  "NC A&T",
     "LIU":                 "Long Island",
     "Stephen F. Austin":   "SFA",
+    "Mississippi":          "Ole Miss",
+    "McNeese St.":          "McNeese",
+    "Bethune Cookman":      "Bethune-Cookman",
+    "Penn St.":             "Penn State",
+    "Oklahoma St.":         "Oklahoma State",
 }
 
 # Torvik JSON field positions
