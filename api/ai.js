@@ -16,7 +16,7 @@ const MODEL         = 'llama-3.3-70b-versatile';
 const MAX_TOKENS    = 2048;
 const GROQ_TPM_CAP  = 14000;
 const CHARS_PER_TOK = 4;
-const TOOL_MAX_ITER = 3;
+const TOOL_MAX_ITER = 6;
 const FETCH_TIMEOUT = 15000;
 
 // ── CORS headers ──────────────────────────────────────────────────────────────
@@ -305,7 +305,7 @@ function trimHistory(messages, systemTokens) {
 }
 
 // ── System prompt — server-side, query-scoped ─────────────────────────────────
-function buildSystemPrompt(userMsg, graph, torvik, form) {
+function buildSystemPrompt(userMsg, graph, torvik, form, prefetchedContext) {
   const msgLower  = (userMsg || '').toLowerCase();
   const mentioned = graph.nodes.filter(n =>
     msgLower.includes(n.label.toLowerCase()) ||
@@ -313,40 +313,113 @@ function buildSystemPrompt(userMsg, graph, torvik, form) {
   );
   const scope = mentioned.slice(0, 8);
 
-  // Use the rich fmtTeam for context — same data the tools return
   const teamLines = scope.map(n => fmtTeam(n, torvik, form)).join('\n\n');
-
   const scopedIds = new Set(scope.map(n => n.id));
   const edges = scope.length > 0
     ? graph.edges.filter(e => scopedIds.has(e.from) || scopedIds.has(e.to)).slice(0, 20)
     : [];
-
   const gameLines = edges.map(e => {
-    const w = graph.nodes.find(n => n.id === e.from)?.label ?? e.from;
-    const l = graph.nodes.find(n => n.id === e.to)?.label ?? e.to;
-    return `${w} beat ${l} ${e.label} on ${(e.date || '').slice(5, 10)}`;
+    const wNode = graph.nodes.find(n => n.id === e.from);
+    const lNode = graph.nodes.find(n => n.id === e.to);
+    const w = wNode ? wNode.label : e.from;
+    const l = lNode ? lNode.label : e.to;
+    return w + ' beat ' + l + ' ' + e.label + ' on ' + (e.date || '').slice(5, 10);
   }).join('\n');
 
-  return `You are AI Scout, an expert NCAA basketball analyst for the 2026 March Madness bracket.
+  const contextBlock = prefetchedContext ||
+    (scope.length > 0
+      ? teamLines + (gameLines ? '\n\nBRACKET GAMES:\n' + gameLines : '')
+      : '');
 
-TOOLS — call when you need data not already in CONTEXT below:
-- get_team_stats(team_names: string[]) — full stats for one or more teams
-- get_matchup(team_a, team_b) — head-to-head results + common opponents
-- get_standings(sort_by, region?, limit?) — ranked list
-  sort_by options: adj_em | barthag | rank | wins_vs_field | seed
-  limit: must be a NUMBER (e.g. 10 not "10"), default 10
+  let prompt = 'You are AI Scout, an expert NCAA basketball analyst for the 2026 March Madness bracket.\n\n';
+  prompt += 'TOOLS - call when you need data not already in DATA below:\n';
+  prompt += '- get_team_stats(team_names: string[]) - full stats for one or more teams\n';
+  prompt += '- get_matchup(team_a, team_b) - head-to-head results + common opponents\n';
+  prompt += '- get_standings(sort_by, region?, limit?) - ranked list\n';
+  prompt += '  sort_by options: adj_em | barthag | rank | wins_vs_field | seed\n';
+  prompt += '  limit: must be a NUMBER like 10 not "10", default 10\n\n';
+  prompt += 'ANALYSIS RULES:\n';
+  prompt += '- Always cite specific numbers: AdjEM, Barthag, shooting splits, form, SOS\n';
+  prompt += '- Compare stats explicitly e.g. Florida AdjOE 126.9 vs St Johns AdjDE 94.9 = +32 edge\n';
+  prompt += '- For sleeper picks: cite seed vs T-Rank gap, recent form, one specific statistical edge\n';
+  prompt += '- For efficiency questions: rank by AdjEM, explain the margin between teams\n';
+  prompt += '- Never say seems to have an advantage - state the exact number\n';
+  prompt += '- Be direct and specific. No hedging.';
+  if (contextBlock) {
+    prompt += '\n\nDATA:\n' + contextBlock;
+  }
+  return prompt;
+}
 
-ANALYSIS RULES:
-- Always cite specific numbers — AdjEM, Barthag, shooting splits, form, SOS
-- Compare stats explicitly when evaluating matchups (e.g. "Florida AdjOE 127.4 vs St. John's AdjDE 98.2")
-- For matchup questions: mention pace mismatch, shooting strengths/weaknesses, recent form, and common opponents if available
-- For sleeper picks: reference seed vs T-Rank gap, recent form, and a specific statistical edge
-- For efficiency questions: rank teams by AdjEM or Barthag and explain what the numbers mean
-- Never say "seems to have an advantage" — state the exact margin
-- If a tool call fails, note it and answer from context${scope.length > 0 ? `
+const REGIONS = ['East', 'West', 'South', 'Midwest'];
 
-CONTEXT (pre-loaded for this query):
-${teamLines}${gameLines ? `\n\nBRACKET GAMES INVOLVING THESE TEAMS:\n${gameLines}` : ''}` : ''}`;
+function classifyIntent(msg) {
+  const m = msg.toLowerCase();
+  // Check unplayed BEFORE top_teams so "best teams that haven't played" hits correct branch
+  if (/haven.?t played|not played|could face|potential matchup|best matchup/i.test(m))
+    return { type: 'unplayed_matchups' };
+  if (/sleeper|dark.horse|cinderella|upset.pick|surprise pick|under.rated|overachiev/i.test(m))
+    return { type: 'sleeper_all_regions' };
+  // Region-specific check — Midwest before West to avoid substring collision
+  const REGIONS_ORDERED = ['Midwest', 'East', 'West', 'South'];
+  for (const r of REGIONS_ORDERED) {
+    if (m.includes(r.toLowerCase()) && /best|top|strong|effici|rank|adj.?em|barthag|who/i.test(m))
+      return { type: 'region_standings', region: r };
+  }
+  if (/best teams|top teams|strongest|who.?s best|who are the best/i.test(m))
+    return { type: 'top_teams_all' };
+  return { type: 'dynamic' };
+}
+
+function preFetch(intent, graph, torvik, form) {
+  const thinking = [];
+  const blocks   = [];
+
+  if (intent.type === 'sleeper_all_regions') {
+    for (const region of REGIONS) {
+      thinking.push('Checking standings \u2014 ' + region);
+      blocks.push('=== ' + region.toUpperCase() + ' ===\n' + toolGetStandings({ sort_by: 'adj_em', region, limit: 16 }));
+    }
+    return { context: blocks.join('\n\n'), thinking };
+  }
+
+  if (intent.type === 'top_teams_all') {
+    thinking.push('Checking top teams overall');
+    blocks.push(toolGetStandings({ sort_by: 'adj_em', region: 'all', limit: 20 }));
+    return { context: blocks.join('\n\n'), thinking };
+  }
+
+  if (intent.type === 'unplayed_matchups') {
+    thinking.push('Checking top teams by efficiency');
+    const top = toolGetStandings({ sort_by: 'adj_em', region: 'all', limit: 8 });
+    blocks.push('TOP TEAMS:\n' + top);
+    const ranked = graph.nodes
+      .map(n => ({ n, tv: torvik && torvik.teams && torvik.teams[n.id] && torvik.teams[n.id].torvik }))
+      .filter(x => x.tv)
+      .sort((a, b) => (b.tv.adj_em || -999) - (a.tv.adj_em || -999))
+      .slice(0, 6);
+    const edgeSet = new Set(graph.edges.map(e => e.from + '-' + e.to));
+    const unplayed = [];
+    for (let i = 0; i < ranked.length; i++) {
+      for (let j = i + 1; j < ranked.length; j++) {
+        const a = ranked[i].n, b = ranked[j].n;
+        if (!edgeSet.has(a.id + '-' + b.id) && !edgeSet.has(b.id + '-' + a.id)) {
+          unplayed.push(a.full_name + ' (' + a.region + ' #' + a.seed + ') vs ' + b.full_name + ' (' + b.region + ' #' + b.seed + ')');
+          thinking.push('Unplayed: ' + a.label + ' vs ' + b.label);
+        }
+      }
+    }
+    if (unplayed.length) blocks.push('TOP UNPLAYED MATCHUPS:\n' + unplayed.join('\n'));
+    return { context: blocks.join('\n\n'), thinking };
+  }
+
+  if (intent.type === 'region_standings') {
+    thinking.push('Checking standings \u2014 ' + intent.region);
+    blocks.push(toolGetStandings({ sort_by: 'adj_em', region: intent.region, limit: 16 }));
+    return { context: blocks.join('\n\n'), thinking };
+  }
+
+  return { context: '', thinking: [] };
 }
 
 // ── Groq fetch with timeout + retry on 429/503 ────────────────────────────────
@@ -433,11 +506,34 @@ export default async function handler(req, res) {
 
   try {
     const { graph, torvik, form } = getData();
-    const system   = buildSystemPrompt(body.userMsg || '', graph, torvik, form);
-    const sysToks  = estTokens(system);
-    const history  = trimHistory(body.messages, sysToks);
-    let   messages = [{ role: 'system', content: system }, ...history];
-    const thinking = [];
+    const userMsg = body.userMsg || '';
+
+    // ── Step 1: classify intent and pre-fetch deterministically ──────────────
+    const intent  = classifyIntent(userMsg);
+    const prefetch = preFetch(intent, graph, torvik, form);
+    const thinking = [...prefetch.thinking];
+
+    // ── Step 2: build system prompt, inject pre-fetched data as context ──────
+    const system  = buildSystemPrompt(userMsg, graph, torvik, form, prefetch.context);
+    const sysToks = estTokens(system);
+    const history = trimHistory(body.messages, sysToks);
+
+    // ── Step 3: for known intents, skip tool calling entirely ────────────────
+    if (intent.type !== 'dynamic') {
+      const messages = [{ role: 'system', content: system }, ...history];
+      const groqRes  = await groqFetch({ model: MODEL, max_tokens: MAX_TOKENS, messages, tool_choice: 'none' }, groqKey);
+      const groqData = await groqRes.json();
+      if (!groqRes.ok) {
+        send(groqRes.status, { error: { message: groqData?.error?.message ?? 'Groq error' } });
+        return;
+      }
+      const text = groqData.choices?.[0]?.message?.content || 'No response — please try again.';
+      send(200, { text, thinking });
+      return;
+    }
+
+    // ── Step 4: dynamic — open-ended tool calling for unclassified queries ───
+    let messages = [{ role: 'system', content: system }, ...history];
 
     for (let iter = 0; iter < TOOL_MAX_ITER; iter++) {
       const groqRes  = await groqFetch({ model: MODEL, max_tokens: MAX_TOKENS, messages, tools: TOOLS, tool_choice: 'auto' }, groqKey);
@@ -453,18 +549,17 @@ export default async function handler(req, res) {
       const toolCalls = choice?.message?.tool_calls;
       const content   = choice?.message?.content ?? '';
 
-      // Model gave a text answer or hit token limit — return it
       if (reason === 'stop' || reason === 'length') {
         send(200, { text: content || '', thinking });
         return;
       }
 
-      // Model tried to call tools but generated nothing valid — retry without tools
+      // Model failed to generate valid tool args — answer from context
       if (!toolCalls?.length) {
         const fallbackRes  = await groqFetch({ model: MODEL, max_tokens: MAX_TOKENS, messages, tool_choice: 'none' }, groqKey);
         const fallbackData = await fallbackRes.json();
         const fallbackText = fallbackData.choices?.[0]?.message?.content ?? '';
-        send(200, { text: fallbackText || 'Unable to answer — try rephrasing your question.', thinking });
+        send(200, { text: fallbackText || 'Unable to answer — try rephrasing.', thinking });
         return;
       }
 
@@ -473,9 +568,8 @@ export default async function handler(req, res) {
         let args = {};
         let parseOk = false;
         try { args = JSON.parse(tc.function.arguments); parseOk = true; } catch {}
-        // If Groq generated unparseable args, return a clear error so the model can recover
         if (!parseOk) {
-          messages.push({ role: 'tool', tool_call_id: tc.id, content: `Tool call failed: could not parse arguments. Please try a simpler query.` });
+          messages.push({ role: 'tool', tool_call_id: tc.id, content: 'Could not parse tool arguments.' });
           continue;
         }
         thinking.push(TOOL_LABELS[tc.function.name]?.(args) ?? tc.function.name);
@@ -486,9 +580,10 @@ export default async function handler(req, res) {
       if (estMessagesTokens(messages) > GROQ_TPM_CAP - MAX_TOKENS) break;
     }
 
+    // Final synthesis — no tools, just write the answer
     const sysToksNow = estTokens(messages[0].content);
     const trimmed    = [messages[0], ...trimHistory(messages.slice(1), sysToksNow)];
-    const groqRes    = await groqFetch({ model: MODEL, max_tokens: MAX_TOKENS, messages: trimmed }, groqKey);
+    const groqRes    = await groqFetch({ model: MODEL, max_tokens: MAX_TOKENS, messages: trimmed, tool_choice: 'none' }, groqKey);
     const groqData   = await groqRes.json();
     const finalText  = groqData.choices?.[0]?.message?.content;
     const fallback   = !finalText ? messages.filter(m => m.role === 'tool').slice(-1)[0]?.content : null;
