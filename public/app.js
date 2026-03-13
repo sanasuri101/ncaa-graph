@@ -95,8 +95,10 @@ function initGraph() {
     is_not_played: true,
   }));
 
-  nodesDS = new vis.DataSet(ALL_NODES);
-  edgesDS = new vis.DataSet(ALL_EDGES);
+  // Start with empty graph — user builds it up dynamically
+  nodesDS = new vis.DataSet([]);
+  edgesDS = new vis.DataSet([]);
+  showEmptyState(true);
 
   const options = {
     nodes: {
@@ -140,6 +142,8 @@ function initGraph() {
 // ── Filters ───────────────────────────────────────────────────────────────────
 function applyFilters() {
   if (customActive) { applyCustomView(); return; }
+  // If nothing is selected, stay empty
+  if (CUSTOM_SELECTION.size === 0 && nodesDS.length === 0) return;
 
   const rv = document.getElementById('region-filter').value;
 
@@ -335,6 +339,13 @@ function renderTeamDetail(nodeId, box) {
       <div class="d-result-list">${lRows}</div>` : ''}
   `;
 
+  // Remove from graph button — always visible in detail panel
+  const removeBtn = document.createElement('button');
+  removeBtn.className = 'remove-from-graph-btn';
+  removeBtn.innerHTML = '✕ Remove from graph';
+  removeBtn.addEventListener('click', () => removeNodeFromGraph(nodeId));
+  box.appendChild(removeBtn);
+
   if (typeof renderSparkline === 'function') {
     renderSparkline(nodeId, document.getElementById(`spark-container-${nodeId}`));
   }
@@ -494,17 +505,45 @@ async function populateSeedDivergence() {
 }
 
 // ── Stats bar ─────────────────────────────────────────────────────────────────
+function updateStats(teamCount, playedCount, notPlayedCount) {
+  document.getElementById('st-teams').textContent     = teamCount;
+  document.getElementById('st-inter').textContent     = playedCount;
+  document.getElementById('cnt-played').textContent   = playedCount;
+  document.getElementById('cnt-notplayed').textContent = notPlayedCount;
+
+  // Total games and rematches: scale from full dataset proportionally,
+  // or show actuals if we have the full set loaded
+  if (teamCount === ALL_NODES.length) {
+    document.getElementById('st-games').textContent     = META.total_games ?? ALL_EDGES.length;
+    document.getElementById('st-rematches').textContent = META.rematches ?? '—';
+  } else {
+    // Count rematches in current selection
+    const rematches = playedCount > 0
+      ? (() => {
+          const pairs = {};
+          const selEdges = customActive ? CUSTOM_EDGES : ALL_EDGES;
+          selEdges.forEach(e => {
+            const key = [e.from, e.to].sort().join('|');
+            pairs[key] = (pairs[key] || 0) + 1;
+          });
+          return Object.values(pairs).filter(c => c > 1).length;
+        })()
+      : 0;
+    document.getElementById('st-games').textContent     = playedCount;
+    document.getElementById('st-rematches').textContent = rematches || '0';
+  }
+
+  if (teamCount === 0) {
+    document.getElementById('sub-stats').textContent = 'No teams selected — use search or quick-add buttons';
+  } else {
+    document.getElementById('sub-stats').textContent =
+      `${teamCount} team${teamCount !== 1 ? 's' : ''} · ${playedCount} game${playedCount !== 1 ? 's' : ''} played · ${notPlayedCount} pairs never met`;
+  }
+}
+
 function populateStats() {
-  document.getElementById('st-teams').textContent    = ALL_NODES.length;
-  document.getElementById('st-games').textContent    = META.total_games ?? ALL_EDGES.length;
-  document.getElementById('st-inter').textContent    = ALL_EDGES.length;
-  document.getElementById('st-rematches').textContent = META.rematches ?? '—';
-
-  document.getElementById('cnt-played').textContent   = ALL_EDGES.length;
-  document.getElementById('cnt-notplayed').textContent = NOT_PLAYED.length;
-
-  document.getElementById('sub-stats').textContent =
-    `${ALL_NODES.length} bracket teams · ${ALL_EDGES.length} inter-bracket matchups · ${NOT_PLAYED.length} pairs never met`;
+  // Boot call — show zeros since graph starts empty
+  updateStats(0, 0, 0);
 
   if (META.generated_at) {
     const d = new Date(META.generated_at);
@@ -571,6 +610,7 @@ function switchTab(tab) {
   if (tabEl) tabEl.classList.add('active');
   if (stabEl) stabEl.classList.add('active');
   if (tab === 'transitive' && typeof populateTransSelects === 'function') populateTransSelects();
+  if (tab === 'bracket'    && typeof initBracket           === 'function') initBracket();
 }
 
 // ── UI bindings ───────────────────────────────────────────────────────────────
@@ -634,6 +674,97 @@ function validateBracketIntegrity() {
     `;
     document.querySelector('.toolbar').before(banner);
   }
+}
+
+// ── Empty state ───────────────────────────────────────────────────────────────
+function showEmptyState(show) {
+  let el = document.getElementById('graph-empty-state');
+  if (show) {
+    if (!el) {
+      el = document.createElement('div');
+      el.id = 'graph-empty-state';
+      el.className = 'graph-empty-state';
+      el.innerHTML = `
+        <div class="ges-icon">⬡</div>
+        <div class="ges-title">Build your graph</div>
+        <div class="ges-sub">Search for teams above, or start with a quick-add:</div>
+        <div class="ges-btns">
+          <button class="ges-btn" onclick="addAllBracketToCustom()">All 64 bracket teams</button>
+          <button class="ges-btn" onclick="addRegionToCustom('East');"   style="border-color:#4a7fb5;color:#4a7fb5">East</button>
+          <button class="ges-btn" onclick="addRegionToCustom('West');"   style="border-color:#3a8c6e;color:#3a8c6e">West</button>
+          <button class="ges-btn" onclick="addRegionToCustom('South');"  style="border-color:#b89030;color:#b89030">South</button>
+          <button class="ges-btn" onclick="addRegionToCustom('Midwest');" style="border-color:#b84545;color:#b84545">Midwest</button>
+          <button class="ges-btn" onclick="addRegionToCustom('bubble');" style="border-color:#7c3aed;color:#7c3aed">Bubble teams</button>
+        </div>`;
+      document.getElementById('network').appendChild(el);
+    }
+    el.style.display = 'flex';
+  } else {
+    if (el) el.style.display = 'none';
+  }
+}
+
+// Remove a single node from the live graph
+function removeNodeFromGraph(nodeId) {
+  CUSTOM_SELECTION.delete(nodeId);
+
+  if (CUSTOM_SELECTION.size === 0) {
+    // Nothing left — go back to empty state
+    clearCustom();
+    return;
+  }
+
+  // Remove node and any edges touching it from the DataSets directly
+  nodesDS.remove(nodeId);
+  const edgesToRemove = edgesDS.getIds({
+    filter: e => e.from === nodeId || e.to === nodeId
+  });
+  edgesDS.remove(edgesToRemove);
+
+  // Rebuild pills bar
+  renderCustomPills();
+
+  // Clear detail panel
+  const box = document.getElementById('detail-box');
+  if (box) box.innerHTML = '<div class="detail-empty">Team removed. Click another team or edge to see details.</div>';
+
+  // Recount not-played pairs for current selection
+  const selArr2  = [...CUSTOM_SELECTION];
+  const playedSet = new Set(
+    edgesDS.get({ filter: e => !e.is_not_played }).map(e => [e.from,e.to].sort().join('|'))
+  );
+  let npCount = 0;
+  for (let i = 0; i < selArr2.length; i++)
+    for (let j = i+1; j < selArr2.length; j++)
+      if (!playedSet.has([selArr2[i],selArr2[j]].sort().join('|'))) npCount++;
+  const playedCnt = edgesDS.get({ filter: e => !e.is_not_played }).length;
+  updateStats(CUSTOM_SELECTION.size, playedCnt, npCount);
+}
+
+// Re-render just the pills without rebuilding the full graph
+function renderCustomPills() {
+  const pillsBar  = document.getElementById('custom-pills-bar');
+  const pillsWrap = document.getElementById('custom-pills');
+  if (CUSTOM_SELECTION.size === 0) {
+    pillsBar.style.display = 'none';
+    return;
+  }
+  pillsWrap.innerHTML = '';
+  CUSTOM_SELECTION.forEach(id => {
+    const node = ALL_NODES.find(n => n.id === id);
+    if (!node) return;
+    const rc = REGION_COLORS[node.region] || '#b0a898';
+    const pill = document.createElement('span');
+    pill.className = 'team-pill';
+    pill.style.borderColor = rc;
+    pill.innerHTML = `
+      <span class="pill-dot" style="background:${rc}"></span>
+      ${node.label}
+      <button class="pill-remove" onclick="removeFromCustom('${id}')">✕</button>
+    `;
+    pillsWrap.appendChild(pill);
+  });
+  pillsBar.style.display = 'flex';
 }
 
 // ── Custom team selector ──────────────────────────────────────────────────────
@@ -719,22 +850,29 @@ function addAllBracketToCustom() {
   renderCustom();
 }
 
+function addAllToCustom() {
+  ALL_NODES.forEach(n => CUSTOM_SELECTION.add(n.id));
+  renderCustom();
+}
+
 function renderCustom() {
   const pillsBar  = document.getElementById('custom-pills-bar');
   const pillsWrap = document.getElementById('custom-pills');
   const clearBtn  = document.getElementById('custom-clear-btn');
 
   if (CUSTOM_SELECTION.size === 0) {
-    // Restore full graph
     customActive = false;
     pillsBar.style.display  = 'none';
     clearBtn.style.display  = 'none';
-    // Restore ALL_NODES / ALL_EDGES fully
-    applyFilters();
-    document.getElementById('sub-stats').textContent =
-      `${ALL_NODES.length} bracket teams · ${ALL_EDGES.length} inter-bracket matchups · ${NOT_PLAYED.length} pairs never met`;
+    // Empty graph — show the empty state prompt
+    nodesDS.clear();
+    edgesDS.clear();
+    showEmptyState(true);
+    updateStats(0, 0, 0);
     return;
   }
+
+  showEmptyState(false);
 
   customActive = true;
   clearBtn.style.display = '';
@@ -794,8 +932,7 @@ function renderCustom() {
 
   const playedCnt = CUSTOM_EDGES.length;
   const npCnt     = CUSTOM_NP.length;
-  document.getElementById('sub-stats').textContent =
-    `${CUSTOM_SELECTION.size} teams selected · ${playedCnt} games played · ${npCnt} pairs never met`;
+  updateStats(CUSTOM_SELECTION.size, playedCnt, npCnt);
 }
 
 function applyCustomView() {

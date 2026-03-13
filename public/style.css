@@ -1753,9 +1753,12 @@ section { margin-bottom: 20px; }
 }
 
 .chat-foot {
-  padding: 10px 14px 12px;
+  padding: 10px 12px 14px;
   border-top: 1px solid var(--border);
   flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .chat-input-wrap {
@@ -1765,7 +1768,7 @@ section { margin-bottom: 20px; }
   background: var(--surface2);
   border: 1px solid var(--border);
   border-radius: 12px;
-  padding: 8px 10px;
+  padding: 10px 10px 8px;
   transition: border-color .15s;
 }
 .chat-input-wrap:focus-within { border-color: var(--accent); }
@@ -1780,8 +1783,8 @@ section { margin-bottom: 20px; }
   font-size: .86rem;
   color: var(--text);
   line-height: 1.5;
-  min-height: 20px;
-  max-height: 80px;
+  min-height: 52px;
+  max-height: 120px;
 }
 .chat-input-wrap textarea::placeholder { color: var(--text-mute); }
 
@@ -1801,25 +1804,25 @@ section { margin-bottom: 20px; }
 
 .chat-hints-row {
   display: flex;
-  gap: 6px;
+  gap: 5px;
   flex-wrap: wrap;
-  margin-top: 8px;
 }
 
 .hint-pill {
-  background: var(--surface);
+  background: var(--surface2);
   border: 1px solid var(--border);
   color: var(--text-dim);
-  padding: 4px 10px;
+  padding: 5px 11px;
   border-radius: 20px;
-  font-size: .76rem;
+  font-size: .74rem;
   cursor: pointer;
   font-family: var(--font-body);
-  font-weight: 300;
+  font-weight: 400;
   transition: all .12s;
   white-space: nowrap;
+  line-height: 1.3;
 }
-.hint-pill:hover { border-color: var(--accent); color: var(--accent); }
+.hint-pill:hover { border-color: var(--accent); color: var(--accent); background: var(--surface); }
 
 /* Key drawer inline in AI panel */
 .ai-key-drawer {
@@ -2284,23 +2287,24 @@ section { margin-bottom: 20px; }
 }
 
 .chat-input-wrap {
-  border-top: 1px solid var(--border) !important;
   background: var(--surface2) !important;
-  padding: 10px 12px !important;
+  padding: 8px 10px !important;
 }
 
 #chat-input {
-  background: var(--surface) !important;
-  border: 1px solid var(--border) !important;
-  border-radius: 10px !important;
+  background: transparent !important;
+  border: none !important;
   color: var(--text) !important;
   font-family: var(--font-body) !important;
-  font-size: .84rem !important;
+  font-size: .86rem !important;
   resize: none !important;
-  padding: 8px 12px !important;
-  transition: border-color .15s !important;
+  padding: 0 !important;
+  min-height: 52px !important;
+  max-height: 120px !important;
+  line-height: 1.5 !important;
+  transition: none !important;
 }
-#chat-input:focus { border-color: var(--accent) !important; outline: none !important; }
+#chat-input:focus { outline: none !important; }
 
 #chat-send-btn {
   background: var(--accent) !important;
@@ -2312,6 +2316,7 @@ section { margin-bottom: 20px; }
   cursor: pointer !important;
   transition: opacity .12s !important;
   flex-shrink: 0 !important;
+  align-self: flex-end !important;
 }
 #chat-send-btn:hover { opacity: .82 !important; }
 
@@ -3222,3 +3227,34 @@ section { margin-bottom: 20px; }
   background: var(--surface); border: 1.5px solid var(--accent);
   border-radius: 8px; padding: 10px; margin-top: 8px;
 }
+
+/* ── Dynamic graph empty state ───────────────────────────────────────── */
+.graph-empty-state {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  background: var(--bg); z-index: 10;
+  gap: 8px; padding: 24px; text-align: center;
+  pointer-events: all;
+}
+.ges-icon  { font-size: 2.4rem; opacity: .25; line-height: 1; }
+.ges-title { font-family: 'Instrument Serif', serif; font-style: italic; font-size: 1.3rem; color: var(--text); }
+.ges-sub   { font-size: .75rem; color: var(--text-mute); margin-bottom: 4px; }
+.ges-btns  { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; max-width: 420px; }
+.ges-btn {
+  padding: 6px 14px; border: 1.5px solid var(--border);
+  background: var(--surface); border-radius: 20px;
+  font-family: 'DM Sans', sans-serif; font-size: .75rem;
+  color: var(--text); cursor: pointer; transition: background .15s, border-color .15s;
+}
+.ges-btn:hover { background: var(--surface2); }
+
+/* ── Remove from graph button ────────────────────────────────────────── */
+.remove-from-graph-btn {
+  display: block; width: 100%; margin-top: 14px;
+  padding: 7px 0; border: 1.5px solid #e5c4c4;
+  background: #fdf5f5; border-radius: 6px;
+  font-family: 'DM Sans', sans-serif; font-size: .75rem;
+  color: var(--midwest); cursor: pointer; transition: background .15s;
+}
+.remove-from-graph-btn:hover { background: #fbe8e8; border-color: var(--midwest); }
