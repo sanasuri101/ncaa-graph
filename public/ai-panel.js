@@ -13,6 +13,8 @@
 
 'use strict';
 
+let _chatInFlight = false;
+
 // ── Token budget ──────────────────────────────────────────────────────────────
 // window.getTorvik() is defined in app.js (loads first) — do not redefine here.
 const CHARS_PER_TOK   = 4;
