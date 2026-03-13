@@ -3284,3 +3284,80 @@ section { margin-bottom: 20px; }
   text-align: center;
   line-height: 1.4;
 }
+
+.chat-stop {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1.5px solid var(--midwest);
+  background: transparent;
+  color: var(--midwest);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background .15s, color .15s;
+}
+.chat-stop:hover { background: var(--midwest); color: #fff; }
+
+/* ── Thinking block ──────────────────────────────────────────────────────────── */
+.thinking-block {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 10px;
+  margin-bottom: 4px;
+}
+
+.thinking-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.thinking-label {
+  font-family: var(--font-body);
+  font-size: .7rem;
+  font-weight: 600;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--text-mute);
+}
+
+.thinking-spinner {
+  width: 10px;
+  height: 10px;
+  border: 1.5px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin .7s linear infinite;
+  flex-shrink: 0;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.thinking-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.thinking-step {
+  font-family: var(--font-mono);
+  font-size: .68rem;
+  color: var(--text-mute);
+  padding: 1px 0;
+  line-height: 1.5;
+}
+.thinking-step::before {
+  content: '→ ';
+  color: var(--accent);
+  opacity: .7;
+}
+
+.thinking-done .thinking-header svg {
+  color: var(--west);
+  flex-shrink: 0;
+}
+.thinking-done .thinking-spinner { display: none; }

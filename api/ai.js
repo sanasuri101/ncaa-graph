@@ -13,11 +13,11 @@ import { join }         from 'path';
 
 const GROQ_URL      = 'https://api.groq.com/openai/v1/chat/completions';
 const MODEL         = 'llama-3.3-70b-versatile';
-const MAX_TOKENS    = 4096;
+const MAX_TOKENS    = 1024;
 const GROQ_TPM_CAP  = 11000;
 const CHARS_PER_TOK = 4;
-const TOOL_MAX_ITER = 5;
-const FETCH_TIMEOUT = 25000;
+const TOOL_MAX_ITER = 3;
+const FETCH_TIMEOUT = 15000;
 
 // ── CORS headers ──────────────────────────────────────────────────────────────
 const CORS = {
@@ -250,7 +250,8 @@ function buildSystemPrompt(userMsg, graph, torvik) {
     msgLower.includes(n.label.toLowerCase()) ||
     msgLower.includes(n.full_name.toLowerCase().split(' ')[0])
   );
-  const scope = mentioned.length > 0 ? mentioned : graph.nodes;
+  // Only include team data for mentioned teams — use tools for everything else
+  const scope = mentioned.slice(0, 8);
 
   const teamLines = scope.map(n => {
     const tv   = torvik?.teams?.[n.id]?.torvik;
@@ -262,9 +263,9 @@ function buildSystemPrompt(userMsg, graph, torvik) {
   }).join('\n');
 
   const scopedIds = new Set(scope.map(n => n.id));
-  const edges = mentioned.length > 0
-    ? graph.edges.filter(e => scopedIds.has(e.from) || scopedIds.has(e.to))
-    : graph.edges.slice(-200);
+  const edges = scope.length > 0
+    ? graph.edges.filter(e => scopedIds.has(e.from) || scopedIds.has(e.to)).slice(0, 30)
+    : [];
 
   const gameLines = edges.map(e => {
     const w = graph.nodes.find(n => n.id === e.from)?.label ?? e.from;
@@ -273,16 +274,10 @@ function buildSystemPrompt(userMsg, graph, torvik) {
   }).join('\n');
 
   return `You are AI Scout, an expert NCAA basketball analyst for the 2026 March Madness bracket.
-Use the provided tools to look up stats, matchups, and standings when needed.
-Never invent numbers — call a tool if the data is not in context.
-
-TEAMS IN CONTEXT (${scope.length} of 91 — use tools for others):
-${teamLines}
-
-GAMES (${edges.length} shown):
-${gameLines}
-
-Be concise. Cite exact stats. Use get_matchup for head-to-head predictions.`;
+Use get_team_stats, get_matchup, and get_standings tools to look up data — always call a tool before citing numbers.
+Never invent stats.
+${scope.length > 0 ? `\nQUICK CONTEXT:\n${teamLines}${gameLines ? `\n\nRECENT GAMES:\n${gameLines}` : ''}` : ''}
+Be concise. Cite exact stats.`;
 }
 
 // ── Groq fetch with timeout + retry on 429/503 ────────────────────────────────
@@ -361,57 +356,55 @@ export default async function handler(req, res) {
     res.end(JSON.stringify(data));
   };
 
+  const TOOL_LABELS = {
+    get_team_stats: (a) => `Looking up ${a.team_name ?? 'team'} stats`,
+    get_matchup:    (a) => `Analysing ${a.team_a ?? '?'} vs ${a.team_b ?? '?'}`,
+    get_standings:  (a) => `Checking standings${a.region ? ' — ' + a.region : ''}`,
+  };
+
   try {
     const { graph, torvik } = getData();
     const system   = buildSystemPrompt(body.userMsg || '', graph, torvik);
     const sysToks  = estTokens(system);
     const history  = trimHistory(body.messages, sysToks);
     let   messages = [{ role: 'system', content: system }, ...history];
+    const thinking = [];
 
-    // Tool calling loop
     for (let iter = 0; iter < TOOL_MAX_ITER; iter++) {
       const groqRes  = await groqFetch({ model: MODEL, max_tokens: MAX_TOKENS, messages, tools: TOOLS, tool_choice: 'auto' }, groqKey);
       const groqData = await groqRes.json();
 
       if (!groqRes.ok) {
-        send(groqRes.status, { error: { message: groqData?.error?.message ?? `Groq ${groqRes.status}` } });
+        send(groqRes.status, { error: { message: groqData?.error?.message ?? 'Groq error' } });
         return;
       }
 
-      const choice = groqData.choices?.[0];
-      if (!choice) {
-        send(500, { error: { message: 'No response from model' } });
-        return;
-      }
+      const choice    = groqData.choices?.[0];
+      const reason    = choice?.finish_reason;
+      const toolCalls = choice?.message?.tool_calls;
 
-      const reason    = choice.finish_reason;
-      const toolCalls = choice.message.tool_calls;
-
-      // Final text answer — no tool calls requested, or model hit token limit
       if (!toolCalls?.length || reason === 'length') {
-        send(200, groqData);
+        send(200, { text: choice?.message?.content ?? '', thinking });
         return;
       }
 
-      // Execute tool calls, append results
       messages.push(choice.message);
       for (const tc of toolCalls) {
         let args = {};
         try { args = JSON.parse(tc.function.arguments); } catch {}
+        thinking.push(TOOL_LABELS[tc.function.name]?.(args) ?? tc.function.name);
         const result = dispatchTool(tc.function.name, args);
         messages.push({ role: 'tool', tool_call_id: tc.id, content: String(result) });
       }
 
-      // Before next iteration: bail if context is too large for another round
       if (estMessagesTokens(messages) > GROQ_TPM_CAP - MAX_TOKENS) break;
     }
 
-    // Max iterations or token budget reached — trim and force final answer without tools
-    const sysToksNow  = estTokens(messages[0].content);
-    const trimmed     = [messages[0], ...trimHistory(messages.slice(1), sysToksNow)];
-    const groqRes     = await groqFetch({ model: MODEL, max_tokens: MAX_TOKENS, messages: trimmed }, groqKey);
-    const groqData    = await groqRes.json();
-    send(groqRes.status, groqData);
+    const sysToksNow = estTokens(messages[0].content);
+    const trimmed    = [messages[0], ...trimHistory(messages.slice(1), sysToksNow)];
+    const groqRes    = await groqFetch({ model: MODEL, max_tokens: MAX_TOKENS, messages: trimmed }, groqKey);
+    const groqData   = await groqRes.json();
+    send(200, { text: groqData.choices?.[0]?.message?.content ?? '', thinking });
 
   } catch (err) {
     send(500, { error: { message: err.message } });

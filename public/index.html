@@ -292,8 +292,11 @@
         </div>
         <div class="chat-input-wrap">
           <textarea id="chat-input" placeholder="Ask about matchups, upsets, sleepers..." rows="3" spellcheck="false"></textarea>
-          <button class="chat-send" id="chat-send-btn" onclick="sendChat()">
+          <button class="chat-send" id="chat-send-btn" onclick="sendChat()" style="display:flex">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13"/><path d="M22 2L15 22 11 13 2 9l20-7z"/></svg>
+          </button>
+          <button class="chat-stop" id="chat-stop-btn" onclick="stopChat()" title="Stop" style="display:none">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
           </button>
         </div>
       </div>

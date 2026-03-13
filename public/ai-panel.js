@@ -197,6 +197,21 @@ async function fetchTeamStats() {
   }
 }
 
+let _chatAbortCtrl = null;
+
+function setChatSending(sending) {
+  const sendBtn = document.getElementById('chat-send-btn');
+  const stopBtn = document.getElementById('chat-stop-btn');
+  const input   = document.getElementById('chat-input');
+  sendBtn.style.display = sending ? 'none' : 'flex';
+  stopBtn.style.display = sending ? 'flex' : 'none';
+  input.disabled = sending;
+}
+
+function stopChat() {
+  if (_chatAbortCtrl) _chatAbortCtrl.abort();
+}
+
 async function sendChat() {
   if (_chatInFlight) return;
 
@@ -204,9 +219,11 @@ async function sendChat() {
   const msg      = textarea.value.trim();
   if (!msg) return;
 
-  _chatInFlight = true;
-  textarea.value = '';
+  _chatInFlight    = true;
+  _chatAbortCtrl   = new AbortController();
+  textarea.value   = '';
   textarea.style.height = '';
+  setChatSending(true);
 
   const messagesEl = document.getElementById('chat-messages');
   messagesEl.querySelectorAll('.chat-empty').forEach(el => el.remove());
@@ -217,16 +234,13 @@ async function sendChat() {
   messagesEl.appendChild(userBubble);
 
   const thinkEl = document.createElement('div');
-  thinkEl.className = 'chat-bubble-ai';
+  thinkEl.className = 'chat-bubble-ai thinking';
   thinkEl.innerHTML = `<div class="chat-bubble-ai-body">${loadingHTML('Thinking...')}</div>`;
   messagesEl.appendChild(thinkEl);
   messagesEl.scrollTop = messagesEl.scrollHeight;
 
-  document.getElementById('chat-send-btn').disabled = true;
-
   chatHistory.push({ role: 'user', content: msg });
 
-  // Trim by token budget before sending — sync chatHistory to what we actually send
   const trimmed = trimHistory(chatHistory);
   if (trimmed.length < chatHistory.length) {
     chatHistory.splice(0, chatHistory.length - trimmed.length);
@@ -237,17 +251,36 @@ async function sendChat() {
   }
 
   try {
-    const reply = await callAI(chatHistory, msg);
-    chatHistory.push({ role: 'assistant', content: reply });
+    const { text, thinking } = await callAI(chatHistory, msg, _chatAbortCtrl.signal);
+    chatHistory.push({ role: 'assistant', content: text });
+    thinkEl.classList.remove('thinking');
+    const thinkHtml = thinking.length ? `
+      <div class="thinking-block thinking-done">
+        <div class="thinking-header">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          <span class="thinking-label">Thought for a moment</span>
+        </div>
+        <div class="thinking-steps">
+          ${thinking.map(s => `<div class="thinking-step">${escapeHtml(s)}</div>`).join('')}
+        </div>
+      </div>` : '';
     thinkEl.innerHTML = `
+      ${thinkHtml}
       <div class="chat-bubble-ai-label">Scout</div>
-      <div class="chat-bubble-ai-body">${renderMarkdown(reply)}</div>`;
+      <div class="chat-bubble-ai-body">${renderMarkdown(text)}</div>`;
   } catch (err) {
     chatHistory.pop();
-    thinkEl.innerHTML = `<div class="ai-error">${escapeHtml(err.message)}</div>`;
+    thinkEl.classList.remove('thinking');
+    if (err.name === 'AbortError') {
+      thinkEl.remove();
+      userBubble.remove();
+    } else {
+      thinkEl.innerHTML = `<div class="ai-error">${escapeHtml(err.message)}</div>`;
+    }
   } finally {
-    document.getElementById('chat-send-btn').disabled = false;
-    _chatInFlight = false;
+    _chatInFlight  = false;
+    _chatAbortCtrl = null;
+    setChatSending(false);
     messagesEl.scrollTop = messagesEl.scrollHeight;
   }
 }
@@ -257,15 +290,15 @@ function insertHint(text) {
   document.getElementById('chat-input').focus();
 }
 
-// ── Core AI call — server owns system prompt and model ────────────────────────
-// Sends only { messages, userMsg } — no team data, no games, no model name.
-// api/ai.js builds the query-scoped system prompt server-side.
+// ── Core AI call — returns {text, thinking[]} ────────────────────────────────
 const WORKER_URL    = '/api/ai';
 const FETCH_TIMEOUT = 30000;
 
-async function callAI(messages, userMsg) {
+async function callAI(messages, userMsg, externalSignal) {
   const ctrl  = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), FETCH_TIMEOUT);
+  if (externalSignal) externalSignal.addEventListener('abort', () => ctrl.abort());
+
   try {
     const res = await fetch(WORKER_URL, {
       method:  'POST',
@@ -274,21 +307,33 @@ async function callAI(messages, userMsg) {
       signal:  ctrl.signal,
     });
     clearTimeout(timer);
-
     if (!res.ok) {
       const err = await res.json().catch(() => ({}));
       throw new Error(err?.error?.message ?? `API error ${res.status}`);
     }
-
     const data = await res.json();
-    const text = data.choices?.[0]?.message?.content?.trim();
-    if (!text) throw new Error(data.error?.message ?? 'No response from model');
-    return text;
+    if (data.error) throw new Error(data.error.message ?? 'Unknown error');
+    return { text: data.text ?? '', thinking: data.thinking ?? [] };
   } catch (err) {
     clearTimeout(timer);
-    if (err.name === 'AbortError') throw new Error('Request timed out after 30s — try again');
+    if (err.name === 'AbortError') {
+      const e = new Error('aborted'); e.name = 'AbortError'; throw e;
+    }
     throw err;
   }
+}
+
+function renderThinking(thinkEl, steps) {
+  thinkEl.innerHTML = `
+    <div class="thinking-block">
+      <div class="thinking-header">
+        <span class="thinking-spinner"></span>
+        <span class="thinking-label">Thinking</span>
+      </div>
+      <div class="thinking-steps">
+        ${steps.map(s => `<div class="thinking-step">${escapeHtml(s)}</div>`).join('')}
+      </div>
+    </div>`;
 }
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
