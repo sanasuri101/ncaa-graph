@@ -13,7 +13,7 @@ import { join }         from 'path';
 
 const GROQ_URL      = 'https://api.groq.com/openai/v1/chat/completions';
 const MODEL         = 'llama-3.3-70b-versatile';
-const MAX_TOKENS    = 1024;
+const MAX_TOKENS    = 2048;
 const GROQ_TPM_CAP  = 11000;
 const CHARS_PER_TOK = 4;
 const TOOL_MAX_ITER = 3;
@@ -305,50 +305,48 @@ function trimHistory(messages, systemTokens) {
 }
 
 // ── System prompt — server-side, query-scoped ─────────────────────────────────
-function buildSystemPrompt(userMsg, graph, torvik) {
+function buildSystemPrompt(userMsg, graph, torvik, form) {
   const msgLower  = (userMsg || '').toLowerCase();
   const mentioned = graph.nodes.filter(n =>
     msgLower.includes(n.label.toLowerCase()) ||
     msgLower.includes(n.full_name.toLowerCase().split(' ')[0])
   );
-  // Only include team data for mentioned teams — use tools for everything else
   const scope = mentioned.slice(0, 8);
 
-  const teamLines = scope.map(n => {
-    const tv   = torvik?.teams?.[n.id]?.torvik;
-    const seed = n.seed != null ? `#${n.seed}` : 'bubble';
-    const tv_s = tv
-      ? `Rk${tv.rank} OE${tv.adj_oe} DE${tv.adj_de} EM${tv.adj_em > 0 ? '+' : ''}${tv.adj_em} Bg${(tv.barthag * 100).toFixed(1)}%`
-      : 'no-torvik';
-    return `${n.label} (${n.region} ${seed}) ${n.wins_vs_field}W-${n.losses_vs_field}L | ${tv_s}`;
-  }).join('\n');
+  // Use the rich fmtTeam for context — same data the tools return
+  const teamLines = scope.map(n => fmtTeam(n, torvik, form)).join('\n\n');
 
   const scopedIds = new Set(scope.map(n => n.id));
   const edges = scope.length > 0
-    ? graph.edges.filter(e => scopedIds.has(e.from) || scopedIds.has(e.to)).slice(0, 30)
+    ? graph.edges.filter(e => scopedIds.has(e.from) || scopedIds.has(e.to)).slice(0, 20)
     : [];
 
   const gameLines = edges.map(e => {
     const w = graph.nodes.find(n => n.id === e.from)?.label ?? e.from;
     const l = graph.nodes.find(n => n.id === e.to)?.label ?? e.to;
-    return `${w}>${l} ${e.label} ${(e.date || '').slice(5, 10)}`;
+    return `${w} beat ${l} ${e.label} on ${(e.date || '').slice(5, 10)}`;
   }).join('\n');
 
-  return `You are AI Scout, an NCAA basketball analyst for the 2026 March Madness bracket.
+  return `You are AI Scout, an expert NCAA basketball analyst for the 2026 March Madness bracket.
 
-TOOLS — only call when you need data not in context:
-- get_team_stats(team_names: string[]) — stats for specific teams
-- get_matchup(team_a, team_b) — head-to-head + common opponents between two teams
-- get_standings(sort_by, region?, limit?) — ranked list; sort_by must be one of: adj_em, barthag, rank, wins_vs_field, seed; limit must be a number
+TOOLS — call when you need data not already in CONTEXT below:
+- get_team_stats(team_names: string[]) — full stats for one or more teams
+- get_matchup(team_a, team_b) — head-to-head results + common opponents
+- get_standings(sort_by, region?, limit?) — ranked list
+  sort_by options: adj_em | barthag | rank | wins_vs_field | seed
+  limit: must be a NUMBER (e.g. 10 not "10"), default 10
 
-RULES:
-- Answer general questions (rules, format, history) directly without tools
-- Never invent stats — call a tool if you need numbers
-- Be concise. One paragraph or a short list.
-- If a tool call fails, answer from what you already know${scope.length > 0 ? `
+ANALYSIS RULES:
+- Always cite specific numbers — AdjEM, Barthag, shooting splits, form, SOS
+- Compare stats explicitly when evaluating matchups (e.g. "Florida AdjOE 127.4 vs St. John's AdjDE 98.2")
+- For matchup questions: mention pace mismatch, shooting strengths/weaknesses, recent form, and common opponents if available
+- For sleeper picks: reference seed vs T-Rank gap, recent form, and a specific statistical edge
+- For efficiency questions: rank teams by AdjEM or Barthag and explain what the numbers mean
+- Never say "seems to have an advantage" — state the exact margin
+- If a tool call fails, note it and answer from context${scope.length > 0 ? `
 
-CONTEXT:
-${teamLines}${gameLines ? `\n\nRECENT GAMES:\n${gameLines}` : ''}` : ''}`;
+CONTEXT (pre-loaded for this query):
+${teamLines}${gameLines ? `\n\nBRACKET GAMES INVOLVING THESE TEAMS:\n${gameLines}` : ''}` : ''}`;
 }
 
 // ── Groq fetch with timeout + retry on 429/503 ────────────────────────────────
@@ -434,8 +432,8 @@ export default async function handler(req, res) {
   };
 
   try {
-    const { graph, torvik } = getData();
-    const system   = buildSystemPrompt(body.userMsg || '', graph, torvik);
+    const { graph, torvik, form } = getData();
+    const system   = buildSystemPrompt(body.userMsg || '', graph, torvik, form);
     const sysToks  = estTokens(system);
     const history  = trimHistory(body.messages, sysToks);
     let   messages = [{ role: 'system', content: system }, ...history];
@@ -455,9 +453,18 @@ export default async function handler(req, res) {
       const toolCalls = choice?.message?.tool_calls;
       const content   = choice?.message?.content ?? '';
 
-      // If no valid tool calls (model failed to generate args, or gave text answer), return what we have
-      if (!toolCalls?.length || reason === 'length' || reason === 'stop') {
-        send(200, { text: content || (thinking.length ? 'Unable to complete — try rephrasing.' : ''), thinking });
+      // Model gave a text answer or hit token limit — return it
+      if (reason === 'stop' || reason === 'length') {
+        send(200, { text: content || '', thinking });
+        return;
+      }
+
+      // Model tried to call tools but generated nothing valid — retry without tools
+      if (!toolCalls?.length) {
+        const fallbackRes  = await groqFetch({ model: MODEL, max_tokens: MAX_TOKENS, messages, tool_choice: 'none' }, groqKey);
+        const fallbackData = await fallbackRes.json();
+        const fallbackText = fallbackData.choices?.[0]?.message?.content ?? '';
+        send(200, { text: fallbackText || 'Unable to answer — try rephrasing your question.', thinking });
         return;
       }
 
