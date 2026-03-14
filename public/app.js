@@ -58,7 +58,11 @@ window.addEventListener('DOMContentLoaded', async () => {
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
 
-    ALL_NODES        = data.nodes;
+    ALL_NODES        = data.nodes.map(n => ({
+      ...n,
+      image: `https://a.espncdn.com/i/teamlogos/ncaa/500/${n.id}.png`,
+      font:  { color: '#2a2520', size: 10, strokeWidth: 2, strokeColor: '#f5f2ed' },
+    }));
     window.ALL_NODES = ALL_NODES; // expose for ai-panel.js detectMatchupIntent
     ALL_EDGES   = data.edges;
     NOT_PLAYED  = data.not_played;
@@ -103,11 +107,13 @@ function initGraph() {
 
   const options = {
     nodes: {
-      shape:       'dot',
-      borderWidth: 1.2,
-      shadow:      { enabled: true, color: 'rgba(42,37,32,.1)', size: 6, x: 0, y: 2 },
+      shape:       'circularImage',
+      borderWidth: 2,
+      shadow:      { enabled: true, color: 'rgba(42,37,32,.15)', size: 6, x: 0, y: 2 },
+      font:        { color: '#2a2520', size: 10, strokeWidth: 2, strokeColor: '#f5f2ed' },
+      brokenImage: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40"><circle cx="20" cy="20" r="20" fill="%23c2551a"/><text x="50%25" y="54%25" dominant-baseline="middle" text-anchor="middle" fill="white" font-size="10" font-family="sans-serif">?</text></svg>',
       chosen: {
-        node: (values) => { values.size *= 1.4; values.borderWidth = 2.5; },
+        node: (values) => { values.size *= 1.35; values.borderWidth = 3; },
       },
     },
     edges: {

@@ -366,7 +366,7 @@ function renderConfidence(conf) {
     </div>`;
   }).join('');
 
-  return `<div class="confidence-block">
+  return `<div class="confidence-block" id="conf-block-${conf.team_a}-${conf.team_b}">
     <div class="conf-header">
       <span class="conf-label">AI SCOUT MULTI-AGENT ANALYSIS</span>
       <span class="conf-consensus" style="color:${consensusColor}">${consensus} (spread: ${conf.agent_spread}pp)</span>
@@ -389,7 +389,132 @@ function renderConfidence(conf) {
     <div class="conf-agents-title">Agent breakdown</div>
     <div class="conf-agents">${breakdown}</div>
     <div class="conf-weights">Weights: Efficiency 50% · Form 25% · Matchup 25%</div>
+    <button class="conf-export-btn" onclick="saveAnalysis(this)" data-team-a="${teamA}" data-team-b="${teamB}" data-pct="${barPct}" data-range="${conf.range_low}–${conf.range_high}" data-favor="${favor}" data-disppct="${dispPct}" data-consensus="${escapeHtml(consensus)}" data-reasoning="${escapeHtml(conf.reasoning ?? '')}" data-breakdown="${escapeHtml(JSON.stringify(conf.agent_breakdown ?? []))}">+ Save analysis</button>
   </div>`;
+}
+
+// ── Analysis exporter ─────────────────────────────────────────────────────────
+// Draws the matchup analysis to a canvas and triggers a PNG download.
+// ── Saved analyses cart ──────────────────────────────────────────────────────
+let savedAnalyses = [];
+
+function saveAnalysis(btn) {
+  const teamA     = btn.getAttribute('data-team-a');
+  const teamB     = btn.getAttribute('data-team-b');
+  const pct       = parseInt(btn.getAttribute('data-pct'));
+  const range     = btn.getAttribute('data-range');
+  const favor     = btn.getAttribute('data-favor');
+  const dispPct   = btn.getAttribute('data-disppct');
+  const consensus = btn.getAttribute('data-consensus');
+  const reasoning = btn.getAttribute('data-reasoning') || '';
+  let breakdown = [];
+  try { breakdown = JSON.parse(btn.getAttribute('data-breakdown') || '[]'); } catch {}
+
+  // Prevent duplicate saves for same matchup
+  const key = `${teamA}|${teamB}`;
+  if (savedAnalyses.find(a => `${a.teamA}|${a.teamB}` === key)) {
+    btn.textContent = '✓ Already saved';
+    setTimeout(() => { btn.textContent = '+ Save analysis'; }, 1500);
+    return;
+  }
+
+  savedAnalyses.push({
+    teamA, teamB, pct, range, favor, dispPct, consensus, reasoning, breakdown,
+    timestamp: new Date().toLocaleString(),
+  });
+
+  btn.textContent = '✓ Saved';
+  btn.disabled = true;
+  btn.style.color = 'var(--west)';
+  btn.style.borderColor = 'var(--west)';
+
+  renderSavedPanel();
+}
+
+function renderSavedPanel() {
+  const panel = document.getElementById('saved-analyses-panel');
+  if (!panel) return;
+
+  if (savedAnalyses.length === 0) {
+    panel.style.display = 'none';
+    return;
+  }
+
+  panel.style.display = 'block';
+  const count = savedAnalyses.length;
+
+  panel.innerHTML = `
+    <div class="saved-panel-header">
+      <span class="saved-panel-title">Saved analyses <span class="saved-count">${count}</span></span>
+      <div class="saved-panel-actions">
+        <button class="saved-export-btn" onclick="exportAllCSV()">↓ Export CSV</button>
+        <button class="saved-clear-btn" onclick="clearSaved()">Clear all</button>
+      </div>
+    </div>
+    <div class="saved-list">
+      ${savedAnalyses.map((a, i) => `
+        <div class="saved-item">
+          <div class="saved-item-teams">${escapeHtml(a.teamA)} <span class="saved-vs">vs</span> ${escapeHtml(a.teamB)}</div>
+          <div class="saved-item-meta">
+            <span class="saved-item-pct" style="color:var(--accent)">${a.pct}%</span>
+            <span class="saved-item-range">${a.range}</span>
+            <span class="saved-item-favor">→ ${escapeHtml(a.favor)}</span>
+          </div>
+          <div class="saved-item-time">${a.timestamp}</div>
+          <button class="saved-item-remove" onclick="removeSaved(${i})" title="Remove">✕</button>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+function removeSaved(index) {
+  savedAnalyses.splice(index, 1);
+  renderSavedPanel();
+}
+
+function clearSaved() {
+  savedAnalyses = [];
+  renderSavedPanel();
+}
+
+function exportAllCSV() {
+  if (savedAnalyses.length === 0) return;
+
+  const headers = [
+    'Team A', 'Team B', 'Win % (A)', 'Win % (B)',
+    'Range Low', 'Range High', 'Favored Team', 'Confidence',
+    'Consensus', 'Efficiency %', 'Form %', 'Matchup %',
+    'Reasoning', 'Saved At'
+  ];
+
+  const escCSV = (s) => {
+    const str = String(s ?? '').replace(/\r?\n/g, ' ').trim();
+    return str.includes(',') || str.includes('"')
+      ? `"${str.replace(/"/g, '""')}"` : str;
+  };
+
+  const rows = savedAnalyses.map(a => {
+    const [rangeLow, rangeHigh] = (a.range || '–').split('–');
+    const eff = a.breakdown.find(b => b.agent === 'efficiency')?.win_pct ?? '';
+    const frm = a.breakdown.find(b => b.agent === 'form')?.win_pct ?? '';
+    const mch = a.breakdown.find(b => b.agent === 'matchup')?.win_pct ?? '';
+    return [
+      a.teamA, a.teamB, a.pct, 100 - a.pct,
+      rangeLow?.trim(), rangeHigh?.trim(), a.favor, a.dispPct + '%',
+      a.consensus, eff, frm, mch,
+      a.reasoning, a.timestamp,
+    ].map(escCSV).join(',');
+  });
+
+  const csv  = [headers.join(','), ...rows].join('\n');
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url  = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href     = url;
+  link.download = `ncaa-scout-analyses-${new Date().toISOString().slice(0,10)}.csv`;
+  link.click();
+  URL.revokeObjectURL(url);
 }
 
 // ── Multi-agent analyze call ──────────────────────────────────────────────────
