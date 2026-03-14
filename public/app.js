@@ -58,7 +58,8 @@ window.addEventListener('DOMContentLoaded', async () => {
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
 
-    ALL_NODES   = data.nodes;
+    ALL_NODES        = data.nodes;
+    window.ALL_NODES = ALL_NODES; // expose for ai-panel.js detectMatchupIntent
     ALL_EDGES   = data.edges;
     NOT_PLAYED  = data.not_played;
     BRACKET_MAP = data.bracket_map;

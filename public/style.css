@@ -3480,3 +3480,190 @@ section { margin-bottom: 20px; }
   #network        { height: 50vw; }
   .sidebar        { height: 240px; }
 }
+
+/* ── Multi-agent confidence block ──────────────────────────────────────────── */
+.confidence-block {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin: 6px 0 10px;
+}
+
+.conf-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.conf-label {
+  font-family: var(--font-mono);
+  font-size: .62rem;
+  font-weight: 600;
+  letter-spacing: .08em;
+  color: var(--accent);
+  text-transform: uppercase;
+}
+
+.conf-consensus {
+  font-size: .68rem;
+  font-weight: 500;
+  font-family: var(--font-mono);
+}
+
+.conf-teams {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.conf-team-a,
+.conf-team-b {
+  font-family: var(--font-serif);
+  font-size: .92rem;
+  color: var(--text);
+  font-weight: 500;
+  max-width: 44%;
+  line-height: 1.2;
+}
+
+.conf-team-b { text-align: right; }
+
+.conf-vs {
+  font-family: var(--font-serif);
+  font-style: italic;
+  color: var(--text-mute);
+  font-size: .8rem;
+}
+
+.conf-bar-wrap {
+  display: flex;
+  height: 10px;
+  border-radius: 5px;
+  overflow: hidden;
+  gap: 1px;
+  margin-bottom: 5px;
+}
+
+.conf-bar-a {
+  background: var(--accent);
+  border-radius: 5px 0 0 5px;
+  transition: width .4s ease;
+}
+
+.conf-bar-b {
+  background: var(--border2);
+  border-radius: 0 5px 5px 0;
+  transition: width .4s ease;
+}
+
+.conf-pct-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.conf-pct-a {
+  font-family: var(--font-mono);
+  font-size: .86rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.conf-pct-b {
+  font-family: var(--font-mono);
+  font-size: .86rem;
+  color: var(--text-mute);
+}
+
+.conf-range {
+  font-family: var(--font-mono);
+  font-size: .7rem;
+  color: var(--text-mute);
+}
+
+.conf-favor {
+  font-size: .78rem;
+  color: var(--text-dim);
+  text-align: center;
+  margin-bottom: 10px;
+  font-weight: 300;
+}
+
+.conf-agents-title {
+  font-size: .64rem;
+  font-weight: 600;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: var(--text-mute);
+  margin-bottom: 5px;
+}
+
+.conf-agents {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.conf-agent-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: .72rem;
+}
+
+.conf-agent-name {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  color: var(--text-dim);
+  width: 68px;
+  flex-shrink: 0;
+  text-transform: capitalize;
+}
+
+.conf-agent-bar-wrap {
+  flex: 1;
+  height: 5px;
+  background: var(--surface3);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.conf-agent-bar {
+  height: 100%;
+  border-radius: 3px;
+  transition: width .4s ease;
+  opacity: .7;
+}
+
+.conf-agent-pct {
+  font-family: var(--font-mono);
+  font-size: .7rem;
+  color: var(--text-dim);
+  width: 30px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.conf-agent-edge {
+  font-size: .66rem;
+  color: var(--text-mute);
+  font-style: italic;
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.conf-weights {
+  font-size: .62rem;
+  color: var(--text-mute);
+  text-align: center;
+  font-family: var(--font-mono);
+  padding-top: 6px;
+  border-top: 1px solid var(--border);
+}

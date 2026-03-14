@@ -3,6 +3,7 @@
   "outputDirectory": "public",
   "functions": {
     "api/ai.js":      { "maxDuration": 30 },
+    "api/analyze.js": { "maxDuration": 55 },
     "api/bracket.js": { "maxDuration": 10 }
   },
   "routes": [

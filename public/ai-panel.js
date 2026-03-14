@@ -252,19 +252,51 @@ async function sendChat() {
   }
 
   try {
-    const { text, thinking } = await callAI(historyForApi, msg, _chatAbortCtrl.signal);
-    chatHistory.push({ role: 'assistant', content: text });
-    const thinkHtml = thinking.length ? `
-      <div class="thinking-block thinking-done">
-        <div class="thinking-header">
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-          <span class="thinking-label">Thought for a moment</span>
-        </div>
-        <div class="thinking-steps">
-          ${thinking.map(s => `<div class="thinking-step">${escapeHtml(s)}</div>`).join('')}
-        </div>
-      </div>` : '';
-    thinkEl.innerHTML = `${thinkHtml}<div class="chat-bubble-ai-label">Scout</div><div class="chat-bubble-ai-body">${renderMarkdown(text)}</div>`;
+    // Detect matchup queries — route to multi-agent pipeline
+    const matchup = detectMatchupIntent(msg);
+
+    if (matchup) {
+      // Show agent thinking steps while waiting
+      thinkEl.innerHTML = `<div class="chat-bubble-ai-body">${loadingHTML('Running 3 specialist agents in parallel...')}</div>`;
+      const data = await callAnalyze(matchup.team_a, matchup.team_b, _chatAbortCtrl.signal);
+
+      const agentSteps = (data.agent_results || []).map(r =>
+        `${r.agent} agent: ${r.win_pct}% for ${matchup.team_a}`
+      );
+      agentSteps.push('synthesis: weighted confidence interval');
+
+      const thinkHtml = `
+        <div class="thinking-block thinking-done">
+          <div class="thinking-header">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            <span class="thinking-label">Multi-agent analysis complete</span>
+          </div>
+          <div class="thinking-steps">
+            ${agentSteps.map(s => `<div class="thinking-step">${escapeHtml(s)}</div>`).join('')}
+          </div>
+        </div>`;
+
+      const confHtml  = data.confidence?.win_pct !== undefined ? renderConfidence(data.confidence) : '';
+      const reasoning = data.confidence?.reasoning ?? 'Analysis complete.';
+      chatHistory.push({ role: 'assistant', content: reasoning });
+      thinkEl.innerHTML = `${thinkHtml}<div class="chat-bubble-ai-label">Scout · Multi-Agent</div>${confHtml}<div class="chat-bubble-ai-body">${renderMarkdown(reasoning)}</div>`;
+
+    } else {
+      // Standard single-agent path
+      const { text, thinking } = await callAI(historyForApi, msg, _chatAbortCtrl.signal);
+      chatHistory.push({ role: 'assistant', content: text });
+      const thinkHtml = thinking.length ? `
+        <div class="thinking-block thinking-done">
+          <div class="thinking-header">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            <span class="thinking-label">Thought for a moment</span>
+          </div>
+          <div class="thinking-steps">
+            ${thinking.map(s => `<div class="thinking-step">${escapeHtml(s)}</div>`).join('')}
+          </div>
+        </div>` : '';
+      thinkEl.innerHTML = `${thinkHtml}<div class="chat-bubble-ai-label">Scout</div><div class="chat-bubble-ai-body">${renderMarkdown(text)}</div>`;
+    }
   } catch (err) {
     chatHistory.pop();
     if (err.name === 'AbortError') {
@@ -284,6 +316,105 @@ async function sendChat() {
 function insertHint(text) {
   document.getElementById('chat-input').value = text;
   document.getElementById('chat-input').focus();
+}
+
+// ── Multi-agent matchup detection ────────────────────────────────────────────
+// Mirrors server-side classifyIntent for the matchup case only.
+// Returns { type:'matchup', team_a, team_b } or null.
+function detectMatchupIntent(msg) {
+  if (!window.ALL_NODES) return null;
+  function normName(s) {
+    return s.toLowerCase().trim()
+      .replace(/\bst\.\s*/g, 'saint ').replace(/\bst\s+/g, 'saint ')
+      .replace(/\bft\.?\s+/g, 'fort ').replace(/[.'`]/g, '')
+      .replace(/\s+/g, ' ').trim();
+  }
+  if (!msg.trim()) return null;
+  const mNorm = normName(msg);
+  const found = window.ALL_NODES
+    .filter(n => n.region !== 'bubble' && n.seed !== null)  // bracket teams only
+    .filter(n => mNorm.includes(normName(n.label)) || mNorm.includes(normName(n.full_name)))
+    .map(n => ({ n, pos: mNorm.indexOf(normName(n.label) !== '' && mNorm.includes(normName(n.label)) ? normName(n.label) : normName(n.full_name)) }))
+    .sort((a, b) => a.pos - b.pos)
+    .map(x => x.n);
+  if (found.length >= 2) return { type: 'matchup', team_a: found[0].label, team_b: found[1].label };
+  return null;
+}
+
+// ── Confidence interval renderer ─────────────────────────────────────────────
+function renderConfidence(conf) {
+  const pct     = conf.win_pct;
+  const teamA   = escapeHtml(conf.team_a);
+  const teamB   = escapeHtml(conf.team_b);
+  const favor   = pct >= 50 ? teamA : teamB;
+  const dispPct = pct >= 50 ? pct : 100 - pct;
+  const barPct  = pct;
+  const consensus = conf.consensus === 'strong' ? 'Agents in agreement' :
+                    conf.consensus === 'moderate' ? 'Some agent disagreement' : 'Agents split';
+  const consensusColor = conf.consensus === 'strong' ? 'var(--west)' :
+                         conf.consensus === 'moderate' ? 'var(--south)' : 'var(--midwest)';
+
+  const breakdown = (conf.agent_breakdown || []).map(a => {
+    const aPct = a.win_pct;
+    return `<div class="conf-agent-row">
+      <span class="conf-agent-name">${escapeHtml(a.agent)}</span>
+      <div class="conf-agent-bar-wrap">
+        <div class="conf-agent-bar" style="width:${aPct}%;background:var(--accent)"></div>
+      </div>
+      <span class="conf-agent-pct">${aPct}%</span>
+      <span class="conf-agent-edge">${escapeHtml(a.key_edge || '')}</span>
+    </div>`;
+  }).join('');
+
+  return `<div class="confidence-block">
+    <div class="conf-header">
+      <span class="conf-label">AI SCOUT MULTI-AGENT ANALYSIS</span>
+      <span class="conf-consensus" style="color:${consensusColor}">${consensus} (spread: ${conf.agent_spread}pp)</span>
+    </div>
+    <div class="conf-teams">
+      <span class="conf-team-a">${teamA}</span>
+      <span class="conf-vs">vs</span>
+      <span class="conf-team-b">${teamB}</span>
+    </div>
+    <div class="conf-bar-wrap">
+      <div class="conf-bar-a" style="width:${barPct}%"></div>
+      <div class="conf-bar-b" style="width:${100-barPct}%"></div>
+    </div>
+    <div class="conf-pct-row">
+      <span class="conf-pct-a">${barPct}%</span>
+      <span class="conf-range">${conf.range_low}–${conf.range_high}% range</span>
+      <span class="conf-pct-b">${100-barPct}%</span>
+    </div>
+    <div class="conf-favor">Favoring <strong>${favor}</strong> with ${dispPct}% confidence</div>
+    <div class="conf-agents-title">Agent breakdown</div>
+    <div class="conf-agents">${breakdown}</div>
+    <div class="conf-weights">Weights: Efficiency 50% · Form 25% · Matchup 25%</div>
+  </div>`;
+}
+
+// ── Multi-agent analyze call ──────────────────────────────────────────────────
+async function callAnalyze(teamA, teamB, signal) {
+  const ctrl  = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), 55000);
+  signal?.addEventListener('abort', () => ctrl.abort(), { once: true });
+  try {
+    const res = await fetch('/api/analyze', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ team_a: teamA, team_b: teamB }),
+      signal:  ctrl.signal,
+    });
+    clearTimeout(timer);
+    if (!res.ok) {
+      const e = await res.json().catch(() => ({}));
+      throw new Error(e?.error ?? 'Analysis failed');
+    }
+    return await res.json();
+  } catch (err) {
+    clearTimeout(timer);
+    if (err.name === 'AbortError') { const e = new Error('aborted'); e.name = 'AbortError'; throw e; }
+    throw err;
+  }
 }
 
 // ── Core AI call — single JSON response, abort supported ────────────────────
