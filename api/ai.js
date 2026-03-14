@@ -117,12 +117,48 @@ function getData() {
 }
 
 // ── Team lookup — tolerant of partial names ───────────────────────────────────
+// Common acronym/nickname aliases
+const TEAM_ALIASES = {
+  'unc':       'north carolina',
+  'uconn':     'uconn huskies',
+  'ucf':       'ucf knights',
+  'ucla':      'ucla bruins',
+  'umbc':      'umbc retrievers',
+  'vcu':       'vcu rams',
+  'tcu':       'tcu horned frogs',
+  'smu':       'smu mustangs',
+  'byu':       'byu cougars',
+  'lsu':       'lsu tigers',
+  'ndsu':      'north dakota state',
+  'a&m':       'texas a&m',
+  'liu':       'long island university',
+  'sam houston':'sam houston bearkats',
+};
+
 function resolveTeam(name, nodeByName) {
-  const q = name.toLowerCase().trim();
-  if (nodeByName[q]) return nodeByName[q];
-  const key = Object.keys(nodeByName).find(k => k.includes(q) || q.includes(k));
-  return key ? nodeByName[key] : null;
+  const raw = name.toLowerCase().trim();
+  const aliasKey = Object.keys(TEAM_ALIASES).find(k => raw === k || raw.startsWith(k + ' '));
+  const queryStr = aliasKey ? TEAM_ALIASES[aliasKey] : normalizeTeamName(name);
+  const normMap = {};
+  Object.keys(nodeByName).forEach(k => { normMap[normalizeTeamName(k)] = nodeByName[k]; });
+  // Exact match
+  if (normMap[queryStr]) return normMap[queryStr];
+  // Partial — score candidates: exact-start match > contains > contained-by
+  // Also prefer longer candidates (more specific) when tie
+  const candidates = Object.keys(normMap)
+    .filter(k => k.includes(queryStr) || queryStr.includes(k))
+    .sort((a, b) => {
+      // Prefer the candidate whose key starts with query (e.g. "florida state..." > "florida gators")
+      const aStarts = a.startsWith(queryStr) ? 1 : 0;
+      const bStarts = b.startsWith(queryStr) ? 1 : 0;
+      if (aStarts !== bStarts) return bStarts - aStarts;
+      // Prefer longer key (more specific label)
+      return b.length - a.length;
+    });
+  return candidates.length ? normMap[candidates[0]] : null;
 }
+
+
 
 function fmtTeam(node, torvik, form) {
   const tv   = torvik?.teams?.[node.id]?.torvik;
@@ -353,7 +389,17 @@ function buildSystemPrompt(userMsg, graph, torvik, form, prefetchedContext) {
 
 const REGIONS = ['East', 'West', 'South', 'Midwest'];
 
-function classifyIntent(msg) {
+function normalizeTeamName(s) {
+  return s.toLowerCase().trim()
+    .replace(/\bst\.\s*/g, 'saint ')   // "st." -> "saint " (dot required, won't match "state")
+    .replace(/\bst\s+/g,  'saint ')     // "st " -> "saint " (space required, won't match "state")
+    .replace(/\bft\.?\s+/g, 'fort ')   // "ft." or "ft " -> "fort "
+    .replace(/[.'`]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function classifyIntent(msg, graph) {
   const m = msg.toLowerCase();
   // Check unplayed BEFORE top_teams so "best teams that haven't played" hits correct branch
   if (/haven.?t played|not played|could face|potential matchup|best matchup/i.test(m))
@@ -368,6 +414,16 @@ function classifyIntent(msg) {
   }
   if (/best teams|top teams|strongest|who.?s best|who are the best/i.test(m))
     return { type: 'top_teams_all' };
+  // Detect team names in query — pre-fetch matchup or single-team lookup
+  if (graph) {
+    const mNorm = normalizeTeamName(msg);
+    const found = graph.nodes.filter(n =>
+      mNorm.includes(normalizeTeamName(n.label)) ||
+      mNorm.includes(normalizeTeamName(n.full_name))
+    );
+    if (found.length >= 2) return { type: 'matchup',     team_a: found[0].label, team_b: found[1].label };
+    if (found.length === 1) return { type: 'team_lookup', team:   found[0].label };
+  }
   return { type: 'dynamic' };
 }
 
@@ -416,6 +472,20 @@ function preFetch(intent, graph, torvik, form) {
   if (intent.type === 'region_standings') {
     thinking.push('Checking standings \u2014 ' + intent.region);
     blocks.push(toolGetStandings({ sort_by: 'adj_em', region: intent.region, limit: 16 }));
+    return { context: blocks.join('\n\n'), thinking };
+  }
+
+  if (intent.type === 'matchup') {
+    thinking.push('Analysing ' + intent.team_a + ' vs ' + intent.team_b);
+    const matchupResult = dispatchTool('get_matchup', { team_a: intent.team_a, team_b: intent.team_b });
+    blocks.push(matchupResult);
+    return { context: blocks.join('\n\n'), thinking };
+  }
+
+  if (intent.type === 'team_lookup') {
+    thinking.push('Looking up ' + intent.team + ' stats');
+    const statsResult = dispatchTool('get_team_stats', { team_names: [intent.team] });
+    blocks.push(statsResult);
     return { context: blocks.join('\n\n'), thinking };
   }
 
@@ -509,7 +579,7 @@ export default async function handler(req, res) {
     const userMsg = body.userMsg || '';
 
     // ── Step 1: classify intent and pre-fetch deterministically ──────────────
-    const intent  = classifyIntent(userMsg);
+    const intent  = classifyIntent(userMsg, graph);
     const prefetch = preFetch(intent, graph, torvik, form);
     const thinking = [...prefetch.thinking];
 
