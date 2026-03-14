@@ -309,7 +309,7 @@ select:focus { border-color: var(--accent); }
 
 /* ── Sidebar (left) ──────────────────────────────────────────────────────────── */
 .sidebar {
-  width: 240px;
+  width: 290px;
   flex-shrink: 0;
   background: var(--surface);
   border-right: 1px solid var(--border);
@@ -324,21 +324,17 @@ select:focus { border-color: var(--accent); }
   border-bottom: 1px solid var(--border);
   background: var(--surface2);
   flex-shrink: 0;
-  overflow-x: auto;
-  scrollbar-width: none;
 }
-.sidebar-tabs::-webkit-scrollbar { display: none; }
 
 .stab {
   flex: 1;
-  min-width: 60px;
   background: transparent;
   border: none;
   color: var(--text-mute);
   font-family: var(--font-body);
-  font-size: .82rem;
+  font-size: .88rem;
   font-weight: 500;
-  padding: 8px 6px;
+  padding: 9px 4px;
   cursor: pointer;
   letter-spacing: .02em;
   border-bottom: 2px solid transparent;
