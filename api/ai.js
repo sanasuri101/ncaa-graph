@@ -401,6 +401,11 @@ function normalizeTeamName(s) {
 
 function classifyIntent(msg, graph) {
   const m = msg.toLowerCase();
+
+  // ── Short-circuit: non-basketball questions should never get tools ──────────
+  // If the message has no basketball signal and no team names, classify as general.
+  const hasBasketballSignal = /team|game|match|play|score|win|loss|seed|bracket|region|stats|rank|efficiency|torvik|adj|barthag|tournament|ncaa|college|basketball|coach|player|roster|season|conference|record|point|rebound|assist|defend|offens|schedul|upset|predict|advance|champion|final four|elite eight|sweet sixteen/i.test(m);
+
   // Check unplayed BEFORE top_teams so "best teams that haven't played" hits correct branch
   if (/haven.?t played|not played|could face|potential matchup|best matchup/i.test(m))
     return { type: 'unplayed_matchups' };
@@ -424,6 +429,10 @@ function classifyIntent(msg, graph) {
     if (found.length >= 2) return { type: 'matchup',     team_a: found[0].label, team_b: found[1].label };
     if (found.length === 1) return { type: 'team_lookup', team:   found[0].label };
   }
+
+  // No team names found — if no basketball signal either, skip tools entirely
+  if (!hasBasketballSignal) return { type: 'general' };
+
   return { type: 'dynamic' };
 }
 
