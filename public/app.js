@@ -63,9 +63,9 @@ window.addEventListener('DOMContentLoaded', async () => {
       image: `https://a.espncdn.com/i/teamlogos/ncaa/500/${n.id}.png`,
       font:  { color: '#2a2520', size: 10, strokeWidth: 2, strokeColor: '#f5f2ed' },
     }));
-    window.ALL_NODES = ALL_NODES; // expose for ai-panel.js detectMatchupIntent
+    window.ALL_NODES = ALL_NODES;
     ALL_EDGES   = data.edges;
-    NOT_PLAYED  = data.not_played;
+    NOT_PLAYED  = []; // populated lazily below
     BRACKET_MAP = data.bracket_map;
     META        = data.meta || {};
 
@@ -75,6 +75,29 @@ window.addEventListener('DOMContentLoaded', async () => {
     bindUI();
     hideLoading();
     try { validateBracketIntegrity(); } catch(e) { console.error('validateBracketIntegrity failed:', e); }
+
+    // Lazy-load not_played in background — only needed for Never Met view
+    fetch('data/not_played.json')
+      .then(r => r.json())
+      .then(d => {
+        NOT_PLAYED = d.not_played;
+        // Rebuild NP_EDGES now that data is ready
+        NP_EDGES = NOT_PLAYED.map((np, i) => ({
+          id:            `np_${i}`,
+          from:          np.a,
+          to:            np.b,
+          color:         { color: '#ccc6b9', opacity: 0.6 },
+          dashes:        true,
+          width:         2,
+          arrows:        '',
+          label:         '',
+          title:         undefined,
+          is_not_played: true,
+        }));
+        // If user already switched to Never Met view, re-apply
+        if (currentView === 'notplayed' || currentView === 'both') applyFilters();
+      })
+      .catch(e => console.warn('not_played lazy load failed:', e));
   } catch (err) {
     const overlay = document.getElementById('loading-overlay');
     if (overlay) overlay.innerHTML =

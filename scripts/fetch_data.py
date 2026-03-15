@@ -293,7 +293,13 @@ def main():
         "teams": recent_form,
     }
 
-    (DATA_DIR / "graph_data.json").write_text(json.dumps(graph, indent=2))
+    # Split not_played into separate file for lazy loading (reduces initial load ~75%)
+    not_played_data = graph.pop("not_played")
+    not_played_out  = {"not_played": not_played_data}
+
+    # Write data/ files (full copies for reference)
+    (DATA_DIR / "graph_data.json").write_text(json.dumps(graph, separators=(",", ":")))
+    (DATA_DIR / "not_played.json").write_text(json.dumps(not_played_out, separators=(",", ":")))
     (DATA_DIR / "inter_games.json").write_text(json.dumps(inter_games, indent=2))
     (DATA_DIR / "all_games.json").write_text(json.dumps(all_games, indent=2))
     (DATA_DIR / "bracket_teams.json").write_text(json.dumps(BRACKET_TEAMS, indent=2))
@@ -302,9 +308,10 @@ def main():
     pub = DATA_DIR.parent / "public" / "data"
     pub.mkdir(parents=True, exist_ok=True)
     (pub / "recent_form.json").write_text(json.dumps(recent_form_out, separators=(",", ":")))
+    (pub / "not_played.json").write_text(json.dumps(not_played_out, separators=(",", ":")))
 
-    print(f"Nodes: {len(graph['nodes'])}, Edges: {len(graph['edges'])}, Not-played: {len(graph['not_played'])}")
-    print(f"\nWrote:\n  data/graph_data.json\n  data/inter_games.json\n  data/all_games.json\n  data/bracket_teams.json\n  data/recent_form.json")
+    print(f"Nodes: {len(graph['nodes'])}, Edges: {len(graph['edges'])}, Not-played: {len(not_played_data)}")
+    print(f"\nWrote:\n  data/graph_data.json\n  data/not_played.json\n  data/inter_games.json\n  data/all_games.json\n  data/bracket_teams.json\n  data/recent_form.json")
 
 
 if __name__ == "__main__":
