@@ -26,16 +26,16 @@ import { Annotation, StateGraph, END, START, Send } from '@langchain/langgraph';
 // Removes: Note:/Explanation:/Reasoning: headers, <think> blocks, instruction echoes
 function sanitizeLLMOutput(text) {
   if (!text) return text;
-  return text
-    // Strip XML-style thinking blocks (some models emit <think>...</think>)
+  const cleaned = text
+    // Strip XML-style thinking blocks
     .replace(/<think>[\s\S]*?<\/think>/gi, '')
-    // Strip "Note:", "Explanation:", "Reasoning:" meta-commentary lines
-    .replace(/^(Note|Explanation|Reasoning|Disclaimer|Commentary|Instructions?|Reminder|Summary of instructions?)[:\s].*$/gim, '')
-    // Strip lines that echo back instructions ("The response already follows...", "I have followed...")
-    .replace(/^(I (have|will|am|did)|The response|This response|As instructed|Following the|Per the|Based on the instructions?)[^\n]*/gim, '')
+    // Strip "Note:" / "Disclaimer:" lines only
+    .replace(/^(Note|Disclaimer|Reminder)[:\s][^\n]*/gim, '')
     // Collapse 3+ newlines to 2
     .replace(/\n{3,}/g, '\n\n')
     .trim();
+  // If sanitizer wiped everything, return original trimmed text
+  return cleaned || text.trim();
 }
 
 const GROQ_URL      = 'https://api.groq.com/openai/v1/chat/completions';
@@ -434,7 +434,14 @@ Agent spread: ${spread.toFixed(0)} percentage points (${spread < 10 ? 'strong co
 Write 3-4 sentences: the decisive factor, the key risk, and one thing that could flip the outcome. Cite specific stats. Do not add any note, disclaimer, or commentary after the analysis.`;
 
   try {
-    const reasoning = sanitizeLLMOutput(await groqCall(system, user, groqKey));
+    let reasoning = sanitizeLLMOutput(await groqCall(system, user, groqKey));
+    // Fallback: if synthesis returned empty, stitch agent reasonings together
+    if (!reasoning) {
+      reasoning = results
+        .filter(r => r.reasoning)
+        .map(r => r.reasoning)
+        .join(' ');
+    }
     const confidence = {
       team_a:    state.team_a,
       team_b:    state.team_b,
