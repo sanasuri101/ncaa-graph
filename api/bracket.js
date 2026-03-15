@@ -167,12 +167,18 @@ function skellamWinProb(tvA, tvB) {
 
 // ── Layer IV: Exponential time-decay win rate (opponent-quality weighted) ─────
 // λ=0.018 → ~50% weight at 38 days — March games ~3× heavier than November.
-// Each game weight also scaled by opponent quality (barthag). A win vs a 98%
-// Barthag team counts ~40% more than a win vs an unrated mid-major.
-// qualMult = 0.5 + barthag → range 0.5–1.5 (bracket opponents ~1.1–1.5).
-// Falls back to opp_barthag.json for non-bracket opponents, then 0.70 default.
+// qualMult uses logit-normalized barthag so top-end differences are meaningful:
+// beating Duke(0.981) vs Vanderbilt(0.949) gives 6× more spread than raw barthag.
+// Normalized to 0.5-1.5 range. Falls back to opp_barthag.json then 0.70.
 const DECAY_LAMBDA = 0.018;
 const DECAY_TODAY  = new Date(); // always today — not hardcoded
+const LOGIT_MIN    = -1.10;     // logit(~0.25) low-major floor
+const LOGIT_MAX    =  4.04;     // logit(~0.981) elite ceiling
+function qualMult(b) {
+  const bv = Math.max(0.001, Math.min(0.999, b ?? 0.70));
+  const l  = Math.log(bv / (1 - bv));
+  return 0.5 + (l - LOGIT_MIN) / (LOGIT_MAX - LOGIT_MIN);
+}
 function decayWinRate(teamId, form, torvik, oppBarthag) {
   const games = form?.teams?.[teamId]?.games ?? [];
   if (!games.length) return 0.5;
@@ -182,7 +188,7 @@ function decayWinRate(teamId, form, torvik, oppBarthag) {
     const b        = torvik?.teams?.[g.opp_id]?.torvik?.barthag
                   ?? oppBarthag?.[g.opp_id]
                   ?? 0.70;
-    const w = recencyW * (0.5 + b);
+    const w = recencyW * qualMult(b);
     if (g.won) wins += w;
     total += w;
   }
@@ -202,9 +208,20 @@ function transitiveAdj(idA, idB, pairs) {
 }
 
 // ── Layer IV: WAB quality-wins adjustment ─────────────────────────────────────
-// Wins Above Bubble captures schedule-adjusted quality. Scale to ±5% adjustment.
+// Wins Above Bubble captures schedule-adjusted quality.
+// Bracket field WAB range ~62-73 (diff ~11). Divisor 270 → max ±4% at diff=10.8.
 function wabAdj(tvA, tvB) {
-  return Math.max(-0.05, Math.min(0.05, ((tvA.wab ?? 0) - (tvB.wab ?? 0)) / 1000));
+  return Math.max(-0.04, Math.min(0.04, ((tvA.wab ?? 0) - (tvB.wab ?? 0)) / 270));
+}
+
+// ── Layer IV: Luck regression adjustment ──────────────────────────────────────
+// Torvik luck = actual wins minus pythagorean expected wins from scoring margin.
+// Lucky teams (positive luck) are overperforming and due for regression.
+// Unlucky teams (negative luck) are better than their record suggests.
+// Scale: luck diff of 0.20 → 3% penalty. Cap ±4%.
+function luckAdj(tvA, tvB) {
+  const diff = (tvA.luck ?? 0) - (tvB.luck ?? 0);
+  return Math.max(-0.04, Math.min(0.04, -diff * 0.15));
 }
 
 // ── Evidence model: combined Layers I + II + IV ───────────────────────────────
