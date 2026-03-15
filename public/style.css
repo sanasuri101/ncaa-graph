@@ -3334,153 +3334,172 @@ section { margin-bottom: 20px; }
 .thinking-done .thinking-spinner { display: none; }
 
 /* ════════════════════════════════════════════════════════════════════════════
+/*
    MOBILE LAYOUT  — max-width 768px
-   Zero impact on desktop. All rules scoped inside this media query.
    ════════════════════════════════════════════════════════════════════════════ */
 @media (max-width: 768px) {
 
-  /* Allow page to scroll vertically on mobile */
-  html, body {
-    overflow: auto;
-    height: auto;
-  }
+  /* ── Base ───────────────────────────────────────────────────────────── */
+  html, body { overflow: hidden; height: 100%; height: 100dvh; }
 
-  /* ── Header — tighten, hide legend pills + subtitle ─────────────────── */
-  header {
-    height: auto;
-    min-height: 48px;
-    padding: 8px 14px;
-    flex-wrap: wrap;
-    gap: 6px;
-  }
+  /* ── Header — compact single row ────────────────────────────────────── */
+  header { height: 48px; min-height: 48px; padding: 0 12px; flex-wrap: nowrap; gap: 8px; }
+  .header-text .sub { display: none; }
+  .legend-pills     { display: none; }
+  .last-updated     { display: none; }
+  .logo-mark        { font-size: 1rem; }
+  .header-text h1   { font-size: .92rem; }
 
-  .header-text .sub  { display: none; }
-  .legend-pills      { display: none; }
-  .last-updated      { display: none; }
-
-  .logo-mark         { font-size: 1.1rem; }
-  .header-text h1    { font-size: 1rem; }
-
-  /* ── Toolbar — scroll horizontally, don't wrap ──────────────────────── */
+  /* ── Toolbar ─────────────────────────────────────────────────────────── */
   .toolbar {
-    overflow-x: auto;
-    overflow-y: hidden;
-    flex-wrap: nowrap;
-    height: auto;
-    min-height: 38px;
-    padding: 4px 10px;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
+    overflow-x: auto; overflow-y: hidden; flex-wrap: nowrap;
+    height: 40px; padding: 0 10px;
+    -webkit-overflow-scrolling: touch; scrollbar-width: none; gap: 4px;
   }
   .toolbar::-webkit-scrollbar { display: none; }
-
-  /* Shrink toolbar labels and separators */
-  .toolbar-label { font-size: .68rem; }
+  .toolbar-label { font-size: .66rem; }
   .toolbar-sep   { height: 14px; }
+  .view-btn, .icon-btn { min-height: 30px; font-size: .76rem; }
 
-  /* ── Main layout — stack vertically, full height auto ───────────────── */
-  .main {
-    flex-direction: column;
-    height: auto;
-    overflow: visible;
-  }
+  /* ── Main — fill remaining viewport ─────────────────────────────────── */
+  .main { flex-direction: column; height: calc(100dvh - 88px); overflow: hidden; position: relative; }
 
-  /* ── Sidebar — full width, fixed height, scrollable ────────────────── */
+  /* ── Sidebar — full-screen overlay, slides in from left ─────────────── */
   .sidebar {
-    width: 100%;
-    height: 280px;
-    flex-shrink: 0;
-    border-right: none;
-    border-bottom: 1px solid var(--border);
-    order: 0;
+    position: absolute; top: 0; left: 0; right: 0; width: 100%; height: 100%;
+    z-index: 40; background: var(--surface);
+    transform: translateX(-100%);
+    transition: transform .25s ease;
+    overflow-y: auto;
+    border-right: none; border-bottom: none;
+  }
+  .sidebar.mob-open { transform: translateX(0); }
+
+  /* ── Sidebar close button ────────────────────────────────────────────── */
+  .mob-sidebar-close {
+    display: flex; position: absolute; top: 10px; right: 10px; z-index: 55;
+    width: 34px; height: 34px; border-radius: 8px;
+    background: var(--surface2); border: 1px solid var(--border);
+    align-items: center; justify-content: center;
+    cursor: pointer; font-size: .9rem; color: var(--muted);
   }
 
-  /* ── Graph canvas — fixed height so it's visible ───────────────────── */
-  #network {
-    width: 100%;
-    height: 55vw;
-    min-height: 200px;
-    max-height: 320px;
-    flex-shrink: 0;
-    order: 1;
-  }
+  /* ── Sidebar tabs — bigger ───────────────────────────────────────────── */
+  .stab { min-height: 38px; padding: 0 14px; font-size: .8rem; }
 
-  /* ── AI panel — full width strip below graph ────────────────────────── */
-  .ai-panel {
-    width: 100%;
-    height: 420px;
-    border-left: none;
-    border-top: 1px solid var(--border);
-    order: 2;
-    flex-shrink: 0;
-  }
-  .ai-panel.open { display: flex; }
+  /* ── Graph — fills the background ───────────────────────────────────── */
+  #network { width: 100%; flex: 1; min-height: 0; }
 
-  /* Taller chat area on mobile */
-  .chat-area       { flex: 1; }
-  #chat-messages   { flex: 1; }
-  #panel-chat      { flex: 1; }
-
-  /* ── Scatter modal — full screen on mobile ──────────────────────────── */
-  .scatter-panel {
-    width: 100%;
-    height: 100%;
-    max-height: 100%;
-    border-radius: 0;
-  }
-
-  /* ── Stat grid — 2 cols (already is) but tighten cells ─────────────── */
-  .stats-grid-2  { grid-template-columns: 1fr 1fr; gap: 4px; }
-  .stat-cell     { padding: 5px 6px; }
-  .sv            { font-size: .82rem; }
-
-  /* ── AI Scout header — tighten ──────────────────────────────────────── */
-  .ai-scout-header { padding: 10px 12px 0 !important; }
-  .ai-key-btn      { display: none; }  /* hide API key btn on mobile — not needed */
-
-  /* ── Chat input — slightly taller tap target ────────────────────────── */
-  .chat-input-wrap textarea { min-height: 36px; font-size: .92rem; }
-  .chat-send  { width: 34px; height: 34px; }
-  .chat-stop  { width: 34px; height: 34px; }
-
-  /* ── Hint pills — scroll horizontally, don't wrap ──────────────────── */
-  .chat-hints-row {
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    padding-bottom: 4px;
-  }
-  .chat-hints-row::-webkit-scrollbar { display: none; }
-  .hint-pill { flex-shrink: 0; }
-
-  /* ── Resize handle — hide on mobile (no drag) ───────────────────────── */
+  /* ── Resize handle — hidden ──────────────────────────────────────────── */
   .resize-handle { display: none; }
 
-  /* ── Key drawer — full width bottom sheet ───────────────────────────── */
+  /* ── AI panel — bottom sheet ─────────────────────────────────────────
+     Closed: drag handle + title peek (56px)
+     Open:   82% viewport height
+  ─────────────────────────────────────────────────────────────────────── */
+  .ai-panel {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    width: 100%; height: 82dvh; max-height: 82dvh;
+    border-left: none; border-top: 1px solid var(--border);
+    border-radius: 18px 18px 0 0;
+    box-shadow: 0 -4px 24px rgba(42,37,32,.12);
+    transform: translateY(calc(100% - 56px));
+    transition: transform .3s cubic-bezier(.32,.72,0,1);
+    z-index: 50;
+    display: flex !important;
+    flex-direction: column; overflow: hidden;
+  }
+  .ai-panel.open { transform: translateY(0); }
+
+  /* Drag handle pill */
+  .ai-panel::before {
+    content: ''; display: block; width: 36px; height: 4px;
+    background: var(--border2); border-radius: 2px;
+    margin: 10px auto 0; flex-shrink: 0;
+  }
+
+  /* ── AI panel internals ──────────────────────────────────────────────── */
+  .ai-scout-header { padding: 8px 12px 0 !important; }
+  .ai-panel-header { padding-bottom: 6px; }
+  .ai-key-btn      { display: none; }
+  .ai-panel-title  { font-size: .78rem; }
+  .chat-area, #chat-messages, #panel-chat { flex: 1; min-height: 0; }
+
+  /* ── Chat input — safe area aware ────────────────────────────────────── */
+  .chat-input-wrap {
+    padding: 8px 10px;
+    padding-bottom: max(8px, env(safe-area-inset-bottom));
+  }
+  .chat-input-wrap textarea {
+    min-height: 40px; max-height: 100px;
+    font-size: .95rem; border-radius: 10px;
+  }
+  .chat-send { width: 38px; height: 38px; }
+  .chat-stop { width: 38px; height: 38px; }
+
+  /* ── Hint pills ──────────────────────────────────────────────────────── */
+  .chat-hints-row {
+    flex-wrap: nowrap; overflow-x: auto;
+    -webkit-overflow-scrolling: touch; scrollbar-width: none; padding-bottom: 2px;
+  }
+  .chat-hints-row::-webkit-scrollbar { display: none; }
+  .hint-pill { flex-shrink: 0; font-size: .76rem; padding: 5px 10px; min-height: 30px; }
+
+  /* ── Floating sidebar button ─────────────────────────────────────────── */
+  .mob-sidebar-btn {
+    display: flex; position: absolute; top: 10px; left: 10px; z-index: 45;
+    width: 38px; height: 38px; border-radius: 10px;
+    background: var(--surface); border: 1px solid var(--border);
+    align-items: center; justify-content: center;
+    cursor: pointer; box-shadow: 0 2px 8px rgba(42,37,32,.1);
+    font-size: .7rem; color: var(--text);
+  }
+
+  /* ── Other components ────────────────────────────────────────────────── */
+  .stats-grid-2 { grid-template-columns: 1fr 1fr; gap: 3px; }
+  .stat-cell    { padding: 5px 6px; }
+  .sv           { font-size: .8rem; }
+  .confidence-block { padding: 10px 12px; }
+  .conf-team-a, .conf-team-b { font-size: .84rem; }
+  .scatter-panel { width: 100%; height: 100%; max-height: 100%; border-radius: 0; }
+  .bracket-panel { padding: 8px 4px; }
+  .br-regions-grid { gap: 10px; }
+  #custom-team-input { width: 120px; font-size: .84rem; }
   .key-drawer-panel { width: 100%; border-radius: 16px 16px 0 0; }
-  .key-drawer       { padding: 0; align-items: flex-end; }
+  .key-drawer { padding: 0; align-items: flex-end; }
 
-  /* ── Bracket tab content — scrollable ───────────────────────────────── */
-  .bracket-panel { padding: 8px 2px; }
-  .br-regions-grid { gap: 12px; }
+  /* ── Bottom sheet collapsed hint text ───────────────────────────────────── */
+  .ai-panel:not(.open) .ai-tab-row::after {
+    content: 'tap to expand  \2191';
+    font-size: .65rem;
+    color: var(--muted);
+    letter-spacing: .04em;
+    margin-left: auto;
+    padding-right: 4px;
+    align-self: center;
+    font-family: var(--font-mono);
+  }
 
-  /* ── Custom team input — wider ──────────────────────────────────────── */
-  #custom-team-input { width: 110px; font-size: .82rem; }
+  /* ── Welcome message — mobile only ──────────────────────────────────────── */
+  .chat-bubble-ai-body em {
+    font-style: normal;
+    color: var(--accent);
+    font-weight: 500;
+  }
 
-  /* ── Touch-friendly tap targets ─────────────────────────────────────── */
-  .view-btn, .ai-tab, .stab { min-height: 32px; }
-  .icon-btn { width: 32px; height: 32px; }
 }
 
 /* ── Very small phones (< 400px) ──────────────────────────────────────────── */
 @media (max-width: 400px) {
-  .header-text h1 { font-size: .9rem; }
-  .logo-mark      { font-size: 1rem; }
-  .toolbar-label  { display: none; }   /* hide SHOW / REGION labels, keep buttons */
-  #network        { height: 50vw; }
-  .sidebar        { height: 240px; }
+  .header-text h1 { font-size: .88rem; }
+  .logo-mark      { font-size: .9rem; }
+  .toolbar-label  { display: none; }
+  .ai-panel       { height: 88dvh; max-height: 88dvh; }
 }
+
+/* ── Mobile-only welcome message — hidden on desktop ──────────────────────── */
+.mob-welcome-msg { display: none; }
+@media (max-width: 768px) { .mob-welcome-msg { display: flex; } }
 
 /* ── Multi-agent confidence block ──────────────────────────────────────────── */
 .confidence-block {

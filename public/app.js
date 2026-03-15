@@ -646,7 +646,10 @@ function hideLoading() {
   const overlay = document.getElementById('loading-overlay');
   overlay.style.opacity = '0';
   overlay.style.transition = 'opacity .4s';
-  setTimeout(() => overlay.remove(), 400);
+  setTimeout(() => {
+    overlay.remove();
+    initMobileFirstImpression(); // fires exactly when loading is done
+  }, 400);
 }
 
 function validateBracketIntegrity() {
@@ -691,7 +694,14 @@ function showEmptyState(show) {
       el = document.createElement('div');
       el.id = 'graph-empty-state';
       el.className = 'graph-empty-state';
-      el.innerHTML = `
+      const isMobile = window.innerWidth <= 768;
+      el.innerHTML = isMobile ? `
+        <div class="ges-icon">⬡</div>
+        <div class="ges-title">2026 NCAA Bracket</div>
+        <div class="ges-sub">Head-to-head results for all 68 teams.</div>
+        <div class="ges-btns">
+          <button class="ges-btn" onclick="addAllToCustom()">Show all teams</button>
+        </div>` : `
         <div class="ges-icon">⬡</div>
         <div class="ges-title">Build your graph</div>
         <div class="ges-sub">Search for teams above, or start with a quick-add:</div>
@@ -991,3 +1001,115 @@ function initSidebarResize() {
     if (network) setTimeout(() => network.redraw(), 50);
   });
 }
+
+// ── Mobile bottom sheet + sidebar overlay ────────────────────────────────────
+function initMobileUI() {
+  if (window.innerWidth > 768) return;
+
+  const aiPanel  = document.getElementById('ai-panel');
+  const sidebar  = document.querySelector('.sidebar');
+  const main     = document.querySelector('.main');
+  if (!aiPanel || !sidebar || !main) return;
+
+  // ── Floating sidebar toggle button ───────────────────────────────────────
+  const sidebarBtn = document.createElement('button');
+  sidebarBtn.className = 'mob-sidebar-btn';
+  sidebarBtn.setAttribute('aria-label', 'Open stats panel');
+  sidebarBtn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/></svg><span style="font-size:.6rem;margin-left:3px;letter-spacing:.02em">STATS</span>`;
+  main.appendChild(sidebarBtn);
+
+  // ── Sidebar close button ──────────────────────────────────────────────────
+  const closeBtn = document.createElement('button');
+  closeBtn.className = 'mob-sidebar-close';
+  closeBtn.setAttribute('aria-label', 'Close stats panel');
+  closeBtn.innerHTML = '✕';
+  sidebar.appendChild(closeBtn);
+
+  sidebarBtn.addEventListener('click', () => {
+    sidebar.classList.add('mob-open');
+    sidebarBtn.style.display = 'none';
+  });
+  closeBtn.addEventListener('click', () => {
+    sidebar.classList.remove('mob-open');
+    sidebarBtn.style.display = '';
+  });
+
+  // ── Bottom sheet: tap header to open/close ───────────────────────────────
+  const aiHeader = aiPanel.querySelector('.ai-panel-header');
+  if (aiHeader) {
+    aiHeader.style.cursor = 'pointer';
+    aiHeader.addEventListener('click', () => {
+      const isOpen = aiPanel.classList.contains('open');
+      if (isOpen) {
+        aiPanel.classList.remove('open');
+      } else {
+        aiPanel.classList.add('open');
+        // Auto-open is handled by the AI toggle button — just ensure panel is visible
+      }
+    });
+  }
+
+  // ── Swipe down on AI panel to close ──────────────────────────────────────
+  let touchStartY = 0;
+  aiPanel.addEventListener('touchstart', e => {
+    touchStartY = e.touches[0].clientY;
+  }, { passive: true });
+  aiPanel.addEventListener('touchend', e => {
+    const dy = e.changedTouches[0].clientY - touchStartY;
+    // Swipe down > 60px while panel is open closes it
+    if (dy > 60 && aiPanel.classList.contains('open')) {
+      aiPanel.classList.remove('open');
+    }
+  }, { passive: true });
+
+  // ── When AI Scout button is tapped, open the bottom sheet ────────────────
+  const aiToggle = document.getElementById('ai-toggle');
+  if (aiToggle) {
+    const original = aiToggle.onclick;
+    aiToggle.addEventListener('click', () => {
+      if (window.innerWidth <= 768) {
+        aiPanel.classList.add('open');
+      }
+    });
+  }
+}
+
+// Run after DOM is ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initMobileUI);
+} else {
+  initMobileUI();
+}
+// Also re-run on resize in case user rotates device
+window.addEventListener('resize', () => {
+  if (window.innerWidth <= 768) initMobileUI();
+});
+
+// ── Mobile first impression: open Scout immediately on load ──────────────────
+function initMobileFirstImpression() {
+  if (window.innerWidth > 768) return;
+
+  const aiPanel = document.getElementById('ai-panel');
+  if (!aiPanel) return;
+
+  // Open the bottom sheet fully
+  aiPanel.classList.add('open');
+
+  // Switch to Chat tab — primary mobile experience
+  const chatTab    = document.querySelector('.ai-tab[data-mode="chat"]');
+  const statsTab   = document.querySelector('.ai-tab[data-mode="stats"]');
+  const chatPanel  = document.getElementById('panel-chat');
+  const statsPanel = document.getElementById('panel-stats');
+  if (chatTab && chatPanel) {
+    chatTab.classList.add('active');
+    chatPanel.classList.add('active');
+    if (statsTab)   statsTab.classList.remove('active');
+    if (statsPanel) statsPanel.classList.remove('active');
+  }
+  // Welcome message is baked into HTML — no JS injection needed
+  // Auto-focus is NOT attempted — iOS Safari blocks programmatic focus
+  // without a direct user gesture; it would silently fail
+}
+
+// Run after data loads — called directly from hideLoading
+// (MutationObserver approach was fragile due to CSS fade timing)
