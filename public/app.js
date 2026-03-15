@@ -209,13 +209,13 @@ function applyFilters() {
   }
 
   // ── Visible nodes ──
+  // Always show all nodes in scope — isolated teams (no inter-bracket games)
+  // should still appear in the graph even if they have no edges.
   const activeIds = new Set([...edges.map(e => e.from), ...edges.map(e => e.to)]);
-  const nodes = ALL_NODES.filter(n =>
-    scopedIds.has(n.id) && (activeIds.has(n.id) || edges.length === 0)
-  );
+  const nodes = ALL_NODES.filter(n => scopedIds.has(n.id));
 
   nodesDS.clear();
-  nodesDS.add(nodes.length > 0 ? nodes : ALL_NODES.filter(n => scopedIds.has(n.id)));
+  nodesDS.add(nodes);
   edgesDS.clear();
   edgesDS.add(edges);
 
