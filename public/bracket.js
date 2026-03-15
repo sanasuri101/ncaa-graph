@@ -57,7 +57,7 @@ function initBracket() {
 
 function buildBracketShell() {
   const modelBtns = Object.entries(MODEL_META).map(([key, m]) => `
-    <button class="br-model-btn ${key === 'evidence' ? 'active' : ''}" data-model="${key}">
+    <button class="br-model-btn ${key === 'evidence' ? 'active' : ''}" data-model="${key}" onclick="selectBracketModel(this)">
       <span class="br-model-label">${m.label}</span>
       <span class="br-model-desc">${m.desc}</span>
     </button>`).join('');
@@ -69,20 +69,20 @@ function buildBracketShell() {
         <div class="bracket-subtitle">${(META?.season ? '20' + META.season.split('-')[1] : new Date().getFullYear())} NCAA Tournament · Pick your prediction model</div>
       </div>
       <div class="br-model-row">${modelBtns}</div>
-      <button class="br-generate-btn" id="br-generate-btn">Generate Bracket</button>
+      <button class="br-generate-btn" id="br-generate-btn" onclick="generateBracket()">Generate Bracket</button>
       <div id="br-output"></div>
     </div>`;
 }
 
+function selectBracketModel(btn) {
+  document.querySelectorAll('.br-model-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  _bracketModel = btn.dataset.model;
+}
+
 function bindBracketEvents() {
-  document.querySelectorAll('.br-model-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.br-model-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      _bracketModel = btn.dataset.model;
-    });
-  });
-  document.getElementById('br-generate-btn').addEventListener('click', generateBracket);
+  // Buttons use onclick attributes so they survive innerHTML cloning on mobile
+  // Nothing to bind here — kept for compatibility
 }
 
 // ── Fetch + render ────────────────────────────────────────────────────────────

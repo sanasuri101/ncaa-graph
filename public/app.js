@@ -1022,6 +1022,8 @@ function initSidebarResize() {
 // ── Mobile bottom sheet + sidebar overlay ────────────────────────────────────
 function initMobileUI() {
   if (window.innerWidth > 768) return;
+  if (initMobileUI._done) return;  // run once only
+  initMobileUI._done = true;
 
   const aiPanel  = document.getElementById('ai-panel');
   const sidebar  = document.querySelector('.sidebar');
@@ -1141,10 +1143,8 @@ if (document.readyState === 'loading') {
 } else {
   initMobileUI();
 }
-// Also re-run on resize in case user rotates device
-window.addEventListener('resize', () => {
-  if (window.innerWidth <= 768) initMobileUI();
-});
+// Note: initMobileUI runs once only — no resize re-run needed
+// (re-running on resize caused duplicate listeners and call stack overflow on iOS)
 
 // ── Mobile first impression: open Scout immediately on load ──────────────────
 function initMobileFirstImpression() {
