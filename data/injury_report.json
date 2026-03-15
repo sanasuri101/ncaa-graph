@@ -1,25 +1,6 @@
 {
-  "generated_at": "2026-03-15T02:23:49.893717+00:00",
+  "generated_at": "2026-03-15T07:11:01.876741+00:00",
   "teams": {
-    "252": {
-      "bracket_name": "BYU",
-      "region": "West",
-      "seed": 6,
-      "adj_em_penalty": 4.5,
-      "players": [
-        {
-          "name": "Richie Saunders",
-          "status": "Out for season - torn ACL (Feb 14)",
-          "impact": "Star guard. Season-ending injury.",
-          "adj_em_impact": -4.5
-        }
-      ],
-      "notes": "BYU ceiling significantly lower without Saunders.",
-      "override_date": "2026-03-09",
-      "news_flags": [],
-      "has_override": true,
-      "has_news_flag": false
-    },
     "150": {
       "bracket_name": "Duke",
       "region": "East",
@@ -58,25 +39,6 @@
       "has_override": true,
       "has_news_flag": true
     },
-    "130": {
-      "bracket_name": "Michigan",
-      "region": "Midwest",
-      "seed": 1,
-      "adj_em_penalty": 1.0,
-      "players": [
-        {
-          "name": "LJ Cason",
-          "status": "Out for season - torn ACL",
-          "impact": "Backup guard. Adds pressure on Elliot Cadeau.",
-          "adj_em_impact": -1.0
-        }
-      ],
-      "notes": "Cason was backup depth, moderate impact on rotation.",
-      "override_date": "2026-03-09",
-      "news_flags": [],
-      "has_override": true,
-      "has_news_flag": false
-    },
     "2641": {
       "bracket_name": "Texas Tech",
       "region": "South",
@@ -91,6 +53,63 @@
         }
       ],
       "notes": "Ceiling significantly lower without Toppin per ESPN.",
+      "override_date": "2026-03-09",
+      "news_flags": [
+        {
+          "headline": "Texas Tech star Christian Anderson available for tournament",
+          "description": "Texas Tech star guard Christian Anderson will be available for the NCAA tournament after leaving the Red Raiders' Big 12 tournament loss because of an apparent groin injury.",
+          "published": "2026-03-15",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48210868/texas-tech-star-christian-anderson-available-tournament"
+        },
+        {
+          "headline": "Texas Tech star Christian Anderson available for tournament",
+          "description": "Texas Tech star guard Christian Anderson will be available for the NCAA tournament after leaving the Red Raiders' Big 12 tournament loss because of an apparent groin injury.",
+          "published": "2026-03-15",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48210868/texas-tech-star-christian-anderson-available-tournament"
+        },
+        {
+          "headline": "Texas Tech star Christian Anderson available for tournament",
+          "description": "Texas Tech star guard Christian Anderson will be available for the NCAA tournament after leaving the Red Raiders' Big 12 tournament loss because of an apparent groin injury.",
+          "published": "2026-03-15",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48210868/texas-tech-star-christian-anderson-available-tournament"
+        }
+      ],
+      "has_override": true,
+      "has_news_flag": true
+    },
+    "252": {
+      "bracket_name": "BYU",
+      "region": "West",
+      "seed": 6,
+      "adj_em_penalty": 4.5,
+      "players": [
+        {
+          "name": "Richie Saunders",
+          "status": "Out for season - torn ACL (Feb 14)",
+          "impact": "Star guard. Season-ending injury.",
+          "adj_em_impact": -4.5
+        }
+      ],
+      "notes": "BYU ceiling significantly lower without Saunders.",
+      "override_date": "2026-03-09",
+      "news_flags": [],
+      "has_override": true,
+      "has_news_flag": false
+    },
+    "130": {
+      "bracket_name": "Michigan",
+      "region": "Midwest",
+      "seed": 1,
+      "adj_em_penalty": 1.0,
+      "players": [
+        {
+          "name": "LJ Cason",
+          "status": "Out for season - torn ACL",
+          "impact": "Backup guard. Adds pressure on Elliot Cadeau.",
+          "adj_em_impact": -1.0
+        }
+      ],
+      "notes": "Cason was backup depth, moderate impact on rotation.",
       "override_date": "2026-03-09",
       "news_flags": [],
       "has_override": true,

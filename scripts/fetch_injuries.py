@@ -111,6 +111,13 @@ for page in range(1, 4):
 print(f"  General scan: {len(injury_news)} bracket teams flagged")
 
 # Per-team scan for key injured teams not yet caught
+# ── Load manual overrides ─────────────────────────────────────────────────────
+overrides_path = DATA_DIR / "injury_overrides.json"
+overrides      = {}
+if overrides_path.exists():
+    with open(overrides_path) as f:
+        overrides = json.load(f).get("overrides", {})
+
 # Derive priority from teams that already have manual overrides
 # — those are the ones most likely to need fresh news scans
 priority = list(overrides.keys())
@@ -139,13 +146,6 @@ news_out = {
 }
 with open(DATA_DIR / "injury_news.json", "w") as f:
     json.dump(news_out, f, indent=2)
-
-# ── Load manual overrides ─────────────────────────────────────────────────────
-overrides_path = DATA_DIR / "injury_overrides.json"
-overrides      = {}
-if overrides_path.exists():
-    with open(overrides_path) as f:
-        overrides = json.load(f).get("overrides", {})
 
 # ── Build merged injury_report.json ──────────────────────────────────────────
 report = {

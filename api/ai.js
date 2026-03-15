@@ -94,6 +94,12 @@ function readJSON(name) {
   return JSON.parse(readFileSync(p, 'utf8'));
 }
 
+function readDataJSON(name) {
+  // For backend-only files in data/ (injury_overrides, transitive source copy)
+  const p = join(process.cwd(), 'data', name);
+  return JSON.parse(readFileSync(p, 'utf8'));
+}
+
 function getData() {
   if (_cache) return _cache;
   const graph  = readJSON('graph_data.json');
@@ -107,7 +113,7 @@ function getData() {
   // Injury overrides — manual file, updated when key players go down
   let injuryMap = {};
   try {
-    const raw = readJSON('../data/injury_overrides.json');
+    const raw = readDataJSON('injury_overrides.json');
     for (const [espnId, override] of Object.entries(raw.overrides ?? {})) {
       const penalty = override.adj_em_penalty ?? 0;
       if (penalty <= 0) continue;

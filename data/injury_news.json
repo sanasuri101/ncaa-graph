@@ -1,7 +1,32 @@
 {
-  "generated_at": "2026-03-15T02:23:49.892519+00:00",
-  "flagged_teams": 1,
+  "generated_at": "2026-03-15T07:11:01.875868+00:00",
+  "flagged_teams": 2,
   "teams": {
+    "2641": {
+      "bracket_name": "Texas Tech",
+      "region": "South",
+      "seed": 5,
+      "articles": [
+        {
+          "headline": "Texas Tech star Christian Anderson available for tournament",
+          "description": "Texas Tech star guard Christian Anderson will be available for the NCAA tournament after leaving the Red Raiders' Big 12 tournament loss because of an apparent groin injury.",
+          "published": "2026-03-15",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48210868/texas-tech-star-christian-anderson-available-tournament"
+        },
+        {
+          "headline": "Texas Tech star Christian Anderson available for tournament",
+          "description": "Texas Tech star guard Christian Anderson will be available for the NCAA tournament after leaving the Red Raiders' Big 12 tournament loss because of an apparent groin injury.",
+          "published": "2026-03-15",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48210868/texas-tech-star-christian-anderson-available-tournament"
+        },
+        {
+          "headline": "Texas Tech star Christian Anderson available for tournament",
+          "description": "Texas Tech star guard Christian Anderson will be available for the NCAA tournament after leaving the Red Raiders' Big 12 tournament loss because of an apparent groin injury.",
+          "published": "2026-03-15",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48210868/texas-tech-star-christian-anderson-available-tournament"
+        }
+      ]
+    },
     "150": {
       "bracket_name": "Duke",
       "region": "East",

@@ -36,13 +36,13 @@ URL_GAMES = f"https://barttorvik.com/getgamestats.php?year={YEAR}&json=1"
 TORVIK_NAME_MAP = {
     "Ohio St.":            "Ohio State",
     "Iowa St.":            "Iowa State",
-    "Michigan St.":        "Michigan State",
+    "Michigan St.":        "Michigan St",
     "N.C. State":          "NC State",
     "Connecticut":         "UConn",
-    "Wright St.":          "Wright State",
+    "Wright St.":          "Wright St",
     "Utah St.":            "Utah State",
     "Portland St.":        "Portland State",
-    "North Dakota St.":    "NDSU",
+    "North Dakota St.":    "N Dakota St",
     "North Carolina A&T":  "NC A&T",
     "LIU":                 "Long Island",
     "Stephen F. Austin":   "SFA",
@@ -51,6 +51,9 @@ TORVIK_NAME_MAP = {
     "Bethune Cookman":      "Bethune-Cookman",
     "Penn St.":             "Penn State",
     "Oklahoma St.":         "Oklahoma State",
+    "St. John's":           "St John's",
+    "Tennessee St.":        "Tennessee St",
+    "Miami FL":             "Miami",
 }
 
 # Torvik JSON field positions
