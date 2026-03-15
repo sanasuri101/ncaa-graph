@@ -52,7 +52,7 @@ window.getTorvik = function () {
 };
 
 // ── Boot ─────────────────────────────────────────────────────────────────────
-(async () => {
+window.addEventListener('DOMContentLoaded', async () => {
   try {
     const res  = await fetch('data/graph_data.json');
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -82,7 +82,7 @@ window.getTorvik = function () {
         Failed to load data.<br><span style="font-size:.72rem;color:#5a7a96">${err.message}</span>
        </div>`;
   }
-})();
+});
 
 // ── Graph init ────────────────────────────────────────────────────────────────
 function initGraph() {
@@ -680,8 +680,7 @@ function hideLoading() {
   overlay.style.transition = 'opacity .4s';
   setTimeout(() => {
     overlay.remove();
-    initMobileUI();              // set up drag, tabs, sidebar toggle
-    initMobileFirstImpression(); // open sheet, default to overview
+    initMobileFirstImpression(); // fires exactly when loading is done
   }, 400);
 }
 
@@ -1037,13 +1036,11 @@ function initSidebarResize() {
 
 // ── Mobile bottom sheet + sidebar overlay ────────────────────────────────────
 function initMobileUI() {
-  console.log('[MOB] initMobileUI called, innerWidth:', window.innerWidth);
-  if (window.innerWidth > 768) { console.log('[MOB] skipped — not mobile'); return; }
+  if (window.innerWidth > 768) return;
 
   const aiPanel  = document.getElementById('ai-panel');
   const sidebar  = document.querySelector('.sidebar');
   const main     = document.querySelector('.main');
-  console.log('[MOB] aiPanel:', !!aiPanel, 'sidebar:', !!sidebar, 'main:', !!main);
   if (!aiPanel || !sidebar || !main) return;
 
   // ── Floating sidebar toggle button ───────────────────────────────────────
@@ -1103,27 +1100,22 @@ function initMobileUI() {
   let dragMoved     = false; // distinguish tap vs drag
 
   function onDragStart(e) {
-    // Don't intercept taps on interactive elements (tab buttons etc)
-    if (e.target.closest('button, a, input, select, textarea')) return;
     dragStartY    = e.touches[0].clientY;
     dragStartOpen = aiPanel.classList.contains('open');
     isDragging    = true;
     dragMoved     = false;
     aiPanel.style.transition = 'none';
-    // Don't preventDefault here — let clicks fire on buttons inside the header
+    e.preventDefault();
   }
   function onDragMove(e) {
     if (!isDragging) return;
     const dy = e.touches[0].clientY - dragStartY;
-    if (Math.abs(dy) > 8) {
-      dragMoved = true;
-      // Only preventDefault once we know it's a drag, not a tap
-      e.preventDefault();
-      const closedOffset  = SHEET_HEIGHT - 56;
-      const currentOffset = dragStartOpen ? 0 : closedOffset;
-      const newOffset = Math.max(0, Math.min(closedOffset, currentOffset + dy));
-      aiPanel.style.transform = `translateY(${newOffset}px)`;
-    }
+    if (Math.abs(dy) > 6) dragMoved = true;
+    const closedOffset  = SHEET_HEIGHT - 56;
+    const currentOffset = dragStartOpen ? 0 : closedOffset;
+    const newOffset = Math.max(0, Math.min(closedOffset, currentOffset + dy));
+    aiPanel.style.transform = `translateY(${newOffset}px)`;
+    e.preventDefault();
   }
   function onDragEnd(e) {
     if (!isDragging) return;
@@ -1132,59 +1124,33 @@ function initMobileUI() {
     aiPanel.style.transform  = '';
     const dy = e.changedTouches[0].clientY - dragStartY;
     if (!dragMoved) {
-      // Pure tap on non-button area — toggle sheet
+      // It was a tap — toggle
       toggleSheet();
     } else if (dragStartOpen) {
       if (dy > 80) aiPanel.classList.remove('open');
     } else {
       if (dy < -80) aiPanel.classList.add('open');
     }
+    e.preventDefault();
   }
 
-  // Drag handle pill — safe to preventDefault on touchstart (no buttons inside)
+  // Attach to drag handle pill
   if (dragHandle) {
-    dragHandle.addEventListener('touchstart', e => {
-      onDragStart(e);
-      e.preventDefault(); // safe — drag handle has no interactive children
-    }, { passive: false });
+    dragHandle.addEventListener('touchstart', onDragStart, { passive: false });
     dragHandle.addEventListener('touchmove',  onDragMove,  { passive: false });
     dragHandle.addEventListener('touchend',   onDragEnd,   { passive: false });
   }
-  // Scout header — drag but DON'T preventDefault on touchstart so button clicks fire
+  // Also attach to the scout header row so the full peek area is draggable
   const scoutHeader = aiPanel.querySelector('.ai-scout-header');
   if (scoutHeader) {
-    scoutHeader.addEventListener('touchstart', onDragStart, { passive: true });
+    scoutHeader.addEventListener('touchstart', onDragStart, { passive: false });
     scoutHeader.addEventListener('touchmove',  onDragMove,  { passive: false });
-    scoutHeader.addEventListener('touchend',   onDragEnd,   { passive: true });
+    scoutHeader.addEventListener('touchend',   onDragEnd,   { passive: false });
   }
 
   // ── Chat and stats panels — allow scrolling without triggering drag ───────
   // CSS overscroll-behavior: contain handles this — no JS needed here.
   // stopPropagation would break tap-to-type and other interactions inside the panel.
-
-  // ── Mobile-only tabs: Overview, Bracket, Rankings ─────────────────────────
-  // These mirror content from the hidden sidebar into panels inside the sheet.
-  // ai-panel.js also binds .ai-tab clicks but skips mob-only-tabs, so no conflict.
-  document.querySelectorAll('.mob-only-tab').forEach(btn => {
-    if (btn._mobTabBound) return;
-    btn._mobTabBound = true;
-    btn.addEventListener('click', () => {
-      const mode = btn.dataset.mode;
-      console.log('[MOB] mob tab clicked:', mode);
-      const mobPanel = document.getElementById(`mob-panel-${mode}`);
-      console.log('[MOB] mobPanel found:', !!mobPanel);
-      if (!mobPanel) return;
-      // For bracket, initBracket() populates tab-bracket dynamically — run it first
-      if (mode === 'bracket' && typeof initBracket === 'function') initBracket();
-      // Sync fresh content from sidebar tab
-      const sidebarContent = document.getElementById(`tab-${mode}`);
-      if (sidebarContent) mobPanel.innerHTML = sidebarContent.innerHTML;
-      // Deactivate ALL panels including native stats/chat panels
-      document.querySelectorAll('.ai-mode-content').forEach(p => p.classList.remove('active'));
-      mobPanel.classList.add('active');
-      aiPanel.classList.add('open');
-    });
-  });
 
   // ── AI Scout header button opens sheet ───────────────────────────────────
   const aiToggle = document.getElementById('ai-toggle');
@@ -1202,24 +1168,23 @@ function initMobileFirstImpression() {
   const aiPanel = document.getElementById('ai-panel');
   if (!aiPanel) return;
 
-  console.log('[MOB] initMobileFirstImpression running');
-  // Open the bottom sheet
+  // Open the bottom sheet fully
   aiPanel.classList.add('open');
-  console.log('[MOB] aiPanel classes after open:', aiPanel.className);
 
-  // Deactivate all tabs and panels
-  document.querySelectorAll('.ai-tab').forEach(b => b.classList.remove('active'));
-  document.querySelectorAll('.ai-mode-content').forEach(p => p.classList.remove('active'));
-
-  // Default to Overview — pre-populate it now so it's instant
-  const overviewBtn = document.querySelector('.ai-tab[data-mode="overview"]');
-  const mobOverview = document.getElementById('mob-panel-overview');
-  const sidebarOverview = document.getElementById('tab-overview');
-  if (overviewBtn && mobOverview && sidebarOverview) {
-    overviewBtn.classList.add('active');
-    mobOverview.innerHTML = sidebarOverview.innerHTML;
-    mobOverview.classList.add('active');
+  // Switch to Chat tab — primary mobile experience
+  const chatTab    = document.querySelector('.ai-tab[data-mode="chat"]');
+  const statsTab   = document.querySelector('.ai-tab[data-mode="stats"]');
+  const chatPanel  = document.getElementById('panel-chat');
+  const statsPanel = document.getElementById('panel-stats');
+  if (chatTab && chatPanel) {
+    chatTab.classList.add('active');
+    chatPanel.classList.add('active');
+    if (statsTab)   statsTab.classList.remove('active');
+    if (statsPanel) statsPanel.classList.remove('active');
   }
+  // Welcome message is baked into HTML — no JS injection needed
+  // Auto-focus is NOT attempted — iOS Safari blocks programmatic focus
+  // without a direct user gesture; it would silently fail
 }
 
 // Run after data loads — called directly from hideLoading

@@ -1657,34 +1657,6 @@ section { margin-bottom: 20px; }
   box-shadow: 0 1px 4px rgba(42,37,32,.08);
 }
 
-/* Mobile-only tabs — hidden on desktop */
-.mob-only-tab { display: none; }
-
-/* Mobile panel content for sidebar tabs */
-#mob-panel-overview,
-#mob-panel-bracket,
-#mob-panel-rankings,
-#mob-panel-detail {
-  overflow-y: auto !important;
-  overflow-x: hidden;
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior: contain;
-  padding: 10px 12px;
-  /* flex:1 and display:flex come from .ai-mode-content.active */
-  /* Override flex-direction so content stacks as blocks */
-  flex-direction: column;
-  align-items: stretch;
-  /* Ensure content isn't clipped */
-  min-height: 0;
-}
-/* Inner content from sidebar clones — display as block, not flex child */
-#mob-panel-overview > *,
-#mob-panel-bracket > *,
-#mob-panel-rankings > *,
-#mob-panel-detail > * {
-  flex-shrink: 0;
-}
-
 /* Stats panel cells — tighter Pickle card style */
 .stat-section-head {
   font-size: .7rem;
@@ -3475,19 +3447,6 @@ section { margin-bottom: 20px; }
   .ai-scout-header { padding: 8px 12px 0 !important; }
   .ai-panel-header { padding-bottom: 6px; }
   .ai-key-btn      { display: none; }
-
-  /* Show mobile-only tabs and make the tab row scroll horizontally */
-  .mob-only-tab { display: inline-flex; }
-  .ai-tab-row {
-    overflow-x: auto;
-    overflow-y: hidden;
-    flex-wrap: nowrap;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    border-radius: 10px;
-  }
-  .ai-tab-row::-webkit-scrollbar { display: none; }
-  .ai-tab { flex-shrink: 0; font-size: .76rem; padding: 5px 10px; }
   .ai-panel-title  { font-size: .78rem; }
   .chat-area, #chat-messages, #panel-chat { flex: 1; min-height: 0; }
 
