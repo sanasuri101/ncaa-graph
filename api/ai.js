@@ -11,6 +11,17 @@
 import { readFileSync } from 'fs';
 import { join }         from 'path';
 
+// ── Output sanitizer — strip CoT/meta-commentary before text reaches client ─────
+function sanitizeLLMOutput(text) {
+  if (!text) return text;
+  return text
+    .replace(/<think>[\s\S]*?<\/think>/gi, '')
+    .replace(/^(Note|Explanation|Reasoning|Disclaimer|Commentary|Instructions?|Reminder|Summary of instructions?)[:\s].*$/gim, '')
+    .replace(/^(I (have|will|am|did)|The response|This response|As instructed|Following the|Per the|Based on the instructions?)[^\n]*/gim, '')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+}
+
 const GROQ_URL      = 'https://api.groq.com/openai/v1/chat/completions';
 const MODEL         = 'llama-3.3-70b-versatile';
 const MAX_TOKENS    = 2048;
@@ -667,7 +678,7 @@ export default async function handler(req, res) {
         return;
       }
       const text = groqData.choices?.[0]?.message?.content || 'No response — please try again.';
-      send(200, { text, thinking });
+      send(200, { text: sanitizeLLMOutput(text), thinking });
       return;
     }
 
@@ -689,7 +700,7 @@ export default async function handler(req, res) {
       const content   = choice?.message?.content ?? '';
 
       if (reason === 'stop' || reason === 'length') {
-        send(200, { text: content || '', thinking });
+        send(200, { text: sanitizeLLMOutput(content) || '', thinking });
         return;
       }
 
@@ -698,7 +709,7 @@ export default async function handler(req, res) {
         const fallbackRes  = await groqFetch({ model: MODEL, max_tokens: MAX_TOKENS, messages, tool_choice: 'none' }, groqKey);
         const fallbackData = await fallbackRes.json();
         const fallbackText = fallbackData.choices?.[0]?.message?.content ?? '';
-        send(200, { text: fallbackText || 'Unable to answer — try rephrasing.', thinking });
+        send(200, { text: sanitizeLLMOutput(fallbackText) || 'Unable to answer — try rephrasing.', thinking });
         return;
       }
 
@@ -726,9 +737,9 @@ export default async function handler(req, res) {
     const groqData   = await groqRes.json();
     const finalText  = groqData.choices?.[0]?.message?.content;
     const fallback   = !finalText ? messages.filter(m => m.role === 'tool').slice(-1)[0]?.content : null;
-    send(200, { text: finalText || fallback || 'No response — please try again.', thinking });
+    send(200, { text: sanitizeLLMOutput(finalText || fallback) || 'No response — please try again.', thinking });
 
   } catch (err) {
-    send(500, { error: { message: err.message } });
+    send(500, { error: { message: 'Internal server error' } });
   }
 }

@@ -22,6 +22,22 @@ import { join }                                      from 'path';
 import { Annotation, StateGraph, END, START, Send } from '@langchain/langgraph';
 
 // ── Constants ─────────────────────────────────────────────────────────────────
+// ── Output sanitizer — strip CoT leakage before any LLM text reaches the client ──
+// Removes: Note:/Explanation:/Reasoning: headers, <think> blocks, instruction echoes
+function sanitizeLLMOutput(text) {
+  if (!text) return text;
+  return text
+    // Strip XML-style thinking blocks (some models emit <think>...</think>)
+    .replace(/<think>[\s\S]*?<\/think>/gi, '')
+    // Strip "Note:", "Explanation:", "Reasoning:" meta-commentary lines
+    .replace(/^(Note|Explanation|Reasoning|Disclaimer|Commentary|Instructions?|Reminder|Summary of instructions?)[:\s].*$/gim, '')
+    // Strip lines that echo back instructions ("The response already follows...", "I have followed...")
+    .replace(/^(I (have|will|am|did)|The response|This response|As instructed|Following the|Per the|Based on the instructions?)[^\n]*/gim, '')
+    // Collapse 3+ newlines to 2
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+}
+
 const GROQ_URL      = 'https://api.groq.com/openai/v1/chat/completions';
 const MODEL         = 'llama-3.3-70b-versatile';
 const MAX_TOKENS    = 1024;
@@ -278,7 +294,7 @@ function routerEdge(state) {
 async function efficiencyAgent(state, config) {
   const groqKey = config.configurable?.groqKey;
   const system  = `You are an NCAA basketball efficiency analyst. Your job is to assess matchup probability using only efficiency metrics.
-Respond with valid JSON only. No markdown, no explanation outside the JSON.
+Respond with valid JSON only. No markdown, no explanation, no notes, no self-commentary outside the JSON object itself.
 Schema: { "agent": "efficiency", "win_pct": <number 0-100 for ${state.team_a}>, "confidence": "low|medium|high", "key_edge": "<one specific stat advantage>", "reasoning": "<2-3 sentences citing exact numbers>" }`;
 
   const user = `Analyze this matchup using efficiency data only.
@@ -296,6 +312,7 @@ Return win probability for ${state.team_a}.`;
     const raw    = await groqCall(system, user, groqKey);
     const clean  = raw.replace(/```json|```/g, '').trim();
     const result = JSON.parse(clean);
+    if (result.reasoning) result.reasoning = sanitizeLLMOutput(result.reasoning);
     return { agent_results: [result] };
   } catch {
     return { agent_results: [{ agent: 'efficiency', win_pct: 50, confidence: 'low', key_edge: 'parse error', reasoning: 'Could not parse efficiency analysis.' }] };
@@ -307,7 +324,7 @@ Return win probability for ${state.team_a}.`;
 async function formAgent(state, config) {
   const groqKey = config.configurable?.groqKey;
   const system  = `You are an NCAA basketball momentum and form analyst. Assess matchup probability using only recent performance data.
-Respond with valid JSON only. No markdown, no explanation outside the JSON.
+Respond with valid JSON only. No markdown, no explanation, no notes, no self-commentary outside the JSON object itself.
 Schema: { "agent": "form", "win_pct": <number 0-100 for ${state.team_a}>, "confidence": "low|medium|high", "key_edge": "<one specific form advantage>", "reasoning": "<2-3 sentences citing specific recent games or trends>" }`;
 
   const user = `Analyze this matchup using recent form data only.
@@ -325,6 +342,7 @@ Return win probability for ${state.team_a}.`;
     const raw    = await groqCall(system, user, groqKey);
     const clean  = raw.replace(/```json|```/g, '').trim();
     const result = JSON.parse(clean);
+    if (result.reasoning) result.reasoning = sanitizeLLMOutput(result.reasoning);
     return { agent_results: [result] };
   } catch {
     return { agent_results: [{ agent: 'form', win_pct: 50, confidence: 'low', key_edge: 'parse error', reasoning: 'Could not parse form analysis.' }] };
@@ -336,7 +354,7 @@ Return win probability for ${state.team_a}.`;
 async function matchupAgent(state, config) {
   const groqKey = config.configurable?.groqKey;
   const system  = `You are an NCAA basketball matchup specialist. Assess win probability using head-to-head history and common opponent analysis.
-Respond with valid JSON only. No markdown, no explanation outside the JSON.
+Respond with valid JSON only. No markdown, no explanation, no notes, no self-commentary outside the JSON object itself.
 Schema: { "agent": "matchup", "win_pct": <number 0-100 for ${state.team_a}>, "confidence": "low|medium|high", "key_edge": "<one specific matchup advantage>", "reasoning": "<2-3 sentences citing H2H or common opponent results>" }`;
 
   const user = `Analyze this matchup using head-to-head and common opponent data.
@@ -357,6 +375,7 @@ Return win probability for ${state.team_a}.`;
     const raw    = await groqCall(system, user, groqKey);
     const clean  = raw.replace(/```json|```/g, '').trim();
     const result = JSON.parse(clean);
+    if (result.reasoning) result.reasoning = sanitizeLLMOutput(result.reasoning);
     return { agent_results: [result] };
   } catch {
     return { agent_results: [{ agent: 'matchup', win_pct: 50, confidence: 'low', key_edge: 'parse error', reasoning: 'Could not parse matchup analysis.' }] };
@@ -401,7 +420,8 @@ async function synthesisNode(state, config) {
   ).join('\n\n');
 
   const system = `You are a senior NCAA tournament analyst synthesizing multiple expert reports into a final prediction.
-Write a concise, data-driven analysis. Be specific. Cite exact numbers. No hedging.`;
+Write a concise, data-driven analysis. Be specific. Cite exact numbers. No hedging.
+Output ONLY the analysis text — no notes, no meta-commentary, no self-referential statements about following instructions, no "Note:" lines.`;
 
   const user = `Synthesize these three expert analyses into a final matchup prediction.
 
@@ -411,10 +431,10 @@ WEIGHTED WIN PROBABILITY for ${state.team_a}: ${weightedPct}% (range: ${rangeLow
 Weights: Efficiency 50%, Recent Form 25%, Matchup History 25%
 Agent spread: ${spread.toFixed(0)} percentage points (${spread < 10 ? 'strong consensus' : spread < 20 ? 'moderate agreement' : 'significant disagreement'})
 
-Write 3-4 sentences: the decisive factor, the key risk, and one thing that could flip the outcome. Cite specific stats.`;
+Write 3-4 sentences: the decisive factor, the key risk, and one thing that could flip the outcome. Cite specific stats. Do not add any note, disclaimer, or commentary after the analysis.`;
 
   try {
-    const reasoning = await groqCall(system, user, groqKey);
+    const reasoning = sanitizeLLMOutput(await groqCall(system, user, groqKey));
     const confidence = {
       team_a:    state.team_a,
       team_b:    state.team_b,
