@@ -8,18 +8,23 @@
 'use strict';
 
 let _bracketData  = null;
-let _bracketModel = 'blended';
+let _bracketModel = 'evidence';
 
 const MODEL_META = {
+  evidence: {
+    label:  'Evidence Model',
+    desc:   'Layers I–IV: Barthag + Logit(AdjEM) + Skellam scores + time-decay form + transitive paths + WAB.',
+    color:  'var(--west)',
+  },
+  blended: {
+    label:  'Balanced',
+    desc:   '70% Barthag + 30% historical seed odds. Simple and reliable.',
+    color:  'var(--accent)',
+  },
   barthag: {
     label:  'Pure Analytics',
     desc:   'Torvik Barthag only — best team wins every game. Fewest upsets.',
     color:  'var(--east)',
-  },
-  blended: {
-    label:  'Balanced',
-    desc:   '70% Barthag + 30% historical seed odds. Recommended.',
-    color:  'var(--accent)',
   },
   upset:   {
     label:  'Upset Heavy',
@@ -52,7 +57,7 @@ function initBracket() {
 
 function buildBracketShell() {
   const modelBtns = Object.entries(MODEL_META).map(([key, m]) => `
-    <button class="br-model-btn ${key === 'blended' ? 'active' : ''}" data-model="${key}">
+    <button class="br-model-btn ${key === 'evidence' ? 'active' : ''}" data-model="${key}">
       <span class="br-model-label">${m.label}</span>
       <span class="br-model-desc">${m.desc}</span>
     </button>`).join('');
@@ -61,7 +66,7 @@ function buildBracketShell() {
     <div class="bracket-panel">
       <div class="bracket-header">
         <div class="bracket-title">Bracket Generator</div>
-        <div class="bracket-subtitle">2026 NCAA Tournament · Pick your prediction model</div>
+        <div class="bracket-subtitle">${(META?.season ? '20' + META.season.split('-')[1] : new Date().getFullYear())} NCAA Tournament · Pick your prediction model</div>
       </div>
       <div class="br-model-row">${modelBtns}</div>
       <button class="br-generate-btn" id="br-generate-btn">Generate Bracket</button>
@@ -88,6 +93,7 @@ async function generateBracket() {
   btn.textContent = 'Simulating…';
   out.innerHTML = '<div class="br-loading">Running 63 games…</div>';
 
+  if (window.posthog) posthog.capture('bracket_simulated', { model: _bracketModel });
   try {
     const res = await fetch('/api/bracket', {
       method:  'POST',
@@ -170,7 +176,7 @@ function renderFullBracket(data) {
 
   const champHTML = `
     <div class="br-champion-block">
-      <div class="br-champion-label">🏆 2026 NCAA Champion</div>
+      <div class="br-champion-label">🏆 ${(META?.season ? '20' + META.season.split('-')[1] : new Date().getFullYear())} NCAA Champion</div>
       <div class="br-champion-name" style="color:${champColor}">${champion.full_name}</div>
       <div class="br-champion-meta">
         ${champion.region} · Seed #${champion.seed} ·

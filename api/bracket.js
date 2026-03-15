@@ -2,7 +2,7 @@
  * api/bracket.js — bracket simulation endpoint
  *
  * POST /api/bracket
- * Body: { model: 'barthag' | 'upset' | 'seed' | 'blended' }
+ * Body: { model: 'barthag' | 'upset' | 'seed' | 'blended' | 'evidence' }
  *
  * Returns: {
  *   model: string,
@@ -32,9 +32,46 @@ const CORS = {
 let _cache = null;
 function getData() {
   if (_cache) return _cache;
-  const graph  = JSON.parse(readFileSync(join(process.cwd(), 'public', 'data', 'graph_data.json'), 'utf8'));
-  const torvik = JSON.parse(readFileSync(join(process.cwd(), 'public', 'data', 'torvik_stats.json'), 'utf8'));
-  _cache = { graph, torvik };
+  const graph    = JSON.parse(readFileSync(join(process.cwd(), 'public', 'data', 'graph_data.json'), 'utf8'));
+  const torvik   = JSON.parse(readFileSync(join(process.cwd(), 'public', 'data', 'torvik_stats.json'), 'utf8'));
+  const form     = JSON.parse(readFileSync(join(process.cwd(), 'public', 'data', 'recent_form.json'), 'utf8'));
+  const trans    = JSON.parse(readFileSync(join(process.cwd(), 'data', 'transitive_analysis.json'), 'utf8'));
+
+  // Injury overrides — manual file updated when key players go down
+  let injuries = { overrides: {} };
+  try {
+    injuries = JSON.parse(readFileSync(join(process.cwd(), 'data', 'injury_overrides.json'), 'utf8'));
+  } catch {}
+
+  // Pre-compute injury-adjusted AdjEM and Barthag for each affected team
+  // adj_em_penalty reduces AdjEM; re-derive Barthag via logit relationship
+  // logit(Barthag) ≈ k * AdjEM where k is calibrated per team from current values
+  const injuryMap = {};
+  for (const [espnId, override] of Object.entries(injuries.overrides ?? {})) {
+    const penalty = override.adj_em_penalty ?? 0;
+    if (penalty <= 0) continue;
+    const tv = torvik.teams?.[espnId]?.torvik;
+    if (!tv) continue;
+    const adjEM = (tv.adj_em ?? 0) - penalty;
+    // Logit-based Barthag re-derivation: logit(b) = k*em → k = logit(b)/em → b_new = sigmoid(k*em_new)
+    const logit  = p => Math.log(Math.max(0.001, p) / Math.max(0.001, 1 - p));
+    const k      = logit(tv.barthag) / Math.max(0.01, tv.adj_em);
+    const sigmoid = x => 1 / (1 + Math.exp(-x));
+    const adjBarthag = Math.max(0.01, Math.min(0.99, sigmoid(k * adjEM)));
+    // Apply same proportional adjustment to proj_barthag
+    const projAdj = tv.proj_barthag
+      ? Math.max(0.01, Math.min(0.99, sigmoid(k * (Math.max(0.01, logit(tv.proj_barthag) / k) - penalty))))
+      : adjBarthag;
+    injuryMap[espnId] = {
+      adj_em:       adjEM,
+      barthag:      adjBarthag,
+      proj_barthag: projAdj,
+      penalty,
+      players:      override.players ?? [],
+    };
+  }
+
+  _cache = { graph, torvik, form, trans, injuryMap };
   return _cache;
 }
 
@@ -85,8 +122,127 @@ function seedWinProb(seedA, seedB) {
   return 0.5 - Math.min((seedA - seedB) * 0.04, 0.45);
 }
 
+// ── Layer I: Barthag ratio (Pythagorean) ─────────────────────────────────────
+function barthagRatio(tvA, tvB) {
+  return tvA.barthag / (tvA.barthag + tvB.barthag);
+}
+
+// ── Layer I: Projected Barthag ratio (forward-looking) ───────────────────────
+// proj_barthag is Torvik's forward projection — accounts for schedule regression
+// and implicitly captures recent player absences that haven't fully shown in AdjEM yet.
+// Falls back to current barthag for 6 teams that lack a projection.
+function projBarthagRatio(tvA, tvB) {
+  if (tvA.proj_barthag && tvB.proj_barthag)
+    return tvA.proj_barthag / (tvA.proj_barthag + tvB.proj_barthag);
+  return barthagRatio(tvA, tvB); // graceful fallback
+}
+
+// ── Layer II: Logit win probability from AdjEM ────────────────────────────────
+// Calibrated k=0.112 from NCAA historical backtesting (Pomeroy/Torvik lineage)
+function logitEM(tvA, tvB) {
+  return 1 / (1 + Math.exp(-0.112 * (tvA.adj_em - tvB.adj_em)));
+}
+
+// ── Layer II: Skellam win probability from projected scores ──────────────────
+// Projects each team's expected score using cross-efficiency (AdjOE vs opponent AdjDE)
+// then applies normal approximation to Skellam distribution (score difference model)
+function skellamWinProb(tvA, tvB) {
+  const poss  = ((tvA.adj_tempo + tvB.adj_tempo) / 2) * 80; // possessions per game
+  const expA  = (tvA.adj_oe / 100) * (tvB.adj_de / 100) * poss;
+  const expB  = (tvB.adj_oe / 100) * (tvA.adj_de / 100) * poss;
+  const mu    = expA - expB;
+  const sigma = Math.sqrt(expA + expB);  // Skellam variance = sum of Poisson rates
+  if (sigma === 0) return 0.5;           // degenerate case: identical teams
+  const z     = mu / sigma;
+  // Normal CDF via Abramowitz & Stegun rational approximation
+  const t    = 1 / (1 + 0.2316419 * Math.abs(z));
+  const poly = t * (0.319381530 + t * (-0.356563782 + t * (1.781477937 + t * (-1.821255978 + t * 1.330274429))));
+  const phi  = Math.exp(-z * z / 2) / Math.sqrt(2 * Math.PI);
+  const cdf  = 1 - phi * poly;
+  return z >= 0 ? cdf : 1 - cdf;
+}
+
+// ── Layer IV: Exponential time-decay win rate ─────────────────────────────────
+// λ=0.018 → ~50% weight at 38 days — March games ~3× heavier than November
+const DECAY_LAMBDA = 0.018;
+const DECAY_TODAY  = new Date(); // always today — not hardcoded
+function decayWinRate(teamId, form) {
+  const games = form?.teams?.[teamId]?.games ?? [];
+  if (!games.length) return 0.5;
+  let wins = 0, total = 0;
+  for (const g of games) {
+    const w = Math.exp(-DECAY_LAMBDA * (DECAY_TODAY - new Date(g.date)) / 86400000);
+    if (g.won) wins += w;
+    total += w;
+  }
+  return total > 0 ? wins / total : 0.5;
+}
+
+// ── Layer IV: Transitive verdict adjustment ───────────────────────────────────
+// Uses pre-computed common-opponent chains to adjust probability by ±8% max
+function transitiveAdj(idA, idB, pairs) {
+  const p = pairs?.[`${idA}_${idB}`] || pairs?.[`${idB}_${idA}`];
+  if (!p || p.verdict === 'unclear' || !p.conf) return 0;
+  const confNorm  = Math.min(p.conf / 100, 1);
+  const direction = pairs?.[`${idA}_${idB}`]
+    ? (p.verdict === 'a' ? 1 : -1)
+    : (p.verdict === 'a' ? -1 : 1);
+  return direction * confNorm * 0.08;
+}
+
+// ── Layer IV: WAB quality-wins adjustment ─────────────────────────────────────
+// Wins Above Bubble captures schedule-adjusted quality. Scale to ±5% adjustment.
+function wabAdj(tvA, tvB) {
+  return Math.max(-0.05, Math.min(0.05, ((tvA.wab ?? 0) - (tvB.wab ?? 0)) / 1000));
+}
+
+// ── Evidence model: combined Layers I + II + IV ───────────────────────────────
+// Weights: 35% Barthag · 25% Logit(AdjEM) · 20% Skellam · 20% decay form
+// Plus additive adjustments: transitive chains + WAB (capped ±12%)
+// Round compression: 10% in R64, 6% in R32, 2% in S16+ (March variance)
+function evidenceWinProb(teamA, teamB, torvik, form, trans, round, injuryMap) {
+  const rawTvA = torvik.teams?.[teamA.id]?.torvik;
+  const rawTvB = torvik.teams?.[teamB.id]?.torvik;
+  const sA  = teamA.seed ?? 17;
+  const sB  = teamB.seed ?? 17;
+
+  // Apply injury-adjusted values if overrides exist for this team
+  const tvA = injuryMap?.[teamA.id]
+    ? { ...rawTvA, adj_em: injuryMap[teamA.id].adj_em, barthag: injuryMap[teamA.id].barthag, proj_barthag: injuryMap[teamA.id].proj_barthag }
+    : rawTvA;
+  const tvB = injuryMap?.[teamB.id]
+    ? { ...rawTvB, adj_em: injuryMap[teamB.id].adj_em, barthag: injuryMap[teamB.id].barthag, proj_barthag: injuryMap[teamB.id].proj_barthag }
+    : rawTvB;
+
+  // Fall back to seed-based when torvik missing
+  if (!tvA && !tvB) return seedWinProb(sA, sB);
+  if (!tvA)         return 1 - seedWinProb(sB, sA);
+  if (!tvB)         return seedWinProb(sA, sB);
+
+  const bP = barthagRatio(tvA, tvB);
+  const pB = projBarthagRatio(tvA, tvB); // forward-looking — captures injury regression
+  const lP = logitEM(tvA, tvB);
+  const sP = skellamWinProb(tvA, tvB);
+  const dA = decayWinRate(teamA.id, form);
+  const dB = decayWinRate(teamB.id, form);
+  const dP = dA / (dA + dB);
+
+  const pairs    = trans?.pairs ?? {};
+  const transAdj = transitiveAdj(teamA.id, teamB.id, pairs);
+  const wAdj     = wabAdj(tvA, tvB);
+
+  // 20% backward Barthag · 15% projected Barthag · 25% Logit(AdjEM) · 20% Skellam · 20% decay form
+  // proj_barthag forward signal captures roster/injury changes Torvik has already modelled
+  const base      = 0.20*bP + 0.15*pB + 0.25*lP + 0.20*sP + 0.20*dP;
+  const evidAdj   = Math.max(-0.12, Math.min(0.12, transAdj + wAdj));
+  const compress  = round <= 1 ? 0.10 : round <= 2 ? 0.06 : 0.02;
+  const prob      = 0.5 + (base - 0.5) * (1 - compress) + evidAdj;
+
+  return Math.max(0.01, Math.min(0.99, prob));
+}
+
 // ── Win probability calculation ───────────────────────────────────────────────
-function winProb(teamA, teamB, torvik, model, round) {
+function winProb(teamA, teamB, torvik, model, round, form, trans, injuryMap) {
   const tvA = torvik.teams?.[teamA.id]?.torvik;
   const tvB = torvik.teams?.[teamB.id]?.torvik;
   const barthagA = tvA?.barthag ?? 0.5;
@@ -95,23 +251,27 @@ function winProb(teamA, teamB, torvik, model, round) {
   const seedB = teamB.seed ?? 17;
 
   // Pure Barthag: P(A beats B) = barthagA / (barthagA + barthagB)
-  const barthagProb = barthagA / (barthagA + barthagB);
+  const barthagPrb = barthagA / (barthagA + barthagB);
 
   // Seed-implied probability from historical rates
   const seedProb = seedWinProb(seedA, seedB);
 
+  if (model === 'evidence') {
+    return evidenceWinProb(teamA, teamB, torvik, form, trans, round, injuryMap);
+  }
+
   let prob;
   if (model === 'barthag') {
-    prob = barthagProb;
+    prob = barthagPrb;
   } else if (model === 'seed') {
     prob = seedProb;
   } else if (model === 'upset') {
     // Compress Barthag toward 50% — more upsets, especially early rounds
     const compression = round <= 1 ? 0.45 : round <= 2 ? 0.35 : 0.20;
-    prob = 0.5 + (barthagProb - 0.5) * (1 - compression);
+    prob = 0.5 + (barthagPrb - 0.5) * (1 - compression);
   } else {
     // blended: 70% Barthag + 30% seed
-    prob = 0.70 * barthagProb + 0.30 * seedProb;
+    prob = 0.70 * barthagPrb + 0.30 * seedProb;
   }
 
   return Math.max(0.01, Math.min(0.99, prob));
@@ -132,7 +292,7 @@ function playInWinner(teamA, teamB, torvik) {
 }
 
 // ── Build one region's bracket ────────────────────────────────────────────────
-function simulateRegion(regionName, nodes, torvik, model) {
+function simulateRegion(regionName, nodes, torvik, model, form, trans, injuryMap) {
   // Collect seeded teams, resolve play-in games first
   const bySlot = {}; // slot = seed (1-16 after play-ins resolved)
   const playIns = [];
@@ -176,7 +336,7 @@ function simulateRegion(regionName, nodes, torvik, model) {
   for (const [sA, sB] of SEED_PAIRS_R1) {
     const teamA = bySlot[sA];
     const teamB = bySlot[sB];
-    const prob  = winProb(teamA, teamB, torvik, model, 0);
+    const prob  = winProb(teamA, teamB, torvik, model, 0, form, trans, injuryMap);
     const winner = prob >= 0.5 ? teamA : teamB;
     r1.push({ teamA, teamB, winner, prob: prob >= 0.5 ? prob : 1 - prob, winnerSide: prob >= 0.5 ? 'A' : 'B' });
     survivors.push(winner);
@@ -190,7 +350,7 @@ function simulateRegion(regionName, nodes, torvik, model) {
     for (let i = 0; i < survivors.length; i += 2) {
       const teamA = survivors[i];
       const teamB = survivors[i + 1];
-      const prob  = winProb(teamA, teamB, torvik, model, round);
+      const prob  = winProb(teamA, teamB, torvik, model, round, form, trans, injuryMap);
       const winner = prob >= 0.5 ? teamA : teamB;
       rGames.push({ teamA, teamB, winner, prob: prob >= 0.5 ? prob : 1 - prob, winnerSide: prob >= 0.5 ? 'A' : 'B' });
       next.push(winner);
@@ -203,7 +363,7 @@ function simulateRegion(regionName, nodes, torvik, model) {
 }
 
 // ── Full bracket simulation ───────────────────────────────────────────────────
-function simulateBracket(model, graph, torvik) {
+function simulateBracket(model, graph, torvik, form, trans, injuryMap) {
   const REGIONS = ['East', 'West', 'South', 'Midwest'];
   const nodesByRegion = {};
   REGIONS.forEach(r => {
@@ -212,7 +372,7 @@ function simulateBracket(model, graph, torvik) {
 
   const regionResults = {};
   REGIONS.forEach(r => {
-    regionResults[r] = simulateRegion(r, nodesByRegion[r], torvik, model);
+    regionResults[r] = simulateRegion(r, nodesByRegion[r], torvik, model, form, trans, injuryMap);
   });
 
   // Final Four: East vs West, South vs Midwest (standard bracket)
@@ -221,12 +381,12 @@ function simulateBracket(model, graph, torvik) {
   const ff2A = regionResults['South'].winner;
   const ff2B = regionResults['Midwest'].winner;
 
-  const ff1Prob = winProb(ff1A, ff1B, torvik, model, 4);
-  const ff2Prob = winProb(ff2A, ff2B, torvik, model, 4);
+  const ff1Prob = winProb(ff1A, ff1B, torvik, model, 4, form, trans, injuryMap);
+  const ff2Prob = winProb(ff2A, ff2B, torvik, model, 4, form, trans, injuryMap);
   const ff1Win  = ff1Prob >= 0.5 ? ff1A : ff1B;
   const ff2Win  = ff2Prob >= 0.5 ? ff2A : ff2B;
 
-  const finalProb = winProb(ff1Win, ff2Win, torvik, model, 5);
+  const finalProb = winProb(ff1Win, ff2Win, torvik, model, 5, form, trans, injuryMap);
   const champion  = finalProb >= 0.5 ? ff1Win : ff2Win;
 
   return {
@@ -243,6 +403,7 @@ function simulateBracket(model, graph, torvik) {
       prob: finalProb >= 0.5 ? finalProb : 1 - finalProb,
     },
     champion,
+    season: graph?.meta?.season ?? '',
   };
 }
 
@@ -267,12 +428,12 @@ export default async function handler(req, res) {
     res.end(JSON.stringify({ error: 'Invalid JSON' })); return;
   }
 
-  const model = ['barthag', 'upset', 'seed', 'blended'].includes(body.model)
+  const model = ['barthag', 'upset', 'seed', 'blended', 'evidence'].includes(body.model)
     ? body.model : 'blended';
 
   try {
-    const { graph, torvik } = getData();
-    const result = simulateBracket(model, graph, torvik);
+    const { graph, torvik, form, trans, injuryMap } = getData();
+    const result = simulateBracket(model, graph, torvik, form, trans, injuryMap);
     res.writeHead(200, { 'Content-Type': 'application/json', ...CORS });
     res.end(JSON.stringify(result));
   } catch (err) {

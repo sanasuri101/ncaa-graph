@@ -156,11 +156,74 @@ def analyze_pair(a_id, b_id, nodes, games_between, adj_beat, adj_lost):
 
 
 def main():
-    graph  = load_required(DATA_DIR / "graph_data.json")
-    nodes, games_between, adj_beat, adj_lost = build_index(graph['nodes'], graph['edges'])
+    graph = load_required(DATA_DIR / "graph_data.json")
     np_pairs = graph['not_played']
 
+    # Build a node label lookup from graph (bracket teams only)
+    bracket_node_labels = {n['id']: n for n in graph['nodes']}
+
+    # Use all_games.json for the transitive index — this includes every game each
+    # bracket team played, not just games against other bracket teams.
+    # That means Wisconsin vs Vanderbilt can be compared via shared non-bracket
+    # opponents (e.g. both played Indiana, both played SEC/Big Ten common foes).
+    all_games_path = DATA_DIR / "all_games.json"
+    if all_games_path.exists():
+        all_games = load_required(all_games_path)
+        print(f"Using all_games.json ({len(all_games)} games) for transitive index")
+    else:
+        # Fallback: use graph edges only (old behaviour)
+        print("WARN: all_games.json not found — falling back to bracket-only edges")
+        print("      Run fetch_data.py to generate all_games.json")
+        all_games = []
+
+    # Build a synthetic edge/node structure from all_games for the index
+    # Nodes: any team that appears in all_games (bracket + non-bracket)
+    all_nodes = {}
+    all_edges = []
+    bracket_ids = set(n['id'] for n in graph['nodes'])
+
+    for g in all_games:
+        t1, t2 = g['team1_id'], g['team2_id']
+        # Register both teams in node lookup (use bracket label if available)
+        for tid, name in [(t1, g['team1_name']), (t2, g['team2_name'])]:
+            if tid not in all_nodes:
+                all_nodes[tid] = {
+                    'id':    tid,
+                    'label': bracket_node_labels.get(tid, {}).get('label', name),
+                }
+        # Only include completed games with a winner
+        if g['team1_winner']:
+            winner, loser = t1, t2
+            ws, ls = g['team1_score'], g['team2_score']
+        elif g['team2_winner']:
+            winner, loser = t2, t1
+            ws, ls = g['team2_score'], g['team1_score']
+        else:
+            continue
+        try:
+            margin = abs(int(ws) - int(ls))
+        except (ValueError, TypeError):
+            margin = 0
+        all_edges.append({
+            'from':   winner,
+            'to':     loser,
+            'margin': margin,
+            'date':   g.get('date', ''),
+            'label':  f"{ws}-{ls}",
+        })
+
+    # Fall back to graph edges if all_games was empty
+    if not all_edges:
+        all_edges = graph['edges']
+        all_nodes = {n['id']: n for n in graph['nodes']}
+
+    nodes, games_between, adj_beat, adj_lost = build_index(
+        list(all_nodes.values()), all_edges
+    )
+
+    print(f"Index: {len(all_nodes)} teams, {len(all_edges)} games")
     print(f"Computing transitive analysis for {len(np_pairs)} not-played pairs...")
+
     trans_map = {}
     for i, np in enumerate(np_pairs):
         key = f"{np['a']}_{np['b']}"

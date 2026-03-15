@@ -26,7 +26,9 @@ PUB_DIR  = ROOT / "public" / "data"
 DATA_DIR.mkdir(exist_ok=True)
 PUB_DIR.mkdir(exist_ok=True)
 
-YEAR = 2026
+from datetime import datetime as _dt
+_month = _dt.now().month
+YEAR = _dt.now().year + 1 if _month >= 10 else _dt.now().year
 URL  = f"https://barttorvik.com/{YEAR}_team_results.json"
 URL_GAMES = f"https://barttorvik.com/getgamestats.php?year={YEAR}&json=1"
 

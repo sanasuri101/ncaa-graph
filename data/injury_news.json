@@ -1,0 +1,25 @@
+{
+  "generated_at": "2026-03-15T02:23:49.892519+00:00",
+  "flagged_teams": 1,
+  "teams": {
+    "150": {
+      "bracket_name": "Duke",
+      "region": "East",
+      "seed": 1,
+      "articles": [
+        {
+          "headline": "Greenberg: Cam Boozer in 'role of Scottie Pippen' with Caleb Foster out",
+          "description": "Seth Greenberg joins \"Get Up\" to discuss how significant Caleb Foster's injury is for Duke.",
+          "published": "2026-03-13",
+          "url": "https://www.espn.com/video/clip?id=48194535"
+        },
+        {
+          "headline": "Duke's Caleb Foster out indefinitely with foot fracture",
+          "description": "Duke starting guard Caleb Foster has a fractured right foot and will be out indefinitely.",
+          "published": "2026-03-10",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48162553/duke-caleb-foster-indefinitely-foot-fracture"
+        }
+      ]
+    }
+  }
+}

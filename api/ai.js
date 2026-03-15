@@ -100,6 +100,26 @@ function getData() {
   const torvik = readJSON('torvik_stats.json');
   const form   = readJSON('recent_form.json');
 
+  // Transitive path analysis — precomputed common-opponent chains
+  let transPairs = {};
+  try { transPairs = readJSON('transitive_analysis.json')?.pairs ?? {}; } catch {}
+
+  // Injury overrides — manual file, updated when key players go down
+  let injuryMap = {};
+  try {
+    const raw = readJSON('../data/injury_overrides.json');
+    for (const [espnId, override] of Object.entries(raw.overrides ?? {})) {
+      const penalty = override.adj_em_penalty ?? 0;
+      if (penalty <= 0) continue;
+      injuryMap[espnId] = {
+        penalty,
+        players: override.players ?? [],
+        notes:   override.notes ?? '',
+        updated: override.updated ?? '',
+      };
+    }
+  } catch {}
+
   const nodeByName = {};
   graph.nodes.forEach(n => {
     nodeByName[n.label.toLowerCase()]     = n;
@@ -112,7 +132,7 @@ function getData() {
     (edgesByNode[e.to]   = edgesByNode[e.to]   || []).push(e);
   });
 
-  _cache = { graph, torvik, form, nodeByName, edgesByNode };
+  _cache = { graph, torvik, form, transPairs, injuryMap, nodeByName, edgesByNode };
   return _cache;
 }
 
@@ -160,7 +180,7 @@ function resolveTeam(name, nodeByName) {
 
 
 
-function fmtTeam(node, torvik, form) {
+function fmtTeam(node, torvik, form, injuryMap) {
   const tv   = torvik?.teams?.[node.id]?.torvik;
   const seed = node.seed != null ? `#${node.seed}` : 'bubble';
   const base = `${node.full_name} (${node.region} ${seed}, ${tv?.conf ?? '?'}) Season: ${tv?.record ?? node.wins_vs_field + '-' + node.losses_vs_field} | vs bracket field: ${node.wins_vs_field}W-${node.losses_vs_field}L`;
@@ -188,6 +208,14 @@ function fmtTeam(node, torvik, form) {
     `${g.date.slice(5)}: ${g.won ? 'W' : 'L'} ${g.score} vs ${g.opp.replace(/ (Blue Devils|Wildcats|Tar Heels|Bulldogs|Tigers|Volunteers|Gators|Trojans|Hurricanes|Ducks|Aztecs|Cowboys|Razorbacks|Sooners|Cornhuskers|Aggies|Longhorns|Jayhawks|Bruins|Bears|Beavers|Cougars|Gamecocks|Hoyas|Huskies|Crimson Tide|Commodores|Cardinal|Boilermakers|Scarlet Knights|Wolverines|Buckeyes|Badgers|Spartans|Hawkeyes|Illini|Gophers|Nittany Lions|Terrapins|Yellow Jackets|Blue Hens|Panthers|Mountaineers|Musketeers|Flyers|Rams|Owls|Eagles|Falcons|Blue Raiders|Miners|Pirates|Bearcats|Red Raiders|Lobos|Rebels|Wolf Pack|Shockers|Racers|Bison|Vikings|Pride|Penguins|Golden Eagles|Mean Green|Monarchs|Phoenix|Antelopes|Jackrabbits|Lumberjacks|Highlanders|Roadrunners|Flames|Chanticleers|Golden Flashes|Tigers|Lions|Saints|Seahawks|Nighthawks|Patriots|Colonials|Catamounts|Bulldogs|Penguins|Terriers|Ravens|Hornets|Aztecs|Aggies)$/, '').trim()}`
   ).join('; ') ?? '';
 
+  // Injury report — only shown when overrides exist for this team
+  const inj = injuryMap?.[node.id];
+  const injStr = inj
+    ? `⚠ INJURY REPORT (AdjEM penalty: -${inj.penalty}): ` +
+      inj.players.map(p => `${p.name} — ${p.status}`).join('; ') +
+      (inj.notes ? ` | ${inj.notes}` : '')
+    : '';
+
   return [
     base,
     `T-Rank #${tv.rank} | AdjEM: ${tv.adj_em > 0 ? '+' : ''}${tv.adj_em} | AdjOE: ${tv.adj_oe} | AdjDE: ${tv.adj_de}`,
@@ -195,20 +223,21 @@ function fmtTeam(node, torvik, form) {
     shooting ? `Shooting — ${shooting}` : '',
     formStr,
     recentGames ? `Recent: ${recentGames}` : '',
+    injStr,
   ].filter(Boolean).join('\n  ');
 }
 
 // ── Tool implementations ──────────────────────────────────────────────────────
 function toolGetTeamStats({ team_names }) {
-  const { torvik, form, nodeByName } = getData();
+  const { torvik, form, injuryMap, nodeByName } = getData();
   return team_names.map(name => {
     const node = resolveTeam(name, nodeByName);
-    return node ? fmtTeam(node, torvik, form) : `${name}: not found`;
+    return node ? fmtTeam(node, torvik, form, injuryMap) : `${name}: not found`;
   }).join('\n\n');
 }
 
 function toolGetMatchup({ team_a, team_b }) {
-  const { graph, torvik, form, nodeByName, edgesByNode } = getData();
+  const { graph, torvik, form, transPairs, injuryMap, nodeByName, edgesByNode } = getData();
   const nodeA = resolveTeam(team_a, nodeByName);
   const nodeB = resolveTeam(team_b, nodeByName);
   if (!nodeA) return `Team not found: ${team_a}`;
@@ -216,14 +245,15 @@ function toolGetMatchup({ team_a, team_b }) {
 
   const lines = [
     `=== ${nodeA.full_name} vs ${nodeB.full_name} ===`,
-    fmtTeam(nodeA, torvik, form),
+    fmtTeam(nodeA, torvik, form, injuryMap),
     '',
-    fmtTeam(nodeB, torvik, form),
+    fmtTeam(nodeB, torvik, form, injuryMap),
   ];
 
   const aEdges = edgesByNode[nodeA.id] || [];
   const bEdges = edgesByNode[nodeB.id] || [];
 
+  // Head-to-head
   const h2h = aEdges.filter(e =>
     (e.from === nodeA.id && e.to === nodeB.id) ||
     (e.from === nodeB.id && e.to === nodeA.id)
@@ -237,12 +267,14 @@ function toolGetMatchup({ team_a, team_b }) {
     });
   } else {
     lines.push('\nHave NOT played each other this season.');
+
+    // Common bracket opponents (from graph edges)
     const aOpps  = new Set(aEdges.map(e => e.from === nodeA.id ? e.to : e.from));
     const bOpps  = new Set(bEdges.map(e => e.from === nodeB.id ? e.to : e.from));
     const common = [...aOpps].filter(id => bOpps.has(id));
     if (common.length > 0) {
-      lines.push(`\nCommon opponents (${common.length}):`);
-      common.slice(0, 8).forEach(cid => {
+      lines.push(`\nCommon bracket opponents (${common.length}):`);
+      common.slice(0, 6).forEach(cid => {
         const cNode = graph.nodes.find(n => n.id === cid);
         const aGame = aEdges.find(e => (e.from === nodeA.id && e.to === cid) || (e.to === nodeA.id && e.from === cid));
         const bGame = bEdges.find(e => (e.from === nodeB.id && e.to === cid) || (e.to === nodeB.id && e.from === cid));
@@ -250,6 +282,26 @@ function toolGetMatchup({ team_a, team_b }) {
         const bRes  = bGame ? (bGame.from === nodeB.id ? `W ${bGame.label}` : `L ${bGame.label}`) : '?';
         lines.push(`  vs ${cNode?.label ?? cid}: ${nodeA.label} ${aRes} | ${nodeB.label} ${bRes}`);
       });
+    }
+
+    // Precomputed transitive path analysis
+    const tKey  = `${nodeA.id}_${nodeB.id}`;
+    const tKeyR = `${nodeB.id}_${nodeA.id}`;
+    const tPair = transPairs[tKey] || transPairs[tKeyR];
+    if (tPair && tPair.n > 0) {
+      const flipped = !!transPairs[tKeyR] && !transPairs[tKey];
+      const favors  = tPair.verdict === 'a' ? (flipped ? nodeB.label : nodeA.label)
+                    : tPair.verdict === 'b' ? (flipped ? nodeA.label : nodeB.label)
+                    : 'neither (unclear)';
+      lines.push(`\nTransitive evidence (${tPair.n} signal${tPair.n !== 1 ? 's' : ''}, confidence ${tPair.conf?.toFixed(0) ?? '?'}/100): favors ${favors}`);
+      (tPair.a || []).slice(0, 3).forEach(s => {
+        lines.push(`  + ${nodeA.label} beat ${s.common_name} (${s.a_score}), who beat ${nodeB.label} (${s.b_score})`);
+      });
+      (tPair.b || []).slice(0, 3).forEach(s => {
+        lines.push(`  + ${nodeB.label} beat ${s.common_name} (${s.b_score}), who beat ${nodeA.label} (${s.a_score})`);
+      });
+    } else {
+      lines.push('\nNo transitive evidence found in schedule data.');
     }
   }
   return lines.join('\n');
@@ -341,7 +393,7 @@ function trimHistory(messages, systemTokens) {
 }
 
 // ── System prompt — server-side, query-scoped ─────────────────────────────────
-function buildSystemPrompt(userMsg, graph, torvik, form, prefetchedContext) {
+function buildSystemPrompt(userMsg, graph, torvik, form, injuryMap, prefetchedContext) {
   const msgLower  = (userMsg || '').toLowerCase();
   const mentioned = graph.nodes.filter(n =>
     msgLower.includes(n.label.toLowerCase()) ||
@@ -349,7 +401,7 @@ function buildSystemPrompt(userMsg, graph, torvik, form, prefetchedContext) {
   );
   const scope = mentioned.slice(0, 8);
 
-  const teamLines = scope.map(n => fmtTeam(n, torvik, form)).join('\n\n');
+  const teamLines = scope.map(n => fmtTeam(n, torvik, form, injuryMap)).join('\n\n');
   const scopedIds = new Set(scope.map(n => n.id));
   const edges = scope.length > 0
     ? graph.edges.filter(e => scopedIds.has(e.from) || scopedIds.has(e.to)).slice(0, 20)
@@ -367,7 +419,9 @@ function buildSystemPrompt(userMsg, graph, torvik, form, prefetchedContext) {
       ? teamLines + (gameLines ? '\n\nBRACKET GAMES:\n' + gameLines : '')
       : '');
 
-  let prompt = 'You are AI Scout, an expert NCAA basketball analyst for the 2026 March Madness bracket.\n\n';
+  const _metaSeason = graph?.meta?.season ?? '';
+  const _seasonYear = _metaSeason ? _metaSeason.split('-')[1] : String(new Date().getFullYear());
+  let prompt = `You are AI Scout, an expert NCAA basketball analyst for the ${_seasonYear} March Madness bracket.\n\n`;
   prompt += 'TOOLS - call when you need data not already in DATA below:\n';
   prompt += '- get_team_stats(team_names: string[]) - full stats for one or more teams\n';
   prompt += '- get_matchup(team_a, team_b) - head-to-head results + common opponents\n';
@@ -584,16 +638,16 @@ export default async function handler(req, res) {
   };
 
   try {
-    const { graph, torvik, form } = getData();
     const userMsg = body.userMsg || '';
 
+    const { graph, torvik, form, injuryMap } = getData();
     // ── Step 1: classify intent and pre-fetch deterministically ──────────────
     const intent  = classifyIntent(userMsg, graph);
     const prefetch = preFetch(intent, graph, torvik, form);
     const thinking = [...prefetch.thinking];
 
     // ── Step 2: build system prompt, inject pre-fetched data as context ──────
-    const system  = buildSystemPrompt(userMsg, graph, torvik, form, prefetch.context);
+    const system  = buildSystemPrompt(userMsg, graph, torvik, form, injuryMap, prefetch.context);
     const sysToks = estTokens(system);
     const history = trimHistory(body.messages, sysToks);
 

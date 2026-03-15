@@ -42,6 +42,22 @@ function getData() {
   const torvik = JSON.parse(readFileSync(join(process.cwd(), 'public', 'data', 'torvik_stats.json'), 'utf8'));
   const form   = JSON.parse(readFileSync(join(process.cwd(), 'public', 'data', 'recent_form.json'),  'utf8'));
 
+  // Injury overrides — read-only, never written by this file
+  let injuryMap = {};
+  try {
+    const raw = JSON.parse(readFileSync(join(process.cwd(), 'data', 'injury_overrides.json'), 'utf8'));
+    for (const [espnId, override] of Object.entries(raw.overrides ?? {})) {
+      const penalty = override.adj_em_penalty ?? 0;
+      if (penalty <= 0) continue;
+      injuryMap[espnId] = {
+        penalty,
+        players: override.players ?? [],
+        notes:   override.notes ?? '',
+        updated: override.updated ?? '',
+      };
+    }
+  } catch {}
+
   const nodeByName = {};
   graph.nodes.forEach(n => {
     nodeByName[n.label.toLowerCase()]     = n;
@@ -54,7 +70,14 @@ function getData() {
     (edgesByNode[e.to]   = edgesByNode[e.to]   || []).push(e);
   });
 
-  _cache = { graph, torvik, form, nodeByName, edgesByNode };
+  // Transitive path analysis — precomputed common-opponent chains
+  let transPairs = {};
+  try {
+    const tp = JSON.parse(readFileSync(join(process.cwd(), 'data', 'transitive_analysis.json'), 'utf8'));
+    transPairs = tp.pairs ?? {};
+  } catch {}
+
+  _cache = { graph, torvik, form, injuryMap, transPairs, nodeByName, edgesByNode };
   return _cache;
 }
 
@@ -96,7 +119,7 @@ function resolveTeam(name, nodeByName) {
 }
 
 // ── Data formatters ───────────────────────────────────────────────────────────
-function fmtTeamFull(node, torvik, form) {
+function fmtTeamFull(node, torvik, form, injuryMap) {
   const tv = torvik?.teams?.[node.id]?.torvik;
   const tf = form?.teams?.[node.id];
   if (!tv) return `${node.full_name}: no Torvik data`;
@@ -106,6 +129,13 @@ function fmtTeamFull(node, torvik, form) {
     `${g.date.slice(5)}: ${g.won ? 'W' : 'L'} ${g.score} vs ${g.opp}`
   ).join(', ') ?? 'no recent data';
 
+  const inj = injuryMap?.[node.id];
+  const injStr = inj
+    ? `⚠ INJURY REPORT (model AdjEM penalty applied: -${inj.penalty}): ` +
+      inj.players.map(p => `${p.name} — ${p.status}`).join('; ') +
+      (inj.notes ? ` | ${inj.notes}` : '')
+    : '';
+
   return [
     `${node.full_name} (${node.region !== 'bubble' ? `${node.region} #${node.seed}` : 'bubble — not in bracket'}, ${tv.conf})`,
     `Season: ${tv.record} | Bracket field: ${node.wins_vs_field}W-${node.losses_vs_field}L`,
@@ -114,7 +144,8 @@ function fmtTeamFull(node, torvik, form) {
     `Shooting: 2P% ${tv.two_p} | 3P% ${tv.three_p} | FT% ${tv.ft_pct} | eFG% ${tv.efg}`,
     `Form: ${tf?.last10 ?? '?'} last 10, ${tf?.streak ?? '?'} streak`,
     `Last 5: ${recent}`,
-  ].join('\n');
+    injStr,
+  ].filter(Boolean).join('\n');
 }
 
 // ── Groq fetch helper ─────────────────────────────────────────────────────────
@@ -166,7 +197,7 @@ const GraphState = Annotation.Root({
 // Validates teams, enriches state with data. Returns plain object — NOT Send.
 // Send/fan-out happens in routerEdge (the conditional edge function).
 function routerNode(state) {
-  const { graph, torvik, form, nodeByName, edgesByNode } = getData();
+  const { graph, torvik, form, injuryMap, transPairs, nodeByName, edgesByNode } = getData();
   const nodeA = resolveTeam(state.team_a, nodeByName);
   const nodeB = resolveTeam(state.team_b, nodeByName);
 
@@ -174,8 +205,8 @@ function routerNode(state) {
     return { error: `Team not found: ${!nodeA ? state.team_a : state.team_b}` };
   }
 
-  const teamAData = fmtTeamFull(nodeA, torvik, form);
-  const teamBData = fmtTeamFull(nodeB, torvik, form);
+  const teamAData = fmtTeamFull(nodeA, torvik, form, injuryMap);
+  const teamBData = fmtTeamFull(nodeB, torvik, form, injuryMap);
 
   const aEdges = edgesByNode[nodeA.id] || [];
   const bEdges = edgesByNode[nodeB.id] || [];
@@ -196,13 +227,35 @@ function routerNode(state) {
     return `  vs ${cNode?.label ?? cid}: ${nodeA.label} ${aRes} | ${nodeB.label} ${bRes}`;
   });
 
+  // Transitive path evidence from precomputed analysis
+  const tKey  = `${nodeA.id}_${nodeB.id}`;
+  const tKeyR = `${nodeB.id}_${nodeA.id}`;
+  const tPair = transPairs[tKey] || transPairs[tKeyR];
+  let transLines = '';
+  if (tPair && tPair.n > 0) {
+    const flipped = !!transPairs[tKeyR] && !transPairs[tKey];
+    const favors  = tPair.verdict === 'a' ? (flipped ? nodeB.label : nodeA.label)
+                  : tPair.verdict === 'b' ? (flipped ? nodeA.label : nodeB.label)
+                  : 'neither';
+    const chains  = [
+      ...(tPair.a || []).slice(0, 2).map(s =>
+        `  ${nodeA.label} beat ${s.common_name} (${s.a_score}), who beat ${nodeB.label} (${s.b_score})`),
+      ...(tPair.b || []).slice(0, 2).map(s =>
+        `  ${nodeB.label} beat ${s.common_name} (${s.b_score}), who beat ${nodeA.label} (${s.a_score})`),
+    ];
+    transLines = `Transitive evidence (${tPair.n} signals, conf ${tPair.conf?.toFixed(0) ?? '?'}/100, favors ${favors}):\n${chains.join('\n')}`;
+  } else {
+    transLines = 'Transitive evidence: none found in schedule data.';
+  }
+
   const matchupData = [
     h2h.length
       ? `H2H: ${h2h.map(e => `${e.from === nodeA.id ? nodeA.label : nodeB.label} won ${e.label} by ${e.margin} on ${e.date}`).join(', ')}`
       : 'H2H: No head-to-head games this season.',
     common.length
-      ? `Common opponents (${common.length}):\n${commonLines.join('\n')}`
-      : 'No common opponents.',
+      ? `Common bracket opponents (${common.length}):\n${commonLines.join('\n')}`
+      : 'No common bracket opponents.',
+    transLines,
   ].join('\n');
 
   return { team_a_data: teamAData, team_b_data: teamBData, matchup_data: matchupData };

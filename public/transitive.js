@@ -231,22 +231,22 @@ async function runTransitiveAnalysisForIds(aId, bId) {
   const net   = flipped ? -pair.net : pair.net;
   const verdict = pair.verdict === 'unclear' ? 'unclear' : (flipped ? (pair.verdict === 'a' ? 'b' : 'a') : pair.verdict);
 
-  renderTransitiveResult(teamA, teamB, sigA, sigB, pair.both_beat, pair.both_lost, net, pair.conf, verdict, pair.n, out);
+  renderTransitiveResult(teamA, teamB, sigA, sigB, pair.both_beat, pair.both_lost, net, pair.conf, verdict, pair.n, out, flipped);
 }
 
 // ── Render ────────────────────────────────────────────────────────────────────
-function renderTransitiveResult(teamA, teamB, sigA, sigB, bothBeat, bothLost, net, conf, verdict, nSignals, out) {
+function renderTransitiveResult(teamA, teamB, sigA, sigB, bothBeat, bothLost, net, conf, verdict, nSignals, out, flipped = false) {
   const rcA = REGION_COLORS[teamA.region] ?? '#94a3b8';
   const rcB = REGION_COLORS[teamB.region] ?? '#94a3b8';
 
   const verdictHTML = buildVerdictBar(teamA, teamB, net, conf, verdict, nSignals);
 
   const sigAHTML = sigA.length > 0
-    ? sigA.map(s => signalRow(s, teamA, teamB, 'a')).join('')
+    ? sigA.map(s => signalRow(s, teamA, teamB, 'a', flipped)).join('')
     : `<div class="trans-none">No signals found favoring ${teamA.label}</div>`;
 
   const sigBHTML = sigB.length > 0
-    ? sigB.map(s => signalRow(s, teamA, teamB, 'b')).join('')
+    ? sigB.map(s => signalRow(s, teamA, teamB, 'b', flipped)).join('')
     : `<div class="trans-none">No signals found favoring ${teamB.label}</div>`;
 
   // All common opponents combined for the margin chart
@@ -270,8 +270,8 @@ function renderTransitiveResult(teamA, teamB, sigA, sigB, bothBeat, bothLost, ne
   const noDataHTML = nSignals === 0
     ? `<div class="trans-no-data">
         <div class="trans-no-data-icon">∅</div>
-        <div>No common opponents found in the 2025-26 regular season between bracket teams.
-        These two teams played in completely separate scheduling universes this year — there is no indirect evidence to compare.</div>
+        <div>No common opponents found in the 2025-26 season data for this pair.
+        These two teams likely played in separate scheduling universes with no shared opponents this year.</div>
        </div>` : '';
 
   out.innerHTML = `
@@ -301,11 +301,11 @@ function renderTransitiveResult(teamA, teamB, sigA, sigB, bothBeat, bothLost, ne
 
     ${bothBeat.length > 0 ? `
     <div class="trans-section-label">BOTH BEAT</div>
-    ${bothBeat.map(s => commonRow(s, teamA, teamB)).join('')}` : ''}
+    ${bothBeat.map(s => commonRow(s, teamA, teamB, flipped)).join('')}` : ''}
 
     ${bothLost.length > 0 ? `
     <div class="trans-section-label">BOTH LOST TO</div>
-    ${bothLost.map(s => commonRow(s, teamA, teamB)).join('')}` : ''}
+    ${bothLost.map(s => commonRow(s, teamA, teamB, flipped)).join('')}` : ''}
 
     <div class="trans-footnote">
       ${nSignals} signal${nSignals !== 1 ? 's' : ''} found · precomputed from 2025-26 regular season results
@@ -346,15 +346,22 @@ function buildVerdictBar(teamA, teamB, net, conf, verdict, nSignals) {
     </div>`;
 }
 
-function signalRow(s, teamA, teamB, side) {
+function signalRow(s, teamA, teamB, side, flipped = false) {
   const isChain   = s.chain_a || s.chain_b;
   const chainIcon = isChain ? '<span class="chain-badge">CHAIN</span>' : '';
   const desc      = isChain
-    ? (side === 'a' ? s.chain_desc_a : s.chain_desc_b)
+    ? (flipped
+        ? (side === 'a' ? s.chain_desc_b : s.chain_desc_a)
+        : (side === 'a' ? s.chain_desc_a : s.chain_desc_b))
     : null;
 
-  const aScoreClass = s.a_beat ? 'sig-win' : 'sig-loss';
-  const bScoreClass = s.b_beat ? 'sig-win' : 'sig-loss';
+  // When the pair is flipped, a/b in the signal data are swapped relative to teamA/teamB
+  const teamABeat  = flipped ? s.b_beat  : s.a_beat;
+  const teamBBeat  = flipped ? s.a_beat  : s.b_beat;
+  const teamAScore = flipped ? s.b_score : s.a_score;
+  const teamBScore = flipped ? s.a_score : s.b_score;
+  const aScoreClass = teamABeat ? 'sig-win' : 'sig-loss';
+  const bScoreClass = teamBBeat ? 'sig-win' : 'sig-loss';
 
   const edgeVal = side === 'a' ? s.edge : -s.edge;
 
@@ -367,20 +374,24 @@ function signalRow(s, teamA, teamB, side) {
       </div>
       ${desc ? `<div class="sig-chain-desc">${side === 'a' ? teamA.label : teamB.label} ${desc}</div>` : `
       <div class="sig-scores">
-        <span class="${aScoreClass}">${teamA.label}: ${s.a_beat ? 'W' : 'L'} ${s.a_score}</span>
-        <span class="${bScoreClass}">${teamB.label}: ${s.b_beat ? 'W' : 'L'} ${s.b_score}</span>
+        <span class="${aScoreClass}">${teamA.label}: ${teamABeat ? 'W' : 'L'} ${teamAScore}</span>
+        <span class="${bScoreClass}">${teamB.label}: ${teamBBeat ? 'W' : 'L'} ${teamBScore}</span>
       </div>`}
     </div>`;
 }
 
-function commonRow(s, teamA, teamB) {
-  const edge  = s.edge;
+function commonRow(s, teamA, teamB, flipped = false) {
+  const teamABeat  = flipped ? s.b_beat  : s.a_beat;
+  const teamBBeat  = flipped ? s.a_beat  : s.b_beat;
+  const teamAScore = flipped ? s.b_score : s.a_score;
+  const teamBScore = flipped ? s.a_score : s.b_score;
+  const edge = flipped ? -s.edge : s.edge;
   const edgeLabel = Math.abs(edge) < 3 ? 'Even' : (edge > 0 ? `${teamA.label} +${edge}` : `${teamB.label} +${-edge}`);
   return `
     <div class="trans-common-row">
       <span class="tc-name">${s.common_name}</span>
-      <span class="${s.a_beat ? 'sig-win' : 'sig-loss'}">${s.a_beat ? 'W' : 'L'} ${s.a_score}</span>
-      <span class="${s.b_beat ? 'sig-win' : 'sig-loss'}">${s.b_beat ? 'W' : 'L'} ${s.b_score}</span>
+      <span class="${teamABeat ? 'sig-win' : 'sig-loss'}">${teamABeat ? 'W' : 'L'} ${teamAScore}</span>
+      <span class="${teamBBeat ? 'sig-win' : 'sig-loss'}">${teamBBeat ? 'W' : 'L'} ${teamBScore}</span>
       <span class="tc-edge ${Math.abs(edge) < 3 ? '' : (edge > 0 ? 'edge-pos' : 'edge-neg')}">${edgeLabel}</span>
     </div>`;
 }

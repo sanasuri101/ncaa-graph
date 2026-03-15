@@ -15,6 +15,16 @@
 
 let _chatInFlight = false;
 let chatHistory   = [];
+let _activeMatchup = null; // tracks { team_a, team_b } after a multi-agent analysis
+
+// Returns true only when message explicitly requests a NEW matchup analysis
+// — contains at least 2 team names AND a matchup trigger word
+function isFreshMatchupRequest(msg, matchup) {
+  if (!matchup) return false;
+  const m = msg.toLowerCase();
+  const hasTrigger = /\bvs\.?\b|\bversus\b|\bcompare\b|\bagainst\b|\bmatchup\b|\banalyze\b|\banalysis\b|\bwho wins?\b|\bwho would win\b/i.test(m);
+  return hasTrigger;
+}
 
 // ── Token budget ──────────────────────────────────────────────────────────────
 // window.getTorvik() is defined in app.js (loads first) — do not redefine here.
@@ -252,12 +262,18 @@ async function sendChat() {
   }
 
   try {
-    // Detect matchup queries — route to multi-agent pipeline
+    // Detect matchup queries — route to multi-agent pipeline only for fresh requests
     const matchup = detectMatchupIntent(msg);
+    const freshRequest = isFreshMatchupRequest(msg, matchup);
 
-    if (matchup) {
+    // If there's an active matchup and this looks like a follow-up (not a fresh vs request)
+    // route through normal chat so the LLM can incorporate the user's context
+    const useMultiAgent = matchup && freshRequest;
+
+    if (useMultiAgent) {
       // Show agent thinking steps while waiting
       thinkEl.innerHTML = `<div class="chat-bubble-ai-body">${loadingHTML('Running 3 specialist agents in parallel...')}</div>`;
+      if (window.posthog) posthog.capture('matchup_analyzed', { team_a: matchup.team_a, team_b: matchup.team_b });
       const data = await callAnalyze(matchup.team_a, matchup.team_b, _chatAbortCtrl.signal);
 
       const agentSteps = (data.agent_results || []).map(r =>
@@ -278,11 +294,16 @@ async function sendChat() {
 
       const confHtml  = data.confidence?.win_pct !== undefined ? renderConfidence(data.confidence) : '';
       const reasoning = data.confidence?.reasoning ?? 'Analysis complete.';
-      chatHistory.push({ role: 'assistant', content: reasoning });
+      // Store active matchup so follow-up messages route to chat, not re-analysis
+      _activeMatchup = { team_a: matchup.team_a, team_b: matchup.team_b };
+      // Push full context into history so follow-up questions have it
+      const analysisContext = `Multi-agent analysis of ${matchup.team_a} vs ${matchup.team_b}: ${reasoning}`;
+      chatHistory.push({ role: 'assistant', content: analysisContext });
       thinkEl.innerHTML = `${thinkHtml}<div class="chat-bubble-ai-label">Scout · Multi-Agent</div>${confHtml}<div class="chat-bubble-ai-body">${renderMarkdown(reasoning)}</div>`;
 
     } else {
       // Standard single-agent path
+      if (window.posthog) posthog.capture('chat_query', { has_active_matchup: !!_activeMatchup });
       const { text, thinking } = await callAI(historyForApi, msg, _chatAbortCtrl.signal);
       chatHistory.push({ role: 'assistant', content: text });
       const thinkHtml = thinking.length ? `
@@ -422,6 +443,7 @@ function saveAnalysis(btn) {
     teamA, teamB, pct, range, favor, dispPct, consensus, reasoning, breakdown,
     timestamp: new Date().toLocaleString(),
   });
+  if (window.posthog) posthog.capture('analysis_saved', { team_a: teamA, team_b: teamB, win_pct: pct, consensus });
 
   btn.textContent = '✓ Saved';
   btn.disabled = true;
@@ -480,6 +502,7 @@ function clearSaved() {
 
 function exportAllCSV() {
   if (savedAnalyses.length === 0) return;
+  if (window.posthog) posthog.capture('csv_exported', { count: savedAnalyses.length });
 
   const headers = [
     'Team A', 'Team B', 'Win % (A)', 'Win % (B)',
