@@ -22,13 +22,14 @@
     autocapture: false,           // we'll track specific events manually
   });
 </script>
-<script src="https://cdn.jsdelivr.net/npm/eruda"></script>
 <script>
-eruda.init();
+// Catch maximum call stack and show it visibly on screen
 window.addEventListener('error', function(e) {
-  console.error('GLOBAL ERROR:', e.message);
-  if (e.error && e.error.stack) {
-    console.error('STACK:\n' + e.error.stack.split('\n').slice(0,10).join('\n'));
+  if (e.message && e.message.toLowerCase().includes('call stack')) {
+    var div = document.createElement('div');
+    div.style.cssText = 'position:fixed;top:0;left:0;right:0;background:red;color:white;padding:10px;font-size:12px;z-index:99999;word-break:break-all;white-space:pre-wrap;max-height:50vh;overflow:auto';
+    div.textContent = 'STACK ERROR\n' + e.message + '\n' + e.filename + ':' + e.lineno + '\n' + (e.error && e.error.stack ? e.error.stack.split('\n').slice(0,15).join('\n') : 'no stack');
+    document.body.appendChild(div);
   }
 });
 </script>
