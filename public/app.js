@@ -1100,22 +1100,27 @@ function initMobileUI() {
   let dragMoved     = false; // distinguish tap vs drag
 
   function onDragStart(e) {
+    // Don't intercept taps on interactive elements (tab buttons etc)
+    if (e.target.closest('button, a, input, select, textarea')) return;
     dragStartY    = e.touches[0].clientY;
     dragStartOpen = aiPanel.classList.contains('open');
     isDragging    = true;
     dragMoved     = false;
     aiPanel.style.transition = 'none';
-    e.preventDefault();
+    // Don't preventDefault here — let clicks fire on buttons inside the header
   }
   function onDragMove(e) {
     if (!isDragging) return;
     const dy = e.touches[0].clientY - dragStartY;
-    if (Math.abs(dy) > 6) dragMoved = true;
-    const closedOffset  = SHEET_HEIGHT - 56;
-    const currentOffset = dragStartOpen ? 0 : closedOffset;
-    const newOffset = Math.max(0, Math.min(closedOffset, currentOffset + dy));
-    aiPanel.style.transform = `translateY(${newOffset}px)`;
-    e.preventDefault();
+    if (Math.abs(dy) > 8) {
+      dragMoved = true;
+      // Only preventDefault once we know it's a drag, not a tap
+      e.preventDefault();
+      const closedOffset  = SHEET_HEIGHT - 56;
+      const currentOffset = dragStartOpen ? 0 : closedOffset;
+      const newOffset = Math.max(0, Math.min(closedOffset, currentOffset + dy));
+      aiPanel.style.transform = `translateY(${newOffset}px)`;
+    }
   }
   function onDragEnd(e) {
     if (!isDragging) return;
@@ -1124,28 +1129,30 @@ function initMobileUI() {
     aiPanel.style.transform  = '';
     const dy = e.changedTouches[0].clientY - dragStartY;
     if (!dragMoved) {
-      // It was a tap — toggle
+      // Pure tap on non-button area — toggle sheet
       toggleSheet();
     } else if (dragStartOpen) {
       if (dy > 80) aiPanel.classList.remove('open');
     } else {
       if (dy < -80) aiPanel.classList.add('open');
     }
-    e.preventDefault();
   }
 
-  // Attach to drag handle pill
+  // Drag handle pill — safe to preventDefault on touchstart (no buttons inside)
   if (dragHandle) {
-    dragHandle.addEventListener('touchstart', onDragStart, { passive: false });
+    dragHandle.addEventListener('touchstart', e => {
+      onDragStart(e);
+      e.preventDefault(); // safe — drag handle has no interactive children
+    }, { passive: false });
     dragHandle.addEventListener('touchmove',  onDragMove,  { passive: false });
     dragHandle.addEventListener('touchend',   onDragEnd,   { passive: false });
   }
-  // Also attach to the scout header row so the full peek area is draggable
+  // Scout header — drag but DON'T preventDefault on touchstart so button clicks fire
   const scoutHeader = aiPanel.querySelector('.ai-scout-header');
   if (scoutHeader) {
-    scoutHeader.addEventListener('touchstart', onDragStart, { passive: false });
+    scoutHeader.addEventListener('touchstart', onDragStart, { passive: true });
     scoutHeader.addEventListener('touchmove',  onDragMove,  { passive: false });
-    scoutHeader.addEventListener('touchend',   onDragEnd,   { passive: false });
+    scoutHeader.addEventListener('touchend',   onDragEnd,   { passive: true });
   }
 
   // ── Chat and stats panels — allow scrolling without triggering drag ───────
@@ -1162,10 +1169,11 @@ function initMobileUI() {
       const mode = btn.dataset.mode;
       const mobPanel = document.getElementById(`mob-panel-${mode}`);
       if (!mobPanel) return;
-      // Sync fresh content from sidebar tab every time
+      // For bracket, initBracket() populates tab-bracket dynamically — run it first
+      if (mode === 'bracket' && typeof initBracket === 'function') initBracket();
+      // Sync fresh content from sidebar tab
       const sidebarContent = document.getElementById(`tab-${mode}`);
       if (sidebarContent) mobPanel.innerHTML = sidebarContent.innerHTML;
-      if (mode === 'bracket' && typeof initBracket === 'function') initBracket();
       // Deactivate ALL panels including native stats/chat panels
       document.querySelectorAll('.ai-mode-content').forEach(p => p.classList.remove('active'));
       mobPanel.classList.add('active');

@@ -1666,10 +1666,23 @@ section { margin-bottom: 20px; }
 #mob-panel-rankings,
 #mob-panel-detail {
   overflow-y: auto !important;
+  overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
   padding: 10px 12px;
+  /* flex:1 and display:flex come from .ai-mode-content.active */
+  /* Override flex-direction so content stacks as blocks */
   flex-direction: column;
+  align-items: stretch;
+  /* Ensure content isn't clipped */
+  min-height: 0;
+}
+/* Inner content from sidebar clones — display as block, not flex child */
+#mob-panel-overview > *,
+#mob-panel-bracket > *,
+#mob-panel-rankings > *,
+#mob-panel-detail > * {
+  flex-shrink: 0;
 }
 
 /* Stats panel cells — tighter Pickle card style */
