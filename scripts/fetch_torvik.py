@@ -54,6 +54,7 @@ TORVIK_NAME_MAP = {
     "St. John's":           "St John's",
     "Tennessee St.":        "Tennessee St",
     "Miami FL":             "Miami",
+    "San Diego St.":        "San Diego St",
 }
 
 # Torvik JSON field positions
@@ -173,7 +174,20 @@ def load_bracket() -> list:
         print(f"ERROR: {path} not found — run fetch_data.py first", file=sys.stderr)
         sys.exit(1)
     with open(path) as f:
-        return json.load(f)
+        bracket = json.load(f)
+
+    # Also include bubble teams from bracket_config.json so they get Torvik stats
+    cfg_path = DATA_DIR / "bracket_config.json"
+    if cfg_path.exists():
+        with open(cfg_path) as f:
+            cfg = json.load(f)
+        bubble = cfg.get("bubble", [])
+        bracket_ids = {str(t["espn_id"]) for t in bracket}
+        for t in bubble:
+            if str(t["espn_id"]) not in bracket_ids:
+                bracket.append(t)
+
+    return bracket
 
 
 def merge(bracket: list, torvik: dict, splits: dict) -> dict:
