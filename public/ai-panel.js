@@ -345,38 +345,52 @@ function insertHint(text) {
 function detectMatchupIntent(msg) {
   if (!window.ALL_NODES) return null;
 
-  // Normalize for matching — intentionally does NOT convert St->Saint here
-  // because team labels use abbreviated forms (Wright St, Michigan St) and
-  // converting "st " in the message creates a mismatch vs the stored label.
-  // St John's alias is handled separately via TEAM_ALIASES in the API layer.
-  function normName(s) {
+  // Two normalization functions:
+  // normLabel — for stored team labels (no st->saint, preserves abbreviations)
+  // normInput — for user input (expands common abbreviations so "st.louis" matches "saint louis")
+  function normLabel(s) {
     return s.toLowerCase().trim()
       .replace(/[.'`]/g, '')
       .replace(/\s+/g, ' ')
       .trim();
   }
+  function normInput(s) {
+    return s.toLowerCase().trim()
+      // Handle "st.louis" BEFORE stripping dots — dot is the separator here
+      .replace(/(?<!\w)st\.([a-z])/g, 'saint $1')
+      // Now strip remaining punctuation
+      .replace(/[.'`]/g, '')
+      // Standalone "st" word -> "saint" (handles "st johns", "wright st")
+      .replace(/\bst\b/g, 'saint')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
 
   if (!msg.trim()) return null;
-  const mNorm = normName(msg);
+  const mNorm = normInput(msg);
 
-  // Build candidates: {node, matchStr, pos, len}
+  // Build candidates: for each team, generate all alias forms the user might type
   const candidates = window.ALL_NODES
     .filter(n => n.region !== 'bubble' && n.seed !== null)
-    .map(n => {
-      const lbl  = normName(n.label);
-      const full = normName(n.full_name);
-      // Prefer the longer of label/full_name that actually appears in the message
-      const matchStr = (full.length >= lbl.length && mNorm.includes(full)) ? full
-                     : mNorm.includes(lbl) ? lbl : null;
-      if (!matchStr) return null;
-      return { n, matchStr, pos: mNorm.indexOf(matchStr), len: matchStr.length };
-    })
-    .filter(Boolean);
+    .flatMap(n => {
+      const lbl  = normLabel(n.label);
+      const full = normLabel(n.full_name);
+      // "Wright St" -> "Wright State" for users who type the full word
+      const stateVariant = lbl.endsWith(' st') ? lbl.slice(0, -3) + ' state' : null;
+      // "St John's" -> "saint johns" for users who type "st johns" or "st.johns"
+      const saintVariant = lbl.startsWith('st ') ? 'saint ' + lbl.slice(3) : null;
+      // "Wright St" -> "wright saint" to match normInput("Wright St") -> "wright saint"
+      const saintEndVariant = lbl.endsWith(' st') ? lbl.slice(0, -2) + 'saint' : null;
+      const aliases = [full, lbl, stateVariant, saintVariant, saintEndVariant].filter(Boolean);
+      // Find the best matching alias in the message
+      const matchStr = aliases
+        .sort((a, b) => b.length - a.length) // try longest first
+        .find(a => mNorm.includes(a)) ?? null;
+      if (!matchStr) return [];
+      return [{ n, matchStr, pos: mNorm.indexOf(matchStr), len: matchStr.length }];
+    });
 
-  // Greedy longest-first assignment: sort by match length desc, then assign each
-  // team its earliest position that doesn't overlap an already-claimed span.
-  // This handles "Iowa State vs Iowa" (Iowa State claims pos 0-9, Iowa gets pos 14),
-  // "Texas Tech vs Texas" (Texas Tech at 0, Texas at 14), etc.
+  // Greedy longest-first assignment: assign each team its earliest non-overlapping position
   const sortedByLen = [...candidates].sort((a, b) => b.len - a.len || a.pos - b.pos);
   const usedRanges = [];
   const assigned = [];
@@ -396,7 +410,7 @@ function detectMatchupIntent(msg) {
     }
   }
 
-  // Sort by position in message, then prefer longer match on ties
+  // Sort by position in message, prefer longer on ties
   assigned.sort((a, b) => a.pos - b.pos || b.len - a.len);
 
   const found = assigned.map(x => x.n);
