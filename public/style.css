@@ -705,8 +705,6 @@ section { margin-bottom: 20px; }
   padding: 14px;
   scrollbar-width: thin;
   scrollbar-color: var(--border) transparent;
-  overscroll-behavior: contain;
-  -webkit-overflow-scrolling: touch;
 }
 .ai-placeholder {
   font-size: 1.2rem;
@@ -1733,8 +1731,6 @@ section { margin-bottom: 20px; }
   display: flex;
   flex-direction: column;
   gap: 14px;
-  overscroll-behavior: contain;
-  -webkit-overflow-scrolling: touch;
 }
 
 .chat-bubble-user {
@@ -3344,8 +3340,7 @@ section { margin-bottom: 20px; }
 @media (max-width: 768px) {
 
   /* ── Base ───────────────────────────────────────────────────────────── */
-  html { overflow: hidden; height: 100dvh; }
-  body { overflow: hidden; height: 100dvh; display: flex; flex-direction: column; }
+  html, body { overflow: hidden; height: 100%; height: 100dvh; }
 
   /* ── Header — compact single row ────────────────────────────────────── */
   header { height: 48px; min-height: 48px; padding: 0 12px; flex-wrap: nowrap; gap: 8px; }
@@ -3366,14 +3361,8 @@ section { margin-bottom: 20px; }
   .toolbar-sep   { height: 14px; }
   .view-btn, .icon-btn { min-height: 30px; font-size: .76rem; }
 
-  /* ── Hide toolbar2 (Efficiency) + custom pills bar on mobile ────────────── */
-  /* Both add height outside .main and break the bottom sheet positioning      */
-  #toolbar2 { display: none; }
-  .custom-pills-bar { display: none !important; }
-
   /* ── Main — fill remaining viewport ─────────────────────────────────── */
-  /* Use flex: 1 instead of fixed calc — auto-fills whatever chrome is above */
-  .main { flex-direction: column; flex: 1; min-height: 0; overflow: hidden; position: relative; }
+  .main { flex-direction: column; height: calc(100dvh - 88px); overflow: hidden; position: relative; }
 
   /* ── Sidebar — full-screen overlay, slides in from left ─────────────── */
   .sidebar {

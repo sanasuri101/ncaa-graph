@@ -1,26 +1,58 @@
 /**
  * ai-panel.js — AI Scout panel
  *
- * Three modes:
- *   Stats  — fetches ESPN team statistics (no AI key required)
- *   News   — paste any article URL or use preset searches; AI reads + summarizes
- *   Chat   — free-form conversation with context about the graph/bracket
- *
- * News + Chat use the Anthropic API via claude-sonnet-4-20250514 with web_search.
- * The API key is read from localStorage key "ANTHROPIC_KEY". On first use, the
- * panel prompts the user to enter it. The key is stored only in their browser.
+ * Production fixes vs previous version:
+ *   - systemPrompt() removed — server builds it query-scoped (api/ai.js)
+ *   - Browser sends only {messages, userMsg} — no team data, no model name
+ *   - torvik_stats.json fetched once globally via window.getTorvik() shared promise
+ *   - AbortController on every AI fetch — 30s timeout
+ *   - chatHistory trimmed by token estimate, not message count
+ *   - Double-send guard via _chatInFlight flag
+ *   - ESPN stats fetch has 10s timeout
  */
 
 'use strict';
 
-// ── Panel open/close ─────────────────────────────────────────────────────────
+let _chatInFlight = false;
+let chatHistory   = [];
+let _activeMatchup = null; // tracks { team_a, team_b } after a multi-agent analysis
+
+// Returns true only when message explicitly requests a NEW matchup analysis
+// — contains at least 2 team names AND a matchup trigger word
+function isFreshMatchupRequest(msg, matchup) {
+  if (!matchup) return false;
+  const m = msg.toLowerCase();
+  const hasTrigger = /\bvs\.?\b|\bversus\b|\bcompare\b|\bagainst\b|\bmatchup\b|\banalyze\b|\banalysis\b|\bwho wins?\b|\bwho would win\b/i.test(m);
+  return hasTrigger;
+}
+
+// ── Token budget ──────────────────────────────────────────────────────────────
+// window.getTorvik() is defined in app.js (loads first) — do not redefine here.
+const CHARS_PER_TOK   = 4;
+const MAX_HISTORY_TOK = 6000;
+
+function estTokens(text) {
+  return Math.ceil((typeof text === 'string' ? text : JSON.stringify(text ?? '')).length / CHARS_PER_TOK);
+}
+
+function trimHistory(messages) {
+  let used = 0;
+  const out = [];
+  for (let i = messages.length - 1; i >= 0; i--) {
+    const t = estTokens(messages[i].content);
+    if (used + t > MAX_HISTORY_TOK) break;
+    out.unshift(messages[i]);
+    used += t;
+  }
+  return out;
+}
+
+// ── Panel open/close ──────────────────────────────────────────────────────────
 function toggleAIPanel() {
   const panel  = document.getElementById('ai-panel');
   const btn    = document.getElementById('ai-toggle');
   const isOpen = panel.classList.toggle('open');
   btn.classList.toggle('active', isOpen);
-
-  // On first open, populate the team select with sorted bracket teams
   if (isOpen && document.getElementById('stats-team-select').options.length === 1) {
     populateTeamSelect();
   }
@@ -29,29 +61,26 @@ function toggleAIPanel() {
 function populateTeamSelect() {
   const sel = document.getElementById('stats-team-select');
   if (!sel) return;
-
-  // If data not loaded yet, retry after a short wait
   if (!ALL_NODES || ALL_NODES.length === 0) {
     sel.innerHTML = '<option value="">Loading teams...</option>';
     setTimeout(populateTeamSelect, 500);
     return;
   }
-
   const sorted = [...ALL_NODES].sort((a, b) => a.full_name.localeCompare(b.full_name));
   sel.innerHTML = '<option value="">Select a team...</option>';
   sorted.forEach(n => {
     const opt = document.createElement('option');
-    opt.value       = n.id;
-    opt.textContent = `${n.full_name} (${n.region}, #${n.seed})`;
+    opt.value = n.id;
+    const seedLabel = n.seed != null ? `#${n.seed}` : 'bubble';
+    opt.textContent = `${n.full_name} (${n.region} ${seedLabel})`;
     sel.appendChild(opt);
   });
 }
 
-// ── Mode switching ───────────────────────────────────────────────────────────
+// ── Mode switching ────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('ai-toggle').addEventListener('click', toggleAIPanel);
 
-  // New segmented tab row
   document.querySelectorAll('.ai-tab').forEach(btn => {
     btn.addEventListener('click', () => {
       const mode = btn.dataset.mode;
@@ -60,98 +89,27 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Auto-fetch stats when team is selected
   document.getElementById('stats-team-select').addEventListener('change', () => {
-    const sel = document.getElementById('stats-team-select');
-    if (sel.value) fetchTeamStats();
+    if (document.getElementById('stats-team-select').value) fetchTeamStats();
   });
-  document.getElementById('chat-input').addEventListener('keydown', e => {
+
+  const chatInput = document.getElementById('chat-input');
+  chatInput.addEventListener('keydown', e => {
     if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChat(); }
   });
-
-  // Key drawer: submit on Enter
-  document.getElementById('ai-key-input').addEventListener('keydown', e => {
-    if (e.key === 'Enter') submitKey();
-    if (e.key === 'Escape') closeKeyDrawer();
+  chatInput.addEventListener('input', () => {
+    chatInput.style.height = 'auto';
+    chatInput.style.height = Math.min(chatInput.scrollHeight, 120) + 'px';
   });
 
-  // Show empty state in chat
   document.getElementById('chat-messages').innerHTML =
     '<div class="chat-empty">Ask anything about the bracket —<br>matchups, stats, trends, predictions.</div>';
 
-  updateKeyStatus();
 });
 
-// ── API key management ───────────────────────────────────────────────────────
-function getApiKey() {
-  return localStorage.getItem('ANTHROPIC_KEY') || '';
-}
 
-function saveApiKey(key) {
-  if (key && key.trim().startsWith('sk-')) {
-    localStorage.setItem('ANTHROPIC_KEY', key.trim());
-    return true;
-  }
-  return false;
-}
 
-function clearApiKey() {
-  localStorage.removeItem('ANTHROPIC_KEY');
-}
-
-function requireKey() {
-  const k = getApiKey();
-  if (k) return k;
-  // Show the settings drawer instead of a browser prompt
-  openKeyDrawer();
-  return null;
-}
-
-// ── Settings drawer ──────────────────────────────────────────────────────────
-function toggleKeyDrawer() {
-  const drawer = document.getElementById('ai-key-drawer');
-  drawer.classList.toggle('open');
-  if (drawer.classList.contains('open')) {
-    setTimeout(() => document.getElementById('ai-key-input').focus(), 100);
-  }
-}
-
-function openKeyDrawer()  { document.getElementById('ai-key-drawer').classList.add('open'); }
-function closeKeyDrawer() { document.getElementById('ai-key-drawer').classList.remove('open'); }
-
-function submitKey() {
-  const val = document.getElementById('ai-key-input').value.trim();
-  const msg = document.getElementById('ai-key-msg');
-  if (!val.startsWith('sk-')) {
-    msg.textContent = 'Key should start with sk-ant- — check and try again.';
-    msg.style.color = 'var(--midwest)';
-    return;
-  }
-  saveApiKey(val);
-  msg.textContent = 'Key saved — stored only in your browser, never sent anywhere else.';
-  msg.style.color = 'var(--west)';
-  document.getElementById('ai-key-input').value = '';
-  updateKeyStatus();
-  setTimeout(closeKeyDrawer, 1200);
-}
-
-function updateKeyStatus() {
-  const has   = !!getApiKey();
-  const btn   = document.getElementById('ai-key-btn');
-  const label = document.getElementById('ai-key-label');
-  if (btn)   btn.classList.toggle('has-key', has);
-  if (label) label.textContent = has ? 'Key set ✓' : 'Add key';
-}
-
-// ── ESPN + Torvik Stats fetcher (no API key needed) ──────────────────────────
-let TORVIK_DATA = null;
-
-async function loadTorvik() {
-  if (TORVIK_DATA) return TORVIK_DATA;
-  TORVIK_DATA = await window.getTorvik();
-  return TORVIK_DATA;
-}
-
+// ── ESPN + Torvik Stats (no AI key needed) ────────────────────────────────────
 async function fetchTeamStats() {
   const sel    = document.getElementById('stats-team-select');
   const teamId = sel.value;
@@ -164,38 +122,41 @@ async function fetchTeamStats() {
   btn.disabled = true;
   output.innerHTML = loadingHTML('Fetching ESPN + Torvik stats...');
 
+  const ctrl  = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), 10000);
+
   try {
-    // Parallel fetch: ESPN stats + Torvik data
     const [espnRes, tData] = await Promise.all([
-      fetch(`https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/teams/${teamId}/statistics`),
-      loadTorvik(),
+      fetch(
+        `https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/teams/${teamId}/statistics`,
+        { signal: ctrl.signal }
+      ),
+      window.getTorvik(),
     ]);
+    clearTimeout(timer);
 
     const espnData = await espnRes.json();
     const cats     = espnData?.results?.stats?.categories ?? [];
-
     const statsMap = {};
-    cats.forEach(cat => {
-      cat.stats.forEach(s => { statsMap[`${cat.name}:${s.name}`] = s; });
-    });
+    cats.forEach(cat => { cat.stats.forEach(s => { statsMap[`${cat.name}:${s.name}`] = s; }); });
     const get = (cat, name) => statsMap[`${cat}:${name}`]?.displayValue ?? '—';
+    const pct = (cat, name) => { const v = get(cat, name); return v === '—' ? '—' : v + '%'; };
 
-    const pct = (cat, name) => {
-      const v = get(cat, name);
-      return v === '—' ? '—' : v + '%';
-    };
-
-    // Fetch season record
     let record = `${node.wins_vs_field}W vs bracket field`;
     try {
-      const tr = await fetch(`https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/teams/${teamId}`);
+      const ctrl2 = new AbortController();
+      setTimeout(() => ctrl2.abort(), 5000);
+      const tr = await fetch(
+        `https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/teams/${teamId}`,
+        { signal: ctrl2.signal }
+      );
       const td = await tr.json();
       record   = td?.team?.record?.items?.[0]?.summary ?? record;
     } catch (_) {}
 
-    const tv     = tData?.teams?.[teamId]?.torvik ?? null;
+    const tv  = tData?.teams?.[teamId]?.torvik ?? null;
     const rgbMap = { East: '#4a7fb5', West: '#3a8c6e', South: '#b89030', Midwest: '#b84545' };
-    const rc     = rgbMap[node.region] ?? '#b0a898';
+    const rc  = rgbMap[node.region] ?? '#b0a898';
 
     const tBlock = tv ? `
       <div class="stats-section-label">TORVIK T-RANK</div>
@@ -218,7 +179,6 @@ async function fetchTeamStats() {
       <div class="stats-card">
         <div class="stats-card-name" style="border-left:3px solid ${rc};padding-left:8px">${node.full_name}</div>
         <div class="stats-card-sub">${node.region} · Seed #${node.seed} · ${record}</div>
-
         <div class="stats-section-label">ESPN BOX STATS</div>
         <div class="stats-grid-2">
           <div class="stat-cell"><div class="sv">${get('offensive','avgPoints')}</div><div class="sl">PPG</div></div>
@@ -234,7 +194,6 @@ async function fetchTeamStats() {
           <div class="stat-cell"><div class="sv">${get('defensive','avgBlocks')}</div><div class="sl">BPG</div></div>
           <div class="stat-cell"><div class="sv">${get('offensive','avgThreePointFieldGoalsMade')} / ${get('offensive','avgThreePointFieldGoalsAttempted')}</div><div class="sl">3PM/A</div></div>
         </div>
-
         ${tBlock}
       </div>
       <div style="font-size:.62rem;color:var(--text-mute);margin-top:4px;line-height:1.5">
@@ -242,196 +201,470 @@ async function fetchTeamStats() {
       </div>
     `;
   } catch (err) {
-    output.innerHTML = `<div class="ai-error">Failed to load stats: ${err.message}</div>`;
+    clearTimeout(timer);
+    output.innerHTML = `<div class="ai-error">Failed to load stats: ${err.name === 'AbortError' ? 'Request timed out' : err.message}</div>`;
   } finally {
     btn.disabled = false;
   }
 }
 
-// ── News / article summarizer ─────────────────────────────────────────────────
-async function fetchNewsArticle() {
-  const url = document.getElementById('news-url').value.trim();
-  if (!url) return;
-  if (!url.startsWith('http')) {
-    document.getElementById('news-output').innerHTML = '<div class="ai-error">Please enter a full URL starting with http/https.</div>';
-    return;
-  }
-  await runNewsAI(`Read this article and give me a concise summary with the key takeaways that are relevant to March Madness bracket analysis: ${url}`);
+let _chatAbortCtrl = null;
+
+function setChatSending(sending) {
+  const sendBtn = document.getElementById('chat-send-btn');
+  const stopBtn = document.getElementById('chat-stop-btn');
+  const input   = document.getElementById('chat-input');
+  sendBtn.style.display = sending ? 'none' : 'flex';
+  stopBtn.style.display = sending ? 'flex' : 'none';
+  input.disabled = sending;
 }
 
-async function fetchNewsSearch(query) {
-  await runNewsAI(`Search the web for the latest news about: "${query}". Summarize the top findings in 3-5 bullet points. Focus on information useful for NCAA bracket decisions.`);
+function stopChat() {
+  if (_chatAbortCtrl) _chatAbortCtrl.abort();
 }
-
-async function runNewsAI(prompt) {
-  const key = WORKER_URL;
-
-  const btn    = document.getElementById('news-fetch-btn');
-  const output = document.getElementById('news-output');
-  btn.disabled = true;
-  output.innerHTML = loadingHTML('Reading article...');
-
-  try {
-    const text = await callClaude(key, prompt, {
-      system: systemPrompt(prompt),
-      tools: [{ type: 'web_search_20250305', name: 'web_search' }],
-    });
-    output.innerHTML = `<div class="ai-text-block">${renderMarkdown(text)}</div>`;
-  } catch (err) {
-    output.innerHTML = `<div class="ai-error">${escapeHtml(err.message)}</div>`;
-  } finally {
-    btn.disabled = false;
-  }
-}
-
-// ── Chat ─────────────────────────────────────────────────────────────────────
-const chatHistory = [];
 
 async function sendChat() {
+  if (_chatInFlight) return;
+
   const textarea = document.getElementById('chat-input');
   const msg      = textarea.value.trim();
   if (!msg) return;
 
-  const key = WORKER_URL;
-
-  textarea.value = '';
+  _chatInFlight    = true;
+  _chatAbortCtrl   = new AbortController();
+  textarea.value   = '';
   textarea.style.height = '';
+  setChatSending(true);
 
   const messagesEl = document.getElementById('chat-messages');
-
-  // Remove empty state
   messagesEl.querySelectorAll('.chat-empty').forEach(el => el.remove());
 
-  // User bubble — use DOM append, not innerHTML +=
   const userBubble = document.createElement('div');
   userBubble.className = 'chat-bubble-user';
   userBubble.textContent = msg;
   messagesEl.appendChild(userBubble);
 
-  // Thinking indicator
   const thinkEl = document.createElement('div');
-  thinkEl.className = 'chat-bubble-ai';
+  thinkEl.className = 'chat-bubble-ai thinking';
   thinkEl.innerHTML = `<div class="chat-bubble-ai-body">${loadingHTML('Thinking...')}</div>`;
   messagesEl.appendChild(thinkEl);
   messagesEl.scrollTop = messagesEl.scrollHeight;
 
-  if (_inFlight) return; // prevent duplicate concurrent requests
-  _inFlight = true;
-  document.getElementById('chat-send-btn').disabled = true;
-
   chatHistory.push({ role: 'user', content: msg });
-  // History length is managed server-side by token budget — keep last 30 messages locally
-  // as a soft cap so localStorage doesn't grow unbounded across very long sessions
-  if (chatHistory.length > 30) chatHistory.splice(0, chatHistory.length - 30);
+
+  // Trim for the API call only — don't mutate chatHistory
+  const historyForApi = trimHistory(chatHistory);
+  if (historyForApi.length < chatHistory.length) {
+    const notice = document.createElement('div');
+    notice.className = 'chat-context-notice';
+    notice.textContent = 'Earlier messages trimmed to stay within context limit';
+    messagesEl.insertBefore(notice, userBubble);
+  }
 
   try {
-    const reply = await callClaude(null, null, {
-      messages: chatHistory,
-      userMsg:  msg,
-    });
+    // Detect matchup queries — route to multi-agent pipeline only for fresh requests
+    const matchup = detectMatchupIntent(msg);
+    const freshRequest = isFreshMatchupRequest(msg, matchup);
 
-    chatHistory.push({ role: 'assistant', content: reply });
+    // If there's an active matchup and this looks like a follow-up (not a fresh vs request)
+    // route through normal chat so the LLM can incorporate the user's context
+    const useMultiAgent = matchup && freshRequest;
 
-    thinkEl.innerHTML = `
-      <div class="chat-bubble-ai-label">Scout</div>
-      <div class="chat-bubble-ai-body">${renderMarkdown(reply)}</div>`;
+    if (useMultiAgent) {
+      // Show agent thinking steps while waiting
+      thinkEl.innerHTML = `<div class="chat-bubble-ai-body">${loadingHTML('Running 3 specialist agents in parallel...')}</div>`;
+      if (window.posthog) posthog.capture('matchup_analyzed', { team_a: matchup.team_a, team_b: matchup.team_b });
+      const data = await callAnalyze(matchup.team_a, matchup.team_b, _chatAbortCtrl.signal);
+
+      const agentSteps = (data.agent_results || []).map(r =>
+        `${r.agent} agent: ${r.win_pct}% for ${matchup.team_a}`
+      );
+      agentSteps.push('synthesis: weighted confidence interval');
+
+      const thinkHtml = `
+        <div class="thinking-block thinking-done">
+          <div class="thinking-header">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            <span class="thinking-label">Multi-agent analysis complete</span>
+          </div>
+          <div class="thinking-steps">
+            ${agentSteps.map(s => `<div class="thinking-step">${escapeHtml(s)}</div>`).join('')}
+          </div>
+        </div>`;
+
+      const confHtml  = data.confidence?.win_pct !== undefined ? renderConfidence(data.confidence) : '';
+      const reasoning = data.confidence?.reasoning ?? 'Analysis complete.';
+      // Store active matchup so follow-up messages route to chat, not re-analysis
+      _activeMatchup = { team_a: matchup.team_a, team_b: matchup.team_b };
+      // Push full context into history so follow-up questions have it
+      const analysisContext = `Multi-agent analysis of ${matchup.team_a} vs ${matchup.team_b}: ${reasoning}`;
+      chatHistory.push({ role: 'assistant', content: analysisContext });
+      thinkEl.innerHTML = `${thinkHtml}<div class="chat-bubble-ai-label">Scout · Multi-Agent</div>${confHtml}<div class="chat-bubble-ai-body">${renderMarkdown(reasoning)}</div>`;
+
+    } else {
+      // Standard single-agent path
+      if (window.posthog) posthog.capture('chat_query', { has_active_matchup: !!_activeMatchup });
+      const { text, thinking } = await callAI(historyForApi, msg, _chatAbortCtrl.signal);
+      chatHistory.push({ role: 'assistant', content: text });
+      const thinkHtml = thinking.length ? `
+        <div class="thinking-block thinking-done">
+          <div class="thinking-header">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            <span class="thinking-label">Thought for a moment</span>
+          </div>
+          <div class="thinking-steps">
+            ${thinking.map(s => `<div class="thinking-step">${escapeHtml(s)}</div>`).join('')}
+          </div>
+        </div>` : '';
+      thinkEl.innerHTML = `${thinkHtml}<div class="chat-bubble-ai-label">Scout</div><div class="chat-bubble-ai-body">${renderMarkdown(text)}</div>`;
+    }
   } catch (err) {
-    // Roll back the user message so history stays alternating user/assistant
-    // Without this, next send would create two consecutive user messages → API 400
     chatHistory.pop();
-    thinkEl.innerHTML = `<div class="ai-error">${escapeHtml(err.message)}</div>`;
+    if (err.name === 'AbortError') {
+      thinkEl.remove();
+      userBubble.remove();
+    } else {
+      thinkEl.innerHTML = `<div class="ai-error">${escapeHtml(err.message)}</div>`;
+    }
   } finally {
-    document.getElementById('chat-send-btn').disabled = false;
+    _chatInFlight  = false;
+    _chatAbortCtrl = null;
+    setChatSending(false);
     messagesEl.scrollTop = messagesEl.scrollHeight;
   }
 }
 
 function insertHint(text) {
-  const ta = document.getElementById('chat-input');
-  ta.value = text;
-  ta.focus();
+  document.getElementById('chat-input').value = text;
+  document.getElementById('chat-input').focus();
 }
 
-// ── API call ─────────────────────────────────────────────────────────────────
-const WORKER_URL = '/api/ai';
+// ── Multi-agent matchup detection ────────────────────────────────────────────
+// Mirrors server-side classifyIntent for the matchup case only.
+// Returns { type:'matchup', team_a, team_b } or null.
+function detectMatchupIntent(msg) {
+  if (!window.ALL_NODES) return null;
 
-// In-flight guard — prevents duplicate concurrent requests from rapid sends
-let _inFlight = false;
-
-async function callClaude(_unusedKey, singlePrompt, opts = {}) {
-  // Server now builds system prompt — just send messages + last user message
-  const messages = opts.messages ?? [{ role: 'user', content: singlePrompt }];
-  const userMsg  = opts.userMsg ?? singlePrompt ?? '';
-
-  const res = await fetch(WORKER_URL, {
-    method:  'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body:    JSON.stringify({ messages, userMsg }),
-  });
-
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({}));
-    throw new Error(err?.error?.message ?? `API error ${res.status}`);
+  // Two normalization functions:
+  // normLabel — for stored team labels (no st->saint, preserves abbreviations)
+  // normInput — for user input (expands common abbreviations so "st.louis" matches "saint louis")
+  function normLabel(s) {
+    return s.toLowerCase().trim()
+      .replace(/[.'`]/g, '')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+  function normInput(s) {
+    return s.toLowerCase().trim()
+      // Handle "st.louis" BEFORE stripping dots — dot is the separator here
+      .replace(/(?<!\w)st\.([a-z])/g, 'saint $1')
+      // Now strip remaining punctuation
+      .replace(/[.'`]/g, '')
+      // Standalone "st" word -> "saint" (handles "st johns", "wright st")
+      .replace(/\bst\b/g, 'saint')
+      .replace(/\s+/g, ' ')
+      .trim();
   }
 
-  const data = await res.json();
-  const text = data.choices?.[0]?.message?.content?.trim();
-  if (!text) {
-    const errMsg = data.error?.message ?? JSON.stringify(data);
-    throw new Error(`No response from model: ${errMsg}`);
-  }
-  return text;
-}
+  if (!msg.trim()) return null;
+  const mNorm = normInput(msg);
 
-// ── System prompt with graph context ─────────────────────────────────────────
-function systemPrompt(userMsg) {
-  // Compact team lines — all 91 teams, tight format
-  const teamLines = ALL_NODES.map(n => {
-    const tv = TORVIK_DATA?.teams?.[n.id]?.torvik;
-    const seedLabel = n.seed != null ? `#${n.seed}` : 'bubble';
-    const rec = `${n.wins_vs_field}W-${n.losses_vs_field}L`;
-    const torvik = tv
-      ? `Rk${tv.rank} OE${tv.adj_oe} DE${tv.adj_de} EM${tv.adj_em > 0 ? '+' : ''}${tv.adj_em} Bg${(tv.barthag*100).toFixed(1)}%`
-      : 'no-torvik';
-    return `${n.full_name} (${n.region} ${seedLabel}) ${rec} | ${torvik}`;
-  }).join('\n');
+  // Build candidates: for each team, generate all alias forms the user might type
+  const candidates = window.ALL_NODES
+    .filter(n => n.region !== 'bubble' && n.seed !== null)
+    .flatMap(n => {
+      const lbl  = normLabel(n.label);
+      const full = normLabel(n.full_name);
+      // "Wright St" -> "Wright State" for users who type the full word
+      const stateVariant = lbl.endsWith(' st') ? lbl.slice(0, -3) + ' state' : null;
+      // "St John's" -> "saint johns" for users who type "st johns" or "st.johns"
+      const saintVariant = lbl.startsWith('st ') ? 'saint ' + lbl.slice(3) : null;
+      // "Wright St" -> "wright saint" to match normInput("Wright St") -> "wright saint"
+      const saintEndVariant = lbl.endsWith(' st') ? lbl.slice(0, -2) + 'saint' : null;
+      const aliases = [full, lbl, stateVariant, saintVariant, saintEndVariant].filter(Boolean);
+      // Find the best matching alias in the message
+      const matchStr = aliases
+        .sort((a, b) => b.length - a.length) // try longest first
+        .find(a => mNorm.includes(a)) ?? null;
+      if (!matchStr) return [];
+      return [{ n, matchStr, pos: mNorm.indexOf(matchStr), len: matchStr.length }];
+    });
 
-  // Smart game selection — if user mentions specific teams, only include their games
-  // Otherwise cap at 200 most recent games to stay under token limit
-  let relevantEdges = ALL_EDGES;
-  if (userMsg) {
-    const msgLower = userMsg.toLowerCase();
-    const mentionedIds = new Set(
-      ALL_NODES.filter(n =>
-        msgLower.includes(n.label.toLowerCase()) ||
-        msgLower.includes(n.full_name.toLowerCase().split(' ')[0])
-      ).map(n => n.id)
-    );
-    if (mentionedIds.size > 0) {
-      relevantEdges = ALL_EDGES.filter(e => mentionedIds.has(e.from) || mentionedIds.has(e.to));
-    } else {
-      // No specific teams — send 200 most recent
-      relevantEdges = ALL_EDGES.slice(-200);
+  // Greedy longest-first assignment: assign each team its earliest non-overlapping position
+  const sortedByLen = [...candidates].sort((a, b) => b.len - a.len || a.pos - b.pos);
+  const usedRanges = [];
+  const assigned = [];
+
+  for (const c of sortedByLen) {
+    let searchFrom = 0, bestPos = -1;
+    while (searchFrom <= mNorm.length - c.len) {
+      const idx = mNorm.indexOf(c.matchStr, searchFrom);
+      if (idx === -1) break;
+      const overlaps = usedRanges.some(([s, e]) => idx < e && idx + c.len > s);
+      if (!overlaps) { bestPos = idx; break; }
+      searchFrom = idx + 1;
+    }
+    if (bestPos !== -1) {
+      usedRanges.push([bestPos, bestPos + c.len]);
+      assigned.push({ ...c, pos: bestPos });
     }
   }
 
-  const gameLines = relevantEdges.map(e => {
-    const w = ALL_NODES.find(n => n.id === e.from)?.label ?? e.from;
-    const l = ALL_NODES.find(n => n.id === e.to)?.label ?? e.to;
-    return `${w}>${l} ${e.label} ${e.date ? e.date.slice(5,10) : ''}`;
-  }).join('\n');
+  // Sort by position in message, prefer longer on ties
+  assigned.sort((a, b) => a.pos - b.pos || b.len - a.len);
 
-  return `You are AI Scout, an expert NCAA basketball analyst for the 2026 March Madness bracket.
-CRITICAL: Only use the stats below. Never invent numbers.
-
-TEAMS (name | region seed | W-L vs field | Torvik: Rk=rank OE=AdjOE DE=AdjDE EM=AdjEM Bg=Barthag):
-${teamLines}
-
-GAMES (winner>loser score date, ${relevantEdges.length} shown):
-${gameLines}
-
-Be concise. Reference exact stats when asked.`;
+  const found = assigned.map(x => x.n);
+  if (found.length >= 2) return { type: 'matchup', team_a: found[0].label, team_b: found[1].label };
+  return null;
 }
+
+// ── Confidence interval renderer ─────────────────────────────────────────────
+function renderConfidence(conf) {
+  const pct     = conf.win_pct;
+  const teamA   = escapeHtml(conf.team_a);
+  const teamB   = escapeHtml(conf.team_b);
+  const favor   = pct >= 50 ? teamA : teamB;
+  const dispPct = pct >= 50 ? pct : 100 - pct;
+  const barPct  = pct;
+  const consensus = conf.consensus === 'strong' ? 'Agents in agreement' :
+                    conf.consensus === 'moderate' ? 'Some agent disagreement' : 'Agents split';
+  const consensusColor = conf.consensus === 'strong' ? 'var(--west)' :
+                         conf.consensus === 'moderate' ? 'var(--south)' : 'var(--midwest)';
+
+  const breakdown = (conf.agent_breakdown || []).map(a => {
+    const aPct = a.win_pct;
+    return `<div class="conf-agent-row">
+      <span class="conf-agent-name">${escapeHtml(a.agent)}</span>
+      <div class="conf-agent-bar-wrap">
+        <div class="conf-agent-bar" style="width:${aPct}%;background:var(--accent)"></div>
+      </div>
+      <span class="conf-agent-pct">${aPct}%</span>
+      <span class="conf-agent-edge">${escapeHtml(a.key_edge || '')}</span>
+    </div>`;
+  }).join('');
+
+  return `<div class="confidence-block" id="conf-block-${conf.team_a}-${conf.team_b}">
+    <div class="conf-header">
+      <span class="conf-label">AI SCOUT MULTI-AGENT ANALYSIS</span>
+      <span class="conf-consensus" style="color:${consensusColor}">${consensus} (spread: ${conf.agent_spread}pp)</span>
+    </div>
+    <div class="conf-teams">
+      <span class="conf-team-a">${teamA}</span>
+      <span class="conf-vs">vs</span>
+      <span class="conf-team-b">${teamB}</span>
+    </div>
+    <div class="conf-bar-wrap">
+      <div class="conf-bar-a" style="width:${barPct}%"></div>
+      <div class="conf-bar-b" style="width:${100-barPct}%"></div>
+    </div>
+    <div class="conf-pct-row">
+      <span class="conf-pct-a">${barPct}%</span>
+      <span class="conf-range">${conf.range_low}–${conf.range_high}% range</span>
+      <span class="conf-pct-b">${100-barPct}%</span>
+    </div>
+    <div class="conf-favor">Favoring <strong>${favor}</strong> with ${dispPct}% confidence</div>
+    <div class="conf-agents-title">Agent breakdown</div>
+    <div class="conf-agents">${breakdown}</div>
+    <div class="conf-weights">Weights: Efficiency 50% · Form 25% · Matchup 25%</div>
+    <button class="conf-export-btn" onclick="saveAnalysis(this)" data-team-a="${teamA}" data-team-b="${teamB}" data-pct="${barPct}" data-range="${conf.range_low}–${conf.range_high}" data-favor="${favor}" data-disppct="${dispPct}" data-consensus="${escapeHtml(consensus)}" data-reasoning="${escapeHtml(conf.reasoning ?? '')}" data-breakdown="${escapeHtml(JSON.stringify(conf.agent_breakdown ?? []))}">+ Save analysis</button>
+  </div>`;
+}
+
+// ── Analysis exporter ─────────────────────────────────────────────────────────
+// Draws the matchup analysis to a canvas and triggers a PNG download.
+// ── Saved analyses cart ──────────────────────────────────────────────────────
+let savedAnalyses = [];
+
+function saveAnalysis(btn) {
+  const teamA     = btn.getAttribute('data-team-a');
+  const teamB     = btn.getAttribute('data-team-b');
+  const pct       = parseInt(btn.getAttribute('data-pct'));
+  const range     = btn.getAttribute('data-range');
+  const favor     = btn.getAttribute('data-favor');
+  const dispPct   = btn.getAttribute('data-disppct');
+  const consensus = btn.getAttribute('data-consensus');
+  const reasoning = btn.getAttribute('data-reasoning') || '';
+  let breakdown = [];
+  try { breakdown = JSON.parse(btn.getAttribute('data-breakdown') || '[]'); } catch {}
+
+  // Prevent duplicate saves for same matchup
+  const key = `${teamA}|${teamB}`;
+  if (savedAnalyses.find(a => `${a.teamA}|${a.teamB}` === key)) {
+    btn.textContent = '✓ Already saved';
+    setTimeout(() => { btn.textContent = '+ Save analysis'; }, 1500);
+    return;
+  }
+
+  savedAnalyses.push({
+    teamA, teamB, pct, range, favor, dispPct, consensus, reasoning, breakdown,
+    timestamp: new Date().toLocaleString(),
+  });
+  if (window.posthog) posthog.capture('analysis_saved', { team_a: teamA, team_b: teamB, win_pct: pct, consensus });
+
+  btn.textContent = '✓ Saved';
+  btn.disabled = true;
+  btn.style.color = 'var(--west)';
+  btn.style.borderColor = 'var(--west)';
+
+  renderSavedPanel();
+}
+
+function renderSavedPanel() {
+  const panel = document.getElementById('saved-analyses-panel');
+  if (!panel) return;
+
+  if (savedAnalyses.length === 0) {
+    panel.style.display = 'none';
+    return;
+  }
+
+  panel.style.display = 'block';
+  const count = savedAnalyses.length;
+
+  panel.innerHTML = `
+    <div class="saved-panel-header">
+      <span class="saved-panel-title">Saved analyses <span class="saved-count">${count}</span></span>
+      <div class="saved-panel-actions">
+        <button class="saved-export-btn" onclick="exportAllCSV()">↓ Export CSV</button>
+        <button class="saved-clear-btn" onclick="clearSaved()">Clear all</button>
+      </div>
+    </div>
+    <div class="saved-list">
+      ${savedAnalyses.map((a, i) => `
+        <div class="saved-item">
+          <div class="saved-item-teams">${escapeHtml(a.teamA)} <span class="saved-vs">vs</span> ${escapeHtml(a.teamB)}</div>
+          <div class="saved-item-meta">
+            <span class="saved-item-pct" style="color:var(--accent)">${a.pct}%</span>
+            <span class="saved-item-range">${a.range}</span>
+            <span class="saved-item-favor">→ ${escapeHtml(a.favor)}</span>
+          </div>
+          <div class="saved-item-time">${a.timestamp}</div>
+          <button class="saved-item-remove" onclick="removeSaved(${i})" title="Remove">✕</button>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+function removeSaved(index) {
+  savedAnalyses.splice(index, 1);
+  renderSavedPanel();
+}
+
+function clearSaved() {
+  savedAnalyses = [];
+  renderSavedPanel();
+}
+
+function exportAllCSV() {
+  if (savedAnalyses.length === 0) return;
+  if (window.posthog) posthog.capture('csv_exported', { count: savedAnalyses.length });
+
+  const headers = [
+    'Team A', 'Team B', 'Win % (A)', 'Win % (B)',
+    'Range Low', 'Range High', 'Favored Team', 'Confidence',
+    'Consensus', 'Efficiency %', 'Form %', 'Matchup %',
+    'Reasoning', 'Saved At'
+  ];
+
+  const escCSV = (s) => {
+    const str = String(s ?? '').replace(/\r?\n/g, ' ').trim();
+    return str.includes(',') || str.includes('"')
+      ? `"${str.replace(/"/g, '""')}"` : str;
+  };
+
+  const rows = savedAnalyses.map(a => {
+    const [rangeLow, rangeHigh] = (a.range || '–').split('–');
+    const eff = a.breakdown.find(b => b.agent === 'efficiency')?.win_pct ?? '';
+    const frm = a.breakdown.find(b => b.agent === 'form')?.win_pct ?? '';
+    const mch = a.breakdown.find(b => b.agent === 'matchup')?.win_pct ?? '';
+    return [
+      a.teamA, a.teamB, a.pct, 100 - a.pct,
+      rangeLow?.trim(), rangeHigh?.trim(), a.favor, a.dispPct + '%',
+      a.consensus, eff, frm, mch,
+      a.reasoning, a.timestamp,
+    ].map(escCSV).join(',');
+  });
+
+  const csv  = [headers.join(','), ...rows].join('\n');
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url  = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href     = url;
+  link.download = `ncaa-scout-analyses-${new Date().toISOString().slice(0,10)}.csv`;
+  link.click();
+  URL.revokeObjectURL(url);
+}
+
+// ── Multi-agent analyze call ──────────────────────────────────────────────────
+async function callAnalyze(teamA, teamB, signal) {
+  const ctrl  = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), 55000);
+  signal?.addEventListener('abort', () => ctrl.abort(), { once: true });
+  try {
+    const res = await fetch('/api/analyze', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ team_a: teamA, team_b: teamB }),
+      signal:  ctrl.signal,
+    });
+    clearTimeout(timer);
+    if (!res.ok) {
+      const e = await res.json().catch(() => ({}));
+      throw new Error(e?.error ?? 'Analysis failed');
+    }
+    return await res.json();
+  } catch (err) {
+    clearTimeout(timer);
+    if (err.name === 'AbortError') { const e = new Error('aborted'); e.name = 'AbortError'; throw e; }
+    throw err;
+  }
+}
+
+// ── Core AI call — single JSON response, abort supported ────────────────────
+const WORKER_URL    = '/api/ai';
+const FETCH_TIMEOUT = 30000;
+
+async function callAI(messages, userMsg, signal) {
+  const ctrl  = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), FETCH_TIMEOUT);
+  signal?.addEventListener('abort', () => ctrl.abort(), { once: true });
+
+  try {
+    const res = await fetch(WORKER_URL, {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ messages, userMsg }),
+      signal:  ctrl.signal,
+    });
+    clearTimeout(timer);
+    if (!res.ok) {
+      const errData = await res.json().catch(() => ({}));
+      throw new Error(errData?.error?.message ?? `API error ${res.status}`);
+    }
+    const data = await res.json();
+    if (data.error) throw new Error(data.error.message ?? 'Unknown error');
+    return { text: data.text || 'No response — please try again.', thinking: data.thinking ?? [] };
+  } catch (err) {
+    clearTimeout(timer);
+    if (err.name === 'AbortError') { const e = new Error('aborted'); e.name = 'AbortError'; throw e; }
+    throw err;
+  }
+}
+
+function renderThinking(thinkEl, steps) {
+  thinkEl.innerHTML = `
+    <div class="thinking-block">
+      <div class="thinking-header">
+        <span class="thinking-spinner"></span>
+        <span class="thinking-label">Thinking</span>
+      </div>
+      <div class="thinking-steps">
+        ${steps.map(s => `<div class="thinking-step">${escapeHtml(s)}</div>`).join('')}
+      </div>
+    </div>`;
+}
+
 // ── Helpers ───────────────────────────────────────────────────────────────────
 function loadingHTML(label) {
   return `<div class="ai-loading">
@@ -448,18 +681,12 @@ function escapeHtml(str) {
     .replace(/"/g, '&quot;');
 }
 
-// Render basic markdown — bold, bullets, numbered lists, newlines
 function renderMarkdown(text) {
   return escapeHtml(text)
-    // Bold **text**
     .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-    // Italic *text*
     .replace(/\*(.+?)\*/g, '<em>$1</em>')
-    // Numbered list lines: "1. foo"
     .replace(/^(\d+)\. (.+)$/gm, '<div class="md-li md-oli"><span class="md-ln">$1.</span>$2</div>')
-    // Bullet list lines: "- foo" or "• foo"
     .replace(/^[-•] (.+)$/gm, '<div class="md-li"><span class="md-dot">·</span>$1</div>')
-    // Newlines to <br> (but not after list items which already have block display)
     .replace(/\n\n/g, '<br><br>')
     .replace(/\n/g, '<br>');
 }

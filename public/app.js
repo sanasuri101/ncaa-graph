@@ -282,14 +282,6 @@ function togglePhysics() {
 function onNetworkClick(params) {
   switchTab('detail');
 
-  // On mobile, clicking a node/edge should open the sidebar overlay
-  if (window.innerWidth <= 768 && (params.nodes.length > 0 || params.edges.length > 0)) {
-    const sidebar    = document.querySelector('.sidebar');
-    const sidebarBtn = document.getElementById('mob-sidebar-btn');
-    if (sidebar) sidebar.classList.add('mob-open');
-    if (sidebarBtn) sidebarBtn.style.display = 'none';
-  }
-
   const box = document.getElementById('detail-box');
 
   if (params.nodes.length > 0) {
@@ -626,13 +618,6 @@ function focusTeam(id) {
   switchTab('detail');
   const box = document.getElementById('detail-box');
   renderTeamDetail(id, box);
-  // On mobile, open the sidebar so the detail is visible
-  if (window.innerWidth <= 768) {
-    const sidebar    = document.querySelector('.sidebar');
-    const sidebarBtn = document.getElementById('mob-sidebar-btn');
-    if (sidebar) sidebar.classList.add('mob-open');
-    if (sidebarBtn) sidebarBtn.style.display = 'none';
-  }
   // Then focus in graph
   try {
     network.selectNodes([id]);
@@ -1044,34 +1029,31 @@ function initMobileUI() {
   if (!aiPanel || !sidebar || !main) return;
 
   // ── Floating sidebar toggle button ───────────────────────────────────────
-  if (!document.getElementById('mob-sidebar-btn')) {
-    const sidebarBtn = document.createElement('button');
-    sidebarBtn.id = 'mob-sidebar-btn';
-    sidebarBtn.className = 'mob-sidebar-btn';
-    sidebarBtn.setAttribute('aria-label', 'Open stats panel');
-    sidebarBtn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/></svg><span style="font-size:.6rem;margin-left:3px;letter-spacing:.02em">STATS</span>`;
-    main.appendChild(sidebarBtn);
+  const sidebarBtn = document.createElement('button');
+  sidebarBtn.className = 'mob-sidebar-btn';
+  sidebarBtn.setAttribute('aria-label', 'Open stats panel');
+  sidebarBtn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/></svg><span style="font-size:.6rem;margin-left:3px;letter-spacing:.02em">STATS</span>`;
+  main.appendChild(sidebarBtn);
 
-    const closeBtn = document.createElement('button');
-    closeBtn.className = 'mob-sidebar-close';
-    closeBtn.setAttribute('aria-label', 'Close stats panel');
-    closeBtn.innerHTML = '\u2715';
-    sidebar.appendChild(closeBtn);
+  // ── Sidebar close button ──────────────────────────────────────────────────
+  const closeBtn = document.createElement('button');
+  closeBtn.className = 'mob-sidebar-close';
+  closeBtn.setAttribute('aria-label', 'Close stats panel');
+  closeBtn.innerHTML = '✕';
+  sidebar.appendChild(closeBtn);
 
-    sidebarBtn.addEventListener('click', () => {
-      sidebar.classList.add('mob-open');
-      sidebarBtn.style.display = 'none';
-    });
-    closeBtn.addEventListener('click', () => {
-      sidebar.classList.remove('mob-open');
-      sidebarBtn.style.display = '';
-    });
-  }
+  sidebarBtn.addEventListener('click', () => {
+    sidebar.classList.add('mob-open');
+    sidebarBtn.style.display = 'none';
+  });
+  closeBtn.addEventListener('click', () => {
+    sidebar.classList.remove('mob-open');
+    sidebarBtn.style.display = '';
+  });
 
-  // ── Drag handle — declared before use ────────────────────────────────────
-  const dragHandle = document.getElementById('mob-drag-handle');
-
-  // ── Tap header or drag handle to toggle sheet ────────────────────────────
+  // ── Tap the collapsed peek area (handle + header) to open ───────────────
+  // When panel is closed, tapping anywhere in the visible 56px strip opens it.
+  // When open, tapping the header closes it.
   const aiHeader = aiPanel.querySelector('.ai-panel-header');
   function toggleSheet() {
     if (aiPanel.classList.contains('open')) {
@@ -1080,86 +1062,89 @@ function initMobileUI() {
       aiPanel.classList.add('open');
     }
   }
-  if (aiHeader && !aiHeader._toggleBound) {
+  if (aiHeader) {
     aiHeader.style.cursor = 'pointer';
-    aiHeader._toggleBound = true;
     aiHeader.addEventListener('click', toggleSheet);
   }
+  // Drag handle tap also toggles (when it wasn't a drag)
   if (dragHandle) {
+    let tapStartY = 0;
+    dragHandle.addEventListener('touchstart', e => { tapStartY = e.touches[0].clientY; }, { passive: true });
+    // toggleSheet is called via touchend only if drag distance was small (< 10px = tap not drag)
+    // The touchend in the drag handler already handles this — if dy < 80 it snaps back
+    // We just need a click fallback for non-touch (desktop testing)
     dragHandle.addEventListener('click', toggleSheet);
   }
 
-  // ── Drag zone — handle pill + full header row ────────────────────────────
-  // Both the drag handle pill and the header row are draggable.
-  // Touch events are non-passive so we can preventDefault and block
-  // Safari's swipe-back and iOS rubber-band overscroll.
-  const SHEET_HEIGHT = window.innerHeight * 0.82;
-  let dragStartY    = 0;
-  let dragStartOpen = false;
-  let isDragging    = false;
-  let dragMoved     = false; // distinguish tap vs drag
-
-  function onDragStart(e) {
-    dragStartY    = e.touches[0].clientY;
-    dragStartOpen = aiPanel.classList.contains('open');
-    isDragging    = true;
-    dragMoved     = false;
-    aiPanel.style.transition = 'none';
-    e.preventDefault();
-  }
-  function onDragMove(e) {
-    if (!isDragging) return;
-    const dy = e.touches[0].clientY - dragStartY;
-    if (Math.abs(dy) > 6) dragMoved = true;
-    const closedOffset  = SHEET_HEIGHT - 56;
-    const currentOffset = dragStartOpen ? 0 : closedOffset;
-    const newOffset = Math.max(0, Math.min(closedOffset, currentOffset + dy));
-    aiPanel.style.transform = `translateY(${newOffset}px)`;
-    e.preventDefault();
-  }
-  function onDragEnd(e) {
-    if (!isDragging) return;
-    isDragging = false;
-    aiPanel.style.transition = '';
-    aiPanel.style.transform  = '';
-    const dy = e.changedTouches[0].clientY - dragStartY;
-    if (!dragMoved) {
-      // It was a tap — toggle
-      toggleSheet();
-    } else if (dragStartOpen) {
-      if (dy > 80) aiPanel.classList.remove('open');
-    } else {
-      if (dy < -80) aiPanel.classList.add('open');
-    }
-    e.preventDefault();
-  }
-
-  // Attach to drag handle pill
+  // ── Drag handle — full drag-to-open/close with non-passive events ───────────
+  // Must use non-passive so we can call preventDefault() to block Safari
+  // swipe-back and iOS overscroll while dragging the handle.
+  const dragHandle = document.getElementById('mob-drag-handle');
   if (dragHandle) {
-    dragHandle.addEventListener('touchstart', onDragStart, { passive: false });
-    dragHandle.addEventListener('touchmove',  onDragMove,  { passive: false });
-    dragHandle.addEventListener('touchend',   onDragEnd,   { passive: false });
-  }
-  // Also attach to the scout header row so the full peek area is draggable
-  const scoutHeader = aiPanel.querySelector('.ai-scout-header');
-  if (scoutHeader) {
-    scoutHeader.addEventListener('touchstart', onDragStart, { passive: false });
-    scoutHeader.addEventListener('touchmove',  onDragMove,  { passive: false });
-    scoutHeader.addEventListener('touchend',   onDragEnd,   { passive: false });
+    let dragStartY   = 0;
+    let dragStartOpen = false;
+    let isDragging   = false;
+    const SHEET_HEIGHT = window.innerHeight * 0.82;
+
+    dragHandle.addEventListener('touchstart', e => {
+      dragStartY    = e.touches[0].clientY;
+      dragStartOpen = aiPanel.classList.contains('open');
+      isDragging    = true;
+      aiPanel.style.transition = 'none'; // disable animation during drag
+      e.preventDefault(); // blocks Safari swipe-back gesture
+    }, { passive: false }); // non-passive = can call preventDefault
+
+    dragHandle.addEventListener('touchmove', e => {
+      if (!isDragging) return;
+      const dy = e.touches[0].clientY - dragStartY;
+      // Clamp: can't drag above fully-open or below fully-closed
+      const closedOffset = SHEET_HEIGHT - 56;
+      const currentOffset = dragStartOpen ? 0 : closedOffset;
+      const newOffset = Math.max(0, Math.min(closedOffset, currentOffset + dy));
+      aiPanel.style.transform = `translateY(${newOffset}px)`;
+      e.preventDefault();
+    }, { passive: false });
+
+    dragHandle.addEventListener('touchend', e => {
+      if (!isDragging) return;
+      isDragging = false;
+      aiPanel.style.transition = ''; // restore CSS transition
+      aiPanel.style.transform  = ''; // let CSS class take over
+      const dy = e.changedTouches[0].clientY - dragStartY;
+      // Threshold: 80px drag decides open/close
+      if (dragStartOpen) {
+        if (dy > 80) aiPanel.classList.remove('open');
+        // else snap back open
+      } else {
+        if (dy < -80) aiPanel.classList.add('open');
+        // else snap back closed
+      }
+      e.preventDefault();
+    }, { passive: false });
   }
 
-  // ── Chat and stats panels — allow scrolling without triggering drag ───────
-  // CSS overscroll-behavior: contain handles this — no JS needed here.
-  // stopPropagation would break tap-to-type and other interactions inside the panel.
-
-  // ── AI Scout header button opens sheet ───────────────────────────────────
+  // ── When AI Scout button is tapped, open the bottom sheet ────────────────
   const aiToggle = document.getElementById('ai-toggle');
   if (aiToggle) {
+    const original = aiToggle.onclick;
     aiToggle.addEventListener('click', () => {
-      if (window.innerWidth <= 768) aiPanel.classList.add('open');
+      if (window.innerWidth <= 768) {
+        aiPanel.classList.add('open');
+      }
     });
   }
 }
+
+// Run after DOM is ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initMobileUI);
+} else {
+  initMobileUI();
+}
+// Also re-run on resize in case user rotates device
+window.addEventListener('resize', () => {
+  if (window.innerWidth <= 768) initMobileUI();
+});
 
 // ── Mobile first impression: open Scout immediately on load ──────────────────
 function initMobileFirstImpression() {
