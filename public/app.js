@@ -1080,69 +1080,77 @@ function initMobileUI() {
       aiPanel.classList.add('open');
     }
   }
-  if (aiHeader) {
+  if (aiHeader && !aiHeader._toggleBound) {
     aiHeader.style.cursor = 'pointer';
-    // Remove old listener by cloning
-    const newHeader = aiHeader.cloneNode(true);
-    aiHeader.parentNode.replaceChild(newHeader, aiHeader);
-    newHeader.addEventListener('click', toggleSheet);
+    aiHeader._toggleBound = true;
+    aiHeader.addEventListener('click', toggleSheet);
   }
   if (dragHandle) {
     dragHandle.addEventListener('click', toggleSheet);
   }
 
-  // ── Drag handle touch — non-passive to block Safari swipe-back ───────────
+  // ── Drag zone — handle pill + full header row ────────────────────────────
+  // Both the drag handle pill and the header row are draggable.
+  // Touch events are non-passive so we can preventDefault and block
+  // Safari's swipe-back and iOS rubber-band overscroll.
+  const SHEET_HEIGHT = window.innerHeight * 0.82;
+  let dragStartY    = 0;
+  let dragStartOpen = false;
+  let isDragging    = false;
+  let dragMoved     = false; // distinguish tap vs drag
+
+  function onDragStart(e) {
+    dragStartY    = e.touches[0].clientY;
+    dragStartOpen = aiPanel.classList.contains('open');
+    isDragging    = true;
+    dragMoved     = false;
+    aiPanel.style.transition = 'none';
+    e.preventDefault();
+  }
+  function onDragMove(e) {
+    if (!isDragging) return;
+    const dy = e.touches[0].clientY - dragStartY;
+    if (Math.abs(dy) > 6) dragMoved = true;
+    const closedOffset  = SHEET_HEIGHT - 56;
+    const currentOffset = dragStartOpen ? 0 : closedOffset;
+    const newOffset = Math.max(0, Math.min(closedOffset, currentOffset + dy));
+    aiPanel.style.transform = `translateY(${newOffset}px)`;
+    e.preventDefault();
+  }
+  function onDragEnd(e) {
+    if (!isDragging) return;
+    isDragging = false;
+    aiPanel.style.transition = '';
+    aiPanel.style.transform  = '';
+    const dy = e.changedTouches[0].clientY - dragStartY;
+    if (!dragMoved) {
+      // It was a tap — toggle
+      toggleSheet();
+    } else if (dragStartOpen) {
+      if (dy > 80) aiPanel.classList.remove('open');
+    } else {
+      if (dy < -80) aiPanel.classList.add('open');
+    }
+    e.preventDefault();
+  }
+
+  // Attach to drag handle pill
   if (dragHandle) {
-    let dragStartY    = 0;
-    let dragStartOpen = false;
-    let isDragging    = false;
-    const SHEET_HEIGHT = window.innerHeight * 0.82;
-
-    dragHandle.addEventListener('touchstart', e => {
-      dragStartY    = e.touches[0].clientY;
-      dragStartOpen = aiPanel.classList.contains('open');
-      isDragging    = true;
-      aiPanel.style.transition = 'none';
-      e.preventDefault();
-    }, { passive: false });
-
-    dragHandle.addEventListener('touchmove', e => {
-      if (!isDragging) return;
-      const dy = e.touches[0].clientY - dragStartY;
-      const closedOffset  = SHEET_HEIGHT - 56;
-      const currentOffset = dragStartOpen ? 0 : closedOffset;
-      const newOffset = Math.max(0, Math.min(closedOffset, currentOffset + dy));
-      aiPanel.style.transform = `translateY(${newOffset}px)`;
-      e.preventDefault();
-    }, { passive: false });
-
-    dragHandle.addEventListener('touchend', e => {
-      if (!isDragging) return;
-      isDragging = false;
-      aiPanel.style.transition = '';
-      aiPanel.style.transform  = '';
-      const dy = e.changedTouches[0].clientY - dragStartY;
-      if (dragStartOpen) {
-        if (dy > 80) aiPanel.classList.remove('open');
-      } else {
-        if (dy < -80) aiPanel.classList.add('open');
-      }
-      e.preventDefault();
-    }, { passive: false });
+    dragHandle.addEventListener('touchstart', onDragStart, { passive: false });
+    dragHandle.addEventListener('touchmove',  onDragMove,  { passive: false });
+    dragHandle.addEventListener('touchend',   onDragEnd,   { passive: false });
+  }
+  // Also attach to the scout header row so the full peek area is draggable
+  const scoutHeader = aiPanel.querySelector('.ai-scout-header');
+  if (scoutHeader) {
+    scoutHeader.addEventListener('touchstart', onDragStart, { passive: false });
+    scoutHeader.addEventListener('touchmove',  onDragMove,  { passive: false });
+    scoutHeader.addEventListener('touchend',   onDragEnd,   { passive: false });
   }
 
   // ── Chat and stats panels — allow scrolling without triggering drag ───────
-  // overscroll-behavior: contain stops scroll from propagating to the sheet
-  const chatArea  = document.getElementById('chat-messages');
-  const statsArea = document.getElementById('panel-stats');
-  [chatArea, statsArea].forEach(el => {
-    if (!el) return;
-    el.style.overscrollBehavior  = 'contain';
-    el.style.webkitOverflowScrolling = 'touch';
-    // Prevent touch events inside scroll areas from bubbling to drag handler
-    el.addEventListener('touchstart', e => e.stopPropagation(), { passive: true });
-    el.addEventListener('touchmove',  e => e.stopPropagation(), { passive: true });
-  });
+  // CSS overscroll-behavior: contain handles this — no JS needed here.
+  // stopPropagation would break tap-to-type and other interactions inside the panel.
 
   // ── AI Scout header button opens sheet ───────────────────────────────────
   const aiToggle = document.getElementById('ai-toggle');
