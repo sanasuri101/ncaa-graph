@@ -1655,6 +1655,10 @@ section { margin-bottom: 20px; }
   box-shadow: 0 1px 4px rgba(42,37,32,.08);
 }
 
+/* Mobile-only tabs — hidden on desktop */
+.mob-only-tab { display: none; }
+.mob-sidebar-panel { overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; padding: 12px 14px; }
+
 /* Stats panel cells — tighter Pickle card style */
 .stat-section-head {
   font-size: .7rem;
@@ -3436,6 +3440,13 @@ section { margin-bottom: 20px; }
   .ai-scout-header { padding: 8px 12px 0 !important; }
   .ai-panel-header { padding-bottom: 6px; }
   .ai-key-btn      { display: none; }
+
+  /* Show mobile-only tabs, make tab row scroll */
+  .mob-only-tab { display: inline-flex !important; }
+  .ai-tab-row { overflow-x: auto; flex-wrap: nowrap; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+  .ai-tab-row::-webkit-scrollbar { display: none; }
+  .ai-tab { flex-shrink: 0; }
+  .mob-sidebar-panel { overflow-y: auto !important; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; padding: 12px 14px; }
   .ai-panel-title  { font-size: .78rem; }
   .chat-area, #chat-messages, #panel-chat { flex: 1; min-height: 0; }
 

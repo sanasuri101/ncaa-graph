@@ -84,7 +84,23 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.ai-tab').forEach(btn => {
     btn.addEventListener('click', () => {
       const mode = btn.dataset.mode;
+      // Update active state on all tabs
       document.querySelectorAll('.ai-tab').forEach(b => b.classList.toggle('active', b.dataset.mode === mode));
+
+      // Mobile-only tabs: pull content from sidebar into the mob panel
+      if (btn.classList.contains('mob-only-tab')) {
+        document.querySelectorAll('.ai-mode-content').forEach(el => el.classList.remove('active'));
+        const mobPanel = document.getElementById(`mob-panel-${mode}`);
+        if (mobPanel) {
+          if (mode === 'bracket' && typeof initBracket === 'function') initBracket();
+          const sidebarTab = document.getElementById(mode === 'paths' ? 'tab-transitive' : `tab-${mode}`);
+          if (sidebarTab) mobPanel.innerHTML = sidebarTab.innerHTML;
+          mobPanel.classList.add('active');
+        }
+        return;
+      }
+
+      // Native panels (stats, chat)
       document.querySelectorAll('.ai-mode-content').forEach(el => el.classList.toggle('active', el.id === `panel-${mode}`));
     });
   });
@@ -97,9 +113,13 @@ document.addEventListener('DOMContentLoaded', () => {
   chatInput.addEventListener('keydown', e => {
     if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChat(); }
   });
+  let _resizing = false;
   chatInput.addEventListener('input', () => {
+    if (_resizing) return;
+    _resizing = true;
     chatInput.style.height = 'auto';
     chatInput.style.height = Math.min(chatInput.scrollHeight, 120) + 'px';
+    _resizing = false;
   });
 
   document.getElementById('chat-messages').innerHTML =

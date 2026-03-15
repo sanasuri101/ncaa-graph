@@ -95,11 +95,15 @@ async function generateBracket() {
 
   if (window.posthog) posthog.capture('bracket_simulated', { model: _bracketModel });
   try {
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 25000);
     const res = await fetch('/api/bracket', {
       method:  'POST',
       headers: { 'Content-Type': 'application/json' },
       body:    JSON.stringify({ model: _bracketModel }),
+      signal:  ctrl.signal,
     });
+    clearTimeout(timer);
     if (!res.ok) throw new Error(`Server error ${res.status}`);
     _bracketData = await res.json();
     out.innerHTML = renderFullBracket(_bracketData);
