@@ -705,6 +705,8 @@ section { margin-bottom: 20px; }
   padding: 14px;
   scrollbar-width: thin;
   scrollbar-color: var(--border) transparent;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
 }
 .ai-placeholder {
   font-size: 1.2rem;
@@ -1731,6 +1733,8 @@ section { margin-bottom: 20px; }
   display: flex;
   flex-direction: column;
   gap: 14px;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
 }
 
 .chat-bubble-user {
