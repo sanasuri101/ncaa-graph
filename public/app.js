@@ -1037,11 +1037,13 @@ function initSidebarResize() {
 
 // ── Mobile bottom sheet + sidebar overlay ────────────────────────────────────
 function initMobileUI() {
-  if (window.innerWidth > 768) return;
+  console.log('[MOB] initMobileUI called, innerWidth:', window.innerWidth);
+  if (window.innerWidth > 768) { console.log('[MOB] skipped — not mobile'); return; }
 
   const aiPanel  = document.getElementById('ai-panel');
   const sidebar  = document.querySelector('.sidebar');
   const main     = document.querySelector('.main');
+  console.log('[MOB] aiPanel:', !!aiPanel, 'sidebar:', !!sidebar, 'main:', !!main);
   if (!aiPanel || !sidebar || !main) return;
 
   // ── Floating sidebar toggle button ───────────────────────────────────────
@@ -1168,7 +1170,9 @@ function initMobileUI() {
     btn._mobTabBound = true;
     btn.addEventListener('click', () => {
       const mode = btn.dataset.mode;
+      console.log('[MOB] mob tab clicked:', mode);
       const mobPanel = document.getElementById(`mob-panel-${mode}`);
+      console.log('[MOB] mobPanel found:', !!mobPanel);
       if (!mobPanel) return;
       // For bracket, initBracket() populates tab-bracket dynamically — run it first
       if (mode === 'bracket' && typeof initBracket === 'function') initBracket();
@@ -1198,8 +1202,10 @@ function initMobileFirstImpression() {
   const aiPanel = document.getElementById('ai-panel');
   if (!aiPanel) return;
 
+  console.log('[MOB] initMobileFirstImpression running');
   // Open the bottom sheet
   aiPanel.classList.add('open');
+  console.log('[MOB] aiPanel classes after open:', aiPanel.className);
 
   // Deactivate all tabs and panels
   document.querySelectorAll('.ai-tab').forEach(b => b.classList.remove('active'));
