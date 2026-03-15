@@ -78,7 +78,7 @@ function populateTeamSelect() {
 }
 
 // ── Mode switching ────────────────────────────────────────────────────────────
-document.addEventListener('DOMContentLoaded', () => {
+(() => {
   document.getElementById('ai-toggle').addEventListener('click', toggleAIPanel);
 
   document.querySelectorAll('.ai-tab').forEach(btn => {
@@ -640,7 +640,7 @@ async function callAI(messages, userMsg, signal) {
       headers: { 'Content-Type': 'application/json' },
       body:    JSON.stringify({ messages, userMsg }),
       signal:  ctrl.signal,
-    });
+})();
     clearTimeout(timer);
     if (!res.ok) {
       const errData = await res.json().catch(() => ({}));

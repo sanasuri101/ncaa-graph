@@ -52,7 +52,7 @@ window.getTorvik = function () {
 };
 
 // ── Boot ─────────────────────────────────────────────────────────────────────
-window.addEventListener('DOMContentLoaded', async () => {
+(async () => {
   try {
     const res  = await fetch('data/graph_data.json');
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -82,7 +82,7 @@ window.addEventListener('DOMContentLoaded', async () => {
         Failed to load data.<br><span style="font-size:.72rem;color:#5a7a96">${err.message}</span>
        </div>`;
   }
-});
+})();
 
 // ── Graph init ────────────────────────────────────────────────────────────────
 function initGraph() {
