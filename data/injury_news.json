@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-15T08:40:05.645757+00:00",
+  "generated_at": "2026-03-15T11:09:07.284919+00:00",
   "flagged_teams": 10,
   "teams": {
     "2641": {
@@ -33,10 +33,10 @@
         }
       ]
     },
-    "127": {
-      "bracket_name": "Michigan St",
-      "region": "West",
-      "seed": 2,
+    "26": {
+      "bracket_name": "UCLA",
+      "region": "Midwest",
+      "seed": 7,
       "articles": [
         {
           "headline": "UCLA loses Bilodeau but ousts Michigan St. in Big Ten quarters",
@@ -64,10 +64,10 @@
         }
       ]
     },
-    "26": {
-      "bracket_name": "UCLA",
-      "region": "South",
-      "seed": 7,
+    "127": {
+      "bracket_name": "Michigan St",
+      "region": "West",
+      "seed": 2,
       "articles": [
         {
           "headline": "UCLA loses Bilodeau but ousts Michigan St. in Big Ten quarters",
@@ -167,7 +167,7 @@
     },
     "228": {
       "bracket_name": "Clemson",
-      "region": "Midwest",
+      "region": "South",
       "seed": 8,
       "articles": [
         {

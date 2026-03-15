@@ -1,4 +1,4 @@
-# NCAA · Head-to-Head Graph
+# NCAA 2025-26 · Head-to-Head Graph
 
 An interactive Neo4j-style graph of every regular season game played between the 64 teams in the 2026 NCAA Tournament bracket, built from live ESPN API data.
 

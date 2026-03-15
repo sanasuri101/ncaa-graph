@@ -55,6 +55,10 @@ TORVIK_NAME_MAP = {
     "Tennessee St.":        "Tennessee St",
     "Miami FL":             "Miami",
     "San Diego St.":        "San Diego St",
+    "Kennesaw St.":         "Kennesaw St",
+    "Prairie View A&M":     "Prairie View",
+    "Cal Baptist":          "CA Baptist",
+    "Hawaii":               "Hawai'i",
 }
 
 # Torvik JSON field positions
