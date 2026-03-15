@@ -1152,6 +1152,27 @@ function initMobileUI() {
   // CSS overscroll-behavior: contain handles this — no JS needed here.
   // stopPropagation would break tap-to-type and other interactions inside the panel.
 
+  // ── Mobile-only tabs: Overview, Bracket, Rankings ─────────────────────────
+  // These mirror content from the hidden sidebar into panels inside the sheet.
+  document.querySelectorAll('.mob-only-tab').forEach(btn => {
+    if (btn._mobTabBound) return;
+    btn._mobTabBound = true;
+    btn.addEventListener('click', () => {
+      const mode = btn.dataset.mode;
+      const mobPanel = document.getElementById(`mob-panel-${mode}`);
+      if (!mobPanel) return;
+      // Sync content from sidebar tab
+      const sidebarContent = document.getElementById(`tab-${mode}`);
+      if (sidebarContent) mobPanel.innerHTML = sidebarContent.innerHTML;
+      if (mode === 'bracket' && typeof initBracket === 'function') initBracket();
+      // Deactivate all ai-mode-content panels
+      document.querySelectorAll('.ai-mode-content').forEach(p => p.classList.remove('active'));
+      mobPanel.classList.add('active');
+      // Open sheet if not already
+      aiPanel.classList.add('open');
+    });
+  });
+
   // ── AI Scout header button opens sheet ───────────────────────────────────
   const aiToggle = document.getElementById('ai-toggle');
   if (aiToggle) {
@@ -1168,23 +1189,22 @@ function initMobileFirstImpression() {
   const aiPanel = document.getElementById('ai-panel');
   if (!aiPanel) return;
 
-  // Open the bottom sheet fully
+  // Open the bottom sheet
   aiPanel.classList.add('open');
 
-  // Switch to Chat tab — primary mobile experience
-  const chatTab    = document.querySelector('.ai-tab[data-mode="chat"]');
-  const statsTab   = document.querySelector('.ai-tab[data-mode="stats"]');
-  const chatPanel  = document.getElementById('panel-chat');
-  const statsPanel = document.getElementById('panel-stats');
-  if (chatTab && chatPanel) {
-    chatTab.classList.add('active');
-    chatPanel.classList.add('active');
-    if (statsTab)   statsTab.classList.remove('active');
-    if (statsPanel) statsPanel.classList.remove('active');
+  // Deactivate all tabs and panels
+  document.querySelectorAll('.ai-tab').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.ai-mode-content').forEach(p => p.classList.remove('active'));
+
+  // Default to Overview — pre-populate it now so it's instant
+  const overviewBtn = document.querySelector('.ai-tab[data-mode="overview"]');
+  const mobOverview = document.getElementById('mob-panel-overview');
+  const sidebarOverview = document.getElementById('tab-overview');
+  if (overviewBtn && mobOverview && sidebarOverview) {
+    overviewBtn.classList.add('active');
+    mobOverview.innerHTML = sidebarOverview.innerHTML;
+    mobOverview.classList.add('active');
   }
-  // Welcome message is baked into HTML — no JS injection needed
-  // Auto-focus is NOT attempted — iOS Safari blocks programmatic focus
-  // without a direct user gesture; it would silently fail
 }
 
 // Run after data loads — called directly from hideLoading

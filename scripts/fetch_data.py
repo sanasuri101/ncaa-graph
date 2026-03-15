@@ -293,8 +293,8 @@ def main():
         "teams": recent_form,
     }
 
-    # Split not_played into separate file for lazy loading (reduces initial load ~75%)
-    not_played_data = graph.pop("not_played")
+    # Keep not_played in graph for app — do NOT pop it before writing public/data
+    not_played_data = graph["not_played"]
     not_played_out  = {"not_played": not_played_data}
 
     # Write data/ files (full copies for reference)
@@ -307,6 +307,8 @@ def main():
 
     pub = DATA_DIR.parent / "public" / "data"
     pub.mkdir(parents=True, exist_ok=True)
+    # Write full graph_data WITH not_played included — app reads data.not_played directly
+    (pub / "graph_data.json").write_text(json.dumps(graph, separators=(",", ":")))
     (pub / "recent_form.json").write_text(json.dumps(recent_form_out, separators=(",", ":")))
     (pub / "not_played.json").write_text(json.dumps(not_played_out, separators=(",", ":")))
 
