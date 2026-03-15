@@ -344,20 +344,62 @@ function insertHint(text) {
 // Returns { type:'matchup', team_a, team_b } or null.
 function detectMatchupIntent(msg) {
   if (!window.ALL_NODES) return null;
+
+  // Normalize for matching — intentionally does NOT convert St->Saint here
+  // because team labels use abbreviated forms (Wright St, Michigan St) and
+  // converting "st " in the message creates a mismatch vs the stored label.
+  // St John's alias is handled separately via TEAM_ALIASES in the API layer.
   function normName(s) {
     return s.toLowerCase().trim()
-      .replace(/\bst\.\s*/g, 'saint ').replace(/\bst\s+/g, 'saint ')
-      .replace(/\bft\.?\s+/g, 'fort ').replace(/[.'`]/g, '')
-      .replace(/\s+/g, ' ').trim();
+      .replace(/[.'`]/g, '')
+      .replace(/\s+/g, ' ')
+      .trim();
   }
+
   if (!msg.trim()) return null;
   const mNorm = normName(msg);
-  const found = window.ALL_NODES
-    .filter(n => n.region !== 'bubble' && n.seed !== null)  // bracket teams only
-    .filter(n => mNorm.includes(normName(n.label)) || mNorm.includes(normName(n.full_name)))
-    .map(n => ({ n, pos: mNorm.indexOf(normName(n.label) !== '' && mNorm.includes(normName(n.label)) ? normName(n.label) : normName(n.full_name)) }))
-    .sort((a, b) => a.pos - b.pos)
-    .map(x => x.n);
+
+  // Build candidates: {node, matchStr, pos, len}
+  const candidates = window.ALL_NODES
+    .filter(n => n.region !== 'bubble' && n.seed !== null)
+    .map(n => {
+      const lbl  = normName(n.label);
+      const full = normName(n.full_name);
+      // Prefer the longer of label/full_name that actually appears in the message
+      const matchStr = (full.length >= lbl.length && mNorm.includes(full)) ? full
+                     : mNorm.includes(lbl) ? lbl : null;
+      if (!matchStr) return null;
+      return { n, matchStr, pos: mNorm.indexOf(matchStr), len: matchStr.length };
+    })
+    .filter(Boolean);
+
+  // Greedy longest-first assignment: sort by match length desc, then assign each
+  // team its earliest position that doesn't overlap an already-claimed span.
+  // This handles "Iowa State vs Iowa" (Iowa State claims pos 0-9, Iowa gets pos 14),
+  // "Texas Tech vs Texas" (Texas Tech at 0, Texas at 14), etc.
+  const sortedByLen = [...candidates].sort((a, b) => b.len - a.len || a.pos - b.pos);
+  const usedRanges = [];
+  const assigned = [];
+
+  for (const c of sortedByLen) {
+    let searchFrom = 0, bestPos = -1;
+    while (searchFrom <= mNorm.length - c.len) {
+      const idx = mNorm.indexOf(c.matchStr, searchFrom);
+      if (idx === -1) break;
+      const overlaps = usedRanges.some(([s, e]) => idx < e && idx + c.len > s);
+      if (!overlaps) { bestPos = idx; break; }
+      searchFrom = idx + 1;
+    }
+    if (bestPos !== -1) {
+      usedRanges.push([bestPos, bestPos + c.len]);
+      assigned.push({ ...c, pos: bestPos });
+    }
+  }
+
+  // Sort by position in message, then prefer longer match on ties
+  assigned.sort((a, b) => a.pos - b.pos || b.len - a.len);
+
+  const found = assigned.map(x => x.n);
   if (found.length >= 2) return { type: 'matchup', team_a: found[0].label, team_b: found[1].label };
   return null;
 }
