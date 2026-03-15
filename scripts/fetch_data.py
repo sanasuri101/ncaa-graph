@@ -70,14 +70,12 @@ def extract_score(raw) -> str:
     return str(raw) if raw is not None else ""
 
 
+from datetime import datetime as _now_dt
+_m = _now_dt.now().month
+season_year = _now_dt.now().year + 1 if _m >= 10 else _now_dt.now().year
+
 def fetch_all_games() -> tuple[list, list]:
     bracket_ids = {t["espn_id"] for t in ALL_TEAMS}
-    # Derive current NCAA season year dynamically
-    # Seasons ending in year Y start in Oct/Nov of Y-1
-    from datetime import datetime as _now_dt
-    _m = _now_dt.now().month
-    season_year = _now_dt.now().year + 1 if _m >= 10 else _now_dt.now().year
-
     all_games: dict[str, dict] = {}
 
     for i, team in enumerate(ALL_TEAMS):

@@ -270,6 +270,21 @@
     "venue": "Spectrum Center"
   },
   {
+    "id": "401851183",
+    "date": "2026-03-15",
+    "name": "Virginia Cavaliers at Duke Blue Devils",
+    "team1_id": "150",
+    "team1_name": "Duke Blue Devils",
+    "team1_score": "74",
+    "team1_winner": true,
+    "team2_id": "258",
+    "team2_name": "Virginia Cavaliers",
+    "team2_score": "70",
+    "team2_winner": false,
+    "neutral": true,
+    "venue": "Spectrum Center"
+  },
+  {
     "id": "401826057",
     "date": "2025-12-21",
     "name": "UMBC Retrievers at South Florida Bulls",
@@ -3855,6 +3870,21 @@
     "venue": "United Center"
   },
   {
+    "id": "401851386",
+    "date": "2026-03-14",
+    "name": "Purdue Boilermakers at UCLA Bruins",
+    "team1_id": "26",
+    "team1_name": "UCLA Bruins",
+    "team1_score": "66",
+    "team1_winner": false,
+    "team2_id": "2509",
+    "team2_name": "Purdue Boilermakers",
+    "team2_score": "73",
+    "team2_winner": true,
+    "neutral": true,
+    "venue": "United Center"
+  },
+  {
     "id": "401823763",
     "date": "2025-11-19",
     "name": "Troy Trojans at San Diego State Aztecs",
@@ -4315,6 +4345,21 @@
     "team2_id": "2305",
     "team2_name": "Kansas Jayhawks",
     "team2_score": "47",
+    "team2_winner": false,
+    "neutral": true,
+    "venue": "T-Mobile Center"
+  },
+  {
+    "id": "401851306",
+    "date": "2026-03-14",
+    "name": "Houston Cougars at Arizona Wildcats",
+    "team1_id": "12",
+    "team1_name": "Arizona Wildcats",
+    "team1_score": "79",
+    "team1_winner": true,
+    "team2_id": "248",
+    "team2_name": "Houston Cougars",
+    "team2_score": "74",
     "team2_winner": false,
     "neutral": true,
     "venue": "T-Mobile Center"
@@ -5310,6 +5355,21 @@
     "venue": "Gampel Pavilion"
   },
   {
+    "id": "401851317",
+    "date": "2026-03-14",
+    "name": "UConn Huskies at St. John's Red Storm",
+    "team1_id": "2599",
+    "team1_name": "St. John's Red Storm",
+    "team1_score": "72",
+    "team1_winner": true,
+    "team2_id": "41",
+    "team2_name": "UConn Huskies",
+    "team2_score": "52",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "Madison Square Garden"
+  },
+  {
     "id": "401823498",
     "date": "2025-12-30",
     "name": "Queens University Royals at Auburn Tigers",
@@ -5503,6 +5563,21 @@
     "team2_winner": false,
     "neutral": false,
     "venue": "Dee Glen Smith Spectrum"
+  },
+  {
+    "id": "401851505",
+    "date": "2026-03-14",
+    "name": "San Diego State Aztecs at Utah State Aggies",
+    "team1_id": "328",
+    "team1_name": "Utah State Aggies",
+    "team1_score": "73",
+    "team1_winner": true,
+    "team2_id": "21",
+    "team2_name": "San Diego State Aztecs",
+    "team2_score": "62",
+    "team2_winner": false,
+    "neutral": true,
+    "venue": "Thomas & Mack Center"
   },
   {
     "id": "401825392",

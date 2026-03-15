@@ -6,9 +6,9 @@
       "full_name": "Duke Blue Devils",
       "region": "East",
       "seed": 1,
-      "wins_vs_field": 16,
+      "wins_vs_field": 17,
       "losses_vs_field": 2,
-      "size": 32.0,
+      "size": 33.5,
       "color": {
         "background": "#3B82F6",
         "border": "#1e293b",
@@ -21,7 +21,7 @@
         "color": "#f1f5f9",
         "size": 10
       },
-      "title": "Duke Blue Devils<br>Seed: 1 | East<br>W-L vs bracket field: 16-2"
+      "title": "Duke Blue Devils<br>Seed: 1 | East<br>W-L vs bracket field: 17-2"
     },
     {
       "id": "2378",
@@ -559,7 +559,7 @@
       "region": "South",
       "seed": 4,
       "wins_vs_field": 11,
-      "losses_vs_field": 2,
+      "losses_vs_field": 3,
       "size": 24.5,
       "color": {
         "background": "#F59E0B",
@@ -573,7 +573,7 @@
         "color": "#f1f5f9",
         "size": 10
       },
-      "title": "Virginia Cavaliers<br>Seed: 4 | South<br>W-L vs bracket field: 11-2"
+      "title": "Virginia Cavaliers<br>Seed: 4 | South<br>W-L vs bracket field: 11-3"
     },
     {
       "id": "3084",
@@ -650,9 +650,9 @@
       "full_name": "Purdue Boilermakers",
       "region": "South",
       "seed": 3,
-      "wins_vs_field": 10,
+      "wins_vs_field": 11,
       "losses_vs_field": 8,
-      "size": 23.0,
+      "size": 24.5,
       "color": {
         "background": "#F59E0B",
         "border": "#1e293b",
@@ -665,7 +665,7 @@
         "color": "#f1f5f9",
         "size": 10
       },
-      "title": "Purdue Boilermakers<br>Seed: 3 | South<br>W-L vs bracket field: 10-8"
+      "title": "Purdue Boilermakers<br>Seed: 3 | South<br>W-L vs bracket field: 11-8"
     },
     {
       "id": "2653",
@@ -697,7 +697,7 @@
       "region": "South",
       "seed": 7,
       "wins_vs_field": 4,
-      "losses_vs_field": 8,
+      "losses_vs_field": 9,
       "size": 14.0,
       "color": {
         "background": "#F59E0B",
@@ -711,7 +711,7 @@
         "color": "#f1f5f9",
         "size": 10
       },
-      "title": "UCLA Bruins<br>Seed: 7 | South<br>W-L vs bracket field: 4-8"
+      "title": "UCLA Bruins<br>Seed: 7 | South<br>W-L vs bracket field: 4-9"
     },
     {
       "id": "245",
@@ -743,7 +743,7 @@
       "region": "South",
       "seed": 2,
       "wins_vs_field": 11,
-      "losses_vs_field": 5,
+      "losses_vs_field": 6,
       "size": 24.5,
       "color": {
         "background": "#F59E0B",
@@ -757,7 +757,7 @@
         "color": "#f1f5f9",
         "size": 10
       },
-      "title": "Houston Cougars<br>Seed: 2 | South<br>W-L vs bracket field: 11-5"
+      "title": "Houston Cougars<br>Seed: 2 | South<br>W-L vs bracket field: 11-6"
     },
     {
       "id": "112358",
@@ -1134,7 +1134,7 @@
       "region": "Midwest",
       "seed": 2,
       "wins_vs_field": 10,
-      "losses_vs_field": 2,
+      "losses_vs_field": 3,
       "size": 23.0,
       "color": {
         "background": "#EF4444",
@@ -1148,7 +1148,7 @@
         "color": "#f1f5f9",
         "size": 10
       },
-      "title": "UConn Huskies<br>Seed: 2 | Midwest<br>W-L vs bracket field: 10-2"
+      "title": "UConn Huskies<br>Seed: 2 | Midwest<br>W-L vs bracket field: 10-3"
     },
     {
       "id": "2511",
@@ -1179,9 +1179,9 @@
       "full_name": "Arizona Wildcats",
       "region": "West",
       "seed": 1,
-      "wins_vs_field": 16,
+      "wins_vs_field": 17,
       "losses_vs_field": 2,
-      "size": 32.0,
+      "size": 33.5,
       "color": {
         "background": "#10B981",
         "border": "#1e293b",
@@ -1194,7 +1194,7 @@
         "color": "#f1f5f9",
         "size": 10
       },
-      "title": "Arizona Wildcats<br>Seed: 1 | West<br>W-L vs bracket field: 16-2"
+      "title": "Arizona Wildcats<br>Seed: 1 | West<br>W-L vs bracket field: 17-2"
     },
     {
       "id": "47",
@@ -1225,9 +1225,9 @@
       "full_name": "Utah State Aggies",
       "region": "West",
       "seed": 8,
-      "wins_vs_field": 4,
+      "wins_vs_field": 5,
       "losses_vs_field": 2,
-      "size": 14.0,
+      "size": 15.5,
       "color": {
         "background": "#10B981",
         "border": "#1e293b",
@@ -1240,7 +1240,7 @@
         "color": "#f1f5f9",
         "size": 10
       },
-      "title": "Utah State Aggies<br>Seed: 8 | West<br>W-L vs bracket field: 4-2"
+      "title": "Utah State Aggies<br>Seed: 8 | West<br>W-L vs bracket field: 5-2"
     },
     {
       "id": "2294",
@@ -1271,9 +1271,9 @@
       "full_name": "St. John's Red Storm",
       "region": "West",
       "seed": 5,
-      "wins_vs_field": 6,
+      "wins_vs_field": 7,
       "losses_vs_field": 5,
-      "size": 17.0,
+      "size": 18.5,
       "color": {
         "background": "#10B981",
         "border": "#1e293b",
@@ -1286,7 +1286,7 @@
         "color": "#f1f5f9",
         "size": 10
       },
-      "title": "St. John's Red Storm<br>Seed: 5 | West<br>W-L vs bracket field: 6-5"
+      "title": "St. John's Red Storm<br>Seed: 5 | West<br>W-L vs bracket field: 7-5"
     },
     {
       "id": "2377",
@@ -1663,7 +1663,7 @@
       "region": "bubble",
       "seed": null,
       "wins_vs_field": 4,
-      "losses_vs_field": 5,
+      "losses_vs_field": 6,
       "size": 14.0,
       "color": {
         "background": "#8B5CF6",
@@ -1677,7 +1677,7 @@
         "color": "#f1f5f9",
         "size": 10
       },
-      "title": "San Diego State Aztecs<br>Seed: None | bubble<br>W-L vs bracket field: 4-5"
+      "title": "San Diego State Aztecs<br>Seed: None | bubble<br>W-L vs bracket field: 4-6"
     },
     {
       "id": "24",
@@ -2073,6 +2073,24 @@
       "date": "2026-03-14",
       "margin": 12,
       "game_id": "401851182"
+    },
+    {
+      "from": "150",
+      "to": "258",
+      "label": "74-70",
+      "title": "Virginia Cavaliers at Duke Blue Devils<br>2026-03-15<br>Score: 74-70<br>Cross-region<br>Margin: 4 pts",
+      "color": {
+        "color": "#94a3b8",
+        "highlight": "#FFD700",
+        "opacity": 0.7
+      },
+      "width": 1,
+      "arrows": "to",
+      "same_region": false,
+      "winner_region": "East",
+      "date": "2026-03-15",
+      "margin": 4,
+      "game_id": "401851183"
     },
     {
       "from": "58",
@@ -6377,6 +6395,24 @@
       "game_id": "401851382"
     },
     {
+      "from": "2509",
+      "to": "26",
+      "label": "73-66",
+      "title": "Purdue Boilermakers at UCLA Bruins<br>2026-03-14<br>Score: 73-66<br>Same region<br>Margin: 7 pts",
+      "color": {
+        "color": "#F59E0B",
+        "highlight": "#FFD700",
+        "opacity": 0.7
+      },
+      "width": 1,
+      "arrows": "to",
+      "same_region": true,
+      "winner_region": "South",
+      "date": "2026-03-14",
+      "margin": 7,
+      "game_id": "401851386"
+    },
+    {
       "from": "2653",
       "to": "21",
       "label": "108-107",
@@ -6933,6 +6969,24 @@
       "date": "2026-03-14",
       "margin": 22,
       "game_id": "401851305"
+    },
+    {
+      "from": "12",
+      "to": "248",
+      "label": "79-74",
+      "title": "Houston Cougars at Arizona Wildcats<br>2026-03-14<br>Score: 79-74<br>Cross-region<br>Margin: 5 pts",
+      "color": {
+        "color": "#94a3b8",
+        "highlight": "#FFD700",
+        "opacity": 0.7
+      },
+      "width": 1,
+      "arrows": "to",
+      "same_region": false,
+      "winner_region": "West",
+      "date": "2026-03-14",
+      "margin": 5,
+      "game_id": "401851306"
     },
     {
       "from": "112358",
@@ -8123,6 +8177,24 @@
       "game_id": "401822963"
     },
     {
+      "from": "2599",
+      "to": "41",
+      "label": "72-52",
+      "title": "UConn Huskies at St. John's Red Storm<br>2026-03-14<br>Score: 72-52<br>Cross-region<br>Margin: 20 pts",
+      "color": {
+        "color": "#94a3b8",
+        "highlight": "#FFD700",
+        "opacity": 0.7
+      },
+      "width": 2,
+      "arrows": "to",
+      "same_region": false,
+      "winner_region": "West",
+      "date": "2026-03-14",
+      "margin": 20,
+      "game_id": "401851317"
+    },
+    {
       "from": "2",
       "to": "2511",
       "label": "106-65",
@@ -8355,6 +8427,24 @@
       "date": "2026-03-07",
       "margin": 4,
       "game_id": "401829340"
+    },
+    {
+      "from": "328",
+      "to": "21",
+      "label": "73-62",
+      "title": "San Diego State Aztecs at Utah State Aggies<br>2026-03-14<br>Score: 73-62<br>Cross-region<br>Margin: 11 pts",
+      "color": {
+        "color": "#94a3b8",
+        "highlight": "#FFD700",
+        "opacity": 0.7
+      },
+      "width": 1,
+      "arrows": "to",
+      "same_region": false,
+      "winner_region": "West",
+      "date": "2026-03-14",
+      "margin": 11,
+      "game_id": "401851505"
     },
     {
       "from": "127",
@@ -24498,10 +24588,10 @@
     }
   },
   "meta": {
-    "total_games": 400,
-    "rematches": 66,
+    "total_games": 405,
+    "rematches": 69,
     "not_played_cnt": 2527,
     "season": "2025-26",
-    "generated_at": "2026-03-14T20:47:01.102494Z"
+    "generated_at": "2026-03-15T06:46:22.781442Z"
   }
 }
