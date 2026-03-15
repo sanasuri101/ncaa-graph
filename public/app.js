@@ -680,7 +680,8 @@ function hideLoading() {
   overlay.style.transition = 'opacity .4s';
   setTimeout(() => {
     overlay.remove();
-    initMobileFirstImpression(); // fires exactly when loading is done
+    initMobileUI();              // set up drag, tabs, sidebar toggle
+    initMobileFirstImpression(); // open sheet, default to overview
   }, 400);
 }
 
