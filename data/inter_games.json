@@ -1215,6 +1215,21 @@
     "venue": "Bridgestone Arena"
   },
   {
+    "id": "401851571",
+    "date": "2026-03-15",
+    "name": "Vanderbilt Commodores at Arkansas Razorbacks",
+    "team1_id": "8",
+    "team1_name": "Arkansas Razorbacks",
+    "team1_score": "86",
+    "team1_winner": true,
+    "team2_id": "238",
+    "team2_name": "Vanderbilt Commodores",
+    "team2_score": "75",
+    "team2_winner": false,
+    "neutral": true,
+    "venue": "Bridgestone Arena"
+  },
+  {
     "id": "401817241",
     "date": "2025-11-12",
     "name": "Kentucky Wildcats at Louisville Cardinals",
@@ -3820,6 +3835,21 @@
     "team2_id": "2509",
     "team2_name": "Purdue Boilermakers",
     "team2_score": "73",
+    "team2_winner": true,
+    "neutral": true,
+    "venue": "United Center"
+  },
+  {
+    "id": "401851388",
+    "date": "2026-03-15",
+    "name": "Purdue Boilermakers at Michigan Wolverines",
+    "team1_id": "130",
+    "team1_name": "Michigan Wolverines",
+    "team1_score": "72",
+    "team1_winner": false,
+    "team2_id": "2509",
+    "team2_name": "Purdue Boilermakers",
+    "team2_score": "80",
     "team2_winner": true,
     "neutral": true,
     "venue": "United Center"
