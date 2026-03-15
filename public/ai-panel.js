@@ -84,7 +84,11 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.ai-tab').forEach(btn => {
     btn.addEventListener('click', () => {
       const mode = btn.dataset.mode;
+      // Update active state on all tabs
       document.querySelectorAll('.ai-tab').forEach(b => b.classList.toggle('active', b.dataset.mode === mode));
+      // For mob-only-tabs (overview/bracket/rankings/detail), let app.js handle panel switching
+      if (btn.classList.contains('mob-only-tab')) return;
+      // For native panels (stats/chat), activate the matching panel
       document.querySelectorAll('.ai-mode-content').forEach(el => el.classList.toggle('active', el.id === `panel-${mode}`));
     });
   });

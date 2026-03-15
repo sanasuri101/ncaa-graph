@@ -1154,6 +1154,7 @@ function initMobileUI() {
 
   // ── Mobile-only tabs: Overview, Bracket, Rankings ─────────────────────────
   // These mirror content from the hidden sidebar into panels inside the sheet.
+  // ai-panel.js also binds .ai-tab clicks but skips mob-only-tabs, so no conflict.
   document.querySelectorAll('.mob-only-tab').forEach(btn => {
     if (btn._mobTabBound) return;
     btn._mobTabBound = true;
@@ -1161,14 +1162,13 @@ function initMobileUI() {
       const mode = btn.dataset.mode;
       const mobPanel = document.getElementById(`mob-panel-${mode}`);
       if (!mobPanel) return;
-      // Sync content from sidebar tab
+      // Sync fresh content from sidebar tab every time
       const sidebarContent = document.getElementById(`tab-${mode}`);
       if (sidebarContent) mobPanel.innerHTML = sidebarContent.innerHTML;
       if (mode === 'bracket' && typeof initBracket === 'function') initBracket();
-      // Deactivate all ai-mode-content panels
+      // Deactivate ALL panels including native stats/chat panels
       document.querySelectorAll('.ai-mode-content').forEach(p => p.classList.remove('active'));
       mobPanel.classList.add('active');
-      // Open sheet if not already
       aiPanel.classList.add('open');
     });
   });

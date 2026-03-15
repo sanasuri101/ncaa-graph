@@ -1663,11 +1663,13 @@ section { margin-bottom: 20px; }
 /* Mobile panel content for sidebar tabs */
 #mob-panel-overview,
 #mob-panel-bracket,
-#mob-panel-rankings {
-  overflow-y: auto;
+#mob-panel-rankings,
+#mob-panel-detail {
+  overflow-y: auto !important;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
   padding: 10px 12px;
+  flex-direction: column;
 }
 
 /* Stats panel cells — tighter Pickle card style */
