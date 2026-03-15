@@ -93,10 +93,10 @@ function initGraph() {
     to:           np.b,
     color:        { color: '#ccc6b9', opacity: 0.6 },
     dashes:       true,
-    width:        1,
+    width:        2,  // wider for easier click detection
     arrows:       '',
     label:        '',
-    title:        `${np.a_name} vs ${np.b_name}: Never played`,
+    title:        undefined, // no hover tooltip — sidebar shows detail on click
     is_not_played: true,
   }));
 
@@ -148,13 +148,27 @@ function initGraph() {
 
 // ── Filters ───────────────────────────────────────────────────────────────────
 function applyFilters() {
-  if (customActive) { applyCustomView(); return; }
-  // If nothing is selected, stay empty
-  if (CUSTOM_SELECTION.size === 0 && nodesDS.length === 0) return;
-
   const rv = document.getElementById('region-filter').value;
 
-  // Nodes in scope for the selected region
+  // Selecting a specific region always drives the view directly —
+  // exit custom mode so the dropdown is the source of truth
+  if (rv !== 'all' && rv !== 'same' && rv !== 'cross') {
+    if (customActive) {
+      customActive = false;
+      const pillsBar = document.getElementById('custom-pills-bar');
+      const clearBtn = document.getElementById('custom-clear-btn');
+      if (pillsBar) pillsBar.style.display = 'none';
+      if (clearBtn) clearBtn.style.display = 'none';
+    }
+    showEmptyState(false);
+  } else {
+    // All / Same / Cross — respect existing custom mode
+    if (customActive) { applyCustomView(); return; }
+    // Nothing selected and graph empty — stay empty
+    if (CUSTOM_SELECTION.size === 0 && nodesDS.length === 0) return;
+  }
+
+  // Nodes in scope
   let scopedIds;
   if (rv === 'all' || rv === 'same' || rv === 'cross') {
     scopedIds = new Set(ALL_NODES.map(n => n.id));
@@ -172,7 +186,6 @@ function applyFilters() {
     } else if (rv === 'cross') {
       e = e.filter(x => !x.same_region);
     } else if (rv !== 'all') {
-      // Both endpoints must be in the selected region
       e = e.filter(x => scopedIds.has(x.from) && scopedIds.has(x.to));
     }
     edges = edges.concat(e);
@@ -182,7 +195,6 @@ function applyFilters() {
   if (currentView === 'notplayed' || currentView === 'both') {
     let np = NP_EDGES;
     if (rv === 'same') {
-      // Keep only NP pairs where both teams are in the same region
       const regionOf = {};
       ALL_NODES.forEach(n => { regionOf[n.id] = n.region; });
       np = np.filter(x => regionOf[x.from] && regionOf[x.from] === regionOf[x.to]);
@@ -196,7 +208,7 @@ function applyFilters() {
     edges = edges.concat(np);
   }
 
-  // ── Visible nodes: only those in scope that appear in an edge ──
+  // ── Visible nodes ──
   const activeIds = new Set([...edges.map(e => e.from), ...edges.map(e => e.to)]);
   const nodes = ALL_NODES.filter(n =>
     scopedIds.has(n.id) && (activeIds.has(n.id) || edges.length === 0)
@@ -206,6 +218,11 @@ function applyFilters() {
   nodesDS.add(nodes.length > 0 ? nodes : ALL_NODES.filter(n => scopedIds.has(n.id)));
   edgesDS.clear();
   edgesDS.add(edges);
+
+  const teamCount = nodesDS.length;
+  const playedCnt = edgesDS.get({ filter: e => !e.is_not_played }).length;
+  const npCnt     = edgesDS.get({ filter: e =>  e.is_not_played }).length;
+  updateStats(teamCount, playedCnt, npCnt);
 }
 
 function setView(view) {
@@ -937,7 +954,7 @@ function renderCustom() {
           width:         1,
           arrows:        '',
           label:         '',
-          title:         `${na?.label ?? selArr[i]} vs ${nb?.label ?? selArr[j]}: Never played`,
+          title:         undefined, // no hover tooltip — sidebar shows detail on click
           is_not_played: true,
         });
       }
