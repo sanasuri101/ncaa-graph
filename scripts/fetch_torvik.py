@@ -262,6 +262,67 @@ def main():
         dest.write_text(json.dumps(output, indent=2))
 
     print(f"  Wrote data/torvik_stats.json and public/data/torvik_stats.json")
+
+    # ── Build opp_barthag.json: ESPN_ID -> barthag for non-bracket opponents ──
+    # Used by bracket.js quality-weighted decay to weight wins by opponent strength
+    import re as _re
+
+    def _strip_mascot(s):
+        s = s.lower().strip()
+        words = s.split()
+        for n in [3, 2, 1]:
+            if len(words) <= n:
+                continue
+            school = " ".join(words[:-n])
+            if school in torvik_by_lower:
+                return school
+        return s
+
+    def _torvik_variants(name):
+        n = name.lower()
+        yield n
+        yield n.replace("state", "st.")
+        yield n.replace("state", "st")
+        yield n.replace("st.", "state")
+        yield n.replace(" & ", " and ")
+        yield _re.sub(r"\bnorth ", "n. ", n)
+        yield _re.sub(r"\bsouth ", "s. ", n)
+
+    # Build full torvik name -> barthag map
+    # Re-fetch raw Torvik JSON for the full team list (all 365 teams, not just bracket)
+    try:
+        _req = urllib.request.Request(URL, headers={"User-Agent": "Mozilla/5.0"})
+        with urllib.request.urlopen(_req, timeout=20) as _resp:
+            _raw = json.loads(_resp.read())
+        torvik_by_lower = {row[1].lower(): float(row[8]) for row in _raw if len(row) > 8}
+    except Exception:
+        torvik_by_lower = {}
+
+    # Load all game participants
+    all_games_path = DATA_DIR / "all_games.json"
+    opp_barthag = {}
+    if all_games_path.exists():
+        all_games_data = json.loads(all_games_path.read_text())
+        bracket_id_set = {str(t["espn_id"]) for t in bracket}
+        id_to_display  = {}
+        for g in all_games_data:
+            id_to_display[g["team1_id"]] = g["team1_name"]
+            id_to_display[g["team2_id"]] = g["team2_name"]
+
+        for espn_id, display_name in id_to_display.items():
+            if espn_id in bracket_id_set:
+                continue
+            school = _strip_mascot(display_name)
+            for variant in _torvik_variants(school):
+                if variant in torvik_by_lower:
+                    opp_barthag[espn_id] = round(torvik_by_lower[variant], 4)
+                    break
+
+    (DATA_DIR / "opp_barthag.json").write_text(
+        json.dumps({"generated": datetime.now(timezone.utc).isoformat(), "opp_barthag": opp_barthag},
+                   separators=(",", ":"))
+    )
+    print(f"  Wrote data/opp_barthag.json ({len(opp_barthag)} non-bracket opponent mappings)")
     print(f"  Top 5 by T-Rank:")
     for t in output["top_10"][:5]:
         tv = t["torvik"]
