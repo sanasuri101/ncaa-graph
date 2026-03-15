@@ -307,8 +307,10 @@ def main():
 
     pub = DATA_DIR.parent / "public" / "data"
     pub.mkdir(parents=True, exist_ok=True)
-    # Write full graph_data WITH not_played included — app reads data.not_played directly
-    (pub / "graph_data.json").write_text(json.dumps(graph, separators=(",", ":")))
+    # Write graph_data to public — strip a_name/b_name from not_played (not used by app, saves ~110KB)
+    pub_graph = dict(graph)
+    pub_graph["not_played"] = [{"a": x["a"], "b": x["b"]} for x in graph["not_played"]]
+    (pub / "graph_data.json").write_text(json.dumps(pub_graph, separators=(",", ":")))
     (pub / "recent_form.json").write_text(json.dumps(recent_form_out, separators=(",", ":")))
     (pub / "not_played.json").write_text(json.dumps(not_played_out, separators=(",", ":")))
 
