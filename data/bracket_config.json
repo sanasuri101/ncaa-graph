@@ -100,7 +100,7 @@
     },
     {
       "bracket_name": "Santa Clara",
-      "espn_id": "2608",
+      "espn_id": "2541",
       "displayName": "Santa Clara",
       "region": "East",
       "seed": 10
@@ -128,7 +128,7 @@
     },
     {
       "bracket_name": "Kennesaw St",
-      "espn_id": "2390",
+      "espn_id": "338",
       "displayName": "Kennesaw St",
       "region": "South",
       "seed": 16
@@ -282,7 +282,7 @@
     },
     {
       "bracket_name": "McNeese",
-      "espn_id": "2378",
+      "espn_id": "2377",
       "displayName": "McNeese",
       "region": "Midwest",
       "seed": 12

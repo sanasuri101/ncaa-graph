@@ -323,14 +323,14 @@
       "title": "Kentucky<br>Seed: 7 | East<br>W-L vs bracket field: 9-13"
     },
     {
-      "id": "2608",
+      "id": "2541",
       "label": "Santa Clara",
       "full_name": "Santa Clara",
       "region": "East",
       "seed": 10,
-      "wins_vs_field": 1,
-      "losses_vs_field": 2,
-      "size": 9.5,
+      "wins_vs_field": 4,
+      "losses_vs_field": 6,
+      "size": 14.0,
       "color": {
         "background": "#3B82F6",
         "border": "#1e293b",
@@ -343,7 +343,7 @@
         "color": "#f1f5f9",
         "size": 10
       },
-      "title": "Santa Clara<br>Seed: 10 | East<br>W-L vs bracket field: 1-2"
+      "title": "Santa Clara<br>Seed: 10 | East<br>W-L vs bracket field: 4-6"
     },
     {
       "id": "66",
@@ -415,14 +415,14 @@
       "title": "Florida<br>Seed: 1 | South<br>W-L vs bracket field: 13-7"
     },
     {
-      "id": "2390",
+      "id": "338",
       "label": "Kennesaw St",
       "full_name": "Kennesaw St",
       "region": "South",
       "seed": 16,
-      "wins_vs_field": 5,
-      "losses_vs_field": 6,
-      "size": 15.5,
+      "wins_vs_field": 0,
+      "losses_vs_field": 2,
+      "size": 8.0,
       "color": {
         "background": "#F59E0B",
         "border": "#1e293b",
@@ -435,7 +435,7 @@
         "color": "#f1f5f9",
         "size": 10
       },
-      "title": "Kennesaw St<br>Seed: 16 | South<br>W-L vs bracket field: 5-6"
+      "title": "Kennesaw St<br>Seed: 16 | South<br>W-L vs bracket field: 0-2"
     },
     {
       "id": "2440",
@@ -444,7 +444,7 @@
       "region": "South",
       "seed": 16,
       "wins_vs_field": 2,
-      "losses_vs_field": 5,
+      "losses_vs_field": 6,
       "size": 11.0,
       "color": {
         "background": "#F59E0B",
@@ -458,7 +458,7 @@
         "color": "#f1f5f9",
         "size": 10
       },
-      "title": "Prairie View<br>Seed: 16 | South<br>W-L vs bracket field: 2-5"
+      "title": "Prairie View<br>Seed: 16 | South<br>W-L vs bracket field: 2-6"
     },
     {
       "id": "228",
@@ -558,9 +558,9 @@
       "full_name": "Gonzaga",
       "region": "South",
       "seed": 4,
-      "wins_vs_field": 5,
+      "wins_vs_field": 8,
       "losses_vs_field": 2,
-      "size": 15.5,
+      "size": 20.0,
       "color": {
         "background": "#F59E0B",
         "border": "#1e293b",
@@ -573,7 +573,7 @@
         "color": "#f1f5f9",
         "size": 10
       },
-      "title": "Gonzaga<br>Seed: 4 | South<br>W-L vs bracket field: 5-2"
+      "title": "Gonzaga<br>Seed: 4 | South<br>W-L vs bracket field: 8-2"
     },
     {
       "id": "2275",
@@ -696,9 +696,9 @@
       "full_name": "Saint Mary's",
       "region": "South",
       "seed": 7,
-      "wins_vs_field": 1,
-      "losses_vs_field": 2,
-      "size": 9.5,
+      "wins_vs_field": 2,
+      "losses_vs_field": 4,
+      "size": 11.0,
       "color": {
         "background": "#F59E0B",
         "border": "#1e293b",
@@ -711,7 +711,7 @@
         "color": "#f1f5f9",
         "size": 10
       },
-      "title": "Saint Mary's<br>Seed: 7 | South<br>W-L vs bracket field: 1-2"
+      "title": "Saint Mary's<br>Seed: 7 | South<br>W-L vs bracket field: 2-4"
     },
     {
       "id": "245",
@@ -788,9 +788,9 @@
       "full_name": "Michigan",
       "region": "Midwest",
       "seed": 1,
-      "wins_vs_field": 17,
+      "wins_vs_field": 18,
       "losses_vs_field": 2,
-      "size": 33.5,
+      "size": 35.0,
       "color": {
         "background": "#EF4444",
         "border": "#1e293b",
@@ -803,7 +803,7 @@
         "color": "#f1f5f9",
         "size": 10
       },
-      "title": "Michigan<br>Seed: 1 | Midwest<br>W-L vs bracket field: 17-2"
+      "title": "Michigan<br>Seed: 1 | Midwest<br>W-L vs bracket field: 18-2"
     },
     {
       "id": "70",
@@ -880,9 +880,9 @@
       "full_name": "Saint Louis",
       "region": "Midwest",
       "seed": 9,
-      "wins_vs_field": 2,
+      "wins_vs_field": 3,
       "losses_vs_field": 1,
-      "size": 11.0,
+      "size": 12.5,
       "color": {
         "background": "#EF4444",
         "border": "#1e293b",
@@ -895,7 +895,7 @@
         "color": "#f1f5f9",
         "size": 10
       },
-      "title": "Saint Louis<br>Seed: 9 | Midwest<br>W-L vs bracket field: 2-1"
+      "title": "Saint Louis<br>Seed: 9 | Midwest<br>W-L vs bracket field: 3-1"
     },
     {
       "id": "8",
@@ -921,13 +921,13 @@
       "title": "Arkansas<br>Seed: 5 | Midwest<br>W-L vs bracket field: 11-8"
     },
     {
-      "id": "2378",
+      "id": "2377",
       "label": "McNeese",
       "full_name": "McNeese",
       "region": "Midwest",
       "seed": 12,
       "wins_vs_field": 0,
-      "losses_vs_field": 1,
+      "losses_vs_field": 2,
       "size": 8.0,
       "color": {
         "background": "#EF4444",
@@ -941,7 +941,7 @@
         "color": "#f1f5f9",
         "size": 10
       },
-      "title": "McNeese<br>Seed: 12 | Midwest<br>W-L vs bracket field: 0-1"
+      "title": "McNeese<br>Seed: 12 | Midwest<br>W-L vs bracket field: 0-2"
     },
     {
       "id": "2305",
@@ -1018,9 +1018,9 @@
       "full_name": "South Florida",
       "region": "Midwest",
       "seed": 11,
-      "wins_vs_field": 2,
+      "wins_vs_field": 3,
       "losses_vs_field": 2,
-      "size": 11.0,
+      "size": 12.5,
       "color": {
         "background": "#EF4444",
         "border": "#1e293b",
@@ -1033,7 +1033,7 @@
         "color": "#f1f5f9",
         "size": 10
       },
-      "title": "South Florida<br>Seed: 11 | Midwest<br>W-L vs bracket field: 2-2"
+      "title": "South Florida<br>Seed: 11 | Midwest<br>W-L vs bracket field: 3-2"
     },
     {
       "id": "158",
@@ -1317,9 +1317,9 @@
       "full_name": "Alabama",
       "region": "West",
       "seed": 4,
-      "wins_vs_field": 13,
+      "wins_vs_field": 14,
       "losses_vs_field": 8,
-      "size": 27.5,
+      "size": 29.0,
       "color": {
         "background": "#10B981",
         "border": "#1e293b",
@@ -1332,7 +1332,7 @@
         "color": "#f1f5f9",
         "size": 10
       },
-      "title": "Alabama<br>Seed: 4 | West<br>W-L vs bracket field: 13-8"
+      "title": "Alabama<br>Seed: 4 | West<br>W-L vs bracket field: 14-8"
     },
     {
       "id": "2449",
@@ -1639,9 +1639,9 @@
       "full_name": "New Mexico",
       "region": "bubble",
       "seed": null,
-      "wins_vs_field": 3,
+      "wins_vs_field": 4,
       "losses_vs_field": 6,
-      "size": 12.5,
+      "size": 14.0,
       "color": {
         "background": "#8B5CF6",
         "border": "#1e293b",
@@ -1654,7 +1654,7 @@
         "color": "#f1f5f9",
         "size": 10
       },
-      "title": "New Mexico<br>Seed: None | bubble<br>W-L vs bracket field: 3-6"
+      "title": "New Mexico<br>Seed: None | bubble<br>W-L vs bracket field: 4-6"
     },
     {
       "id": "21",
@@ -4307,40 +4307,184 @@
       "game_id": "401851565"
     },
     {
-      "from": "2250",
-      "to": "2608",
-      "label": "73-65",
-      "title": "Saint Mary's Gaels at Gonzaga Bulldogs<br>2026-02-01<br>Score: 73-65<br>Same region<br>Margin: 8 pts",
+      "from": "2541",
+      "to": "2377",
+      "label": "79-67",
+      "title": "McNeese Cowboys at Santa Clara Broncos<br>2025-11-08<br>Score: 79-67<br>Cross-region<br>Margin: 12 pts",
       "color": {
-        "color": "#F59E0B",
+        "color": "#94a3b8",
         "highlight": "#FFD700",
         "opacity": 0.7
       },
       "width": 1,
       "arrows": "to",
-      "same_region": true,
+      "same_region": false,
+      "winner_region": "East",
+      "date": "2025-11-08",
+      "margin": 12,
+      "game_id": "401824119"
+    },
+    {
+      "from": "2541",
+      "to": "2440",
+      "label": "98-83",
+      "title": "Nevada Wolf Pack at Santa Clara Broncos<br>2025-11-16<br>Score: 98-83<br>Cross-region<br>Margin: 15 pts",
+      "color": {
+        "color": "#94a3b8",
+        "highlight": "#FFD700",
+        "opacity": 0.7
+      },
+      "width": 2,
+      "arrows": "to",
+      "same_region": false,
+      "winner_region": "East",
+      "date": "2025-11-16",
+      "margin": 15,
+      "game_id": "401824120"
+    },
+    {
+      "from": "139",
+      "to": "2541",
+      "label": "71-70",
+      "title": "Santa Clara Broncos at Saint Louis Billikens<br>2025-11-28<br>Score: 71-70<br>Cross-region<br>Margin: 1 pts",
+      "color": {
+        "color": "#94a3b8",
+        "highlight": "#FFD700",
+        "opacity": 0.7
+      },
+      "width": 1,
+      "arrows": "to",
+      "same_region": false,
+      "winner_region": "Midwest",
+      "date": "2025-11-28",
+      "margin": 1,
+      "game_id": "401817187"
+    },
+    {
+      "from": "167",
+      "to": "2541",
+      "label": "98-71",
+      "title": "Santa Clara Broncos at New Mexico Lobos<br>2025-12-07<br>Score: 98-71<br>Cross-region<br>Margin: 27 pts",
+      "color": {
+        "color": "#94a3b8",
+        "highlight": "#FFD700",
+        "opacity": 0.7
+      },
+      "width": 2,
+      "arrows": "to",
+      "same_region": false,
+      "winner_region": "bubble",
+      "date": "2025-12-07",
+      "margin": 27,
+      "game_id": "401824122"
+    },
+    {
+      "from": "2250",
+      "to": "2541",
+      "label": "89-77",
+      "title": "Santa Clara Broncos at Gonzaga Bulldogs<br>2026-01-09<br>Score: 89-77<br>Cross-region<br>Margin: 12 pts",
+      "color": {
+        "color": "#94a3b8",
+        "highlight": "#FFD700",
+        "opacity": 0.7
+      },
+      "width": 1,
+      "arrows": "to",
+      "same_region": false,
       "winner_region": "South",
-      "date": "2026-02-01",
+      "date": "2026-01-09",
+      "margin": 12,
+      "game_id": "401829190"
+    },
+    {
+      "from": "2541",
+      "to": "2608",
+      "label": "62-54",
+      "title": "Saint Mary's Gaels at Santa Clara Broncos<br>2026-01-18<br>Score: 62-54<br>Cross-region<br>Margin: 8 pts",
+      "color": {
+        "color": "#94a3b8",
+        "highlight": "#FFD700",
+        "opacity": 0.7
+      },
+      "width": 1,
+      "arrows": "to",
+      "same_region": false,
+      "winner_region": "East",
+      "date": "2026-01-18",
       "margin": 8,
-      "game_id": "401829225"
+      "game_id": "401829206"
+    },
+    {
+      "from": "2250",
+      "to": "2541",
+      "label": "94-86",
+      "title": "Gonzaga Bulldogs at Santa Clara Broncos<br>2026-02-15<br>Score: 94-86<br>Cross-region<br>Margin: 8 pts",
+      "color": {
+        "color": "#94a3b8",
+        "highlight": "#FFD700",
+        "opacity": 0.7
+      },
+      "width": 1,
+      "arrows": "to",
+      "same_region": false,
+      "winner_region": "South",
+      "date": "2026-02-15",
+      "margin": 8,
+      "game_id": "401829245"
     },
     {
       "from": "2608",
-      "to": "2250",
-      "label": "70-59",
-      "title": "Gonzaga Bulldogs at Saint Mary's Gaels<br>2026-03-01<br>Score: 70-59<br>Same region<br>Margin: 11 pts",
+      "to": "2541",
+      "label": "86-67",
+      "title": "Santa Clara Broncos at Saint Mary's Gaels<br>2026-02-26<br>Score: 86-67<br>Cross-region<br>Margin: 19 pts",
       "color": {
-        "color": "#F59E0B",
+        "color": "#94a3b8",
+        "highlight": "#FFD700",
+        "opacity": 0.7
+      },
+      "width": 2,
+      "arrows": "to",
+      "same_region": false,
+      "winner_region": "South",
+      "date": "2026-02-26",
+      "margin": 19,
+      "game_id": "401829262"
+    },
+    {
+      "from": "2541",
+      "to": "2608",
+      "label": "76-71",
+      "title": "Santa Clara Broncos at Saint Mary's Gaels<br>2026-03-10<br>Score: 76-71<br>Cross-region<br>Margin: 5 pts",
+      "color": {
+        "color": "#94a3b8",
         "highlight": "#FFD700",
         "opacity": 0.7
       },
       "width": 1,
       "arrows": "to",
-      "same_region": true,
+      "same_region": false,
+      "winner_region": "East",
+      "date": "2026-03-10",
+      "margin": 5,
+      "game_id": "401851760"
+    },
+    {
+      "from": "2250",
+      "to": "2541",
+      "label": "79-68",
+      "title": "Santa Clara Broncos at Gonzaga Bulldogs<br>2026-03-11<br>Score: 79-68<br>Cross-region<br>Margin: 11 pts",
+      "color": {
+        "color": "#94a3b8",
+        "highlight": "#FFD700",
+        "opacity": 0.7
+      },
+      "width": 1,
+      "arrows": "to",
+      "same_region": false,
       "winner_region": "South",
-      "date": "2026-03-01",
+      "date": "2026-03-11",
       "margin": 11,
-      "game_id": "401829265"
+      "game_id": "401851762"
     },
     {
       "from": "66",
@@ -4811,148 +4955,40 @@
       "game_id": "401808266"
     },
     {
-      "from": "252",
-      "to": "2390",
-      "label": "72-62",
-      "title": "BYU Cougars at Miami Hurricanes<br>2025-11-27<br>Score: 72-62<br>Same region<br>Margin: 10 pts",
-      "color": {
-        "color": "#10B981",
-        "highlight": "#FFD700",
-        "opacity": 0.7
-      },
-      "width": 1,
-      "arrows": "to",
-      "same_region": true,
-      "winner_region": "West",
-      "date": "2025-11-27",
-      "margin": 10,
-      "game_id": "401809419"
-    },
-    {
-      "from": "228",
-      "to": "2390",
-      "label": "69-59",
-      "title": "Miami Hurricanes at Clemson Tigers<br>2026-01-17<br>Score: 69-59<br>Cross-region<br>Margin: 10 pts",
+      "from": "58",
+      "to": "338",
+      "label": "108-89",
+      "title": "South Florida Bulls at Kennesaw State Owls<br>2025-11-16<br>Score: 108-89<br>Cross-region<br>Margin: 19 pts",
       "color": {
         "color": "#94a3b8",
-        "highlight": "#FFD700",
-        "opacity": 0.7
-      },
-      "width": 1,
-      "arrows": "to",
-      "same_region": false,
-      "winner_region": "South",
-      "date": "2026-01-17",
-      "margin": 10,
-      "game_id": "401820676"
-    },
-    {
-      "from": "2390",
-      "to": "24",
-      "label": "79-70",
-      "title": "Stanford Cardinal at Miami Hurricanes<br>2026-01-29<br>Score: 79-70<br>Cross-region<br>Margin: 9 pts",
-      "color": {
-        "color": "#94a3b8",
-        "highlight": "#FFD700",
-        "opacity": 0.7
-      },
-      "width": 1,
-      "arrows": "to",
-      "same_region": false,
-      "winner_region": "West",
-      "date": "2026-01-29",
-      "margin": 9,
-      "game_id": "401820701"
-    },
-    {
-      "from": "2390",
-      "to": "153",
-      "label": "75-66",
-      "title": "North Carolina Tar Heels at Miami Hurricanes<br>2026-02-11<br>Score: 75-66<br>Cross-region<br>Margin: 9 pts",
-      "color": {
-        "color": "#94a3b8",
-        "highlight": "#FFD700",
-        "opacity": 0.7
-      },
-      "width": 1,
-      "arrows": "to",
-      "same_region": false,
-      "winner_region": "West",
-      "date": "2026-02-11",
-      "margin": 9,
-      "game_id": "401820731"
-    },
-    {
-      "from": "2390",
-      "to": "152",
-      "label": "77-76",
-      "title": "Miami Hurricanes at NC State Wolfpack<br>2026-02-14<br>Score: 77-76<br>Cross-region<br>Margin: 1 pts",
-      "color": {
-        "color": "#94a3b8",
-        "highlight": "#FFD700",
-        "opacity": 0.7
-      },
-      "width": 1,
-      "arrows": "to",
-      "same_region": false,
-      "winner_region": "West",
-      "date": "2026-02-14",
-      "margin": 1,
-      "game_id": "401820741"
-    },
-    {
-      "from": "258",
-      "to": "2390",
-      "label": "86-83",
-      "title": "Miami Hurricanes at Virginia Cavaliers<br>2026-02-21<br>Score: 86-83<br>Same region<br>Margin: 3 pts",
-      "color": {
-        "color": "#10B981",
-        "highlight": "#FFD700",
-        "opacity": 0.7
-      },
-      "width": 1,
-      "arrows": "to",
-      "same_region": true,
-      "winner_region": "West",
-      "date": "2026-02-21",
-      "margin": 3,
-      "game_id": "401820760"
-    },
-    {
-      "from": "2390",
-      "to": "2567",
-      "label": "77-69",
-      "title": "Miami Hurricanes at SMU Mustangs<br>2026-03-05<br>Score: 77-69<br>Same region<br>Margin: 8 pts",
-      "color": {
-        "color": "#10B981",
-        "highlight": "#FFD700",
-        "opacity": 0.7
-      },
-      "width": 1,
-      "arrows": "to",
-      "same_region": true,
-      "winner_region": "West",
-      "date": "2026-03-05",
-      "margin": 8,
-      "game_id": "401820784"
-    },
-    {
-      "from": "258",
-      "to": "2390",
-      "label": "84-62",
-      "title": "Miami Hurricanes at Virginia Cavaliers<br>2026-03-13<br>Score: 84-62<br>Same region<br>Margin: 22 pts",
-      "color": {
-        "color": "#10B981",
         "highlight": "#FFD700",
         "opacity": 0.7
       },
       "width": 2,
       "arrows": "to",
-      "same_region": true,
+      "same_region": false,
+      "winner_region": "Midwest",
+      "date": "2025-11-16",
+      "margin": 19,
+      "game_id": "401826813"
+    },
+    {
+      "from": "333",
+      "to": "338",
+      "label": "92-81",
+      "title": "Kennesaw State Owls at Alabama Crimson Tide<br>2025-12-21<br>Score: 92-81<br>Cross-region<br>Margin: 11 pts",
+      "color": {
+        "color": "#94a3b8",
+        "highlight": "#FFD700",
+        "opacity": 0.7
+      },
+      "width": 1,
+      "arrows": "to",
+      "same_region": false,
       "winner_region": "West",
-      "date": "2026-03-13",
-      "margin": 22,
-      "game_id": "401851181"
+      "date": "2025-12-21",
+      "margin": 11,
+      "game_id": "401812268"
     },
     {
       "from": "21",
@@ -5169,6 +5205,24 @@
       "date": "2026-01-08",
       "margin": 4,
       "game_id": "401820652"
+    },
+    {
+      "from": "228",
+      "to": "2390",
+      "label": "69-59",
+      "title": "Miami Hurricanes at Clemson Tigers<br>2026-01-17<br>Score: 69-59<br>Cross-region<br>Margin: 10 pts",
+      "color": {
+        "color": "#94a3b8",
+        "highlight": "#FFD700",
+        "opacity": 0.7
+      },
+      "width": 1,
+      "arrows": "to",
+      "same_region": false,
+      "winner_region": "South",
+      "date": "2026-01-17",
+      "margin": 10,
+      "game_id": "401820676"
     },
     {
       "from": "152",
@@ -5637,6 +5691,42 @@
       "date": "2025-12-14",
       "margin": 10,
       "game_id": "401813763"
+    },
+    {
+      "from": "2250",
+      "to": "2608",
+      "label": "73-65",
+      "title": "Saint Mary's Gaels at Gonzaga Bulldogs<br>2026-02-01<br>Score: 73-65<br>Same region<br>Margin: 8 pts",
+      "color": {
+        "color": "#F59E0B",
+        "highlight": "#FFD700",
+        "opacity": 0.7
+      },
+      "width": 1,
+      "arrows": "to",
+      "same_region": true,
+      "winner_region": "South",
+      "date": "2026-02-01",
+      "margin": 8,
+      "game_id": "401829225"
+    },
+    {
+      "from": "2608",
+      "to": "2250",
+      "label": "70-59",
+      "title": "Gonzaga Bulldogs at Saint Mary's Gaels<br>2026-03-01<br>Score: 70-59<br>Same region<br>Margin: 11 pts",
+      "color": {
+        "color": "#F59E0B",
+        "highlight": "#FFD700",
+        "opacity": 0.7
+      },
+      "width": 1,
+      "arrows": "to",
+      "same_region": true,
+      "winner_region": "South",
+      "date": "2026-03-01",
+      "margin": 11,
+      "game_id": "401829265"
     },
     {
       "from": "2116",
@@ -6686,15 +6776,15 @@
       "from": "58",
       "to": "2378",
       "label": "94-69",
-      "title": "UMBC Retrievers at South Florida Bulls<br>2025-12-21<br>Score: 94-69<br>Same region<br>Margin: 25 pts",
+      "title": "UMBC Retrievers at South Florida Bulls<br>2025-12-21<br>Score: 94-69<br>Cross-region<br>Margin: 25 pts",
       "color": {
-        "color": "#EF4444",
+        "color": "#94a3b8",
         "highlight": "#FFD700",
         "opacity": 0.7
       },
       "width": 2,
       "arrows": "to",
-      "same_region": true,
+      "same_region": false,
       "winner_region": "Midwest",
       "date": "2025-12-21",
       "margin": 25,
@@ -6735,6 +6825,24 @@
       "date": "2025-11-26",
       "margin": 30,
       "game_id": "401823479"
+    },
+    {
+      "from": "130",
+      "to": "2377",
+      "label": "112-71",
+      "title": "McNeese Cowboys at Michigan Wolverines<br>2025-12-30<br>Score: 112-71<br>Same region<br>Margin: 41 pts",
+      "color": {
+        "color": "#EF4444",
+        "highlight": "#FFD700",
+        "opacity": 0.7
+      },
+      "width": 3,
+      "arrows": "to",
+      "same_region": true,
+      "winner_region": "Midwest",
+      "date": "2025-12-30",
+      "margin": 41,
+      "game_id": "401826084"
     },
     {
       "from": "275",
@@ -7367,6 +7475,24 @@
       "game_id": "401820697"
     },
     {
+      "from": "2390",
+      "to": "153",
+      "label": "75-66",
+      "title": "North Carolina Tar Heels at Miami Hurricanes<br>2026-02-11<br>Score: 75-66<br>Cross-region<br>Margin: 9 pts",
+      "color": {
+        "color": "#94a3b8",
+        "highlight": "#FFD700",
+        "opacity": 0.7
+      },
+      "width": 1,
+      "arrows": "to",
+      "same_region": false,
+      "winner_region": "West",
+      "date": "2026-02-11",
+      "margin": 9,
+      "game_id": "401820731"
+    },
+    {
       "from": "152",
       "to": "153",
       "label": "82-58",
@@ -7761,6 +7887,24 @@
       "date": "2026-02-04",
       "margin": 1,
       "game_id": "401820719"
+    },
+    {
+      "from": "2390",
+      "to": "152",
+      "label": "77-76",
+      "title": "Miami Hurricanes at NC State Wolfpack<br>2026-02-14<br>Score: 77-76<br>Cross-region<br>Margin: 1 pts",
+      "color": {
+        "color": "#94a3b8",
+        "highlight": "#FFD700",
+        "opacity": 0.7
+      },
+      "width": 1,
+      "arrows": "to",
+      "same_region": false,
+      "winner_region": "West",
+      "date": "2026-02-14",
+      "margin": 1,
+      "game_id": "401820741"
     },
     {
       "from": "258",
@@ -8339,6 +8483,24 @@
       "game_id": "401808288"
     },
     {
+      "from": "252",
+      "to": "2390",
+      "label": "72-62",
+      "title": "BYU Cougars at Miami Hurricanes<br>2025-11-27<br>Score: 72-62<br>Same region<br>Margin: 10 pts",
+      "color": {
+        "color": "#10B981",
+        "highlight": "#FFD700",
+        "opacity": 0.7
+      },
+      "width": 1,
+      "arrows": "to",
+      "same_region": true,
+      "winner_region": "West",
+      "date": "2025-11-27",
+      "margin": 10,
+      "game_id": "401809419"
+    },
+    {
       "from": "2116",
       "to": "252",
       "label": "97-84",
@@ -8409,6 +8571,24 @@
       "date": "2026-02-28",
       "margin": 20,
       "game_id": "401820776"
+    },
+    {
+      "from": "2390",
+      "to": "2567",
+      "label": "77-69",
+      "title": "Miami Hurricanes at SMU Mustangs<br>2026-03-05<br>Score: 77-69<br>Same region<br>Margin: 8 pts",
+      "color": {
+        "color": "#10B981",
+        "highlight": "#FFD700",
+        "opacity": 0.7
+      },
+      "width": 1,
+      "arrows": "to",
+      "same_region": true,
+      "winner_region": "West",
+      "date": "2026-03-05",
+      "margin": 8,
+      "game_id": "401820784"
     },
     {
       "from": "258",
@@ -8499,6 +8679,60 @@
       "date": "2026-01-10",
       "margin": 15,
       "game_id": "401820664"
+    },
+    {
+      "from": "258",
+      "to": "2390",
+      "label": "86-83",
+      "title": "Miami Hurricanes at Virginia Cavaliers<br>2026-02-21<br>Score: 86-83<br>Same region<br>Margin: 3 pts",
+      "color": {
+        "color": "#10B981",
+        "highlight": "#FFD700",
+        "opacity": 0.7
+      },
+      "width": 1,
+      "arrows": "to",
+      "same_region": true,
+      "winner_region": "West",
+      "date": "2026-02-21",
+      "margin": 3,
+      "game_id": "401820760"
+    },
+    {
+      "from": "258",
+      "to": "2390",
+      "label": "84-62",
+      "title": "Miami Hurricanes at Virginia Cavaliers<br>2026-03-13<br>Score: 84-62<br>Same region<br>Margin: 22 pts",
+      "color": {
+        "color": "#10B981",
+        "highlight": "#FFD700",
+        "opacity": 0.7
+      },
+      "width": 2,
+      "arrows": "to",
+      "same_region": true,
+      "winner_region": "West",
+      "date": "2026-03-13",
+      "margin": 22,
+      "game_id": "401851181"
+    },
+    {
+      "from": "2390",
+      "to": "24",
+      "label": "79-70",
+      "title": "Stanford Cardinal at Miami Hurricanes<br>2026-01-29<br>Score: 79-70<br>Cross-region<br>Margin: 9 pts",
+      "color": {
+        "color": "#94a3b8",
+        "highlight": "#FFD700",
+        "opacity": 0.7
+      },
+      "width": 1,
+      "arrows": "to",
+      "same_region": false,
+      "winner_region": "West",
+      "date": "2026-01-29",
+      "margin": 9,
+      "game_id": "401820701"
     },
     {
       "from": "2116",
@@ -8756,9 +8990,9 @@
     },
     {
       "a": "150",
-      "b": "2608",
+      "b": "2541",
       "a_name": "Duke",
-      "b_name": "Saint Mary's"
+      "b_name": "Santa Clara"
     },
     {
       "a": "150",
@@ -8774,9 +9008,9 @@
     },
     {
       "a": "150",
-      "b": "2390",
+      "b": "338",
       "a_name": "Duke",
-      "b_name": "Miami"
+      "b_name": "Kennesaw St"
     },
     {
       "a": "150",
@@ -8854,7 +9088,7 @@
       "a": "150",
       "b": "2378",
       "a_name": "Duke",
-      "b_name": "McNeese"
+      "b_name": "UMBC"
     },
     {
       "a": "150",
@@ -8882,7 +9116,7 @@
     },
     {
       "a": "150",
-      "b": "2378",
+      "b": "2377",
       "a_name": "Duke",
       "b_name": "McNeese"
     },
@@ -9116,9 +9350,9 @@
     },
     {
       "a": "2652",
-      "b": "2608",
+      "b": "2541",
       "a_name": "Long Island",
-      "b_name": "Saint Mary's"
+      "b_name": "Santa Clara"
     },
     {
       "a": "2652",
@@ -9140,9 +9374,9 @@
     },
     {
       "a": "2652",
-      "b": "2390",
+      "b": "338",
       "a_name": "Long Island",
-      "b_name": "Miami"
+      "b_name": "Kennesaw St"
     },
     {
       "a": "2652",
@@ -9232,7 +9466,7 @@
       "a": "2652",
       "b": "2378",
       "a_name": "Long Island",
-      "b_name": "McNeese"
+      "b_name": "UMBC"
     },
     {
       "a": "2652",
@@ -9272,7 +9506,7 @@
     },
     {
       "a": "2652",
-      "b": "2378",
+      "b": "2377",
       "a_name": "Long Island",
       "b_name": "McNeese"
     },
@@ -9548,9 +9782,9 @@
     },
     {
       "a": "194",
-      "b": "2608",
+      "b": "2541",
       "a_name": "Ohio State",
-      "b_name": "Saint Mary's"
+      "b_name": "Santa Clara"
     },
     {
       "a": "194",
@@ -9572,9 +9806,9 @@
     },
     {
       "a": "194",
-      "b": "2390",
+      "b": "338",
       "a_name": "Ohio State",
-      "b_name": "Miami"
+      "b_name": "Kennesaw St"
     },
     {
       "a": "194",
@@ -9658,7 +9892,7 @@
       "a": "194",
       "b": "2378",
       "a_name": "Ohio State",
-      "b_name": "McNeese"
+      "b_name": "UMBC"
     },
     {
       "a": "194",
@@ -9692,7 +9926,7 @@
     },
     {
       "a": "194",
-      "b": "2378",
+      "b": "2377",
       "a_name": "Ohio State",
       "b_name": "McNeese"
     },
@@ -9920,9 +10154,9 @@
     },
     {
       "a": "2628",
-      "b": "2608",
+      "b": "2541",
       "a_name": "TCU",
-      "b_name": "Saint Mary's"
+      "b_name": "Santa Clara"
     },
     {
       "a": "2628",
@@ -9932,9 +10166,9 @@
     },
     {
       "a": "2628",
-      "b": "2390",
+      "b": "338",
       "a_name": "TCU",
-      "b_name": "Miami"
+      "b_name": "Kennesaw St"
     },
     {
       "a": "2628",
@@ -10012,7 +10246,7 @@
       "a": "2628",
       "b": "2378",
       "a_name": "TCU",
-      "b_name": "McNeese"
+      "b_name": "UMBC"
     },
     {
       "a": "2628",
@@ -10046,7 +10280,7 @@
     },
     {
       "a": "2628",
-      "b": "2378",
+      "b": "2377",
       "a_name": "TCU",
       "b_name": "McNeese"
     },
@@ -10274,9 +10508,9 @@
     },
     {
       "a": "2599",
-      "b": "2608",
+      "b": "2541",
       "a_name": "St John's",
-      "b_name": "Saint Mary's"
+      "b_name": "Santa Clara"
     },
     {
       "a": "2599",
@@ -10292,9 +10526,9 @@
     },
     {
       "a": "2599",
-      "b": "2390",
+      "b": "338",
       "a_name": "St John's",
-      "b_name": "Miami"
+      "b_name": "Kennesaw St"
     },
     {
       "a": "2599",
@@ -10378,7 +10612,7 @@
       "a": "2599",
       "b": "2378",
       "a_name": "St John's",
-      "b_name": "McNeese"
+      "b_name": "UMBC"
     },
     {
       "a": "2599",
@@ -10418,7 +10652,7 @@
     },
     {
       "a": "2599",
-      "b": "2378",
+      "b": "2377",
       "a_name": "St John's",
       "b_name": "McNeese"
     },
@@ -10652,9 +10886,9 @@
     },
     {
       "a": "2006",
-      "b": "2608",
+      "b": "2541",
       "a_name": "Akron",
-      "b_name": "Saint Mary's"
+      "b_name": "Santa Clara"
     },
     {
       "a": "2006",
@@ -10676,9 +10910,9 @@
     },
     {
       "a": "2006",
-      "b": "2390",
+      "b": "338",
       "a_name": "Akron",
-      "b_name": "Miami"
+      "b_name": "Kennesaw St"
     },
     {
       "a": "2006",
@@ -10750,7 +10984,7 @@
       "a": "2006",
       "b": "2378",
       "a_name": "Akron",
-      "b_name": "McNeese"
+      "b_name": "UMBC"
     },
     {
       "a": "2006",
@@ -10790,7 +11024,7 @@
     },
     {
       "a": "2006",
-      "b": "2378",
+      "b": "2377",
       "a_name": "Akron",
       "b_name": "McNeese"
     },
@@ -11036,6 +11270,12 @@
     },
     {
       "a": "238",
+      "b": "2541",
+      "a_name": "Vanderbilt",
+      "b_name": "Santa Clara"
+    },
+    {
+      "a": "238",
       "b": "66",
       "a_name": "Vanderbilt",
       "b_name": "Iowa State"
@@ -11048,9 +11288,9 @@
     },
     {
       "a": "238",
-      "b": "2390",
+      "b": "338",
       "a_name": "Vanderbilt",
-      "b_name": "Miami"
+      "b_name": "Kennesaw St"
     },
     {
       "a": "238",
@@ -11116,7 +11356,7 @@
       "a": "238",
       "b": "2378",
       "a_name": "Vanderbilt",
-      "b_name": "McNeese"
+      "b_name": "UMBC"
     },
     {
       "a": "238",
@@ -11144,7 +11384,7 @@
     },
     {
       "a": "238",
-      "b": "2378",
+      "b": "2377",
       "a_name": "Vanderbilt",
       "b_name": "McNeese"
     },
@@ -11360,9 +11600,9 @@
     },
     {
       "a": "2271",
-      "b": "2608",
+      "b": "2541",
       "a_name": "Northern Iowa",
-      "b_name": "Saint Mary's"
+      "b_name": "Santa Clara"
     },
     {
       "a": "2271",
@@ -11384,9 +11624,9 @@
     },
     {
       "a": "2271",
-      "b": "2390",
+      "b": "338",
       "a_name": "Northern Iowa",
-      "b_name": "Miami"
+      "b_name": "Kennesaw St"
     },
     {
       "a": "2271",
@@ -11476,7 +11716,7 @@
       "a": "2271",
       "b": "2378",
       "a_name": "Northern Iowa",
-      "b_name": "McNeese"
+      "b_name": "UMBC"
     },
     {
       "a": "2271",
@@ -11516,7 +11756,7 @@
     },
     {
       "a": "2271",
-      "b": "2378",
+      "b": "2377",
       "a_name": "Northern Iowa",
       "b_name": "McNeese"
     },
@@ -11756,9 +11996,9 @@
     },
     {
       "a": "97",
-      "b": "2608",
+      "b": "2541",
       "a_name": "Louisville",
-      "b_name": "Saint Mary's"
+      "b_name": "Santa Clara"
     },
     {
       "a": "97",
@@ -11777,6 +12017,12 @@
       "b": "57",
       "a_name": "Louisville",
       "b_name": "Florida"
+    },
+    {
+      "a": "97",
+      "b": "338",
+      "a_name": "Louisville",
+      "b_name": "Kennesaw St"
     },
     {
       "a": "97",
@@ -11854,7 +12100,7 @@
       "a": "97",
       "b": "2378",
       "a_name": "Louisville",
-      "b_name": "McNeese"
+      "b_name": "UMBC"
     },
     {
       "a": "97",
@@ -11888,7 +12134,7 @@
     },
     {
       "a": "97",
-      "b": "2378",
+      "b": "2377",
       "a_name": "Louisville",
       "b_name": "McNeese"
     },
@@ -12068,9 +12314,9 @@
     },
     {
       "a": "142",
-      "b": "2608",
+      "b": "2541",
       "a_name": "Missouri",
-      "b_name": "Saint Mary's"
+      "b_name": "Santa Clara"
     },
     {
       "a": "142",
@@ -12086,9 +12332,9 @@
     },
     {
       "a": "142",
-      "b": "2390",
+      "b": "338",
       "a_name": "Missouri",
-      "b_name": "Miami"
+      "b_name": "Kennesaw St"
     },
     {
       "a": "142",
@@ -12166,7 +12412,7 @@
       "a": "142",
       "b": "2378",
       "a_name": "Missouri",
-      "b_name": "McNeese"
+      "b_name": "UMBC"
     },
     {
       "a": "142",
@@ -12194,7 +12440,7 @@
     },
     {
       "a": "142",
-      "b": "2378",
+      "b": "2377",
       "a_name": "Missouri",
       "b_name": "McNeese"
     },
@@ -12392,9 +12638,9 @@
     },
     {
       "a": "193",
-      "b": "2608",
+      "b": "2541",
       "a_name": "Miami OH",
-      "b_name": "Saint Mary's"
+      "b_name": "Santa Clara"
     },
     {
       "a": "193",
@@ -12416,9 +12662,9 @@
     },
     {
       "a": "193",
-      "b": "2390",
+      "b": "338",
       "a_name": "Miami OH",
-      "b_name": "Miami"
+      "b_name": "Kennesaw St"
     },
     {
       "a": "193",
@@ -12508,7 +12754,7 @@
       "a": "193",
       "b": "2378",
       "a_name": "Miami OH",
-      "b_name": "McNeese"
+      "b_name": "UMBC"
     },
     {
       "a": "193",
@@ -12548,7 +12794,7 @@
     },
     {
       "a": "193",
-      "b": "2378",
+      "b": "2377",
       "a_name": "Miami OH",
       "b_name": "McNeese"
     },
@@ -12776,9 +13022,9 @@
     },
     {
       "a": "356",
-      "b": "2608",
+      "b": "2541",
       "a_name": "Illinois",
-      "b_name": "Saint Mary's"
+      "b_name": "Santa Clara"
     },
     {
       "a": "356",
@@ -12800,9 +13046,9 @@
     },
     {
       "a": "356",
-      "b": "2390",
+      "b": "338",
       "a_name": "Illinois",
-      "b_name": "Miami"
+      "b_name": "Kennesaw St"
     },
     {
       "a": "356",
@@ -12874,7 +13120,7 @@
       "a": "356",
       "b": "2378",
       "a_name": "Illinois",
-      "b_name": "McNeese"
+      "b_name": "UMBC"
     },
     {
       "a": "356",
@@ -12908,7 +13154,7 @@
     },
     {
       "a": "356",
-      "b": "2378",
+      "b": "2377",
       "a_name": "Illinois",
       "b_name": "McNeese"
     },
@@ -13082,9 +13328,9 @@
     },
     {
       "a": "2750",
-      "b": "2608",
+      "b": "2541",
       "a_name": "Wright St",
-      "b_name": "Saint Mary's"
+      "b_name": "Santa Clara"
     },
     {
       "a": "2750",
@@ -13106,9 +13352,9 @@
     },
     {
       "a": "2750",
-      "b": "2390",
+      "b": "338",
       "a_name": "Wright St",
-      "b_name": "Miami"
+      "b_name": "Kennesaw St"
     },
     {
       "a": "2750",
@@ -13198,7 +13444,7 @@
       "a": "2750",
       "b": "2378",
       "a_name": "Wright St",
-      "b_name": "McNeese"
+      "b_name": "UMBC"
     },
     {
       "a": "2750",
@@ -13238,7 +13484,7 @@
     },
     {
       "a": "2750",
-      "b": "2378",
+      "b": "2377",
       "a_name": "Wright St",
       "b_name": "McNeese"
     },
@@ -13454,9 +13700,9 @@
     },
     {
       "a": "96",
-      "b": "2608",
+      "b": "2541",
       "a_name": "Kentucky",
-      "b_name": "Saint Mary's"
+      "b_name": "Santa Clara"
     },
     {
       "a": "96",
@@ -13472,9 +13718,9 @@
     },
     {
       "a": "96",
-      "b": "2390",
+      "b": "338",
       "a_name": "Kentucky",
-      "b_name": "Miami"
+      "b_name": "Kennesaw St"
     },
     {
       "a": "96",
@@ -13546,7 +13792,7 @@
       "a": "96",
       "b": "2378",
       "a_name": "Kentucky",
-      "b_name": "McNeese"
+      "b_name": "UMBC"
     },
     {
       "a": "96",
@@ -13574,7 +13820,7 @@
     },
     {
       "a": "96",
-      "b": "2378",
+      "b": "2377",
       "a_name": "Kentucky",
       "b_name": "McNeese"
     },
@@ -13747,363 +13993,333 @@
       "b_name": "Seton Hall"
     },
     {
-      "a": "2608",
+      "a": "2541",
       "b": "66",
-      "a_name": "Saint Mary's",
+      "a_name": "Santa Clara",
       "b_name": "Iowa State"
     },
     {
-      "a": "2608",
+      "a": "2541",
       "b": "231",
-      "a_name": "Saint Mary's",
+      "a_name": "Santa Clara",
       "b_name": "Furman"
     },
     {
-      "a": "2608",
+      "a": "2541",
       "b": "57",
-      "a_name": "Saint Mary's",
+      "a_name": "Santa Clara",
       "b_name": "Florida"
     },
     {
-      "a": "2608",
-      "b": "2390",
-      "a_name": "Saint Mary's",
-      "b_name": "Miami"
+      "a": "2541",
+      "b": "338",
+      "a_name": "Santa Clara",
+      "b_name": "Kennesaw St"
     },
     {
-      "a": "2608",
-      "b": "2440",
-      "a_name": "Saint Mary's",
-      "b_name": "Prairie View"
-    },
-    {
-      "a": "2608",
+      "a": "2541",
       "b": "228",
-      "a_name": "Saint Mary's",
+      "a_name": "Santa Clara",
       "b_name": "Clemson"
     },
     {
-      "a": "2608",
+      "a": "2541",
       "b": "222",
-      "a_name": "Saint Mary's",
+      "a_name": "Santa Clara",
       "b_name": "Villanova"
     },
     {
-      "a": "2608",
+      "a": "2541",
       "b": "2641",
-      "a_name": "Saint Mary's",
+      "a_name": "Santa Clara",
       "b_name": "Texas Tech"
     },
     {
-      "a": "2608",
+      "a": "2541",
       "b": "43",
-      "a_name": "Saint Mary's",
+      "a_name": "Santa Clara",
       "b_name": "Yale"
     },
     {
-      "a": "2608",
+      "a": "2541",
       "b": "2275",
-      "a_name": "Saint Mary's",
+      "a_name": "Santa Clara",
       "b_name": "Hofstra"
     },
     {
-      "a": "2608",
+      "a": "2541",
       "b": "2633",
-      "a_name": "Saint Mary's",
+      "a_name": "Santa Clara",
       "b_name": "Tennessee"
     },
     {
-      "a": "2608",
+      "a": "2541",
       "b": "2670",
-      "a_name": "Saint Mary's",
+      "a_name": "Santa Clara",
       "b_name": "VCU"
     },
     {
-      "a": "2608",
+      "a": "2541",
       "b": "2509",
-      "a_name": "Saint Mary's",
+      "a_name": "Santa Clara",
       "b_name": "Purdue"
     },
     {
-      "a": "2608",
+      "a": "2541",
       "b": "2653",
-      "a_name": "Saint Mary's",
+      "a_name": "Santa Clara",
       "b_name": "Troy"
     },
     {
-      "a": "2608",
-      "b": "2608",
-      "a_name": "Saint Mary's",
-      "b_name": "Saint Mary's"
-    },
-    {
-      "a": "2608",
+      "a": "2541",
       "b": "245",
-      "a_name": "Saint Mary's",
+      "a_name": "Santa Clara",
       "b_name": "Texas A&M"
     },
     {
-      "a": "2608",
+      "a": "2541",
       "b": "248",
-      "a_name": "Saint Mary's",
+      "a_name": "Santa Clara",
       "b_name": "Houston"
     },
     {
-      "a": "2608",
+      "a": "2541",
       "b": "2378",
-      "a_name": "Saint Mary's",
-      "b_name": "McNeese"
+      "a_name": "Santa Clara",
+      "b_name": "UMBC"
     },
     {
-      "a": "2608",
+      "a": "2541",
       "b": "130",
-      "a_name": "Saint Mary's",
+      "a_name": "Santa Clara",
       "b_name": "Michigan"
     },
     {
-      "a": "2608",
+      "a": "2541",
       "b": "70",
-      "a_name": "Saint Mary's",
+      "a_name": "Santa Clara",
       "b_name": "Idaho"
     },
     {
-      "a": "2608",
+      "a": "2541",
       "b": "2329",
-      "a_name": "Saint Mary's",
+      "a_name": "Santa Clara",
       "b_name": "Lehigh"
     },
     {
-      "a": "2608",
+      "a": "2541",
       "b": "61",
-      "a_name": "Saint Mary's",
+      "a_name": "Santa Clara",
       "b_name": "Georgia"
     },
     {
-      "a": "2608",
-      "b": "139",
-      "a_name": "Saint Mary's",
-      "b_name": "Saint Louis"
-    },
-    {
-      "a": "2608",
+      "a": "2541",
       "b": "8",
-      "a_name": "Saint Mary's",
+      "a_name": "Santa Clara",
       "b_name": "Arkansas"
     },
     {
-      "a": "2608",
-      "b": "2378",
-      "a_name": "Saint Mary's",
-      "b_name": "McNeese"
-    },
-    {
-      "a": "2608",
+      "a": "2541",
       "b": "2305",
-      "a_name": "Saint Mary's",
+      "a_name": "Santa Clara",
       "b_name": "Kansas"
     },
     {
-      "a": "2608",
+      "a": "2541",
       "b": "2871",
-      "a_name": "Saint Mary's",
+      "a_name": "Santa Clara",
       "b_name": "CA Baptist"
     },
     {
-      "a": "2608",
+      "a": "2541",
       "b": "153",
-      "a_name": "Saint Mary's",
+      "a_name": "Santa Clara",
       "b_name": "North Carolina"
     },
     {
-      "a": "2608",
+      "a": "2541",
       "b": "58",
-      "a_name": "Saint Mary's",
+      "a_name": "Santa Clara",
       "b_name": "South Florida"
     },
     {
-      "a": "2608",
+      "a": "2541",
       "b": "158",
-      "a_name": "Saint Mary's",
+      "a_name": "Santa Clara",
       "b_name": "Nebraska"
     },
     {
-      "a": "2608",
+      "a": "2541",
       "b": "62",
-      "a_name": "Saint Mary's",
+      "a_name": "Santa Clara",
       "b_name": "Hawai'i"
     },
     {
-      "a": "2608",
+      "a": "2541",
       "b": "26",
-      "a_name": "Saint Mary's",
+      "a_name": "Santa Clara",
       "b_name": "UCLA"
     },
     {
-      "a": "2608",
+      "a": "2541",
       "b": "152",
-      "a_name": "Saint Mary's",
+      "a_name": "Santa Clara",
       "b_name": "NC State"
     },
     {
-      "a": "2608",
+      "a": "2541",
       "b": "41",
-      "a_name": "Saint Mary's",
+      "a_name": "Santa Clara",
       "b_name": "UConn"
     },
     {
-      "a": "2608",
+      "a": "2541",
       "b": "2952",
-      "a_name": "Saint Mary's",
+      "a_name": "Santa Clara",
       "b_name": "Queens"
     },
     {
-      "a": "2608",
+      "a": "2541",
       "b": "12",
-      "a_name": "Saint Mary's",
+      "a_name": "Santa Clara",
       "b_name": "Arizona"
     },
     {
-      "a": "2608",
+      "a": "2541",
       "b": "2261",
-      "a_name": "Saint Mary's",
+      "a_name": "Santa Clara",
       "b_name": "Howard"
     },
     {
-      "a": "2608",
+      "a": "2541",
       "b": "328",
-      "a_name": "Saint Mary's",
+      "a_name": "Santa Clara",
       "b_name": "Utah State"
     },
     {
-      "a": "2608",
+      "a": "2541",
       "b": "2294",
-      "a_name": "Saint Mary's",
+      "a_name": "Santa Clara",
       "b_name": "Iowa"
     },
     {
-      "a": "2608",
+      "a": "2541",
       "b": "275",
-      "a_name": "Saint Mary's",
+      "a_name": "Santa Clara",
       "b_name": "Wisconsin"
     },
     {
-      "a": "2608",
+      "a": "2541",
       "b": "2272",
-      "a_name": "Saint Mary's",
+      "a_name": "Santa Clara",
       "b_name": "High Point"
     },
     {
-      "a": "2608",
+      "a": "2541",
       "b": "333",
-      "a_name": "Saint Mary's",
+      "a_name": "Santa Clara",
       "b_name": "Alabama"
     },
     {
-      "a": "2608",
+      "a": "2541",
       "b": "2449",
-      "a_name": "Saint Mary's",
+      "a_name": "Santa Clara",
       "b_name": "N Dakota St"
     },
     {
-      "a": "2608",
+      "a": "2541",
       "b": "252",
-      "a_name": "Saint Mary's",
+      "a_name": "Santa Clara",
       "b_name": "BYU"
     },
     {
-      "a": "2608",
+      "a": "2541",
       "b": "2567",
-      "a_name": "Saint Mary's",
+      "a_name": "Santa Clara",
       "b_name": "SMU"
     },
     {
-      "a": "2608",
+      "a": "2541",
       "b": "251",
-      "a_name": "Saint Mary's",
+      "a_name": "Santa Clara",
       "b_name": "Texas"
     },
     {
-      "a": "2608",
+      "a": "2541",
       "b": "258",
-      "a_name": "Saint Mary's",
+      "a_name": "Santa Clara",
       "b_name": "Virginia"
     },
     {
-      "a": "2608",
+      "a": "2541",
       "b": "2634",
-      "a_name": "Saint Mary's",
+      "a_name": "Santa Clara",
       "b_name": "Tennessee St"
     },
     {
-      "a": "2608",
+      "a": "2541",
       "b": "2390",
-      "a_name": "Saint Mary's",
+      "a_name": "Santa Clara",
       "b_name": "Miami"
     },
     {
-      "a": "2608",
+      "a": "2541",
       "b": "2116",
-      "a_name": "Saint Mary's",
+      "a_name": "Santa Clara",
       "b_name": "UCF"
     },
     {
-      "a": "2608",
+      "a": "2541",
       "b": "127",
-      "a_name": "Saint Mary's",
+      "a_name": "Santa Clara",
       "b_name": "Michigan St"
     },
     {
-      "a": "2608",
+      "a": "2541",
       "b": "2561",
-      "a_name": "Saint Mary's",
+      "a_name": "Santa Clara",
       "b_name": "Siena"
     },
     {
-      "a": "2608",
+      "a": "2541",
       "b": "201",
-      "a_name": "Saint Mary's",
+      "a_name": "Santa Clara",
       "b_name": "Oklahoma"
     },
     {
-      "a": "2608",
+      "a": "2541",
       "b": "2",
-      "a_name": "Saint Mary's",
+      "a_name": "Santa Clara",
       "b_name": "Auburn"
     },
     {
-      "a": "2608",
+      "a": "2541",
       "b": "84",
-      "a_name": "Saint Mary's",
+      "a_name": "Santa Clara",
       "b_name": "Indiana"
     },
     {
-      "a": "2608",
-      "b": "167",
-      "a_name": "Saint Mary's",
-      "b_name": "New Mexico"
-    },
-    {
-      "a": "2608",
+      "a": "2541",
       "b": "21",
-      "a_name": "Saint Mary's",
+      "a_name": "Santa Clara",
       "b_name": "San Diego St"
     },
     {
-      "a": "2608",
+      "a": "2541",
       "b": "24",
-      "a_name": "Saint Mary's",
+      "a_name": "Santa Clara",
       "b_name": "Stanford"
     },
     {
-      "a": "2608",
+      "a": "2541",
       "b": "2132",
-      "a_name": "Saint Mary's",
+      "a_name": "Santa Clara",
       "b_name": "Cincinnati"
     },
     {
-      "a": "2608",
+      "a": "2541",
       "b": "2550",
-      "a_name": "Saint Mary's",
+      "a_name": "Santa Clara",
       "b_name": "Seton Hall"
     },
     {
@@ -14120,9 +14336,9 @@
     },
     {
       "a": "66",
-      "b": "2390",
+      "b": "338",
       "a_name": "Iowa State",
-      "b_name": "Miami"
+      "b_name": "Kennesaw St"
     },
     {
       "a": "66",
@@ -14194,7 +14410,7 @@
       "a": "66",
       "b": "2378",
       "a_name": "Iowa State",
-      "b_name": "McNeese"
+      "b_name": "UMBC"
     },
     {
       "a": "66",
@@ -14234,7 +14450,7 @@
     },
     {
       "a": "66",
-      "b": "2378",
+      "b": "2377",
       "a_name": "Iowa State",
       "b_name": "McNeese"
     },
@@ -14420,9 +14636,9 @@
     },
     {
       "a": "231",
-      "b": "2390",
+      "b": "338",
       "a_name": "Furman",
-      "b_name": "Miami"
+      "b_name": "Kennesaw St"
     },
     {
       "a": "231",
@@ -14506,7 +14722,7 @@
       "a": "231",
       "b": "2378",
       "a_name": "Furman",
-      "b_name": "McNeese"
+      "b_name": "UMBC"
     },
     {
       "a": "231",
@@ -14546,7 +14762,7 @@
     },
     {
       "a": "231",
-      "b": "2378",
+      "b": "2377",
       "a_name": "Furman",
       "b_name": "McNeese"
     },
@@ -14753,6 +14969,12 @@
       "b": "2550",
       "a_name": "Furman",
       "b_name": "Seton Hall"
+    },
+    {
+      "a": "57",
+      "b": "338",
+      "a_name": "Florida",
+      "b_name": "Kennesaw St"
     },
     {
       "a": "57",
@@ -14830,7 +15052,7 @@
       "a": "57",
       "b": "2378",
       "a_name": "Florida",
-      "b_name": "McNeese"
+      "b_name": "UMBC"
     },
     {
       "a": "57",
@@ -14858,7 +15080,7 @@
     },
     {
       "a": "57",
-      "b": "2378",
+      "b": "2377",
       "a_name": "Florida",
       "b_name": "McNeese"
     },
@@ -15031,303 +15253,333 @@
       "b_name": "Seton Hall"
     },
     {
-      "a": "2390",
+      "a": "338",
       "b": "2440",
-      "a_name": "Miami",
+      "a_name": "Kennesaw St",
       "b_name": "Prairie View"
     },
     {
-      "a": "2390",
+      "a": "338",
+      "b": "228",
+      "a_name": "Kennesaw St",
+      "b_name": "Clemson"
+    },
+    {
+      "a": "338",
       "b": "222",
-      "a_name": "Miami",
+      "a_name": "Kennesaw St",
       "b_name": "Villanova"
     },
     {
-      "a": "2390",
+      "a": "338",
       "b": "2641",
-      "a_name": "Miami",
+      "a_name": "Kennesaw St",
       "b_name": "Texas Tech"
     },
     {
-      "a": "2390",
+      "a": "338",
       "b": "43",
-      "a_name": "Miami",
+      "a_name": "Kennesaw St",
       "b_name": "Yale"
     },
     {
-      "a": "2390",
+      "a": "338",
       "b": "2250",
-      "a_name": "Miami",
+      "a_name": "Kennesaw St",
       "b_name": "Gonzaga"
     },
     {
-      "a": "2390",
+      "a": "338",
       "b": "2275",
-      "a_name": "Miami",
+      "a_name": "Kennesaw St",
       "b_name": "Hofstra"
     },
     {
-      "a": "2390",
+      "a": "338",
       "b": "2633",
-      "a_name": "Miami",
+      "a_name": "Kennesaw St",
       "b_name": "Tennessee"
     },
     {
-      "a": "2390",
+      "a": "338",
       "b": "2670",
-      "a_name": "Miami",
+      "a_name": "Kennesaw St",
       "b_name": "VCU"
     },
     {
-      "a": "2390",
+      "a": "338",
       "b": "2509",
-      "a_name": "Miami",
+      "a_name": "Kennesaw St",
       "b_name": "Purdue"
     },
     {
-      "a": "2390",
+      "a": "338",
       "b": "2653",
-      "a_name": "Miami",
+      "a_name": "Kennesaw St",
       "b_name": "Troy"
     },
     {
-      "a": "2390",
+      "a": "338",
       "b": "2608",
-      "a_name": "Miami",
+      "a_name": "Kennesaw St",
       "b_name": "Saint Mary's"
     },
     {
-      "a": "2390",
+      "a": "338",
       "b": "245",
-      "a_name": "Miami",
+      "a_name": "Kennesaw St",
       "b_name": "Texas A&M"
     },
     {
-      "a": "2390",
+      "a": "338",
       "b": "248",
-      "a_name": "Miami",
+      "a_name": "Kennesaw St",
       "b_name": "Houston"
     },
     {
-      "a": "2390",
+      "a": "338",
       "b": "2378",
-      "a_name": "Miami",
-      "b_name": "McNeese"
+      "a_name": "Kennesaw St",
+      "b_name": "UMBC"
     },
     {
-      "a": "2390",
+      "a": "338",
       "b": "130",
-      "a_name": "Miami",
+      "a_name": "Kennesaw St",
       "b_name": "Michigan"
     },
     {
-      "a": "2390",
+      "a": "338",
       "b": "70",
-      "a_name": "Miami",
+      "a_name": "Kennesaw St",
       "b_name": "Idaho"
     },
     {
-      "a": "2390",
+      "a": "338",
       "b": "2329",
-      "a_name": "Miami",
+      "a_name": "Kennesaw St",
       "b_name": "Lehigh"
     },
     {
-      "a": "2390",
+      "a": "338",
       "b": "61",
-      "a_name": "Miami",
+      "a_name": "Kennesaw St",
       "b_name": "Georgia"
     },
     {
-      "a": "2390",
+      "a": "338",
       "b": "139",
-      "a_name": "Miami",
+      "a_name": "Kennesaw St",
       "b_name": "Saint Louis"
     },
     {
-      "a": "2390",
+      "a": "338",
       "b": "8",
-      "a_name": "Miami",
+      "a_name": "Kennesaw St",
       "b_name": "Arkansas"
     },
     {
-      "a": "2390",
-      "b": "2378",
-      "a_name": "Miami",
+      "a": "338",
+      "b": "2377",
+      "a_name": "Kennesaw St",
       "b_name": "McNeese"
     },
     {
-      "a": "2390",
+      "a": "338",
       "b": "2305",
-      "a_name": "Miami",
+      "a_name": "Kennesaw St",
       "b_name": "Kansas"
     },
     {
-      "a": "2390",
+      "a": "338",
       "b": "2871",
-      "a_name": "Miami",
+      "a_name": "Kennesaw St",
       "b_name": "CA Baptist"
     },
     {
-      "a": "2390",
-      "b": "58",
-      "a_name": "Miami",
-      "b_name": "South Florida"
+      "a": "338",
+      "b": "153",
+      "a_name": "Kennesaw St",
+      "b_name": "North Carolina"
     },
     {
-      "a": "2390",
+      "a": "338",
       "b": "158",
-      "a_name": "Miami",
+      "a_name": "Kennesaw St",
       "b_name": "Nebraska"
     },
     {
-      "a": "2390",
+      "a": "338",
       "b": "62",
-      "a_name": "Miami",
+      "a_name": "Kennesaw St",
       "b_name": "Hawai'i"
     },
     {
-      "a": "2390",
+      "a": "338",
       "b": "26",
-      "a_name": "Miami",
+      "a_name": "Kennesaw St",
       "b_name": "UCLA"
     },
     {
-      "a": "2390",
+      "a": "338",
+      "b": "152",
+      "a_name": "Kennesaw St",
+      "b_name": "NC State"
+    },
+    {
+      "a": "338",
       "b": "41",
-      "a_name": "Miami",
+      "a_name": "Kennesaw St",
       "b_name": "UConn"
     },
     {
-      "a": "2390",
+      "a": "338",
       "b": "2952",
-      "a_name": "Miami",
+      "a_name": "Kennesaw St",
       "b_name": "Queens"
     },
     {
-      "a": "2390",
+      "a": "338",
       "b": "12",
-      "a_name": "Miami",
+      "a_name": "Kennesaw St",
       "b_name": "Arizona"
     },
     {
-      "a": "2390",
+      "a": "338",
       "b": "2261",
-      "a_name": "Miami",
+      "a_name": "Kennesaw St",
       "b_name": "Howard"
     },
     {
-      "a": "2390",
+      "a": "338",
       "b": "328",
-      "a_name": "Miami",
+      "a_name": "Kennesaw St",
       "b_name": "Utah State"
     },
     {
-      "a": "2390",
+      "a": "338",
       "b": "2294",
-      "a_name": "Miami",
+      "a_name": "Kennesaw St",
       "b_name": "Iowa"
     },
     {
-      "a": "2390",
+      "a": "338",
       "b": "275",
-      "a_name": "Miami",
+      "a_name": "Kennesaw St",
       "b_name": "Wisconsin"
     },
     {
-      "a": "2390",
+      "a": "338",
       "b": "2272",
-      "a_name": "Miami",
+      "a_name": "Kennesaw St",
       "b_name": "High Point"
     },
     {
-      "a": "2390",
-      "b": "333",
-      "a_name": "Miami",
-      "b_name": "Alabama"
-    },
-    {
-      "a": "2390",
+      "a": "338",
       "b": "2449",
-      "a_name": "Miami",
+      "a_name": "Kennesaw St",
       "b_name": "N Dakota St"
     },
     {
-      "a": "2390",
+      "a": "338",
+      "b": "252",
+      "a_name": "Kennesaw St",
+      "b_name": "BYU"
+    },
+    {
+      "a": "338",
+      "b": "2567",
+      "a_name": "Kennesaw St",
+      "b_name": "SMU"
+    },
+    {
+      "a": "338",
       "b": "251",
-      "a_name": "Miami",
+      "a_name": "Kennesaw St",
       "b_name": "Texas"
     },
     {
-      "a": "2390",
+      "a": "338",
+      "b": "258",
+      "a_name": "Kennesaw St",
+      "b_name": "Virginia"
+    },
+    {
+      "a": "338",
       "b": "2634",
-      "a_name": "Miami",
+      "a_name": "Kennesaw St",
       "b_name": "Tennessee St"
     },
     {
-      "a": "2390",
+      "a": "338",
       "b": "2390",
-      "a_name": "Miami",
+      "a_name": "Kennesaw St",
       "b_name": "Miami"
     },
     {
-      "a": "2390",
+      "a": "338",
       "b": "2116",
-      "a_name": "Miami",
+      "a_name": "Kennesaw St",
       "b_name": "UCF"
     },
     {
-      "a": "2390",
+      "a": "338",
       "b": "127",
-      "a_name": "Miami",
+      "a_name": "Kennesaw St",
       "b_name": "Michigan St"
     },
     {
-      "a": "2390",
+      "a": "338",
       "b": "2561",
-      "a_name": "Miami",
+      "a_name": "Kennesaw St",
       "b_name": "Siena"
     },
     {
-      "a": "2390",
+      "a": "338",
       "b": "201",
-      "a_name": "Miami",
+      "a_name": "Kennesaw St",
       "b_name": "Oklahoma"
     },
     {
-      "a": "2390",
+      "a": "338",
       "b": "2",
-      "a_name": "Miami",
+      "a_name": "Kennesaw St",
       "b_name": "Auburn"
     },
     {
-      "a": "2390",
+      "a": "338",
       "b": "84",
-      "a_name": "Miami",
+      "a_name": "Kennesaw St",
       "b_name": "Indiana"
     },
     {
-      "a": "2390",
+      "a": "338",
       "b": "167",
-      "a_name": "Miami",
+      "a_name": "Kennesaw St",
       "b_name": "New Mexico"
     },
     {
-      "a": "2390",
+      "a": "338",
       "b": "21",
-      "a_name": "Miami",
+      "a_name": "Kennesaw St",
       "b_name": "San Diego St"
     },
     {
-      "a": "2390",
+      "a": "338",
+      "b": "24",
+      "a_name": "Kennesaw St",
+      "b_name": "Stanford"
+    },
+    {
+      "a": "338",
       "b": "2132",
-      "a_name": "Miami",
+      "a_name": "Kennesaw St",
       "b_name": "Cincinnati"
     },
     {
-      "a": "2390",
+      "a": "338",
       "b": "2550",
-      "a_name": "Miami",
+      "a_name": "Kennesaw St",
       "b_name": "Seton Hall"
     },
     {
@@ -15412,7 +15664,7 @@
       "a": "2440",
       "b": "2378",
       "a_name": "Prairie View",
-      "b_name": "McNeese"
+      "b_name": "UMBC"
     },
     {
       "a": "2440",
@@ -15452,7 +15704,7 @@
     },
     {
       "a": "2440",
-      "b": "2378",
+      "b": "2377",
       "a_name": "Prairie View",
       "b_name": "McNeese"
     },
@@ -15724,7 +15976,7 @@
       "a": "228",
       "b": "2378",
       "a_name": "Clemson",
-      "b_name": "McNeese"
+      "b_name": "UMBC"
     },
     {
       "a": "228",
@@ -15758,7 +16010,7 @@
     },
     {
       "a": "228",
-      "b": "2378",
+      "b": "2377",
       "a_name": "Clemson",
       "b_name": "McNeese"
     },
@@ -15994,7 +16246,7 @@
       "a": "222",
       "b": "2378",
       "a_name": "Villanova",
-      "b_name": "McNeese"
+      "b_name": "UMBC"
     },
     {
       "a": "222",
@@ -16028,7 +16280,7 @@
     },
     {
       "a": "222",
-      "b": "2378",
+      "b": "2377",
       "a_name": "Villanova",
       "b_name": "McNeese"
     },
@@ -16270,7 +16522,7 @@
       "a": "2641",
       "b": "2378",
       "a_name": "Texas Tech",
-      "b_name": "McNeese"
+      "b_name": "UMBC"
     },
     {
       "a": "2641",
@@ -16304,7 +16556,7 @@
     },
     {
       "a": "2641",
-      "b": "2378",
+      "b": "2377",
       "a_name": "Texas Tech",
       "b_name": "McNeese"
     },
@@ -16546,7 +16798,7 @@
       "a": "43",
       "b": "2378",
       "a_name": "Yale",
-      "b_name": "McNeese"
+      "b_name": "UMBC"
     },
     {
       "a": "43",
@@ -16586,7 +16838,7 @@
     },
     {
       "a": "43",
-      "b": "2378",
+      "b": "2377",
       "a_name": "Yale",
       "b_name": "McNeese"
     },
@@ -16840,7 +17092,7 @@
       "a": "2250",
       "b": "2378",
       "a_name": "Gonzaga",
-      "b_name": "McNeese"
+      "b_name": "UMBC"
     },
     {
       "a": "2250",
@@ -16874,7 +17126,7 @@
     },
     {
       "a": "2250",
-      "b": "2378",
+      "b": "2377",
       "a_name": "Gonzaga",
       "b_name": "McNeese"
     },
@@ -17116,7 +17368,7 @@
       "a": "2275",
       "b": "2378",
       "a_name": "Hofstra",
-      "b_name": "McNeese"
+      "b_name": "UMBC"
     },
     {
       "a": "2275",
@@ -17156,7 +17408,7 @@
     },
     {
       "a": "2275",
-      "b": "2378",
+      "b": "2377",
       "a_name": "Hofstra",
       "b_name": "McNeese"
     },
@@ -17386,7 +17638,7 @@
       "a": "2633",
       "b": "2378",
       "a_name": "Tennessee",
-      "b_name": "McNeese"
+      "b_name": "UMBC"
     },
     {
       "a": "2633",
@@ -17414,7 +17666,7 @@
     },
     {
       "a": "2633",
-      "b": "2378",
+      "b": "2377",
       "a_name": "Tennessee",
       "b_name": "McNeese"
     },
@@ -17626,7 +17878,7 @@
       "a": "2670",
       "b": "2378",
       "a_name": "VCU",
-      "b_name": "McNeese"
+      "b_name": "UMBC"
     },
     {
       "a": "2670",
@@ -17660,7 +17912,7 @@
     },
     {
       "a": "2670",
-      "b": "2378",
+      "b": "2377",
       "a_name": "VCU",
       "b_name": "McNeese"
     },
@@ -17878,7 +18130,7 @@
       "a": "2509",
       "b": "2378",
       "a_name": "Purdue",
-      "b_name": "McNeese"
+      "b_name": "UMBC"
     },
     {
       "a": "2509",
@@ -17912,7 +18164,7 @@
     },
     {
       "a": "2509",
-      "b": "2378",
+      "b": "2377",
       "a_name": "Purdue",
       "b_name": "McNeese"
     },
@@ -18100,7 +18352,7 @@
       "a": "2653",
       "b": "2378",
       "a_name": "Troy",
-      "b_name": "McNeese"
+      "b_name": "UMBC"
     },
     {
       "a": "2653",
@@ -18140,7 +18392,7 @@
     },
     {
       "a": "2653",
-      "b": "2378",
+      "b": "2377",
       "a_name": "Troy",
       "b_name": "McNeese"
     },
@@ -18364,7 +18616,7 @@
       "a": "2608",
       "b": "2378",
       "a_name": "Saint Mary's",
-      "b_name": "McNeese"
+      "b_name": "UMBC"
     },
     {
       "a": "2608",
@@ -18404,7 +18656,7 @@
     },
     {
       "a": "2608",
-      "b": "2378",
+      "b": "2377",
       "a_name": "Saint Mary's",
       "b_name": "McNeese"
     },
@@ -18628,7 +18880,7 @@
       "a": "245",
       "b": "2378",
       "a_name": "Texas A&M",
-      "b_name": "McNeese"
+      "b_name": "UMBC"
     },
     {
       "a": "245",
@@ -18656,7 +18908,7 @@
     },
     {
       "a": "245",
-      "b": "2378",
+      "b": "2377",
       "a_name": "Texas A&M",
       "b_name": "McNeese"
     },
@@ -18838,7 +19090,7 @@
       "a": "248",
       "b": "2378",
       "a_name": "Houston",
-      "b_name": "McNeese"
+      "b_name": "UMBC"
     },
     {
       "a": "248",
@@ -18866,7 +19118,7 @@
     },
     {
       "a": "248",
-      "b": "2378",
+      "b": "2377",
       "a_name": "Houston",
       "b_name": "McNeese"
     },
@@ -19047,247 +19299,247 @@
     {
       "a": "2378",
       "b": "130",
-      "a_name": "McNeese",
+      "a_name": "UMBC",
       "b_name": "Michigan"
     },
     {
       "a": "2378",
       "b": "70",
-      "a_name": "McNeese",
+      "a_name": "UMBC",
       "b_name": "Idaho"
     },
     {
       "a": "2378",
       "b": "2329",
-      "a_name": "McNeese",
+      "a_name": "UMBC",
       "b_name": "Lehigh"
     },
     {
       "a": "2378",
       "b": "61",
-      "a_name": "McNeese",
+      "a_name": "UMBC",
       "b_name": "Georgia"
     },
     {
       "a": "2378",
       "b": "139",
-      "a_name": "McNeese",
+      "a_name": "UMBC",
       "b_name": "Saint Louis"
     },
     {
       "a": "2378",
       "b": "8",
-      "a_name": "McNeese",
+      "a_name": "UMBC",
       "b_name": "Arkansas"
     },
     {
       "a": "2378",
-      "b": "2378",
-      "a_name": "McNeese",
+      "b": "2377",
+      "a_name": "UMBC",
       "b_name": "McNeese"
     },
     {
       "a": "2378",
       "b": "2305",
-      "a_name": "McNeese",
+      "a_name": "UMBC",
       "b_name": "Kansas"
     },
     {
       "a": "2378",
       "b": "2871",
-      "a_name": "McNeese",
+      "a_name": "UMBC",
       "b_name": "CA Baptist"
     },
     {
       "a": "2378",
       "b": "153",
-      "a_name": "McNeese",
+      "a_name": "UMBC",
       "b_name": "North Carolina"
     },
     {
       "a": "2378",
       "b": "158",
-      "a_name": "McNeese",
+      "a_name": "UMBC",
       "b_name": "Nebraska"
     },
     {
       "a": "2378",
       "b": "62",
-      "a_name": "McNeese",
+      "a_name": "UMBC",
       "b_name": "Hawai'i"
     },
     {
       "a": "2378",
       "b": "26",
-      "a_name": "McNeese",
+      "a_name": "UMBC",
       "b_name": "UCLA"
     },
     {
       "a": "2378",
       "b": "152",
-      "a_name": "McNeese",
+      "a_name": "UMBC",
       "b_name": "NC State"
     },
     {
       "a": "2378",
       "b": "41",
-      "a_name": "McNeese",
+      "a_name": "UMBC",
       "b_name": "UConn"
     },
     {
       "a": "2378",
       "b": "2952",
-      "a_name": "McNeese",
+      "a_name": "UMBC",
       "b_name": "Queens"
     },
     {
       "a": "2378",
       "b": "12",
-      "a_name": "McNeese",
+      "a_name": "UMBC",
       "b_name": "Arizona"
     },
     {
       "a": "2378",
       "b": "2261",
-      "a_name": "McNeese",
+      "a_name": "UMBC",
       "b_name": "Howard"
     },
     {
       "a": "2378",
       "b": "328",
-      "a_name": "McNeese",
+      "a_name": "UMBC",
       "b_name": "Utah State"
     },
     {
       "a": "2378",
       "b": "2294",
-      "a_name": "McNeese",
+      "a_name": "UMBC",
       "b_name": "Iowa"
     },
     {
       "a": "2378",
       "b": "275",
-      "a_name": "McNeese",
+      "a_name": "UMBC",
       "b_name": "Wisconsin"
     },
     {
       "a": "2378",
       "b": "2272",
-      "a_name": "McNeese",
+      "a_name": "UMBC",
       "b_name": "High Point"
     },
     {
       "a": "2378",
       "b": "333",
-      "a_name": "McNeese",
+      "a_name": "UMBC",
       "b_name": "Alabama"
     },
     {
       "a": "2378",
       "b": "2449",
-      "a_name": "McNeese",
+      "a_name": "UMBC",
       "b_name": "N Dakota St"
     },
     {
       "a": "2378",
       "b": "252",
-      "a_name": "McNeese",
+      "a_name": "UMBC",
       "b_name": "BYU"
     },
     {
       "a": "2378",
       "b": "2567",
-      "a_name": "McNeese",
+      "a_name": "UMBC",
       "b_name": "SMU"
     },
     {
       "a": "2378",
       "b": "251",
-      "a_name": "McNeese",
+      "a_name": "UMBC",
       "b_name": "Texas"
     },
     {
       "a": "2378",
       "b": "258",
-      "a_name": "McNeese",
+      "a_name": "UMBC",
       "b_name": "Virginia"
     },
     {
       "a": "2378",
       "b": "2634",
-      "a_name": "McNeese",
+      "a_name": "UMBC",
       "b_name": "Tennessee St"
     },
     {
       "a": "2378",
       "b": "2390",
-      "a_name": "McNeese",
+      "a_name": "UMBC",
       "b_name": "Miami"
     },
     {
       "a": "2378",
       "b": "2116",
-      "a_name": "McNeese",
+      "a_name": "UMBC",
       "b_name": "UCF"
     },
     {
       "a": "2378",
       "b": "127",
-      "a_name": "McNeese",
+      "a_name": "UMBC",
       "b_name": "Michigan St"
     },
     {
       "a": "2378",
       "b": "2561",
-      "a_name": "McNeese",
+      "a_name": "UMBC",
       "b_name": "Siena"
     },
     {
       "a": "2378",
       "b": "201",
-      "a_name": "McNeese",
+      "a_name": "UMBC",
       "b_name": "Oklahoma"
     },
     {
       "a": "2378",
       "b": "2",
-      "a_name": "McNeese",
+      "a_name": "UMBC",
       "b_name": "Auburn"
     },
     {
       "a": "2378",
       "b": "84",
-      "a_name": "McNeese",
+      "a_name": "UMBC",
       "b_name": "Indiana"
     },
     {
       "a": "2378",
       "b": "167",
-      "a_name": "McNeese",
+      "a_name": "UMBC",
       "b_name": "New Mexico"
     },
     {
       "a": "2378",
       "b": "21",
-      "a_name": "McNeese",
+      "a_name": "UMBC",
       "b_name": "San Diego St"
     },
     {
       "a": "2378",
       "b": "24",
-      "a_name": "McNeese",
+      "a_name": "UMBC",
       "b_name": "Stanford"
     },
     {
       "a": "2378",
       "b": "2132",
-      "a_name": "McNeese",
+      "a_name": "UMBC",
       "b_name": "Cincinnati"
     },
     {
       "a": "2378",
       "b": "2550",
-      "a_name": "McNeese",
+      "a_name": "UMBC",
       "b_name": "Seton Hall"
     },
     {
@@ -19322,12 +19574,6 @@
     },
     {
       "a": "130",
-      "b": "2378",
-      "a_name": "Michigan",
-      "b_name": "McNeese"
-    },
-    {
-      "a": "130",
       "b": "2305",
       "a_name": "Michigan",
       "b_name": "Kansas"
@@ -19514,7 +19760,7 @@
     },
     {
       "a": "70",
-      "b": "2378",
+      "b": "2377",
       "a_name": "Idaho",
       "b_name": "McNeese"
     },
@@ -19748,7 +19994,7 @@
     },
     {
       "a": "2329",
-      "b": "2378",
+      "b": "2377",
       "a_name": "Lehigh",
       "b_name": "McNeese"
     },
@@ -19970,7 +20216,7 @@
     },
     {
       "a": "61",
-      "b": "2378",
+      "b": "2377",
       "a_name": "Georgia",
       "b_name": "McNeese"
     },
@@ -20162,7 +20408,7 @@
     },
     {
       "a": "139",
-      "b": "2378",
+      "b": "2377",
       "a_name": "Saint Louis",
       "b_name": "McNeese"
     },
@@ -20372,7 +20618,7 @@
     },
     {
       "a": "8",
-      "b": "2378",
+      "b": "2377",
       "a_name": "Arkansas",
       "b_name": "McNeese"
     },
@@ -20557,205 +20803,211 @@
       "b_name": "Seton Hall"
     },
     {
-      "a": "2378",
+      "a": "2377",
       "b": "2305",
       "a_name": "McNeese",
       "b_name": "Kansas"
     },
     {
-      "a": "2378",
+      "a": "2377",
       "b": "2871",
       "a_name": "McNeese",
       "b_name": "CA Baptist"
     },
     {
-      "a": "2378",
+      "a": "2377",
       "b": "153",
       "a_name": "McNeese",
       "b_name": "North Carolina"
     },
     {
-      "a": "2378",
+      "a": "2377",
+      "b": "58",
+      "a_name": "McNeese",
+      "b_name": "South Florida"
+    },
+    {
+      "a": "2377",
       "b": "158",
       "a_name": "McNeese",
       "b_name": "Nebraska"
     },
     {
-      "a": "2378",
+      "a": "2377",
       "b": "62",
       "a_name": "McNeese",
       "b_name": "Hawai'i"
     },
     {
-      "a": "2378",
+      "a": "2377",
       "b": "26",
       "a_name": "McNeese",
       "b_name": "UCLA"
     },
     {
-      "a": "2378",
+      "a": "2377",
       "b": "152",
       "a_name": "McNeese",
       "b_name": "NC State"
     },
     {
-      "a": "2378",
+      "a": "2377",
       "b": "41",
       "a_name": "McNeese",
       "b_name": "UConn"
     },
     {
-      "a": "2378",
+      "a": "2377",
       "b": "2952",
       "a_name": "McNeese",
       "b_name": "Queens"
     },
     {
-      "a": "2378",
+      "a": "2377",
       "b": "12",
       "a_name": "McNeese",
       "b_name": "Arizona"
     },
     {
-      "a": "2378",
+      "a": "2377",
       "b": "2261",
       "a_name": "McNeese",
       "b_name": "Howard"
     },
     {
-      "a": "2378",
+      "a": "2377",
       "b": "328",
       "a_name": "McNeese",
       "b_name": "Utah State"
     },
     {
-      "a": "2378",
+      "a": "2377",
       "b": "2294",
       "a_name": "McNeese",
       "b_name": "Iowa"
     },
     {
-      "a": "2378",
+      "a": "2377",
       "b": "275",
       "a_name": "McNeese",
       "b_name": "Wisconsin"
     },
     {
-      "a": "2378",
+      "a": "2377",
       "b": "2272",
       "a_name": "McNeese",
       "b_name": "High Point"
     },
     {
-      "a": "2378",
+      "a": "2377",
       "b": "333",
       "a_name": "McNeese",
       "b_name": "Alabama"
     },
     {
-      "a": "2378",
+      "a": "2377",
       "b": "2449",
       "a_name": "McNeese",
       "b_name": "N Dakota St"
     },
     {
-      "a": "2378",
+      "a": "2377",
       "b": "252",
       "a_name": "McNeese",
       "b_name": "BYU"
     },
     {
-      "a": "2378",
+      "a": "2377",
       "b": "2567",
       "a_name": "McNeese",
       "b_name": "SMU"
     },
     {
-      "a": "2378",
+      "a": "2377",
       "b": "251",
       "a_name": "McNeese",
       "b_name": "Texas"
     },
     {
-      "a": "2378",
+      "a": "2377",
       "b": "258",
       "a_name": "McNeese",
       "b_name": "Virginia"
     },
     {
-      "a": "2378",
+      "a": "2377",
       "b": "2634",
       "a_name": "McNeese",
       "b_name": "Tennessee St"
     },
     {
-      "a": "2378",
+      "a": "2377",
       "b": "2390",
       "a_name": "McNeese",
       "b_name": "Miami"
     },
     {
-      "a": "2378",
+      "a": "2377",
       "b": "2116",
       "a_name": "McNeese",
       "b_name": "UCF"
     },
     {
-      "a": "2378",
+      "a": "2377",
       "b": "127",
       "a_name": "McNeese",
       "b_name": "Michigan St"
     },
     {
-      "a": "2378",
+      "a": "2377",
       "b": "2561",
       "a_name": "McNeese",
       "b_name": "Siena"
     },
     {
-      "a": "2378",
+      "a": "2377",
       "b": "201",
       "a_name": "McNeese",
       "b_name": "Oklahoma"
     },
     {
-      "a": "2378",
+      "a": "2377",
       "b": "2",
       "a_name": "McNeese",
       "b_name": "Auburn"
     },
     {
-      "a": "2378",
+      "a": "2377",
       "b": "84",
       "a_name": "McNeese",
       "b_name": "Indiana"
     },
     {
-      "a": "2378",
+      "a": "2377",
       "b": "167",
       "a_name": "McNeese",
       "b_name": "New Mexico"
     },
     {
-      "a": "2378",
+      "a": "2377",
       "b": "21",
       "a_name": "McNeese",
       "b_name": "San Diego St"
     },
     {
-      "a": "2378",
+      "a": "2377",
       "b": "24",
       "a_name": "McNeese",
       "b_name": "Stanford"
     },
     {
-      "a": "2378",
+      "a": "2377",
       "b": "2132",
       "a_name": "McNeese",
       "b_name": "Cincinnati"
     },
     {
-      "a": "2378",
+      "a": "2377",
       "b": "2550",
       "a_name": "McNeese",
       "b_name": "Seton Hall"
@@ -23964,10 +24216,10 @@
       "region": "East",
       "seed": 7
     },
-    "2608": {
-      "bracket_name": "Saint Mary's",
-      "region": "South",
-      "seed": 7
+    "2541": {
+      "bracket_name": "Santa Clara",
+      "region": "East",
+      "seed": 10
     },
     "66": {
       "bracket_name": "Iowa State",
@@ -23984,10 +24236,10 @@
       "region": "South",
       "seed": 1
     },
-    "2390": {
-      "bracket_name": "Miami",
-      "region": "West",
-      "seed": 7
+    "338": {
+      "bracket_name": "Kennesaw St",
+      "region": "South",
+      "seed": 16
     },
     "2440": {
       "bracket_name": "Prairie View",
@@ -24044,6 +24296,11 @@
       "region": "South",
       "seed": 14
     },
+    "2608": {
+      "bracket_name": "Saint Mary's",
+      "region": "South",
+      "seed": 7
+    },
     "245": {
       "bracket_name": "Texas A&M",
       "region": "South",
@@ -24055,9 +24312,9 @@
       "seed": 2
     },
     "2378": {
-      "bracket_name": "McNeese",
-      "region": "Midwest",
-      "seed": 12
+      "bracket_name": "UMBC",
+      "region": "South",
+      "seed": 15
     },
     "130": {
       "bracket_name": "Michigan",
@@ -24088,6 +24345,11 @@
       "bracket_name": "Arkansas",
       "region": "Midwest",
       "seed": 5
+    },
+    "2377": {
+      "bracket_name": "McNeese",
+      "region": "Midwest",
+      "seed": 12
     },
     "2305": {
       "bracket_name": "Kansas",
@@ -24204,6 +24466,11 @@
       "region": "West",
       "seed": 14
     },
+    "2390": {
+      "bracket_name": "Miami",
+      "region": "West",
+      "seed": 7
+    },
     "2116": {
       "bracket_name": "UCF",
       "region": "West",
@@ -24261,10 +24528,10 @@
     }
   },
   "meta": {
-    "total_games": 385,
-    "rematches": 70,
-    "not_played_cnt": 2535,
+    "total_games": 398,
+    "rematches": 72,
+    "not_played_cnt": 2538,
     "season": "2025-26",
-    "generated_at": "2026-03-15T11:08:17.018453Z"
+    "generated_at": "2026-03-15T11:19:16.903104Z"
   }
 }

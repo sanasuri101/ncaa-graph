@@ -1,6 +1,6 @@
 {
   "season": 2026,
-  "generated_at": "2026-03-15T11:08:37.423114+00:00",
+  "generated_at": "2026-03-15T11:19:19.460507+00:00",
   "teams": {
     "150": {
       "espn_id": "150",
@@ -352,29 +352,29 @@
         "efg": 53.1
       }
     },
-    "2608": {
-      "espn_id": "2608",
-      "bracket_name": "Saint Mary's",
-      "display_name": "Saint Mary's",
-      "region": "South",
-      "seed": 7,
+    "2541": {
+      "espn_id": "2541",
+      "bracket_name": "Santa Clara",
+      "display_name": "Santa Clara",
+      "region": "East",
+      "seed": 10,
       "torvik": {
-        "rank": 24,
-        "record": "27-5",
-        "adj_oe": 119.3,
-        "adj_de": 97.5,
-        "adj_em": 21.85,
-        "barthag": 0.9109,
-        "adj_tempo": 0.89,
-        "luck": 0.048,
-        "wab": 65.3,
-        "proj_barthag": 0.8764,
-        "sos_rank": 1.190736359682159,
+        "rank": 28,
+        "record": "26-8",
+        "adj_oe": 125.0,
+        "adj_de": 103.7,
+        "adj_em": 21.32,
+        "barthag": 0.8957,
+        "adj_tempo": 0.83,
+        "luck": 0.006,
+        "wab": 69.3,
+        "proj_barthag": 0.8519,
+        "sos_rank": 1.224872165189898,
         "conf": "WCC",
-        "two_p": 50.2,
-        "three_p": 38.6,
-        "ft_pct": 81.1,
-        "efg": 52.9
+        "two_p": 56.5,
+        "three_p": 34.9,
+        "ft_pct": 74.0,
+        "efg": 54.6
       }
     },
     "66": {
@@ -452,29 +452,29 @@
         "efg": 53.5
       }
     },
-    "2390": {
-      "espn_id": "2390",
-      "bracket_name": "Miami",
-      "display_name": "Miami",
-      "region": "West",
-      "seed": 7,
+    "338": {
+      "espn_id": "338",
+      "bracket_name": "Kennesaw St",
+      "display_name": "Kennesaw St",
+      "region": "South",
+      "seed": 16,
       "torvik": {
-        "rank": 35,
-        "record": "25-8",
-        "adj_oe": 121.1,
-        "adj_de": 101.4,
-        "adj_em": 19.65,
-        "barthag": 0.8846,
-        "adj_tempo": 0.72,
-        "luck": 0.076,
-        "wab": 67.9,
-        "proj_barthag": 0.8981,
-        "sos_rank": 1.1531694669369195,
-        "conf": "ACC",
-        "two_p": 57.2,
-        "three_p": 34.7,
-        "ft_pct": 68.5,
-        "efg": 55.6
+        "rank": 145,
+        "record": "21-13",
+        "adj_oe": 110.7,
+        "adj_de": 109.4,
+        "adj_em": 1.29,
+        "barthag": 0.5336,
+        "adj_tempo": 0.5,
+        "luck": 0.015,
+        "wab": 71.3,
+        "proj_barthag": 0.4699,
+        "sos_rank": 1.1006345678127132,
+        "conf": "CUSA",
+        "two_p": 50.8,
+        "three_p": 33.7,
+        "ft_pct": 70.0,
+        "efg": 50.7
       }
     },
     "2440": {
@@ -752,6 +752,31 @@
         "efg": 51.9
       }
     },
+    "2608": {
+      "espn_id": "2608",
+      "bracket_name": "Saint Mary's",
+      "display_name": "Saint Mary's",
+      "region": "South",
+      "seed": 7,
+      "torvik": {
+        "rank": 24,
+        "record": "27-5",
+        "adj_oe": 119.3,
+        "adj_de": 97.5,
+        "adj_em": 21.85,
+        "barthag": 0.9109,
+        "adj_tempo": 0.89,
+        "luck": 0.048,
+        "wab": 65.3,
+        "proj_barthag": 0.8764,
+        "sos_rank": 1.190736359682159,
+        "conf": "WCC",
+        "two_p": 50.2,
+        "three_p": 38.6,
+        "ft_pct": 81.1,
+        "efg": 52.9
+      }
+    },
     "245": {
       "espn_id": "245",
       "bracket_name": "Texas A&M",
@@ -804,27 +829,27 @@
     },
     "2378": {
       "espn_id": "2378",
-      "bracket_name": "McNeese",
-      "display_name": "McNeese",
-      "region": "Midwest",
-      "seed": 12,
+      "bracket_name": "UMBC",
+      "display_name": "UMBC",
+      "region": "South",
+      "seed": 15,
       "torvik": {
-        "rank": 73,
-        "record": "28-5",
-        "adj_oe": 113.1,
-        "adj_de": 102.1,
-        "adj_em": 11.0,
-        "barthag": 0.7644,
-        "adj_tempo": 0.86,
-        "luck": 0.091,
-        "wab": 66.1,
-        "proj_barthag": 0.4916,
-        "sos_rank": 1.1721332756382519,
-        "conf": "Slnd",
-        "two_p": 52.9,
-        "three_p": 31.6,
-        "ft_pct": 74.0,
-        "efg": 51.0
+        "rank": 185,
+        "record": "24-8",
+        "adj_oe": 107.5,
+        "adj_de": 109.2,
+        "adj_em": -1.71,
+        "barthag": 0.4548,
+        "adj_tempo": 0.88,
+        "luck": -0.001,
+        "wab": 66.0,
+        "proj_barthag": 0.219,
+        "sos_rank": 1.153247370610256,
+        "conf": "AE",
+        "two_p": 54.0,
+        "three_p": 35.9,
+        "ft_pct": 76.4,
+        "efg": 53.9
       }
     },
     "130": {
@@ -975,6 +1000,31 @@
         "three_p": 38.1,
         "ft_pct": 74.7,
         "efg": 56.3
+      }
+    },
+    "2377": {
+      "espn_id": "2377",
+      "bracket_name": "McNeese",
+      "display_name": "McNeese",
+      "region": "Midwest",
+      "seed": 12,
+      "torvik": {
+        "rank": 73,
+        "record": "28-5",
+        "adj_oe": 113.1,
+        "adj_de": 102.1,
+        "adj_em": 11.0,
+        "barthag": 0.7644,
+        "adj_tempo": 0.86,
+        "luck": 0.091,
+        "wab": 66.1,
+        "proj_barthag": 0.4916,
+        "sos_rank": 1.1721332756382519,
+        "conf": "Slnd",
+        "two_p": 52.9,
+        "three_p": 31.6,
+        "ft_pct": 74.0,
+        "efg": 51.0
       }
     },
     "2305": {
@@ -1550,6 +1600,31 @@
         "three_p": 33.7,
         "ft_pct": 76.3,
         "efg": 50.1
+      }
+    },
+    "2390": {
+      "espn_id": "2390",
+      "bracket_name": "Miami",
+      "display_name": "Miami",
+      "region": "West",
+      "seed": 7,
+      "torvik": {
+        "rank": 35,
+        "record": "25-8",
+        "adj_oe": 121.1,
+        "adj_de": 101.4,
+        "adj_em": 19.65,
+        "barthag": 0.8846,
+        "adj_tempo": 0.72,
+        "luck": 0.076,
+        "wab": 67.9,
+        "proj_barthag": 0.8981,
+        "sos_rank": 1.1531694669369195,
+        "conf": "ACC",
+        "two_p": 57.2,
+        "three_p": 34.7,
+        "ft_pct": 68.5,
+        "efg": 55.6
       }
     },
     "2116": {
