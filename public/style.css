@@ -3412,10 +3412,24 @@ section { margin-bottom: 20px; }
   .ai-panel.open { transform: translateY(0); }
 
   /* Drag handle pill */
-  .ai-panel::before {
-    content: ''; display: block; width: 36px; height: 4px;
-    background: var(--border2); border-radius: 2px;
-    margin: 10px auto 0; flex-shrink: 0;
+  /* Real drag handle element — ::before can't receive touch events */
+  .mob-drag-handle {
+    width: 100%;
+    height: 28px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: grab;
+    touch-action: none;  /* tells browser we handle touch ourselves */
+  }
+  .mob-drag-handle::after {
+    content: '';
+    display: block;
+    width: 36px;
+    height: 4px;
+    background: var(--border2);
+    border-radius: 2px;
   }
 
   /* ── AI panel internals ──────────────────────────────────────────────── */
@@ -3461,7 +3475,13 @@ section { margin-bottom: 20px; }
   .sv           { font-size: .8rem; }
   .confidence-block { padding: 10px 12px; }
   .conf-team-a, .conf-team-b { font-size: .84rem; }
-  .scatter-panel { width: 100%; height: 100%; max-height: 100%; border-radius: 0; }
+  .scatter-panel {
+    width: 100%; height: 100%; max-height: 100%;
+    border-radius: 0; overflow-y: auto;
+  }
+  .scatter-body { padding: 10px 12px; }
+  .scatter-header { padding: 10px 12px; }
+  #scatter-canvas { display: block; width: 100% !important; }
   .bracket-panel { padding: 8px 4px; }
   .br-regions-grid { gap: 10px; }
   #custom-team-input { width: 120px; font-size: .84rem; }

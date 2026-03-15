@@ -60,8 +60,23 @@ function buildScatterPoints() {
 function renderScatter() {
   const canvas  = document.getElementById('scatter-canvas');
   const ctx     = canvas.getContext('2d');
-  const W       = canvas.width;
-  const H       = canvas.height;
+
+  // Resize canvas to fit container — fixes mobile cutoff
+  // Use devicePixelRatio for sharp rendering on retina/high-dpi screens
+  const body    = canvas.parentElement;
+  const dpr     = window.devicePixelRatio || 1;
+  const cssW    = body ? body.clientWidth - 36 : 504;  // 36 = 2×18px padding
+  const cssH    = Math.min(Math.round(cssW * 0.78), window.innerHeight * 0.55);
+  if (canvas.width !== Math.round(cssW * dpr) || canvas.height !== Math.round(cssH * dpr)) {
+    canvas.width  = Math.round(cssW * dpr);
+    canvas.height = Math.round(cssH * dpr);
+    canvas.style.width  = cssW  + 'px';
+    canvas.style.height = cssH + 'px';
+    ctx.scale(dpr, dpr);
+  }
+
+  const W       = cssW;
+  const H       = cssH;
   const PAD     = { top: 24, right: 20, bottom: 40, left: 52 };
   const plotW   = W - PAD.left - PAD.right;
   const plotH   = H - PAD.top  - PAD.bottom;
@@ -255,11 +270,10 @@ function bindScatterEvents() {
 
   // Canvas handlers use assignment — safe to re-run on every open
   canvas.onmousemove = (e) => {
-    const rect  = canvas.getBoundingClientRect();
-    const scaleX = canvas.width  / rect.width;
-    const scaleY = canvas.height / rect.height;
-    const mx    = (e.clientX - rect.left) * scaleX;
-    const my    = (e.clientY - rect.top)  * scaleY;
+    const rect   = canvas.getBoundingClientRect();
+    // Use CSS dimensions for hit-testing — the canvas buffer may be DPR-scaled
+    const mx    = e.clientX - rect.left;
+    const my    = e.clientY - rect.top;
     const meta  = canvas._plotMeta;
     if (!meta) return;
 
@@ -290,6 +304,29 @@ function bindScatterEvents() {
     tooltip.style.display = 'none';
     renderScatter();
   };
+
+  // Touch support for mobile — tap to highlight nearest team
+  canvas.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    const rect  = canvas.getBoundingClientRect();
+    const touch = e.touches[0];
+    const mx    = touch.clientX - rect.left;
+    const my    = touch.clientY - rect.top;
+    const meta  = canvas._plotMeta;
+    if (!meta) return;
+
+    let closest = -1, closestD = Infinity;
+    SCATTER_POINTS.forEach((p, i) => {
+      const d = Math.hypot(meta.toX(p.oe) - mx, meta.toY(p.de) - my);
+      if (d < closestD) { closestD = d; closest = i; }
+    });
+
+    if (closestD < 30) {
+      HOVERED_IDX = closest;
+      renderScatter();
+      showScatterTooltip(SCATTER_POINTS[closest], touch, rect, tooltip);
+    }
+  }, { passive: false });
 
   canvas.onclick = (e) => {
     if (HOVERED_IDX < 0) return;

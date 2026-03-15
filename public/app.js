@@ -1051,33 +1051,77 @@ function initMobileUI() {
     sidebarBtn.style.display = '';
   });
 
-  // ── Bottom sheet: tap header to open/close ───────────────────────────────
+  // ── Tap the collapsed peek area (handle + header) to open ───────────────
+  // When panel is closed, tapping anywhere in the visible 56px strip opens it.
+  // When open, tapping the header closes it.
   const aiHeader = aiPanel.querySelector('.ai-panel-header');
+  function toggleSheet() {
+    if (aiPanel.classList.contains('open')) {
+      aiPanel.classList.remove('open');
+    } else {
+      aiPanel.classList.add('open');
+    }
+  }
   if (aiHeader) {
     aiHeader.style.cursor = 'pointer';
-    aiHeader.addEventListener('click', () => {
-      const isOpen = aiPanel.classList.contains('open');
-      if (isOpen) {
-        aiPanel.classList.remove('open');
-      } else {
-        aiPanel.classList.add('open');
-        // Auto-open is handled by the AI toggle button — just ensure panel is visible
-      }
-    });
+    aiHeader.addEventListener('click', toggleSheet);
+  }
+  // Drag handle tap also toggles (when it wasn't a drag)
+  if (dragHandle) {
+    let tapStartY = 0;
+    dragHandle.addEventListener('touchstart', e => { tapStartY = e.touches[0].clientY; }, { passive: true });
+    // toggleSheet is called via touchend only if drag distance was small (< 10px = tap not drag)
+    // The touchend in the drag handler already handles this — if dy < 80 it snaps back
+    // We just need a click fallback for non-touch (desktop testing)
+    dragHandle.addEventListener('click', toggleSheet);
   }
 
-  // ── Swipe down on AI panel to close ──────────────────────────────────────
-  let touchStartY = 0;
-  aiPanel.addEventListener('touchstart', e => {
-    touchStartY = e.touches[0].clientY;
-  }, { passive: true });
-  aiPanel.addEventListener('touchend', e => {
-    const dy = e.changedTouches[0].clientY - touchStartY;
-    // Swipe down > 60px while panel is open closes it
-    if (dy > 60 && aiPanel.classList.contains('open')) {
-      aiPanel.classList.remove('open');
-    }
-  }, { passive: true });
+  // ── Drag handle — full drag-to-open/close with non-passive events ───────────
+  // Must use non-passive so we can call preventDefault() to block Safari
+  // swipe-back and iOS overscroll while dragging the handle.
+  const dragHandle = document.getElementById('mob-drag-handle');
+  if (dragHandle) {
+    let dragStartY   = 0;
+    let dragStartOpen = false;
+    let isDragging   = false;
+    const SHEET_HEIGHT = window.innerHeight * 0.82;
+
+    dragHandle.addEventListener('touchstart', e => {
+      dragStartY    = e.touches[0].clientY;
+      dragStartOpen = aiPanel.classList.contains('open');
+      isDragging    = true;
+      aiPanel.style.transition = 'none'; // disable animation during drag
+      e.preventDefault(); // blocks Safari swipe-back gesture
+    }, { passive: false }); // non-passive = can call preventDefault
+
+    dragHandle.addEventListener('touchmove', e => {
+      if (!isDragging) return;
+      const dy = e.touches[0].clientY - dragStartY;
+      // Clamp: can't drag above fully-open or below fully-closed
+      const closedOffset = SHEET_HEIGHT - 56;
+      const currentOffset = dragStartOpen ? 0 : closedOffset;
+      const newOffset = Math.max(0, Math.min(closedOffset, currentOffset + dy));
+      aiPanel.style.transform = `translateY(${newOffset}px)`;
+      e.preventDefault();
+    }, { passive: false });
+
+    dragHandle.addEventListener('touchend', e => {
+      if (!isDragging) return;
+      isDragging = false;
+      aiPanel.style.transition = ''; // restore CSS transition
+      aiPanel.style.transform  = ''; // let CSS class take over
+      const dy = e.changedTouches[0].clientY - dragStartY;
+      // Threshold: 80px drag decides open/close
+      if (dragStartOpen) {
+        if (dy > 80) aiPanel.classList.remove('open');
+        // else snap back open
+      } else {
+        if (dy < -80) aiPanel.classList.add('open');
+        // else snap back closed
+      }
+      e.preventDefault();
+    }, { passive: false });
+  }
 
   // ── When AI Scout button is tapped, open the bottom sheet ────────────────
   const aiToggle = document.getElementById('ai-toggle');
