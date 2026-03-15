@@ -1,4 +1,4 @@
-name: Refresh ESPN Data
+name: Refresh ESPN + Torvik Data
 
 on:
   schedule:
@@ -24,21 +24,29 @@ jobs:
       - name: Fetch ESPN game data
         run: python scripts/fetch_data.py
 
+      - name: Fetch Torvik stats
+        run: python scripts/fetch_torvik.py
+
+      - name: Fetch injury news flags
+        run: python scripts/fetch_injuries.py
+
       - name: Recompute transitive analysis
         run: python scripts/compute_transitive.py
 
-      - name: Copy to public/data
+      - name: Copy all data to public/data
         run: |
           mkdir -p public/data
-          cp data/graph_data.json public/data/graph_data.json
+          cp data/graph_data.json          public/data/graph_data.json
+          cp data/not_played.json          public/data/not_played.json
+          cp data/recent_form.json         public/data/recent_form.json
+          cp data/torvik_stats.json        public/data/torvik_stats.json
           cp data/transitive_analysis.json public/data/transitive_analysis.json
 
       - name: Commit updated data
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git pull --rebase origin main
           git add data/ public/data/
-          git diff --quiet && git diff --staged --quiet || \
-            git commit -m "chore: refresh ESPN + transitive data $(date -u +'%Y-%m-%d')"
-          git push
+          git diff --staged --quiet && echo "No changes to commit." && exit 0
+          git commit -m "chore: refresh ESPN + Torvik + injury data $(date -u +'%Y-%m-%d')"
+          git push origin HEAD:main
