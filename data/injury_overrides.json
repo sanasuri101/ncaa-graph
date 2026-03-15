@@ -80,6 +80,91 @@
       "notes": "Cason was backup depth, moderate impact on rotation.",
       "source": "ESPN",
       "updated": "2026-03-09"
+    },
+    "153": {
+      "bracket_name": "North Carolina",
+      "region": "Midwest",
+      "seed": 6,
+      "adj_em_penalty": 6.0,
+      "players": [
+        {
+          "name": "Caleb Wilson",
+          "status": "Out for season - broken right thumb (surgery March 5)",
+          "impact": "Team's leading scorer (19.8 ppg) and rebounder (9.4 rpg). Top-5 NBA draft pick. Out since Feb 10 with left hand fracture, then broke right thumb dunking in practice March 5. UNC went 5-1 without him but faces tougher competition in tournament.",
+          "adj_em_impact": -6.0
+        }
+      ],
+      "notes": "UNC's go-to lineup without Wilson: Trimble/Dixon/Bogavac backcourt, Stevenson at 4, Veesaar at center. +22 net rating with that quintet in last 4 games but vs weaker ACC opponents.",
+      "source": "UNC Athletics, ESPN, CBS Sports, WRAL",
+      "updated": "2026-03-15"
+    },
+    "2250": {
+      "bracket_name": "Gonzaga",
+      "region": "West",
+      "seed": 3,
+      "adj_em_penalty": 1.5,
+      "players": [
+        {
+          "name": "Braden Huff",
+          "status": "Questionable - left knee injury (out since Jan 15, targeting NCAA tournament return)",
+          "impact": "Leading scorer (17.8 ppg, 66.2% FG) \u2014 out since Jan 15. Gonzaga went 8-1 without him. Torvik rating already reflects 2 months of absence. Penalty reflects uncertainty about his readiness/effectiveness if he returns.",
+          "adj_em_impact": -1.5
+        }
+      ],
+      "notes": "Graham Ike (19.9 ppg) has stepped up. Huff could return for Round 1 (Mar 19-20) but game-ready status unknown. If confirmed fully available, remove this override.",
+      "source": "ESPN, SI, Spokesman-Review",
+      "updated": "2026-03-15"
+    },
+    "222": {
+      "bracket_name": "Villanova",
+      "region": "South",
+      "seed": 9,
+      "adj_em_penalty": 3.5,
+      "players": [
+        {
+          "name": "Matt Hodge",
+          "status": "Out for season - torn ACL (March 3)",
+          "impact": "Starting forward. Season-ending ACL tear confirmed March 3.",
+          "adj_em_impact": -3.5
+        }
+      ],
+      "notes": "Hodge was a starting contributor. Villanova (24-8) must go deeper into bench.",
+      "source": "ESPN",
+      "updated": "2026-03-15"
+    },
+    "228": {
+      "bracket_name": "Clemson",
+      "region": "Midwest",
+      "seed": 8,
+      "adj_em_penalty": 3.0,
+      "players": [
+        {
+          "name": "Carter Welling",
+          "status": "Out for season - torn ACL (March 13)",
+          "impact": "Season-ending torn ACL confirmed day before Selection Sunday.",
+          "adj_em_impact": -3.0
+        }
+      ],
+      "notes": "Welling injury came March 13 \u2014 very recent, Torvik may not have fully adjusted.",
+      "source": "ESPN",
+      "updated": "2026-03-15"
+    },
+    "26": {
+      "bracket_name": "UCLA",
+      "region": "South",
+      "seed": 7,
+      "adj_em_penalty": 2.0,
+      "players": [
+        {
+          "name": "Tyler Bilodeau",
+          "status": "Questionable - right leg injury (suffered March 14 vs Michigan St)",
+          "impact": "Star player \u2014 right leg injury in Big Ten quarterfinal. Described as 'likely sideline for at least one game.' May miss Round 1 (Mar 19-20) but could return after.",
+          "adj_em_impact": -2.0
+        }
+      ],
+      "notes": "UCLA (23-11) won without him 88-84 vs Michigan St. Dent (23pts) and Perry (22pts) stepped up. Monitor for R1 availability update.",
+      "source": "ESPN",
+      "updated": "2026-03-15"
     }
   }
 }

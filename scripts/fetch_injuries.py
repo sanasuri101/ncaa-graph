@@ -32,20 +32,44 @@ HEADERS = {
 INJURY_PATTERNS = [
     r"\binjur",
     r"\bfractur",
-    r"\btorn\s+\w{2,5}l\b",   # torn ACL / MCL / PCL
+    r"\btorn\s+\w{2,5}l\b",
     r"\bacl\b", r"\bmcl\b",
     r"\bsurger",
-    r"\bout\s+for\s+(?:the\s+)?(?:season|remainder|tournament|indefinitely)",
+    r"\bout\s+for\s+(?:the\s+)?(?:season|remainder|tournament|indefinitely|the\s+year)",
     r"\bout\s+indefinitely",
     r"\bseason.ending",
-    r"\bbroken\s+\w+\b",
+    r"\bbroken\b",
     r"\bconcussion",
     r"\bsprained?\b",
     r"\bstress\s+fracture",
+    r"\bthumb\b",
+    r"\bout\s+(?:with|after|following)\b",
+    r"\bnot\s+cleared\b",
+    r"\bmissing\s+(?:the\s+)?(?:rest|remainder|season|tournament)\b",
+    r"\bstill\s+out\b",
+    r"\bwill\s+miss\b",
+    r"\bday.to.day\b",
+    r"\bquestionable\b",
+    r"\bdoubtful\b",
+]
+
+# Headlines that match injury patterns but aren't injury reports
+INJURY_FALSE_POSITIVES = [
+    r"breakout\s+star",
+    r"mock\s+selection",
+    r"key\s+takeaway",
+    r"ranking\s+\d+",
+    r"top\s+\d+\s+(?:player|team|freshman)",
+    r"(?:all.america|wooden\s+award|all.conference)",
+    r"draft\s+(?:stock|prospect|ranking|mock)",
+    r"(?:best|worst)\s+(?:game|season|performance)",
 ]
 
 def is_injury_headline(headline: str, description: str = "") -> bool:
     text = (headline + " " + description).lower()
+    # Reject known false-positive patterns first
+    if any(re.search(p, text) for p in INJURY_FALSE_POSITIVES):
+        return False
     return any(re.search(p, text) for p in INJURY_PATTERNS)
 
 def fetch_json(url: str, retries: int = 2) -> dict | None:
@@ -118,17 +142,17 @@ if overrides_path.exists():
     with open(overrides_path) as f:
         overrides = json.load(f).get("overrides", {})
 
-# Derive priority from teams that already have manual overrides
-# — those are the ones most likely to need fresh news scans
-priority = list(overrides.keys())
-for espn_id in priority:
-    url  = f"https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/news?team={espn_id}&limit=15"
+# Scan ALL 68 bracket teams individually — general feed misses team-specific injury stories
+print(f"  Scanning all {len(bracket_ids)} bracket teams individually...")
+for espn_id in sorted(bracket_ids):
+    url  = f"https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/news?team={espn_id}&limit=20"
     data = fetch_json(url)
     if not data:
         continue
     for a in data.get("articles", []):
         process_article(a)
-    time.sleep(0.3)
+    time.sleep(0.15)
+print(f"  Per-team scan complete")
 
 # ── Write injury_news.json ────────────────────────────────────────────────────
 news_out = {
