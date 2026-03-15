@@ -227,3 +227,7 @@ function bindGameTooltips() {
     el.title = `${winner} wins · ${pct}% probability · ${loser} eliminated`;
   });
 }
+
+// Expose to window so onclick attributes work in cloned elements (strict mode safe)
+window.generateBracket   = generateBracket;
+window.selectBracketModel = selectBracketModel;

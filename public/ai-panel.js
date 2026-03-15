@@ -113,14 +113,17 @@ document.addEventListener('DOMContentLoaded', () => {
   chatInput.addEventListener('keydown', e => {
     if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChat(); }
   });
-  let _resizing = false;
-  chatInput.addEventListener('input', () => {
-    if (_resizing) return;
-    _resizing = true;
-    chatInput.style.height = 'auto';
-    chatInput.style.height = Math.min(chatInput.scrollHeight, 120) + 'px';
-    _resizing = false;
-  });
+  // Auto-resize textarea — skip on iOS Safari where style.height
+  // triggers synchronous reflow that causes maximum call stack exceeded
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+  if (!isIOS) {
+    chatInput.addEventListener('input', () => {
+      requestAnimationFrame(() => {
+        chatInput.style.height = 'auto';
+        chatInput.style.height = Math.min(chatInput.scrollHeight, 120) + 'px';
+      });
+    });
+  }
 
   document.getElementById('chat-messages').innerHTML =
     '<div class="chat-empty">Ask anything about the bracket —<br>matchups, stats, trends, predictions.</div>';
