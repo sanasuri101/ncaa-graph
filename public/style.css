@@ -623,6 +623,9 @@ section { margin-bottom: 20px; }
 }
 
 /* ── AI Panel (right) ────────────────────────────────────────────────────────── */
+/* Mobile-only tabs — hidden on desktop */
+.mob-only-tab { display: none; }
+
 .ai-panel {
   width: 320px;
   flex-shrink: 0;
@@ -3343,181 +3346,126 @@ section { margin-bottom: 20px; }
    ════════════════════════════════════════════════════════════════════════════ */
 @media (max-width: 768px) {
 
-  /* ── Base ───────────────────────────────────────────────────────────── */
-  html { overflow: hidden; height: 100dvh; }
-  body { overflow: hidden; height: 100dvh; display: flex; flex-direction: column; }
+  /* ── Base ─────────────────────────────────────────────────────────────── */
+  html { height: 100dvh; overflow: hidden; }
+  body { height: 100dvh; overflow: hidden; display: flex; flex-direction: column; }
 
-  /* ── Header — compact single row ────────────────────────────────────── */
-  header { height: 48px; min-height: 48px; padding: 0 12px; flex-wrap: nowrap; gap: 8px; }
+  /* ── Header ───────────────────────────────────────────────────────────── */
+  header { height: 48px; min-height: 48px; padding: 0 12px; flex-wrap: nowrap; gap: 8px; flex-shrink: 0; }
   .header-text .sub { display: none; }
   .legend-pills     { display: none; }
   .last-updated     { display: none; }
   .logo-mark        { font-size: 1rem; }
-  .header-text h1   { font-size: .92rem; }
+  .header-text h1   { font-size: .88rem; }
 
-  /* ── Toolbar ─────────────────────────────────────────────────────────── */
+  /* ── Toolbar — scrollable, no wrap ───────────────────────────────────── */
   .toolbar {
+    flex-shrink: 0; height: 38px;
     overflow-x: auto; overflow-y: hidden; flex-wrap: nowrap;
-    height: 40px; padding: 0 10px;
-    -webkit-overflow-scrolling: touch; scrollbar-width: none; gap: 4px;
+    padding: 0 10px; -webkit-overflow-scrolling: touch; scrollbar-width: none;
   }
   .toolbar::-webkit-scrollbar { display: none; }
   .toolbar-label { font-size: .66rem; }
   .toolbar-sep   { height: 14px; }
-  .view-btn, .icon-btn { min-height: 30px; font-size: .76rem; }
+  .view-btn, .icon-btn { min-height: 28px; font-size: .74rem; }
 
-  /* ── Hide toolbar2 (Efficiency) + custom pills bar on mobile ────────────── */
-  /* Both add height outside .main and break the bottom sheet positioning      */
-  #toolbar2 { display: none; }
-  .custom-pills-bar { display: none !important; }
+  /* ── Hide elements that break mobile layout ───────────────────────────── */
+  #toolbar2          { display: none; }
+  .custom-pills-bar  { display: none !important; }
+  .resize-handle     { display: none; }
+  .ai-key-btn        { display: none; }
 
-  /* ── Main — fill remaining viewport ─────────────────────────────────── */
-  /* Use flex: 1 instead of fixed calc — auto-fills whatever chrome is above */
-  .main { flex-direction: column; flex: 1; min-height: 0; overflow: hidden; position: relative; }
+  /* ── Main — fills remaining space ─────────────────────────────────────── */
+  .main { flex: 1; min-height: 0; flex-direction: column; overflow: hidden; position: relative; }
 
-  /* ── Sidebar — full-screen overlay, slides in from left ─────────────── */
-  .sidebar {
-    position: absolute; top: 0; left: 0; right: 0; width: 100%; height: 100%;
-    z-index: 40; background: var(--surface);
-    transform: translateX(-100%);
-    transition: transform .25s ease;
-    overflow-y: auto;
-    border-right: none; border-bottom: none;
-  }
-  .sidebar.mob-open { transform: translateX(0); }
+  /* ── Sidebar — HIDDEN on mobile, tabs moved into bottom sheet ─────────── */
+  .sidebar { display: none !important; }
 
-  /* ── Sidebar close button ────────────────────────────────────────────── */
-  .mob-sidebar-close {
-    display: flex; position: absolute; top: 10px; right: 10px; z-index: 55;
-    width: 34px; height: 34px; border-radius: 8px;
-    background: var(--surface2); border: 1px solid var(--border);
-    align-items: center; justify-content: center;
-    cursor: pointer; font-size: .9rem; color: var(--muted);
-  }
-
-  /* ── Sidebar tabs — bigger ───────────────────────────────────────────── */
-  .stab { min-height: 38px; padding: 0 14px; font-size: .8rem; }
-
-  /* ── Graph — fills the background ───────────────────────────────────── */
+  /* ── Graph — fills the background ────────────────────────────────────── */
   #network { width: 100%; flex: 1; min-height: 0; }
 
-  /* ── Resize handle — hidden ──────────────────────────────────────────── */
-  .resize-handle { display: none; }
-
-  /* ── AI panel — bottom sheet ─────────────────────────────────────────
-     Closed: drag handle + title peek (56px)
-     Open:   82% viewport height
-  ─────────────────────────────────────────────────────────────────────── */
+  /* ── AI Panel — bottom sheet ──────────────────────────────────────────── */
   .ai-panel {
     position: absolute; bottom: 0; left: 0; right: 0;
-    width: 100%; height: 82dvh; max-height: 82dvh;
+    width: 100%; height: 82dvh;
     border-left: none; border-top: 1px solid var(--border);
-    border-radius: 18px 18px 0 0;
-    box-shadow: 0 -4px 24px rgba(42,37,32,.12);
-    transform: translateY(calc(100% - 56px));
+    border-radius: 16px 16px 0 0;
+    box-shadow: 0 -4px 20px rgba(42,37,32,.12);
+    transform: translateY(calc(100% - 52px));
     transition: transform .3s cubic-bezier(.32,.72,0,1);
     z-index: 50;
     display: flex !important;
     flex-direction: column; overflow: hidden;
   }
-  .ai-panel.open { transform: translateY(0); }
+  .ai-panel.mob-open { transform: translateY(0); }
 
-  /* Drag handle pill */
-  /* Real drag handle element — ::before can't receive touch events */
+  /* ── Drag handle ──────────────────────────────────────────────────────── */
   .mob-drag-handle {
-    width: 100%;
-    height: 28px;
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: grab;
-    touch-action: none;  /* tells browser we handle touch ourselves */
+    width: 100%; height: 24px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    cursor: grab; touch-action: none;
   }
   .mob-drag-handle::after {
-    content: '';
-    display: block;
-    width: 36px;
-    height: 4px;
-    background: var(--border2);
-    border-radius: 2px;
+    content: ''; display: block;
+    width: 32px; height: 4px;
+    background: var(--border2); border-radius: 2px;
   }
 
-  /* ── AI panel internals ──────────────────────────────────────────────── */
-  .ai-scout-header { padding: 8px 12px 0 !important; }
-  .ai-panel-header { padding-bottom: 6px; }
-  .ai-key-btn      { display: none; }
-  .ai-panel-title  { font-size: .78rem; }
+  /* ── AI Scout header — compact ────────────────────────────────────────── */
+  .ai-scout-header { padding: 4px 12px 0 !important; flex-shrink: 0; }
+  .ai-panel-header { padding-bottom: 4px; flex-shrink: 0; }
+
+  /* ── Tab row — ALL tabs visible, scrolls horizontally ────────────────── */
+  .ai-tab-row {
+    overflow-x: auto; overflow-y: hidden;
+    flex-wrap: nowrap; -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; gap: 2px;
+  }
+  .ai-tab-row::-webkit-scrollbar { display: none; }
+  .ai-tab { flex-shrink: 0; font-size: .76rem; padding: 5px 12px; min-height: 30px; }
+
+  /* mob-only-tab: hidden on desktop, visible on mobile */
+  .mob-only-tab { display: inline-flex; }
+
+  /* ── Panel content areas ──────────────────────────────────────────────── */
+  .ai-mode-content { overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
   .chat-area, #chat-messages, #panel-chat { flex: 1; min-height: 0; }
 
-  /* ── Chat input — safe area aware ────────────────────────────────────── */
+  /* ── Chat input — safe area inset ────────────────────────────────────── */
   .chat-input-wrap {
     padding: 8px 10px;
     padding-bottom: max(8px, env(safe-area-inset-bottom));
   }
-  .chat-input-wrap textarea {
-    min-height: 40px; max-height: 100px;
-    font-size: .95rem; border-radius: 10px;
-  }
-  .chat-send { width: 38px; height: 38px; }
-  .chat-stop { width: 38px; height: 38px; }
+  .chat-input-wrap textarea { min-height: 38px; max-height: 90px; font-size: .93rem; border-radius: 10px; }
+  .chat-send { width: 36px; height: 36px; }
+  .chat-stop { width: 36px; height: 36px; }
 
-  /* ── Hint pills ──────────────────────────────────────────────────────── */
-  .chat-hints-row {
-    flex-wrap: nowrap; overflow-x: auto;
-    -webkit-overflow-scrolling: touch; scrollbar-width: none; padding-bottom: 2px;
-  }
+  /* ── Hint pills ───────────────────────────────────────────────────────── */
+  .chat-hints-row { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
   .chat-hints-row::-webkit-scrollbar { display: none; }
-  .hint-pill { flex-shrink: 0; font-size: .76rem; padding: 5px 10px; min-height: 30px; }
+  .hint-pill { flex-shrink: 0; font-size: .74rem; padding: 4px 10px; min-height: 28px; }
 
-  /* ── Floating sidebar button ─────────────────────────────────────────── */
-  .mob-sidebar-btn {
-    display: flex; position: absolute; top: 10px; left: 10px; z-index: 45;
-    width: 38px; height: 38px; border-radius: 10px;
-    background: var(--surface); border: 1px solid var(--border);
-    align-items: center; justify-content: center;
-    cursor: pointer; box-shadow: 0 2px 8px rgba(42,37,32,.1);
-    font-size: .7rem; color: var(--text);
-  }
-
-  /* ── Other components ────────────────────────────────────────────────── */
+  /* ── Stats grid ───────────────────────────────────────────────────────── */
   .stats-grid-2 { grid-template-columns: 1fr 1fr; gap: 3px; }
   .stat-cell    { padding: 5px 6px; }
   .sv           { font-size: .8rem; }
-  .confidence-block { padding: 10px 12px; }
-  .conf-team-a, .conf-team-b { font-size: .84rem; }
-  .scatter-panel {
-    width: 100%; height: 100%; max-height: 100%;
-    border-radius: 0; overflow-y: auto;
-  }
-  .scatter-body { padding: 10px 12px; }
+
+  /* ── Scatter — full screen ────────────────────────────────────────────── */
+  .scatter-panel { width: 100%; height: 100%; max-height: 100%; border-radius: 0; overflow-y: auto; }
+  .scatter-body  { padding: 10px 12px; }
   .scatter-header { padding: 10px 12px; }
-  #scatter-canvas { display: block; width: 100% !important; }
+
+  /* ── Bracket ──────────────────────────────────────────────────────────── */
   .bracket-panel { padding: 8px 4px; }
   .br-regions-grid { gap: 10px; }
-  #custom-team-input { width: 120px; font-size: .84rem; }
+
+  /* ── Key drawer ───────────────────────────────────────────────────────── */
   .key-drawer-panel { width: 100%; border-radius: 16px 16px 0 0; }
-  .key-drawer { padding: 0; align-items: flex-end; }
+  .key-drawer       { padding: 0; align-items: flex-end; }
 
-  /* ── Bottom sheet collapsed hint text ───────────────────────────────────── */
-  .ai-panel:not(.open) .ai-tab-row::after {
-    content: 'tap to expand  \2191';
-    font-size: .65rem;
-    color: var(--muted);
-    letter-spacing: .04em;
-    margin-left: auto;
-    padding-right: 4px;
-    align-self: center;
-    font-family: var(--font-mono);
-  }
-
-  /* ── Welcome message — mobile only ──────────────────────────────────────── */
-  .chat-bubble-ai-body em {
-    font-style: normal;
-    color: var(--accent);
-    font-weight: 500;
-  }
-
+  /* ── Welcome message ─────────────────────────────────────────────────── */
+  .mob-welcome-msg { display: flex; }
+  .chat-bubble-ai-body em { font-style: normal; color: var(--accent); font-weight: 500; }
 }
 
 /* ── Very small phones (< 400px) ──────────────────────────────────────────── */

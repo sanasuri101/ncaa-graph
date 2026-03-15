@@ -273,20 +273,19 @@
         </div>
 
       </div>
-      <div class="ai-tab-row" id="ai-tab-row">
+      <div class="ai-tab-row">
+        <button class="ai-tab active" data-mode="stats">Stats</button>
         <button class="ai-tab" data-mode="chat">Chat</button>
-        <button class="ai-tab" data-mode="stats">Stats</button>
-        <button class="ai-tab mob-only-tab active" data-mode="overview">Overview</button>
+        <button class="ai-tab mob-only-tab" data-mode="overview">Overview</button>
         <button class="ai-tab mob-only-tab" data-mode="bracket">Bracket</button>
         <button class="ai-tab mob-only-tab" data-mode="rankings">Rankings</button>
-        <button class="ai-tab mob-only-tab" data-mode="detail">Detail</button>
       </div>
     </div>
 
 
 
     <!-- STATS MODE -->
-    <div class="ai-mode-content" id="panel-stats">
+    <div class="ai-mode-content active" id="panel-stats">
       <div class="ai-team-picker">
         <select id="stats-team-select">
           <option value="">Select a team...</option>
