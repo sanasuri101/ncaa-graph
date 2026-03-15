@@ -25,7 +25,7 @@ function sanitizeLLMOutput(text) {
 const GROQ_URL      = 'https://api.groq.com/openai/v1/chat/completions';
 const MODEL         = 'llama-3.3-70b-versatile';
 const MAX_TOKENS    = 2048;
-const GROQ_TPM_CAP  = 14000;
+const GROQ_TPM_CAP  = 5500;  // Groq free tier: 6000 TPM, keep buffer
 const CHARS_PER_TOK = 4;
 const TOOL_MAX_ITER = 6;
 const FETCH_TIMEOUT = 15000;

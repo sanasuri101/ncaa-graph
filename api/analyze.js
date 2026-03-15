@@ -165,7 +165,7 @@ function fmtTeamFull(node, torvik, form, injuryMap) {
 }
 
 // ── Groq fetch helper ─────────────────────────────────────────────────────────
-async function groqCall(systemPrompt, userPrompt, groqKey) {
+async function groqCall(systemPrompt, userPrompt, groqKey, attempt = 0) {
   const ctrl  = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), FETCH_TIMEOUT);
   try {
@@ -183,6 +183,11 @@ async function groqCall(systemPrompt, userPrompt, groqKey) {
       signal: ctrl.signal,
     });
     clearTimeout(timer);
+    if (res.status === 429 && attempt < 2) {
+      const wait = parseInt(res.headers.get('retry-after') || '5', 10);
+      await new Promise(r => setTimeout(r, Math.min(wait, 10) * 1000));
+      return groqCall(systemPrompt, userPrompt, groqKey, attempt + 1);
+    }
     if (!res.ok) {
       const errBody = await res.json().catch(() => ({}));
       throw new Error(`Groq ${res.status}: ${errBody?.error?.message ?? 'unknown error'}`);
@@ -281,7 +286,7 @@ function routerNode(state) {
 // LangGraph requires Send to come from the edge fn, not from the node itself.
 // This fans out to 3 specialist agents in parallel.
 function routerEdge(state) {
-  if (state.error) return END;
+  if (state.error) return [END];
   return [
     new Send('efficiency_agent', state),
     new Send('form_agent',       state),
@@ -314,8 +319,9 @@ Return win probability for ${state.team_a}.`;
     const result = JSON.parse(clean);
     if (result.reasoning) result.reasoning = sanitizeLLMOutput(result.reasoning);
     return { agent_results: [result] };
-  } catch {
-    return { agent_results: [{ agent: 'efficiency', win_pct: 50, confidence: 'low', key_edge: 'parse error', reasoning: 'Could not parse efficiency analysis.' }] };
+  } catch (err) {
+    console.error('[efficiency_agent] error:', err?.message ?? err);
+    return { agent_results: [{ agent: 'efficiency', win_pct: 50, confidence: 'low', key_edge: 'parse error', reasoning: `Efficiency analysis error: ${err?.message ?? 'unknown'}` }] };
   }
 }
 
@@ -344,8 +350,9 @@ Return win probability for ${state.team_a}.`;
     const result = JSON.parse(clean);
     if (result.reasoning) result.reasoning = sanitizeLLMOutput(result.reasoning);
     return { agent_results: [result] };
-  } catch {
-    return { agent_results: [{ agent: 'form', win_pct: 50, confidence: 'low', key_edge: 'parse error', reasoning: 'Could not parse form analysis.' }] };
+  } catch (err) {
+    console.error('[form_agent] error:', err?.message ?? err);
+    return { agent_results: [{ agent: 'form', win_pct: 50, confidence: 'low', key_edge: 'parse error', reasoning: `Form analysis error: ${err?.message ?? 'unknown'}` }] };
   }
 }
 
@@ -377,8 +384,9 @@ Return win probability for ${state.team_a}.`;
     const result = JSON.parse(clean);
     if (result.reasoning) result.reasoning = sanitizeLLMOutput(result.reasoning);
     return { agent_results: [result] };
-  } catch {
-    return { agent_results: [{ agent: 'matchup', win_pct: 50, confidence: 'low', key_edge: 'parse error', reasoning: 'Could not parse matchup analysis.' }] };
+  } catch (err) {
+    console.error('[matchup_agent] error:', err?.message ?? err);
+    return { agent_results: [{ agent: 'matchup', win_pct: 50, confidence: 'low', key_edge: 'parse error', reasoning: `Matchup analysis error: ${err?.message ?? 'unknown'}` }] };
   }
 }
 
@@ -388,6 +396,9 @@ Return win probability for ${state.team_a}.`;
 async function synthesisNode(state, config) {
   const groqKey = config.configurable?.groqKey;
   const results = state.agent_results ?? [];
+  // Small delay so synthesis doesn't fire in the same second as the 3 parallel agents
+  // This spreads the 4 requests across 2 seconds, avoiding per-second rate limits
+  await new Promise(r => setTimeout(r, 1000));
 
   const effResult  = results.find(r => r.agent === 'efficiency') ?? { win_pct: 50, confidence: 'low', reasoning: '' };
   const formResult = results.find(r => r.agent === 'form')       ?? { win_pct: 50, confidence: 'low', reasoning: '' };
@@ -474,10 +485,8 @@ function buildGraph() {
     .addNode('matchup_agent',    matchupAgent)
     .addNode('synthesis',        synthesisNode);
 
-  // routerEdge returns Send objects for parallel fan-out — correct LangGraph pattern
+  // All three agents run in parallel, converge to synthesis
   workflow.addConditionalEdges('router', routerEdge);
-
-  // All three agents converge to synthesis
   workflow.addEdge('efficiency_agent', 'synthesis');
   workflow.addEdge('form_agent',       'synthesis');
   workflow.addEdge('matchup_agent',    'synthesis');
@@ -517,7 +526,7 @@ export default async function handler(req, res) {
     return;
   }
 
-  const groqKey = process.env.GROQ_KEY;
+  const groqKey = process.env.GROQ_KEY_ANALYZE ?? process.env.GROQ_KEY;
   if (!groqKey) {
     res.writeHead(500, { 'Content-Type': 'application/json', ...CORS });
     res.end(JSON.stringify({ error: 'Server configuration error' }));
