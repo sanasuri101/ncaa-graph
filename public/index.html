@@ -22,6 +22,16 @@
     autocapture: false,           // we'll track specific events manually
   });
 </script>
+<script src="https://cdn.jsdelivr.net/npm/eruda"></script>
+<script>
+eruda.init();
+window.addEventListener('error', function(e) {
+  console.error('GLOBAL ERROR:', e.message);
+  if (e.error && e.error.stack) {
+    console.error('STACK:\n' + e.error.stack.split('\n').slice(0,10).join('\n'));
+  }
+});
+</script>
 </head>
 <body>
 

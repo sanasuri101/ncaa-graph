@@ -44,6 +44,8 @@ html, body {
   overflow: hidden;
   -webkit-font-smoothing: antialiased;
 }
+body { display: flex; flex-direction: column; }
+
 
 /* ── Header ─────────────────────────────────────────────────────────────────── */
 header {
@@ -261,7 +263,8 @@ select:focus { border-color: var(--accent); }
 /* ── Main Layout ─────────────────────────────────────────────────────────────── */
 .main {
   display: flex;
-  height: calc(100vh - 90px);
+  flex: 1;
+  min-height: 0;
   overflow: hidden;
 }
 
@@ -1362,10 +1365,11 @@ section { margin-bottom: 20px; }
 }
 .key-clear-btn:hover { color: var(--midwest); }
 
-/* Main layout height adjustment for taller header */
+/* Main layout height — accounts for header(~60px) + toolbar(~40px) + toolbar2(~36px) */
 .main {
   display: flex;
-  height: calc(100vh - 100px);
+  flex: 1;
+  min-height: 0;
   overflow: hidden;
 }
 
