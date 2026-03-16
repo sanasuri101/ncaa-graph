@@ -1,6 +1,6 @@
 {
   "season": 2026,
-  "generated_at": "2026-03-15T23:26:11.720651+00:00",
+  "generated_at": "2026-03-16T00:06:13.373182+00:00",
   "teams": {
     "150": {
       "espn_id": "150",
@@ -468,7 +468,7 @@
         "adj_tempo": 0.5,
         "luck": 0.015,
         "wab": 71.3,
-        "proj_barthag": 0.4692,
+        "proj_barthag": 0.4691,
         "sos_rank": 1.1006345678127132,
         "conf": "CUSA",
         "two_p": null,
