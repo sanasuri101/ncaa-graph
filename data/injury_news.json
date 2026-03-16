@@ -1,41 +1,10 @@
 {
-  "generated_at": "2026-03-15T11:19:45.911453+00:00",
+  "generated_at": "2026-03-16T07:04:19.879153+00:00",
   "flagged_teams": 10,
   "teams": {
-    "2641": {
-      "bracket_name": "Texas Tech",
-      "region": "South",
-      "seed": 5,
-      "articles": [
-        {
-          "headline": "Texas Tech star Christian Anderson available for tournament",
-          "description": "Texas Tech star guard Christian Anderson will be available for the NCAA tournament after leaving the Red Raiders' Big 12 tournament loss because of an apparent groin injury.",
-          "published": "2026-03-15",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48210868/texas-tech-star-christian-anderson-available-tournament"
-        },
-        {
-          "headline": "Texas Tech star Christian Anderson available for tournament",
-          "description": "Texas Tech star guard Christian Anderson will be available for the NCAA tournament after leaving the Red Raiders' Big 12 tournament loss because of an apparent groin injury.",
-          "published": "2026-03-15",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48210868/texas-tech-star-christian-anderson-available-tournament"
-        },
-        {
-          "headline": "Texas Tech star Christian Anderson available for tournament",
-          "description": "Texas Tech star guard Christian Anderson will be available for the NCAA tournament after leaving the Red Raiders' Big 12 tournament loss because of an apparent groin injury.",
-          "published": "2026-03-15",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48210868/texas-tech-star-christian-anderson-available-tournament"
-        },
-        {
-          "headline": "Texas Tech star Christian Anderson available for tournament",
-          "description": "Texas Tech star guard Christian Anderson will be available for the NCAA tournament after leaving the Red Raiders' Big 12 tournament loss because of an apparent groin injury.",
-          "published": "2026-03-15",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48210868/texas-tech-star-christian-anderson-available-tournament"
-        }
-      ]
-    },
     "26": {
       "bracket_name": "UCLA",
-      "region": "Midwest",
+      "region": "East",
       "seed": 7,
       "articles": [
         {
@@ -66,8 +35,8 @@
     },
     "127": {
       "bracket_name": "Michigan St",
-      "region": "West",
-      "seed": 2,
+      "region": "East",
+      "seed": 3,
       "articles": [
         {
           "headline": "UCLA loses Bilodeau but ousts Michigan St. in Big Ten quarters",
@@ -97,8 +66,8 @@
     },
     "142": {
       "bracket_name": "Missouri",
-      "region": "East",
-      "seed": 11,
+      "region": "West",
+      "seed": 10,
       "articles": [
         {
           "headline": "Gates credits return of Stone, depth of bigs for Mizzou surge",
@@ -118,18 +87,12 @@
           "description": "Seth Greenberg joins \"Get Up\" to discuss how significant Caleb Foster's injury is for Duke.",
           "published": "2026-03-13",
           "url": "https://www.espn.com/video/clip?id=48194535"
-        },
-        {
-          "headline": "Duke's Caleb Foster out indefinitely with foot fracture",
-          "description": "Duke starting guard Caleb Foster has a fractured right foot and will be out indefinitely.",
-          "published": "2026-03-10",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48162553/duke-caleb-foster-indefinitely-foot-fracture"
         }
       ]
     },
     "153": {
       "bracket_name": "North Carolina",
-      "region": "Midwest",
+      "region": "South",
       "seed": 6,
       "articles": [
         {
@@ -137,19 +100,13 @@
           "description": "North Carolina star freshman Caleb Wilson will miss the remainder of the season after breaking his right thumb during practice, the school announced.",
           "published": "2026-03-07",
           "url": "https://www.espn.com/mens-college-basketball/story/_/id/48123740/sources-unc-wilson-rest-season-thumb-surgery"
-        },
-        {
-          "headline": "UNC star Caleb Wilson still not cleared as Duke rematch looms",
-          "description": "Star freshman Caleb Wilson is increasing practice work for No. 17 North Carolina ahead of the rivalry game at No. 1 Duke but has yet to be cleared for 5-on-5 action due to his hand fracture.",
-          "published": "2026-03-06",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48114155/unc-star-caleb-wilson-not-cleared-duke-rematch-looms"
         }
       ]
     },
     "222": {
       "bracket_name": "Villanova",
-      "region": "South",
-      "seed": 9,
+      "region": "West",
+      "seed": 8,
       "articles": [
         {
           "headline": "Villanova says Matt Hodge suffered season-ending ACL tear",
@@ -193,7 +150,7 @@
     },
     "2633": {
       "bracket_name": "Tennessee",
-      "region": "South",
+      "region": "Midwest",
       "seed": 6,
       "articles": [
         {
@@ -207,6 +164,19 @@
           "description": "Tennessee star freshman Nate Ament, out the past two games with a leg injury, will play in the SEC quarterfinals against Auburn.",
           "published": "2026-03-12",
           "url": "https://www.espn.com/mens-college-basketball/story/_/id/48183962/source-nate-ament-set-play-tennessee-sec-tournament"
+        }
+      ]
+    },
+    "2641": {
+      "bracket_name": "Texas Tech",
+      "region": "Midwest",
+      "seed": 5,
+      "articles": [
+        {
+          "headline": "Texas Tech star Christian Anderson available for tournament",
+          "description": "Texas Tech star guard Christian Anderson will be available for the NCAA tournament after leaving the Red Raiders' Big 12 tournament loss because of an apparent groin injury.",
+          "published": "2026-03-15",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48210868/texas-tech-star-christian-anderson-available-tournament"
         }
       ]
     }
