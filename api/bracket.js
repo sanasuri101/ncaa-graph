@@ -397,12 +397,12 @@ function playInWinner(teamA, teamB, torvik) {
 
 // ── Probabilistic winner pick ─────────────────────────────────────────────────
 // For deterministic models (barthag, blended, seed): always pick chalk
-// For probabilistic models (upset, evidence): use Math.random() weighted by prob
+// upset = probabilistic (Math.random weighted by prob)
+// evidence = deterministic (always pick higher probability team — best single prediction)
 function pickWinner(teamA, teamB, prob, model) {
-  if (model === 'upset' || model === 'evidence') {
+  if (model === 'upset') {
     return Math.random() < prob ? teamA : teamB;
   }
-  // barthag, blended, seed — deterministic (best prediction)
   return prob >= 0.5 ? teamA : teamB;
 }
 
