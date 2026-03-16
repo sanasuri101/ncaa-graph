@@ -342,24 +342,34 @@ function winProb(teamA, teamB, torvik, model, round, form, trans, injuryMap, opp
     // Pure historical seed win rates
     prob = seedProb;
   } else if (model === 'upset') {
-    // Upset model: full signal stack with compression toward 50%
-    // Applies: efficiency + historical rates + form + luck regression + WAB + Four Factors + injuries
-    // Injuries applied via tvA/tvB (same adjustment as evidence model)
-    const base = 0.40 * barthagPrb + 0.60 * seedProb;
-    // Form: recent decay-weighted win rate
-    const dA   = decayWinRate(teamA.id, form, torvik, oppBarthag);
-    const dB   = decayWinRate(teamB.id, form, torvik, oppBarthag);
-    const dP   = dA / (dA + dB);
-    const formAdj = (dP - 0.5) * 0.10; // up to ±5% for hot/cold teams
-    // Style mismatches
+    // Upset model: seed-gap weighted base + mild compression + signal adjustments
+    // Large seed gaps (1v16, 2v15): historical rates dominate — prevents statistically
+    //   impossible runs like 15-seeds reaching Sweet 16
+    // Small seed gaps (5v12, 6v11): efficiency dominates — these ARE close games
+    // Result: ~3-5 upsets from seeds 12+, ~6-8 total upsets per R1
+    const seedGap    = Math.abs(seedB - seedA);
+    const histWeight = Math.min(0.90, 0.50 + seedGap * 0.04); // scales 50%→90% with seed gap
+    const base       = (1 - histWeight) * barthagPrb + histWeight * seedProb;
+
+    // Signal adjustments: form, Four Factors, luck, WAB
+    const dA      = decayWinRate(teamA.id, form, torvik, oppBarthag);
+    const dB      = decayWinRate(teamB.id, form, torvik, oppBarthag);
+    const dP      = dA / (dA + dB);
+    const formAdj = (dP - 0.5) * 0.08;
     const ffAdj   = fourFactorsAdj(tvA, tvB);
-    // Luck regression and WAB (capped)
     const lAdj    = luckAdj(tvA, tvB);
     const wAdj    = wabAdj(tvA, tvB);
-    const allAdj  = Math.max(-0.08, Math.min(0.08, formAdj + ffAdj + lAdj + wAdj));
-    // Compress toward 50% by round — more chaos early
-    const compression = round <= 1 ? 0.25 : round <= 2 ? 0.18 : 0.10;
-    prob = 0.5 + (base + allAdj - 0.5) * (1 - compression);
+    const allAdj  = Math.max(-0.06, Math.min(0.06, formAdj + ffAdj + lAdj + wAdj));
+    const adjusted = base + allAdj;
+
+    // Only compress games that are not already dominant favorites (base < 0.85)
+    // Dominant matchups (1v16 after weighting) stay near historical chalk
+    if (adjusted >= 0.85) {
+      prob = adjusted; // don't compress — too dominant
+    } else {
+      const compression = round <= 1 ? 0.20 : round <= 2 ? 0.14 : 0.08;
+      prob = 0.5 + (adjusted - 0.5) * (1 - compression);
+    }
   } else {
     // blended: 40% Barthag + 60% historical seed rates
     // Seed rates are historically calibrated — barthag adds efficiency signal
