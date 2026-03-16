@@ -13,28 +13,13 @@ let _bracketModel = 'evidence';
 const MODEL_META = {
   evidence: {
     label:  'Evidence Model',
-    desc:   'Layers I–IV: Barthag + Logit(AdjEM) + Skellam scores + time-decay form + transitive paths + WAB.',
+    desc:   'Multi-layer: efficiency + form + transitive paths + Four Factors + injuries. Best single prediction.',
     color:  'var(--west)',
   },
-  blended: {
-    label:  'Balanced',
-    desc:   '70% Barthag + 30% historical seed odds. Simple and reliable.',
-    color:  'var(--accent)',
-  },
-  barthag: {
-    label:  'Pure Analytics',
-    desc:   'Torvik Barthag only — best team wins every game. Fewest upsets.',
-    color:  'var(--east)',
-  },
-  upset:   {
+  upset: {
     label:  'Upset Heavy',
-    desc:   'Barthag compressed toward 50% — lower seeds win more often.',
+    desc:   'Probabilistic simulation weighted toward chaos. Run it multiple times for different outcomes.',
     color:  'var(--midwest)',
-  },
-  seed:    {
-    label:  'Seed Only',
-    desc:   'Historical NCAA upset rates by seed matchup, ignores efficiency.',
-    color:  'var(--south)',
   },
 };
 

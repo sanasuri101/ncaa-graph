@@ -134,34 +134,60 @@ def fetch_shooting_splits() -> dict:
         print(f"  Shooting splits will be unavailable this run.", file=sys.stderr)
         return {}
 
-    accum = {}  # team_name -> {fgm, fga, pm3, pa3, ftm, fta}
+    # Accumulate: [fgm, fga, pm3, pa3, ftm, fta, oreb, dreb, tov, opp_oreb, opp_dreb, opp_fga, opp_fta, games]
+    accum = {}
     for row in rows:
         try:
             box = json.loads(row[29])
         except (IndexError, json.JSONDecodeError, TypeError):
             continue
-        if len(box) < 25:
+        if len(box) < 34:
             continue
-        for team_name, offset in [(box[2], 4), (box[3], 19)]:
+        # box offsets: team_a=4, team_b=19
+        # [offset+0]=FGM [+1]=FGA [+2]=3PM [+3]=3PA [+4]=FTM [+5]=FTA
+        # [+6]=OREB [+7]=DREB [+8]=REB [+9]=AST [+10]=TO [+11]=STL [+12]=BLK [+13]=PF [+14]=PTS
+        for (team_name, offset, opp_offset) in [(box[2], 4, 19), (box[3], 19, 4)]:
             if not team_name:
                 continue
-            a = accum.setdefault(team_name, [0,0,0,0,0,0])
-            a[0] += box[offset]     # fgm
-            a[1] += box[offset+1]   # fga
-            a[2] += box[offset+2]   # 3pm
-            a[3] += box[offset+3]   # 3pa
-            a[4] += box[offset+4]   # ftm
-            a[5] += box[offset+5]   # fta
+            try:
+                a = accum.setdefault(team_name, [0]*14)
+                a[0]  += box[offset]       # fgm
+                a[1]  += box[offset+1]     # fga
+                a[2]  += box[offset+2]     # 3pm
+                a[3]  += box[offset+3]     # 3pa
+                a[4]  += box[offset+4]     # ftm
+                a[5]  += box[offset+5]     # fta
+                a[6]  += box[offset+6]     # oreb
+                a[7]  += box[offset+7]     # dreb
+                a[8]  += box[offset+10]    # tov (TO is at +10)
+                a[9]  += box[opp_offset+6] # opp oreb (for dreb% calc)
+                a[10] += box[opp_offset+7] # opp dreb
+                a[11] += box[opp_offset+1] # opp fga
+                a[12] += box[opp_offset+5] # opp fta
+                a[13] += 1                 # games
+            except (IndexError, TypeError):
+                continue
 
     out = {}
-    for team, (fgm, fga, pm3, pa3, ftm, fta) in accum.items():
+    for team, a in accum.items():
+        fgm, fga, pm3, pa3, ftm, fta, oreb, dreb, tov, opp_oreb, opp_dreb, opp_fga, opp_fta, games = a
         p2m = fgm - pm3
         p2a = fga - pa3
+        # TOV rate = TOV / (FGA + 0.44*FTA + TOV) -- Dean Oliver formula
+        poss = fga + 0.44 * fta + tov
+        # ORB rate = OREB / (OREB + opp_DREB)
+        orb_denom = oreb + opp_dreb
+        # FTR = FTA / FGA
+        # 3PA rate = 3PA / FGA
         out[team] = {
-            "two_p":   round(p2m / p2a * 100, 1) if p2a else None,
-            "three_p": round(pm3 / pa3 * 100, 1) if pa3 else None,
-            "ft_pct":  round(ftm / fta * 100, 1) if fta else None,
-            "efg":     round((fgm + 0.5 * pm3) / fga * 100, 1) if fga else None,
+            "two_p":        round(p2m / p2a * 100, 1) if p2a else None,
+            "three_p":      round(pm3 / pa3 * 100, 1) if pa3 else None,
+            "ft_pct":       round(ftm / fta * 100, 1) if fta else None,
+            "efg":          round((fgm + 0.5 * pm3) / fga * 100, 1) if fga else None,
+            "tov_rate":     round(tov / poss * 100, 1) if poss else None,
+            "orb_rate":     round(oreb / orb_denom * 100, 1) if orb_denom else None,
+            "ftr":          round(fta / fga * 100, 1) if fga else None,
+            "three_pa_rate": round(pa3 / fga * 100, 1) if fga else None,
         }
     print(f"  Shooting splits: {len(out)} teams computed")
     return out
@@ -250,6 +276,15 @@ def merge(bracket: list, torvik: dict, splits: dict) -> dict:
                     "three_p":       splits.get(torvik_name, {}).get("three_p"),
                     "ft_pct":        splits.get(torvik_name, {}).get("ft_pct"),
                     "efg":           splits.get(torvik_name, {}).get("efg"),
+                    "tov_rate":      splits.get(torvik_name, {}).get("tov_rate"),
+                    "orb_rate":      splits.get(torvik_name, {}).get("orb_rate"),
+                    "ftr":           splits.get(torvik_name, {}).get("ftr"),
+                    "three_pa_rate": splits.get(torvik_name, {}).get("three_pa_rate"),
+                    "efg_d":         round(float(stats["f_adj_de"]), 4) if stats.get("f_adj_de") else None,
+                    "recent_win_pct": round(float(stats["exp"]), 3) if stats.get("exp") else None,
+                    "recent_margin":  round(float(stats["avg_poss"]), 1) if stats.get("avg_poss") else None,
+                    "quad1_record":   stats.get("conf_record"),
+                    "net_rank":       int(stats["ncaa_seed"]) if stats.get("ncaa_seed") else None,
                 },
             }
 

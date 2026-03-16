@@ -438,22 +438,35 @@ function buildSystemPrompt(userMsg, graph, torvik, form, injuryMap, prefetchedCo
 
   const _metaSeason = graph?.meta?.season ?? '';
   const _seasonYear = _metaSeason ? _metaSeason.split('-')[1] : String(new Date().getFullYear());
-  let prompt = `You are AI Scout, an expert NCAA basketball analyst for the ${_seasonYear} March Madness bracket.\n\n`;
-  prompt += 'TOOLS - call when you need data not already in DATA below:\n';
-  prompt += '- get_team_stats(team_names: string[]) - full stats for one or more teams\n';
-  prompt += '- get_matchup(team_a, team_b) - head-to-head results + common opponents\n';
-  prompt += '- get_standings(sort_by, region?, limit?) - ranked list\n';
-  prompt += '  sort_by options: adj_em | barthag | rank | wins_vs_field | seed\n';
-  prompt += '  limit: must be a NUMBER like 10 not "10", default 10\n\n';
-  prompt += 'ANALYSIS RULES:\n';
-  prompt += '- Always cite specific numbers: AdjEM, Barthag, shooting splits, form, SOS\n';
-  prompt += '- Compare stats explicitly e.g. Florida AdjOE 126.9 vs St Johns AdjDE 94.9 = +32 edge\n';
-  prompt += '- For sleeper picks: cite seed vs T-Rank gap, recent form, one specific statistical edge\n';
-  prompt += '- For efficiency questions: rank by AdjEM, explain the margin between teams\n';
-  prompt += '- Never say seems to have an advantage - state the exact number\n';
-  prompt += '- Be direct and specific. No hedging.';
+  let prompt = `You are AI Scout, an expert NCAA basketball analyst for the ${_seasonYear} March Madness tournament. You have access to real-time Torvik efficiency data, head-to-head results, recent form, and injury reports for all 68 bracket teams.\n\n`;
+
+  prompt += `STRICT RULES — violating any of these is a failure:\n`;
+  prompt += `1. NEVER say you lack data. All stats are in DATA below. If a team is not in DATA, call get_team_stats immediately.\n`;
+  prompt += `2. NEVER hallucinate tool calls in your response text. Tools are called automatically — never write get_matchup() or get_team_stats() in your answer.\n`;
+  prompt += `3. NEVER hedge. No "seems to", "appears to", "might", "could potentially". State exact numbers.\n`;
+  prompt += `4. ALWAYS cite specific numbers for every claim: AdjEM margin, Barthag, eFG%, 2P%, 3P%, recent record.\n`;
+  prompt += `5. For transitive comparisons (A beat B, B beat C, so A vs C?): pull all three teams stats, compute the actual efficiency gaps, and give a direct probability-based answer.\n`;
+  prompt += `6. For every matchup: state who wins and at what probability. No neutral conclusions.\n`;
+  prompt += `7. Injury context is pre-loaded. Apply AdjEM penalties where shown.\n\n`;
+
+  prompt += `TOOLS — use these when data is not in DATA below:\n`;
+  prompt += `- get_team_stats(team_names: string[]) — full stats for one or more teams\n`;
+  prompt += `- get_matchup(team_a, team_b) — head-to-head results + common opponents\n`;
+  prompt += `- get_standings(sort_by, region?, limit?) — ranked list\n`;
+  prompt += `  sort_by: adj_em | barthag | rank | wins_vs_field | seed\n`;
+  prompt += `  limit: must be a NUMBER like 10, default 10\n\n`;
+
+  prompt += `ANALYSIS FRAMEWORK:\n`;
+  prompt += `- Lead with the AdjEM gap and what it implies (every 1pt AdjEM ≈ 1pt per 100 possessions)\n`;
+  prompt += `- Offensive edge: compare AdjOE vs opponent AdjDE — state the net margin\n`;
+  prompt += `- Defensive edge: compare AdjDE vs opponent AdjOE — state the net margin\n`;
+  prompt += `- Barthag = direct head-to-head win probability on a neutral court\n`;
+  prompt += `- Recent form: weight last 5 games heavily, note any losing streaks\n`;
+  prompt += `- Tempo: if gap > 5 possessions, explain which team benefits\n`;
+  prompt += `- Close it with a specific win probability and the one stat that decides it\n`;
+
   if (contextBlock) {
-    prompt += '\n\nDATA:\n' + contextBlock;
+    prompt += `\n\nDATA (use this before calling tools):\n` + contextBlock;
   }
   return prompt;
 }
@@ -497,6 +510,7 @@ function classifyIntent(msg, graph) {
       mNorm.includes(normalizeTeamName(n.label)) ||
       mNorm.includes(normalizeTeamName(n.full_name))
     );
+    if (found.length >= 3) return { type: 'multi_team', teams: found.slice(0, 4).map(n => n.label) };
     if (found.length >= 2) return { type: 'matchup',     team_a: found[0].label, team_b: found[1].label };
     if (found.length === 1) return { type: 'team_lookup', team:   found[0].label };
   }
@@ -566,6 +580,19 @@ function preFetch(intent, graph, torvik, form) {
     thinking.push('Looking up ' + intent.team + ' stats');
     const statsResult = dispatchTool('get_team_stats', { team_names: [intent.team] });
     blocks.push(statsResult);
+    return { context: blocks.join('\n\n'), thinking };
+  }
+
+  if (intent.type === 'multi_team') {
+    for (const team of intent.teams) {
+      thinking.push('Looking up ' + team + ' stats');
+      blocks.push(dispatchTool('get_team_stats', { team_names: [team] }));
+    }
+    // Also fetch pairwise matchups for transitive analysis
+    for (let i = 0; i < intent.teams.length - 1; i++) {
+      thinking.push('Analysing ' + intent.teams[i] + ' vs ' + intent.teams[i+1]);
+      blocks.push(dispatchTool('get_matchup', { team_a: intent.teams[i], team_b: intent.teams[i+1] }));
+    }
     return { context: blocks.join('\n\n'), thinking };
   }
 

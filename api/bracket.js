@@ -83,36 +83,37 @@ function getData() {
 const SEED_PAIRS_R1 = [[1,16],[8,9],[5,12],[4,13],[6,11],[3,14],[7,10],[2,15]];
 
 // Seed-implied win probability (historical NCAA upset rates by matchup)
+// Historical NCAA tournament win rates by seed matchup (1985-2024, n=2400+ games)
 const SEED_WIN_PROB = {
+  // R1 matchups
   '1v16': 0.991, '16v1': 0.009,
-  '1v15': 0.982, '15v1': 0.018,
-  '1v14': 0.970, '14v1': 0.030,
-  '1v13': 0.960, '13v1': 0.040,
-  '1v12': 0.940, '12v1': 0.060,
-  '1v11': 0.930, '11v1': 0.070,
-  '1v10': 0.920, '10v1': 0.080,
-  '1v9':  0.900, '9v1':  0.100,
-  '1v8':  0.840, '8v1':  0.160,
-  '2v16': 0.960, '16v2': 0.040,
-  '2v15': 0.960, '15v2': 0.040,
-  '2v14': 0.950, '14v2': 0.050,
-  '2v13': 0.940, '13v2': 0.060,
-  '2v12': 0.930, '12v2': 0.070,
-  '2v11': 0.910, '11v2': 0.090,
-  '2v10': 0.890, '10v2': 0.110,
-  '2v9':  0.860, '9v2':  0.140,
-  '2v8':  0.720, '8v2':  0.280,
-  '3v16': 0.940, '16v3': 0.060,
+  '2v15': 0.942, '15v2': 0.058,
   '3v14': 0.850, '14v3': 0.150,
-  '3v11': 0.780, '11v3': 0.220,
-  '3v6':  0.600, '6v3':  0.400,
-  '4v13': 0.800, '13v4': 0.200,
-  '4v12': 0.780, '12v4': 0.220,
-  '4v5':  0.560, '5v4':  0.440,
-  '5v12': 0.640, '12v5': 0.360,
-  '6v11': 0.620, '11v6': 0.380,
-  '7v10': 0.600, '10v7': 0.400,
-  '8v9':  0.510, '9v8':  0.490,
+  '4v13': 0.795, '13v4': 0.205,
+  '5v12': 0.647, '12v5': 0.353,
+  '6v11': 0.622, '11v6': 0.378,
+  '7v10': 0.601, '10v7': 0.399,
+  '8v9':  0.509, '9v8':  0.491,
+  // R2 matchups (common paths)
+  '1v8':  0.760, '8v1':  0.240,
+  '1v9':  0.800, '9v1':  0.200,
+  '2v7':  0.660, '7v2':  0.340,
+  '2v10': 0.720, '10v2': 0.280,
+  '3v6':  0.590, '6v3':  0.410,
+  '3v11': 0.720, '11v3': 0.280,
+  '4v5':  0.530, '5v4':  0.470,
+  '4v12': 0.700, '12v4': 0.300,
+  // S16 matchups
+  '1v4':  0.710, '4v1':  0.290,
+  '1v5':  0.730, '5v1':  0.270,
+  '1v12': 0.820, '12v1': 0.180,
+  '2v3':  0.560, '3v2':  0.440,
+  '2v6':  0.650, '6v2':  0.350,
+  '2v11': 0.750, '11v2': 0.250,
+  // E8 matchups
+  '1v2':  0.560, '2v1':  0.440,
+  '1v3':  0.620, '3v1':  0.380,
+  '2v4':  0.590, '4v2':  0.410,
 };
 
 function seedWinProb(seedA, seedB) {
@@ -224,6 +225,42 @@ function luckAdj(tvA, tvB) {
   return Math.max(-0.04, Math.min(0.04, -diff * 0.15));
 }
 
+// ── Four Factors mismatch score ──────────────────────────────────────────────
+// Identifies "Giant Killer" profiles: double-digit seeds that can math their way
+// past higher seeds via style mismatches.
+// Returns an adjustment in range [-0.06, +0.06] for team A
+function fourFactorsAdj(tvA, tvB) {
+  if (!tvA || !tvB) return 0;
+  let adj = 0;
+
+  // 1. eFG% edge — most important of Four Factors (~40% weight)
+  const efgA = tvA.efg ?? 50, efgB = tvB.efg ?? 50;
+  adj += (efgA - efgB) / 100 * 0.15;
+
+  // 2. TOV% edge — lower TOV rate is better (~25% weight)
+  const tovA = tvA.tov_rate ?? 18, tovB = tvB.tov_rate ?? 18;
+  adj += (tovB - tovA) / 100 * 0.10;  // positive when A turns it over less
+
+  // 3. ORB% edge (~20% weight)
+  const orbA = tvA.orb_rate ?? 30, orbB = tvB.orb_rate ?? 30;
+  adj += (orbA - orbB) / 100 * 0.08;
+
+  // 4. FTR edge (~15% weight) — but high FTR = vulnerable to referee variability
+  // In upsets: teams that DON'T rely on FTs are more consistent
+  const ftrA = tvA.ftr ?? 35, ftrB = tvB.ftr ?? 35;
+  adj += (ftrA - ftrB) / 100 * 0.05;
+
+  // 5. 3PA rate mismatch — "Giant Killer" profile
+  // A team shooting lots of 3s (high variance) vs interior-reliant team = upset potential
+  const tpaA = tvA.three_pa_rate ?? 35, tpaB = tvB.three_pa_rate ?? 35;
+  const threePctA = tvA.three_p ?? 33, threePctB = tvB.three_p ?? 33;
+  // Bonus for lower seed with high 3PA rate AND good 3P% — classic upset profile
+  if (tpaA > 45 && threePctA > 36) adj += 0.02;   // A is a 3P-reliant team
+  if (tpaB > 45 && threePctB > 36) adj -= 0.02;   // B is a 3P-reliant team
+
+  return Math.max(-0.06, Math.min(0.06, adj));
+}
+
 // ── Evidence model: combined Layers I + II + IV ───────────────────────────────
 // Weights: 35% Barthag · 25% Logit(AdjEM) · 20% Skellam · 20% decay form
 // Plus additive adjustments: transitive chains + WAB (capped ±12%)
@@ -263,7 +300,8 @@ function evidenceWinProb(teamA, teamB, torvik, form, trans, round, injuryMap, op
   // 20% backward Barthag · 15% projected Barthag · 25% Logit(AdjEM) · 20% Skellam · 20% quality-decay form
   // proj_barthag forward signal captures roster/injury changes Torvik has already modelled
   const base      = 0.20*bP + 0.15*pB + 0.25*lP + 0.20*sP + 0.20*dP;
-  const evidAdj   = Math.max(-0.12, Math.min(0.12, transAdj + wAdj + lAdj));
+  const ffAdj     = fourFactorsAdj(tvA, tvB);
+  const evidAdj   = Math.max(-0.12, Math.min(0.12, transAdj + wAdj + lAdj + ffAdj));
   const compress  = round <= 1 ? 0.10 : round <= 2 ? 0.06 : 0.02;
   const prob      = 0.5 + (base - 0.5) * (1 - compress) + evidAdj;
 
@@ -272,8 +310,15 @@ function evidenceWinProb(teamA, teamB, torvik, form, trans, round, injuryMap, op
 
 // ── Win probability calculation ───────────────────────────────────────────────
 function winProb(teamA, teamB, torvik, model, round, form, trans, injuryMap, oppBarthag) {
-  const tvA = torvik.teams?.[teamA.id]?.torvik;
-  const tvB = torvik.teams?.[teamB.id]?.torvik;
+  const rawTvA = torvik.teams?.[teamA.id]?.torvik;
+  const rawTvB = torvik.teams?.[teamB.id]?.torvik;
+  // Apply injury adjustments for ALL models
+  const tvA = injuryMap?.[teamA.id]
+    ? { ...rawTvA, adj_em: injuryMap[teamA.id].adj_em, barthag: injuryMap[teamA.id].barthag, proj_barthag: injuryMap[teamA.id].proj_barthag }
+    : rawTvA;
+  const tvB = injuryMap?.[teamB.id]
+    ? { ...rawTvB, adj_em: injuryMap[teamB.id].adj_em, barthag: injuryMap[teamB.id].barthag, proj_barthag: injuryMap[teamB.id].proj_barthag }
+    : rawTvB;
   const barthagA = tvA?.barthag ?? 0.5;
   const barthagB = tvB?.barthag ?? 0.5;
   const seedA = teamA.seed ?? 17;
@@ -291,16 +336,36 @@ function winProb(teamA, teamB, torvik, model, round, form, trans, injuryMap, opp
 
   let prob;
   if (model === 'barthag') {
+    // Pure efficiency — Torvik barthag ratio
     prob = barthagPrb;
   } else if (model === 'seed') {
+    // Pure historical seed win rates
     prob = seedProb;
   } else if (model === 'upset') {
-    // Compress Barthag toward 50% — more upsets, especially early rounds
-    const compression = round <= 1 ? 0.45 : round <= 2 ? 0.35 : 0.20;
-    prob = 0.5 + (barthagPrb - 0.5) * (1 - compression);
+    // Upset model: full signal stack with compression toward 50%
+    // Applies: efficiency + historical rates + form + luck regression + WAB + Four Factors + injuries
+    // Injuries applied via tvA/tvB (same adjustment as evidence model)
+    const base = 0.40 * barthagPrb + 0.60 * seedProb;
+    // Form: recent decay-weighted win rate
+    const dA   = decayWinRate(teamA.id, form, torvik, oppBarthag);
+    const dB   = decayWinRate(teamB.id, form, torvik, oppBarthag);
+    const dP   = dA / (dA + dB);
+    const formAdj = (dP - 0.5) * 0.10; // up to ±5% for hot/cold teams
+    // Style mismatches
+    const ffAdj   = fourFactorsAdj(tvA, tvB);
+    // Luck regression and WAB (capped)
+    const lAdj    = luckAdj(tvA, tvB);
+    const wAdj    = wabAdj(tvA, tvB);
+    const allAdj  = Math.max(-0.08, Math.min(0.08, formAdj + ffAdj + lAdj + wAdj));
+    // Compress toward 50% by round — more chaos early
+    const compression = round <= 1 ? 0.25 : round <= 2 ? 0.18 : 0.10;
+    prob = 0.5 + (base + allAdj - 0.5) * (1 - compression);
   } else {
-    // blended: 70% Barthag + 30% seed
-    prob = 0.70 * barthagPrb + 0.30 * seedProb;
+    // blended: 40% Barthag + 60% historical seed rates
+    // Seed rates are historically calibrated — barthag adds efficiency signal
+    // This weights early-round chalk correctly while letting efficiency matter in later rounds
+    const seedWeight = round <= 1 ? 0.60 : round <= 2 ? 0.45 : 0.25;
+    prob = (1 - seedWeight) * barthagPrb + seedWeight * seedProb;
   }
 
   return Math.max(0.01, Math.min(0.99, prob));
@@ -318,6 +383,17 @@ function playInWinner(teamA, teamB, torvik) {
     loser:  prob >= 0.5 ? teamB : teamA,
     prob:   prob >= 0.5 ? prob : 1 - prob,
   };
+}
+
+// ── Probabilistic winner pick ─────────────────────────────────────────────────
+// For deterministic models (barthag, blended, seed): always pick chalk
+// For probabilistic models (upset, evidence): use Math.random() weighted by prob
+function pickWinner(teamA, teamB, prob, model) {
+  if (model === 'upset' || model === 'evidence') {
+    return Math.random() < prob ? teamA : teamB;
+  }
+  // barthag, blended, seed — deterministic (best prediction)
+  return prob >= 0.5 ? teamA : teamB;
 }
 
 // ── Build one region's bracket ────────────────────────────────────────────────
@@ -366,8 +442,9 @@ function simulateRegion(regionName, nodes, torvik, model, form, trans, injuryMap
     const teamA = bySlot[sA];
     const teamB = bySlot[sB];
     const prob  = winProb(teamA, teamB, torvik, model, 0, form, trans, injuryMap, oppBarthag);
-    const winner = prob >= 0.5 ? teamA : teamB;
-    r1.push({ teamA, teamB, winner, prob: prob >= 0.5 ? prob : 1 - prob, winnerSide: prob >= 0.5 ? 'A' : 'B' });
+    const winner = pickWinner(teamA, teamB, prob, model);
+    const winnerProb = winner === teamA ? prob : 1 - prob;
+    r1.push({ teamA, teamB, winner, prob: Math.max(winnerProb, 1 - winnerProb), winnerSide: winner === teamA ? 'A' : 'B' });
     survivors.push(winner);
   }
   rounds.push(r1);
@@ -380,8 +457,9 @@ function simulateRegion(regionName, nodes, torvik, model, form, trans, injuryMap
       const teamA = survivors[i];
       const teamB = survivors[i + 1];
       const prob  = winProb(teamA, teamB, torvik, model, round, form, trans, injuryMap, oppBarthag);
-      const winner = prob >= 0.5 ? teamA : teamB;
-      rGames.push({ teamA, teamB, winner, prob: prob >= 0.5 ? prob : 1 - prob, winnerSide: prob >= 0.5 ? 'A' : 'B' });
+      const winner = pickWinner(teamA, teamB, prob, model);
+      const winnerProb = winner === teamA ? prob : 1 - prob;
+      rGames.push({ teamA, teamB, winner, prob: Math.max(winnerProb, 1 - winnerProb), winnerSide: winner === teamA ? 'A' : 'B' });
       next.push(winner);
     }
     rounds.push(rGames);
@@ -412,11 +490,11 @@ function simulateBracket(model, graph, torvik, form, trans, injuryMap, oppBartha
 
   const ff1Prob = winProb(ff1A, ff1B, torvik, model, 4, form, trans, injuryMap, oppBarthag);
   const ff2Prob = winProb(ff2A, ff2B, torvik, model, 4, form, trans, injuryMap, oppBarthag);
-  const ff1Win  = ff1Prob >= 0.5 ? ff1A : ff1B;
-  const ff2Win  = ff2Prob >= 0.5 ? ff2A : ff2B;
+  const ff1Win  = pickWinner(ff1A, ff1B, ff1Prob, model);
+  const ff2Win  = pickWinner(ff2A, ff2B, ff2Prob, model);
 
   const finalProb = winProb(ff1Win, ff2Win, torvik, model, 5, form, trans, injuryMap, oppBarthag);
-  const champion  = finalProb >= 0.5 ? ff1Win : ff2Win;
+  const champion  = pickWinner(ff1Win, ff2Win, finalProb, model);
 
   return {
     model,
@@ -457,8 +535,8 @@ export default async function handler(req, res) {
     res.end(JSON.stringify({ error: 'Invalid JSON' })); return;
   }
 
-  const model = ['barthag', 'upset', 'seed', 'blended', 'evidence'].includes(body.model)
-    ? body.model : 'blended';
+  const model = ['evidence', 'upset'].includes(body.model)
+    ? body.model : 'evidence';
 
   try {
     const { graph, torvik, form, trans, injuryMap, oppBarthag } = getData();

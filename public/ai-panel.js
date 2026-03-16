@@ -22,8 +22,11 @@ let _activeMatchup = null; // tracks { team_a, team_b } after a multi-agent anal
 function isFreshMatchupRequest(msg, matchup) {
   if (!matchup) return false;
   const m = msg.toLowerCase();
+  // Direct matchup triggers
   const hasTrigger = /\bvs\.?\b|\bversus\b|\bcompare\b|\bagainst\b|\bmatchup\b|\banalyze\b|\banalysis\b|\bwho wins?\b|\bwho would win\b/i.test(m);
-  return hasTrigger;
+  // Transitive / comparative queries mentioning two teams
+  const hasComparative = /\bbeat\b|\bbeat\b|\bcan.{0,20}beat\b|\bwould.{0,20}win\b|\bstronger\b|\bbetter than\b|\bover\b|\bupset\b|\btransitive\b|\bif.{0,40}then\b|\bcan.{0,20}handle\b/i.test(m);
+  return hasTrigger || hasComparative;
 }
 
 // ── Token budget ──────────────────────────────────────────────────────────────
