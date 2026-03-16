@@ -127,10 +127,11 @@ def fetch_shooting_splits() -> dict:
         }
     )
     try:
-        with urllib.request.urlopen(req, timeout=30) as resp:
+        with urllib.request.urlopen(req, timeout=90) as resp:
             rows = json.loads(resp.read())
     except Exception as exc:
         print(f"WARNING: Could not fetch game stats for shooting splits: {exc}", file=sys.stderr)
+        print(f"  Shooting splits will be unavailable this run.", file=sys.stderr)
         return {}
 
     accum = {}  # team_name -> {fgm, fga, pm3, pa3, ftm, fta}

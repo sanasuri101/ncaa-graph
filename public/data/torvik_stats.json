@@ -1,6 +1,6 @@
 {
   "season": 2026,
-  "generated_at": "2026-03-16T00:09:23.815944+00:00",
+  "generated_at": "2026-03-16T00:18:05.941820+00:00",
   "teams": {
     "150": {
       "espn_id": "150",
@@ -21,10 +21,10 @@
         "proj_barthag": 0.985,
         "sos_rank": 1.2400395757311404,
         "conf": "ACC",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 60.1,
+        "three_p": 35.1,
+        "ft_pct": 72.4,
+        "efg": 56.8
       }
     },
     "2561": {
@@ -46,10 +46,10 @@
         "proj_barthag": 0.1499,
         "sos_rank": 1.1293420295789338,
         "conf": "MAAC",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 52.8,
+        "three_p": 30.4,
+        "ft_pct": 76.9,
+        "efg": 50.6
       }
     },
     "194": {
@@ -71,10 +71,10 @@
         "proj_barthag": 0.9232,
         "sos_rank": 1.1820904575956326,
         "conf": "B10",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 58.2,
+        "three_p": 36.0,
+        "ft_pct": 77.5,
+        "efg": 56.5
       }
     },
     "2628": {
@@ -96,10 +96,10 @@
         "proj_barthag": 0.933,
         "sos_rank": 1.0819229366479712,
         "conf": "B12",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 51.6,
+        "three_p": 33.1,
+        "ft_pct": 70.8,
+        "efg": 50.9
       }
     },
     "2599": {
@@ -121,10 +121,10 @@
         "proj_barthag": 0.9458,
         "sos_rank": 1.1322471038339086,
         "conf": "BE",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 51.6,
+        "three_p": 33.2,
+        "ft_pct": 72.7,
+        "efg": 51.0
       }
     },
     "2271": {
@@ -146,10 +146,10 @@
         "proj_barthag": 0.9132,
         "sos_rank": 1.0733360417760778,
         "conf": "MVC",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 55.3,
+        "three_p": 34.9,
+        "ft_pct": 69.7,
+        "efg": 54.2
       }
     },
     "2305": {
@@ -171,10 +171,10 @@
         "proj_barthag": 0.8982,
         "sos_rank": 1.1067493732082747,
         "conf": "B12",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 51.1,
+        "three_p": 35.0,
+        "ft_pct": 76.7,
+        "efg": 51.6
       }
     },
     "2871": {
@@ -196,10 +196,10 @@
         "proj_barthag": 0.1245,
         "sos_rank": 1.0544294680522686,
         "conf": "WAC",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 47.7,
+        "three_p": 33.7,
+        "ft_pct": 71.9,
+        "efg": 48.6
       }
     },
     "97": {
@@ -221,10 +221,10 @@
         "proj_barthag": 0.8998,
         "sos_rank": 1.1751286908741059,
         "conf": "ACC",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 59.7,
+        "three_p": 35.7,
+        "ft_pct": 76.9,
+        "efg": 56.4
       }
     },
     "58": {
@@ -246,10 +246,10 @@
         "proj_barthag": 0.9092,
         "sos_rank": 1.1744934760852739,
         "conf": "Amer",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 51.9,
+        "three_p": 33.1,
+        "ft_pct": 74.3,
+        "efg": 50.9
       }
     },
     "127": {
@@ -271,10 +271,10 @@
         "proj_barthag": 0.9578,
         "sos_rank": 1.1630345452999689,
         "conf": "B10",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 53.4,
+        "three_p": 35.9,
+        "ft_pct": 76.3,
+        "efg": 53.6
       }
     },
     "2449": {
@@ -296,10 +296,10 @@
         "proj_barthag": 0.0,
         "sos_rank": 1.205397645707723,
         "conf": "Sum",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 53.2,
+        "three_p": 35.7,
+        "ft_pct": 71.6,
+        "efg": 53.4
       }
     },
     "26": {
@@ -321,10 +321,10 @@
         "proj_barthag": 0.8792,
         "sos_rank": 1.166468845593415,
         "conf": "B10",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 52.0,
+        "three_p": 38.2,
+        "ft_pct": 76.7,
+        "efg": 53.9
       }
     },
     "2116": {
@@ -346,10 +346,10 @@
         "proj_barthag": 0.8276,
         "sos_rank": 1.1056936143441332,
         "conf": "B12",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 52.1,
+        "three_p": 36.2,
+        "ft_pct": 74.0,
+        "efg": 52.8
       }
     },
     "41": {
@@ -371,10 +371,10 @@
         "proj_barthag": 0.9668,
         "sos_rank": 1.163336920413606,
         "conf": "BE",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 57.1,
+        "three_p": 35.2,
+        "ft_pct": 71.6,
+        "efg": 55.3
       }
     },
     "231": {
@@ -396,10 +396,10 @@
         "proj_barthag": 0.0,
         "sos_rank": 1.1126970401008511,
         "conf": "SC",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 59.0,
+        "three_p": 33.3,
+        "ft_pct": 69.8,
+        "efg": 54.8
       }
     },
     "12": {
@@ -421,10 +421,10 @@
         "proj_barthag": 0.9785,
         "sos_rank": 1.178268614872429,
         "conf": "B12",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 55.4,
+        "three_p": 36.0,
+        "ft_pct": 73.4,
+        "efg": 55.1
       }
     },
     "2652": {
@@ -446,10 +446,10 @@
         "proj_barthag": 0.5124,
         "sos_rank": 1.091225531825664,
         "conf": "NEC",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 52.9,
+        "three_p": 36.1,
+        "ft_pct": 66.8,
+        "efg": 53.3
       }
     },
     "222": {
@@ -471,10 +471,10 @@
         "proj_barthag": 0.8236,
         "sos_rank": 1.1205819678154163,
         "conf": "BE",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 54.4,
+        "three_p": 35.3,
+        "ft_pct": 69.4,
+        "efg": 53.7
       }
     },
     "328": {
@@ -496,10 +496,10 @@
         "proj_barthag": 0.8878,
         "sos_rank": 1.2080785621641654,
         "conf": "MWC",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 59.3,
+        "three_p": 35.1,
+        "ft_pct": 70.6,
+        "efg": 56.6
       }
     },
     "275": {
@@ -521,10 +521,10 @@
         "proj_barthag": 0.917,
         "sos_rank": 1.2000329076665721,
         "conf": "B10",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 54.8,
+        "three_p": 36.1,
+        "ft_pct": 78.6,
+        "efg": 54.5
       }
     },
     "2272": {
@@ -546,10 +546,10 @@
         "proj_barthag": 0.0,
         "sos_rank": 1.2048691709985724,
         "conf": "BSth",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 57.1,
+        "three_p": 34.4,
+        "ft_pct": 74.2,
+        "efg": 54.7
       }
     },
     "8": {
@@ -571,10 +571,10 @@
         "proj_barthag": 0.9225,
         "sos_rank": 1.2203160015818915,
         "conf": "SEC",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 55.6,
+        "three_p": 38.9,
+        "ft_pct": 74.7,
+        "efg": 56.5
       }
     },
     "62": {
@@ -596,10 +596,10 @@
         "proj_barthag": 0.0,
         "sos_rank": 1.0793710508990486,
         "conf": "BW",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 55.0,
+        "three_p": 31.6,
+        "ft_pct": 73.8,
+        "efg": 52.0
       }
     },
     "252": {
@@ -621,10 +621,10 @@
         "proj_barthag": 0.9083,
         "sos_rank": 1.1568113333072438,
         "conf": "B12",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 56.2,
+        "three_p": 34.9,
+        "ft_pct": 74.6,
+        "efg": 54.7
       }
     },
     "251": {
@@ -646,10 +646,10 @@
         "proj_barthag": 0.8765,
         "sos_rank": 1.1952053751763478,
         "conf": "SEC",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 55.3,
+        "three_p": 34.9,
+        "ft_pct": 75.3,
+        "efg": 54.2
       }
     },
     "152": {
@@ -671,10 +671,10 @@
         "proj_barthag": 0.8574,
         "sos_rank": 1.1500004984398833,
         "conf": "ACC",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 53.1,
+        "three_p": 38.8,
+        "ft_pct": 76.8,
+        "efg": 55.3
       }
     },
     "2250": {
@@ -696,10 +696,10 @@
         "proj_barthag": 0.9567,
         "sos_rank": 1.1745487708327067,
         "conf": "WCC",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 58.7,
+        "three_p": 34.0,
+        "ft_pct": 69.9,
+        "efg": 56.3
       }
     },
     "338": {
@@ -721,10 +721,10 @@
         "proj_barthag": 0.4691,
         "sos_rank": 1.1006345678127132,
         "conf": "CUSA",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 50.8,
+        "three_p": 33.7,
+        "ft_pct": 70.0,
+        "efg": 50.7
       }
     },
     "2390": {
@@ -746,10 +746,10 @@
         "proj_barthag": 0.8866,
         "sos_rank": 1.1531694669369195,
         "conf": "ACC",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 57.2,
+        "three_p": 34.7,
+        "ft_pct": 68.5,
+        "efg": 55.6
       }
     },
     "142": {
@@ -771,10 +771,10 @@
         "proj_barthag": 0.819,
         "sos_rank": 1.1266691018304318,
         "conf": "SEC",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 56.9,
+        "three_p": 35.0,
+        "ft_pct": 68.6,
+        "efg": 55.3
       }
     },
     "2509": {
@@ -796,10 +796,10 @@
         "proj_barthag": 0.9691,
         "sos_rank": 1.2273382678073632,
         "conf": "B10",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 58.1,
+        "three_p": 37.9,
+        "ft_pct": 74.3,
+        "efg": 57.6
       }
     },
     "2952": {
@@ -821,10 +821,10 @@
         "proj_barthag": 0.2212,
         "sos_rank": 1.228883507141798,
         "conf": "ASun",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 59.0,
+        "three_p": 35.9,
+        "ft_pct": 74.9,
+        "efg": 56.6
       }
     },
     "130": {
@@ -846,10 +846,10 @@
         "proj_barthag": 0.9843,
         "sos_rank": 1.2275283406230473,
         "conf": "B10",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 61.0,
+        "three_p": 36.0,
+        "ft_pct": 74.7,
+        "efg": 58.1
       }
     },
     "2378": {
@@ -871,10 +871,10 @@
         "proj_barthag": 0.228,
         "sos_rank": 1.153247370610256,
         "conf": "AE",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 54.0,
+        "three_p": 35.9,
+        "ft_pct": 76.4,
+        "efg": 53.9
       }
     },
     "2261": {
@@ -896,10 +896,10 @@
         "proj_barthag": 0.2558,
         "sos_rank": 1.1502231036192365,
         "conf": "MEAC",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 49.9,
+        "three_p": 34.7,
+        "ft_pct": 74.2,
+        "efg": 50.6
       }
     },
     "61": {
@@ -921,10 +921,10 @@
         "proj_barthag": 0.9068,
         "sos_rank": 1.1792865899935783,
         "conf": "SEC",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 57.3,
+        "three_p": 34.1,
+        "ft_pct": 75.4,
+        "efg": 54.6
       }
     },
     "139": {
@@ -946,10 +946,10 @@
         "proj_barthag": 0.9399,
         "sos_rank": 1.1875403646480203,
         "conf": "A10",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 58.9,
+        "three_p": 40.5,
+        "ft_pct": 74.4,
+        "efg": 59.7
       }
     },
     "2641": {
@@ -971,10 +971,10 @@
         "proj_barthag": 0.9418,
         "sos_rank": 1.1849950314673732,
         "conf": "B12",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 53.6,
+        "three_p": 39.3,
+        "ft_pct": 71.5,
+        "efg": 56.2
       }
     },
     "2006": {
@@ -996,10 +996,10 @@
         "proj_barthag": 0.7886,
         "sos_rank": 1.2071179959801952,
         "conf": "MAC",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 59.1,
+        "three_p": 38.5,
+        "ft_pct": 75.3,
+        "efg": 58.5
       }
     },
     "333": {
@@ -1021,10 +1021,10 @@
         "proj_barthag": 0.9213,
         "sos_rank": 1.2122341020005216,
         "conf": "SEC",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 57.3,
+        "three_p": 35.8,
+        "ft_pct": 76.5,
+        "efg": 55.4
       }
     },
     "2275": {
@@ -1046,10 +1046,10 @@
         "proj_barthag": 0.7937,
         "sos_rank": 1.1376154653978867,
         "conf": "CAA",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 48.6,
+        "three_p": 36.8,
+        "ft_pct": 75.9,
+        "efg": 51.5
       }
     },
     "2633": {
@@ -1071,10 +1071,10 @@
         "proj_barthag": 0.9294,
         "sos_rank": 1.1395801331285202,
         "conf": "SEC",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 52.2,
+        "three_p": 33.4,
+        "ft_pct": 69.4,
+        "efg": 51.6
       }
     },
     "193": {
@@ -1096,10 +1096,10 @@
         "proj_barthag": 0.0,
         "sos_rank": 1.202234679407258,
         "conf": "MAC",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 61.5,
+        "three_p": 37.5,
+        "ft_pct": 75.0,
+        "efg": 59.2
       }
     },
     "2567": {
@@ -1121,10 +1121,10 @@
         "proj_barthag": 0.8503,
         "sos_rank": 1.1664573179922624,
         "conf": "ACC",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 55.5,
+        "three_p": 37.4,
+        "ft_pct": 74.1,
+        "efg": 55.7
       }
     },
     "258": {
@@ -1146,10 +1146,10 @@
         "proj_barthag": 0.9569,
         "sos_rank": 1.1287492265714545,
         "conf": "ACC",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 55.2,
+        "three_p": 35.9,
+        "ft_pct": 72.6,
+        "efg": 54.6
       }
     },
     "2750": {
@@ -1171,10 +1171,10 @@
         "proj_barthag": 0.0,
         "sos_rank": 1.1852929146025541,
         "conf": "Horz",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 54.5,
+        "three_p": 36.1,
+        "ft_pct": 74.5,
+        "efg": 54.4
       }
     },
     "96": {
@@ -1196,10 +1196,10 @@
         "proj_barthag": 0.8722,
         "sos_rank": 1.13494531955453,
         "conf": "SEC",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 54.4,
+        "three_p": 34.1,
+        "ft_pct": 72.8,
+        "efg": 53.1
       }
     },
     "2541": {
@@ -1221,10 +1221,10 @@
         "proj_barthag": 0.8513,
         "sos_rank": 1.224872165189898,
         "conf": "WCC",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 56.5,
+        "three_p": 34.9,
+        "ft_pct": 74.0,
+        "efg": 54.6
       }
     },
     "66": {
@@ -1246,10 +1246,10 @@
         "proj_barthag": 0.9306,
         "sos_rank": 1.1330736706171503,
         "conf": "B12",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 55.5,
+        "three_p": 38.7,
+        "ft_pct": 67.2,
+        "efg": 56.5
       }
     },
     "2634": {
@@ -1271,10 +1271,10 @@
         "proj_barthag": 0.1445,
         "sos_rank": 1.1482304606911695,
         "conf": "OVC",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 49.9,
+        "three_p": 33.7,
+        "ft_pct": 76.3,
+        "efg": 50.1
       }
     },
     "57": {
@@ -1296,10 +1296,10 @@
         "proj_barthag": 0.9747,
         "sos_rank": 1.2376394310541612,
         "conf": "SEC",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 57.9,
+        "three_p": 30.8,
+        "ft_pct": 71.0,
+        "efg": 53.5
       }
     },
     "2440": {
@@ -1321,10 +1321,10 @@
         "proj_barthag": 0.2043,
         "sos_rank": 1.050784769311015,
         "conf": "SWAC",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 47.0,
+        "three_p": 33.2,
+        "ft_pct": 75.2,
+        "efg": 47.9
       }
     },
     "2329": {
@@ -1346,10 +1346,10 @@
         "proj_barthag": 0.1092,
         "sos_rank": 1.088048108243548,
         "conf": "Pat",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 52.4,
+        "three_p": 36.5,
+        "ft_pct": 72.9,
+        "efg": 53.3
       }
     },
     "228": {
@@ -1371,10 +1371,10 @@
         "proj_barthag": 0.9198,
         "sos_rank": 1.08846445710377,
         "conf": "ACC",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 53.8,
+        "three_p": 34.1,
+        "ft_pct": 72.6,
+        "efg": 52.6
       }
     },
     "2294": {
@@ -1396,10 +1396,10 @@
         "proj_barthag": 0.9159,
         "sos_rank": 1.12136589805225,
         "conf": "B10",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 58.7,
+        "three_p": 35.7,
+        "ft_pct": 77.0,
+        "efg": 56.6
       }
     },
     "238": {
@@ -1421,10 +1421,10 @@
         "proj_barthag": 0.9443,
         "sos_rank": 1.1673383494471021,
         "conf": "SEC",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 56.8,
+        "three_p": 35.5,
+        "ft_pct": 79.3,
+        "efg": 55.3
       }
     },
     "2377": {
@@ -1446,10 +1446,10 @@
         "proj_barthag": 0.4823,
         "sos_rank": 1.1721332756382519,
         "conf": "Slnd",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 52.9,
+        "three_p": 31.6,
+        "ft_pct": 74.0,
+        "efg": 51.0
       }
     },
     "158": {
@@ -1471,10 +1471,10 @@
         "proj_barthag": 0.9422,
         "sos_rank": 1.1320896928584887,
         "conf": "B10",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 58.1,
+        "three_p": 35.3,
+        "ft_pct": 75.0,
+        "efg": 55.4
       }
     },
     "2653": {
@@ -1496,10 +1496,10 @@
         "proj_barthag": 0.9254,
         "sos_rank": 1.1370686926242484,
         "conf": "SB",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 53.7,
+        "three_p": 33.2,
+        "ft_pct": 73.8,
+        "efg": 51.9
       }
     },
     "153": {
@@ -1521,10 +1521,10 @@
         "proj_barthag": 0.8762,
         "sos_rank": 1.1493506493506493,
         "conf": "ACC",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 56.7,
+        "three_p": 34.5,
+        "ft_pct": 68.4,
+        "efg": 54.6
       }
     },
     "2670": {
@@ -1546,10 +1546,10 @@
         "proj_barthag": 0.8115,
         "sos_rank": 1.1609155716229662,
         "conf": "A10",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 53.3,
+        "three_p": 36.7,
+        "ft_pct": 73.9,
+        "efg": 54.1
       }
     },
     "356": {
@@ -1571,10 +1571,10 @@
         "proj_barthag": 0.9607,
         "sos_rank": 1.2442852788783907,
         "conf": "B10",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 58.2,
+        "three_p": 34.7,
+        "ft_pct": 78.9,
+        "efg": 55.1
       }
     },
     "219": {
@@ -1596,10 +1596,10 @@
         "proj_barthag": 0.216,
         "sos_rank": 1.0812924416407075,
         "conf": "Ivy",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 46.2,
+        "three_p": 38.7,
+        "ft_pct": 69.5,
+        "efg": 50.3
       }
     },
     "2608": {
@@ -1621,10 +1621,10 @@
         "proj_barthag": 0.875,
         "sos_rank": 1.190736359682159,
         "conf": "WCC",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 50.2,
+        "three_p": 38.6,
+        "ft_pct": 81.1,
+        "efg": 52.9
       }
     },
     "245": {
@@ -1646,10 +1646,10 @@
         "proj_barthag": 0.8821,
         "sos_rank": 1.1414045851131944,
         "conf": "SEC",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 54.1,
+        "three_p": 36.2,
+        "ft_pct": 73.7,
+        "efg": 54.2
       }
     },
     "248": {
@@ -1671,10 +1671,10 @@
         "proj_barthag": 0.9675,
         "sos_rank": 1.1906784673456,
         "conf": "B12",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 51.9,
+        "three_p": 34.9,
+        "ft_pct": 77.2,
+        "efg": 52.1
       }
     },
     "70": {
@@ -1696,10 +1696,10 @@
         "proj_barthag": 0.0,
         "sos_rank": 1.1155458192039531,
         "conf": "BSky",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 52.0,
+        "three_p": 34.5,
+        "ft_pct": 72.9,
+        "efg": 51.9
       }
     },
     "201": {
@@ -1721,10 +1721,10 @@
         "proj_barthag": 0.8883,
         "sos_rank": 1.1570030463428707,
         "conf": "SEC",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 55.0,
+        "three_p": 36.8,
+        "ft_pct": 74.5,
+        "efg": 55.1
       }
     },
     "2": {
@@ -1746,10 +1746,10 @@
         "proj_barthag": 0.8675,
         "sos_rank": 1.1826380380420591,
         "conf": "SEC",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 53.4,
+        "three_p": 33.8,
+        "ft_pct": 74.4,
+        "efg": 52.3
       }
     },
     "84": {
@@ -1771,10 +1771,10 @@
         "proj_barthag": 0.7854,
         "sos_rank": 1.1500421972936838,
         "conf": "B10",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 60.3,
+        "three_p": 34.7,
+        "ft_pct": 78.0,
+        "efg": 56.1
       }
     },
     "167": {
@@ -1796,10 +1796,10 @@
         "proj_barthag": 0.8522,
         "sos_rank": 1.1459233971244953,
         "conf": "MWC",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 53.3,
+        "three_p": 36.1,
+        "ft_pct": 72.5,
+        "efg": 53.6
       }
     },
     "21": {
@@ -1821,10 +1821,10 @@
         "proj_barthag": 0.7787,
         "sos_rank": 1.1076344877101856,
         "conf": "MWC",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 53.2,
+        "three_p": 34.5,
+        "ft_pct": 73.0,
+        "efg": 52.7
       }
     },
     "24": {
@@ -1846,10 +1846,10 @@
         "proj_barthag": 0.8076,
         "sos_rank": 1.1032615592876178,
         "conf": "ACC",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 50.4,
+        "three_p": 35.6,
+        "ft_pct": 73.1,
+        "efg": 51.7
       }
     },
     "2132": {
@@ -1871,10 +1871,10 @@
         "proj_barthag": 0.8595,
         "sos_rank": 1.07856149995297,
         "conf": "B12",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 50.2,
+        "three_p": 33.9,
+        "ft_pct": 68.1,
+        "efg": 50.5
       }
     },
     "2550": {
@@ -1896,10 +1896,10 @@
         "proj_barthag": 0.8332,
         "sos_rank": 1.0158850585613353,
         "conf": "BE",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 48.3,
+        "three_p": 30.5,
+        "ft_pct": 72.3,
+        "efg": 47.6
       }
     }
   },
@@ -1923,10 +1923,10 @@
         "proj_barthag": 0.985,
         "sos_rank": 1.2400395757311404,
         "conf": "ACC",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 60.1,
+        "three_p": 35.1,
+        "ft_pct": 72.4,
+        "efg": 56.8
       }
     },
     {
@@ -1948,10 +1948,10 @@
         "proj_barthag": 0.9843,
         "sos_rank": 1.2275283406230473,
         "conf": "B10",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 61.0,
+        "three_p": 36.0,
+        "ft_pct": 74.7,
+        "efg": 58.1
       }
     },
     {
@@ -1973,10 +1973,10 @@
         "proj_barthag": 0.9785,
         "sos_rank": 1.178268614872429,
         "conf": "B12",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 55.4,
+        "three_p": 36.0,
+        "ft_pct": 73.4,
+        "efg": 55.1
       }
     },
     {
@@ -1998,10 +1998,10 @@
         "proj_barthag": 0.9747,
         "sos_rank": 1.2376394310541612,
         "conf": "SEC",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 57.9,
+        "three_p": 30.8,
+        "ft_pct": 71.0,
+        "efg": 53.5
       }
     },
     {
@@ -2023,10 +2023,10 @@
         "proj_barthag": 0.9675,
         "sos_rank": 1.1906784673456,
         "conf": "B12",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 51.9,
+        "three_p": 34.9,
+        "ft_pct": 77.2,
+        "efg": 52.1
       }
     },
     {
@@ -2048,10 +2048,10 @@
         "proj_barthag": 0.9607,
         "sos_rank": 1.2442852788783907,
         "conf": "B10",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 58.2,
+        "three_p": 34.7,
+        "ft_pct": 78.9,
+        "efg": 55.1
       }
     },
     {
@@ -2073,10 +2073,10 @@
         "proj_barthag": 0.9306,
         "sos_rank": 1.1330736706171503,
         "conf": "B12",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 55.5,
+        "three_p": 38.7,
+        "ft_pct": 67.2,
+        "efg": 56.5
       }
     },
     {
@@ -2098,10 +2098,10 @@
         "proj_barthag": 0.9691,
         "sos_rank": 1.2273382678073632,
         "conf": "B10",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 58.1,
+        "three_p": 37.9,
+        "ft_pct": 74.3,
+        "efg": 57.6
       }
     },
     {
@@ -2123,10 +2123,10 @@
         "proj_barthag": 0.9668,
         "sos_rank": 1.163336920413606,
         "conf": "BE",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 57.1,
+        "three_p": 35.2,
+        "ft_pct": 71.6,
+        "efg": 55.3
       }
     },
     {
@@ -2148,10 +2148,10 @@
         "proj_barthag": 0.9443,
         "sos_rank": 1.1673383494471021,
         "conf": "SEC",
-        "two_p": null,
-        "three_p": null,
-        "ft_pct": null,
-        "efg": null
+        "two_p": 56.8,
+        "three_p": 35.5,
+        "ft_pct": 79.3,
+        "efg": 55.3
       }
     }
   ]
