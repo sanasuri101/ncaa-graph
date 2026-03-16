@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-03-15T23:26:54.478834+00:00",
+  "generated_at": "2026-03-16T00:09:50.110291+00:00",
   "flagged_teams": 10,
   "teams": {
     "2641": {
       "bracket_name": "Texas Tech",
-      "region": "South",
+      "region": "Midwest",
       "seed": 5,
       "articles": [
         {
@@ -33,10 +33,10 @@
         }
       ]
     },
-    "127": {
-      "bracket_name": "Michigan St",
-      "region": "West",
-      "seed": 2,
+    "26": {
+      "bracket_name": "UCLA",
+      "region": "East",
+      "seed": 7,
       "articles": [
         {
           "headline": "UCLA loses Bilodeau but ousts Michigan St. in Big Ten quarters",
@@ -64,10 +64,10 @@
         }
       ]
     },
-    "26": {
-      "bracket_name": "UCLA",
-      "region": "Midwest",
-      "seed": 7,
+    "127": {
+      "bracket_name": "Michigan St",
+      "region": "East",
+      "seed": 3,
       "articles": [
         {
           "headline": "UCLA loses Bilodeau but ousts Michigan St. in Big Ten quarters",
@@ -97,8 +97,8 @@
     },
     "142": {
       "bracket_name": "Missouri",
-      "region": "East",
-      "seed": 11,
+      "region": "West",
+      "seed": 10,
       "articles": [
         {
           "headline": "Gates credits return of Stone, depth of bigs for Mizzou surge",
@@ -123,7 +123,7 @@
     },
     "153": {
       "bracket_name": "North Carolina",
-      "region": "Midwest",
+      "region": "South",
       "seed": 6,
       "articles": [
         {
@@ -136,8 +136,8 @@
     },
     "222": {
       "bracket_name": "Villanova",
-      "region": "South",
-      "seed": 9,
+      "region": "West",
+      "seed": 8,
       "articles": [
         {
           "headline": "Villanova says Matt Hodge suffered season-ending ACL tear",
@@ -181,7 +181,7 @@
     },
     "2633": {
       "bracket_name": "Tennessee",
-      "region": "South",
+      "region": "Midwest",
       "seed": 6,
       "articles": [
         {

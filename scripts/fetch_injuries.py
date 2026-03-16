@@ -72,7 +72,7 @@ def is_injury_headline(headline: str, description: str = "") -> bool:
         return False
     return any(re.search(p, text) for p in INJURY_PATTERNS)
 
-def fetch_json(url: str, retries: int = 2) -> dict | None:
+def fetch_json(url: str, retries: int = 2) -> object:
     for attempt in range(retries + 1):
         try:
             req = urllib.request.Request(url, headers=HEADERS)
