@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-03-16T07:04:19.879153+00:00",
-  "flagged_teams": 10,
+  "generated_at": "2026-03-17T06:51:13.287771+00:00",
+  "flagged_teams": 8,
   "teams": {
-    "26": {
-      "bracket_name": "UCLA",
+    "127": {
+      "bracket_name": "Michigan St",
       "region": "East",
-      "seed": 7,
+      "seed": 3,
       "articles": [
         {
           "headline": "UCLA loses Bilodeau but ousts Michigan St. in Big Ten quarters",
@@ -33,10 +33,10 @@
         }
       ]
     },
-    "127": {
-      "bracket_name": "Michigan St",
+    "26": {
+      "bracket_name": "UCLA",
       "region": "East",
-      "seed": 3,
+      "seed": 7,
       "articles": [
         {
           "headline": "UCLA loses Bilodeau but ousts Michigan St. in Big Ten quarters",
@@ -74,32 +74,6 @@
           "description": "Dennis Gates says the return of guard Jayden Stone from injury and the development of the 8-seed Tigers' frontcourt has them ready for the SEC Tournament.",
           "published": "2026-03-11",
           "url": "https://www.espn.com/video/clip?id=48177192"
-        }
-      ]
-    },
-    "150": {
-      "bracket_name": "Duke",
-      "region": "East",
-      "seed": 1,
-      "articles": [
-        {
-          "headline": "Greenberg: Cam Boozer in 'role of Scottie Pippen' with Caleb Foster out",
-          "description": "Seth Greenberg joins \"Get Up\" to discuss how significant Caleb Foster's injury is for Duke.",
-          "published": "2026-03-13",
-          "url": "https://www.espn.com/video/clip?id=48194535"
-        }
-      ]
-    },
-    "153": {
-      "bracket_name": "North Carolina",
-      "region": "South",
-      "seed": 6,
-      "articles": [
-        {
-          "headline": "UNC's Caleb Wilson out rest of season after thumb surgery",
-          "description": "North Carolina star freshman Caleb Wilson will miss the remainder of the season after breaking his right thumb during practice, the school announced.",
-          "published": "2026-03-07",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48123740/sources-unc-wilson-rest-season-thumb-surgery"
         }
       ]
     },
@@ -158,12 +132,6 @@
           "description": "After leading the Vols past Auburn with 27 points in the SEC Tournament, Ament describes his game-changing play in his first action back after returning from an ankle injury.",
           "published": "2026-03-12",
           "url": "https://www.espn.com/video/clip?id=48187935"
-        },
-        {
-          "headline": "Nate Ament set to play for Tennessee in SEC tournament",
-          "description": "Tennessee star freshman Nate Ament, out the past two games with a leg injury, will play in the SEC quarterfinals against Auburn.",
-          "published": "2026-03-12",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48183962/source-nate-ament-set-play-tennessee-sec-tournament"
         }
       ]
     },

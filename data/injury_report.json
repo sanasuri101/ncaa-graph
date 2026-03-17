@@ -1,25 +1,6 @@
 {
-  "generated_at": "2026-03-16T07:04:19.879793+00:00",
+  "generated_at": "2026-03-17T06:51:13.288349+00:00",
   "teams": {
-    "130": {
-      "bracket_name": "Michigan",
-      "region": "Midwest",
-      "seed": 1,
-      "adj_em_penalty": 1.0,
-      "players": [
-        {
-          "name": "LJ Cason",
-          "status": "Out for season - torn ACL",
-          "impact": "Backup guard. Adds pressure on Elliot Cadeau.",
-          "adj_em_impact": -1.0
-        }
-      ],
-      "notes": "Cason was backup depth, moderate impact on rotation.",
-      "override_date": "2026-03-09",
-      "news_flags": [],
-      "has_override": true,
-      "has_news_flag": false
-    },
     "2250": {
       "bracket_name": "Gonzaga",
       "region": "West",
@@ -38,6 +19,25 @@
       "news_flags": [],
       "has_override": true,
       "has_news_flag": false
+    },
+    "245": {
+      "bracket_name": "Texas A&M",
+      "region": "South",
+      "seed": 10,
+      "adj_em_penalty": 0,
+      "players": [],
+      "notes": "",
+      "override_date": "",
+      "news_flags": [
+        {
+          "headline": "Highlight: 11-seed Sooners continue SEC run by eliminating 6-seed Aggies",
+          "description": "With Nijel Pack leading the way with 20 points before leaving the game late with an injury, Oklahoma ousts Texas A&M, xx-xx, for its second win in as many days.",
+          "published": "2026-03-13",
+          "url": "https://www.espn.com/video/clip?id=48191653"
+        }
+      ],
+      "has_override": false,
+      "has_news_flag": true
     },
     "26": {
       "bracket_name": "UCLA",
@@ -77,119 +77,62 @@
       "has_override": true,
       "has_news_flag": true
     },
-    "150": {
-      "bracket_name": "Duke",
-      "region": "East",
-      "seed": 1,
-      "adj_em_penalty": 4.0,
-      "players": [
-        {
-          "name": "Caleb Foster",
-          "status": "Out - fractured right foot (surgery March 9)",
-          "impact": "Starting PG, 8.5 ppg, 40.4% 3PT, primary ball handler. Out until Final Four at earliest.",
-          "adj_em_impact": -3.2
-        },
-        {
-          "name": "Patrick Ngongba II",
-          "status": "Questionable - right foot soreness",
-          "impact": "Starting C, 10.7 ppg, 1.1 bpg, top rim protector. Expected back for NCAA opener.",
-          "adj_em_impact": -0.8
-        }
-      ],
-      "notes": "Duke operating with 7-man rotation. Cayden Boozer moves to starting PG.",
-      "override_date": "2026-03-15",
-      "news_flags": [
-        {
-          "headline": "Greenberg: Cam Boozer in 'role of Scottie Pippen' with Caleb Foster out",
-          "description": "Seth Greenberg joins \"Get Up\" to discuss how significant Caleb Foster's injury is for Duke.",
-          "published": "2026-03-13",
-          "url": "https://www.espn.com/video/clip?id=48194535"
-        }
-      ],
-      "has_override": true,
-      "has_news_flag": true
-    },
-    "127": {
-      "bracket_name": "Michigan St",
-      "region": "East",
-      "seed": 3,
+    "142": {
+      "bracket_name": "Missouri",
+      "region": "West",
+      "seed": 10,
       "adj_em_penalty": 0,
       "players": [],
       "notes": "",
       "override_date": "",
       "news_flags": [
         {
-          "headline": "UCLA loses Bilodeau but ousts Michigan St. in Big Ten quarters",
-          "description": "UCLA star Tyler Bilodeau suffered a right leg injury that will likely sideline him for at least one game, but the Bruins held off No. 8 Michigan State 88-84 to advance to the Big Ten tournament semifi",
-          "published": "2026-03-14",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48201354/ucla-loses-bilodeau-ousts-michigan-st-big-ten-quarters"
-        },
-        {
-          "headline": "Dent, Perry lead way as UCLA holds off No. 8 Michigan State despite Bilodeau's injury",
-          "description": "\u2014 Donovan Dent had 23 points and 12 assists, Trent Perry added 22 points and UCLA held off No. 8 Michigan State 88-84 in the Big Ten Tournament quarterfinals on Friday night despite losing star Tyler ",
-          "published": "2026-03-14",
-          "url": "http://www.espn.com/ncb/recap?gameId=401851383"
-        },
-        {
-          "headline": "UCLA loses Bilodeau but ousts Michigan St. in Big Ten quarters",
-          "description": "UCLA star Tyler Bilodeau suffered a right leg injury that will likely sideline him for at least one game, but the Bruins held off No. 8 Michigan State 88-84 to advance to the Big Ten tournament semifi",
-          "published": "2026-03-14",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48201354/ucla-loses-bilodeau-ousts-michigan-st-big-ten-quarters"
+          "headline": "Gates credits return of Stone, depth of bigs for Mizzou surge",
+          "description": "Dennis Gates says the return of guard Jayden Stone from injury and the development of the 8-seed Tigers' frontcourt has them ready for the SEC Tournament.",
+          "published": "2026-03-11",
+          "url": "https://www.espn.com/video/clip?id=48177192"
         }
       ],
       "has_override": false,
       "has_news_flag": true
     },
-    "2633": {
-      "bracket_name": "Tennessee",
+    "130": {
+      "bracket_name": "Michigan",
       "region": "Midwest",
-      "seed": 6,
-      "adj_em_penalty": 0,
-      "players": [],
-      "notes": "",
-      "override_date": "",
-      "news_flags": [
-        {
-          "headline": "Nate Ament recaps Tennessee's second-half comeback over Auburn",
-          "description": "After leading the Vols past Auburn with 27 points in the SEC Tournament, Ament describes his game-changing play in his first action back after returning from an ankle injury.",
-          "published": "2026-03-12",
-          "url": "https://www.espn.com/video/clip?id=48187935"
-        },
-        {
-          "headline": "Nate Ament set to play for Tennessee in SEC tournament",
-          "description": "Tennessee star freshman Nate Ament, out the past two games with a leg injury, will play in the SEC quarterfinals against Auburn.",
-          "published": "2026-03-12",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48183962/source-nate-ament-set-play-tennessee-sec-tournament"
-        }
-      ],
-      "has_override": false,
-      "has_news_flag": true
-    },
-    "228": {
-      "bracket_name": "Clemson",
-      "region": "South",
-      "seed": 8,
-      "adj_em_penalty": 3.0,
+      "seed": 1,
+      "adj_em_penalty": 1.0,
       "players": [
         {
-          "name": "Carter Welling",
-          "status": "Out for season - torn ACL (March 13)",
-          "impact": "Season-ending torn ACL confirmed day before Selection Sunday.",
-          "adj_em_impact": -3.0
+          "name": "LJ Cason",
+          "status": "Out for season - torn ACL",
+          "impact": "Backup guard. Adds pressure on Elliot Cadeau.",
+          "adj_em_impact": -1.0
         }
       ],
-      "notes": "Welling injury came March 13 \u2014 very recent, Torvik may not have fully adjusted.",
-      "override_date": "2026-03-15",
-      "news_flags": [
-        {
-          "headline": "Clemson's Carter Welling done for season with torn ACL",
-          "description": "Clemson said forward Carter Welling tore the ACL in his right knee in its opening game of the ACC tournament Wednesday.",
-          "published": "2026-03-13",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48189958/clemson-carter-welling-done-season-torn-acl"
-        }
-      ],
+      "notes": "Cason was backup depth, moderate impact on rotation.",
+      "override_date": "2026-03-09",
+      "news_flags": [],
       "has_override": true,
-      "has_news_flag": true
+      "has_news_flag": false
+    },
+    "153": {
+      "bracket_name": "North Carolina",
+      "region": "South",
+      "seed": 6,
+      "adj_em_penalty": 6.0,
+      "players": [
+        {
+          "name": "Caleb Wilson",
+          "status": "Out for season - broken right thumb (surgery March 5)",
+          "impact": "Team's leading scorer (19.8 ppg) and rebounder (9.4 rpg). Top-5 NBA draft pick. Out since Feb 10 with left hand fracture, then broke right thumb dunking in practice March 5. UNC went 5-1 without him but faces tougher competition in tournament.",
+          "adj_em_impact": -6.0
+        }
+      ],
+      "notes": "UNC's go-to lineup without Wilson: Trimble/Dixon/Bogavac backcourt, Stevenson at 4, Veesaar at center. +22 net rating with that quintet in last 4 games but vs weaker ACC opponents.",
+      "override_date": "2026-03-15",
+      "news_flags": [],
+      "has_override": true,
+      "has_news_flag": false
     },
     "222": {
       "bracket_name": "Villanova",
@@ -223,68 +166,49 @@
       "has_override": true,
       "has_news_flag": true
     },
-    "142": {
-      "bracket_name": "Missouri",
-      "region": "West",
-      "seed": 10,
+    "2633": {
+      "bracket_name": "Tennessee",
+      "region": "Midwest",
+      "seed": 6,
       "adj_em_penalty": 0,
       "players": [],
       "notes": "",
       "override_date": "",
       "news_flags": [
         {
-          "headline": "Gates credits return of Stone, depth of bigs for Mizzou surge",
-          "description": "Dennis Gates says the return of guard Jayden Stone from injury and the development of the 8-seed Tigers' frontcourt has them ready for the SEC Tournament.",
-          "published": "2026-03-11",
-          "url": "https://www.espn.com/video/clip?id=48177192"
+          "headline": "Nate Ament recaps Tennessee's second-half comeback over Auburn",
+          "description": "After leading the Vols past Auburn with 27 points in the SEC Tournament, Ament describes his game-changing play in his first action back after returning from an ankle injury.",
+          "published": "2026-03-12",
+          "url": "https://www.espn.com/video/clip?id=48187935"
         }
       ],
       "has_override": false,
       "has_news_flag": true
     },
-    "153": {
-      "bracket_name": "North Carolina",
+    "228": {
+      "bracket_name": "Clemson",
       "region": "South",
-      "seed": 6,
-      "adj_em_penalty": 6.0,
+      "seed": 8,
+      "adj_em_penalty": 3.0,
       "players": [
         {
-          "name": "Caleb Wilson",
-          "status": "Out for season - broken right thumb (surgery March 5)",
-          "impact": "Team's leading scorer (19.8 ppg) and rebounder (9.4 rpg). Top-5 NBA draft pick. Out since Feb 10 with left hand fracture, then broke right thumb dunking in practice March 5. UNC went 5-1 without him but faces tougher competition in tournament.",
-          "adj_em_impact": -6.0
+          "name": "Carter Welling",
+          "status": "Out for season - torn ACL (March 13)",
+          "impact": "Season-ending torn ACL confirmed day before Selection Sunday.",
+          "adj_em_impact": -3.0
         }
       ],
-      "notes": "UNC's go-to lineup without Wilson: Trimble/Dixon/Bogavac backcourt, Stevenson at 4, Veesaar at center. +22 net rating with that quintet in last 4 games but vs weaker ACC opponents.",
+      "notes": "Welling injury came March 13 \u2014 very recent, Torvik may not have fully adjusted.",
       "override_date": "2026-03-15",
       "news_flags": [
         {
-          "headline": "UNC's Caleb Wilson out rest of season after thumb surgery",
-          "description": "North Carolina star freshman Caleb Wilson will miss the remainder of the season after breaking his right thumb during practice, the school announced.",
-          "published": "2026-03-07",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48123740/sources-unc-wilson-rest-season-thumb-surgery"
+          "headline": "Clemson's Carter Welling done for season with torn ACL",
+          "description": "Clemson said forward Carter Welling tore the ACL in his right knee in its opening game of the ACC tournament Wednesday.",
+          "published": "2026-03-13",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48189958/clemson-carter-welling-done-season-torn-acl"
         }
       ],
       "has_override": true,
-      "has_news_flag": true
-    },
-    "245": {
-      "bracket_name": "Texas A&M",
-      "region": "South",
-      "seed": 10,
-      "adj_em_penalty": 0,
-      "players": [],
-      "notes": "",
-      "override_date": "",
-      "news_flags": [
-        {
-          "headline": "Highlight: 11-seed Sooners continue SEC run by eliminating 6-seed Aggies",
-          "description": "With Nijel Pack leading the way with 20 points before leaving the game late with an injury, Oklahoma ousts Texas A&M, xx-xx, for its second win in as many days.",
-          "published": "2026-03-13",
-          "url": "https://www.espn.com/video/clip?id=48191653"
-        }
-      ],
-      "has_override": false,
       "has_news_flag": true
     },
     "2641": {
@@ -311,6 +235,62 @@
         }
       ],
       "has_override": true,
+      "has_news_flag": true
+    },
+    "150": {
+      "bracket_name": "Duke",
+      "region": "East",
+      "seed": 1,
+      "adj_em_penalty": 4.0,
+      "players": [
+        {
+          "name": "Caleb Foster",
+          "status": "Out - fractured right foot (surgery March 9)",
+          "impact": "Starting PG, 8.5 ppg, 40.4% 3PT, primary ball handler. Out until Final Four at earliest.",
+          "adj_em_impact": -3.2
+        },
+        {
+          "name": "Patrick Ngongba II",
+          "status": "Questionable - right foot soreness",
+          "impact": "Starting C, 10.7 ppg, 1.1 bpg, top rim protector. Expected back for NCAA opener.",
+          "adj_em_impact": -0.8
+        }
+      ],
+      "notes": "Duke operating with 7-man rotation. Cayden Boozer moves to starting PG.",
+      "override_date": "2026-03-15",
+      "news_flags": [],
+      "has_override": true,
+      "has_news_flag": false
+    },
+    "127": {
+      "bracket_name": "Michigan St",
+      "region": "East",
+      "seed": 3,
+      "adj_em_penalty": 0,
+      "players": [],
+      "notes": "",
+      "override_date": "",
+      "news_flags": [
+        {
+          "headline": "UCLA loses Bilodeau but ousts Michigan St. in Big Ten quarters",
+          "description": "UCLA star Tyler Bilodeau suffered a right leg injury that will likely sideline him for at least one game, but the Bruins held off No. 8 Michigan State 88-84 to advance to the Big Ten tournament semifi",
+          "published": "2026-03-14",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48201354/ucla-loses-bilodeau-ousts-michigan-st-big-ten-quarters"
+        },
+        {
+          "headline": "Dent, Perry lead way as UCLA holds off No. 8 Michigan State despite Bilodeau's injury",
+          "description": "\u2014 Donovan Dent had 23 points and 12 assists, Trent Perry added 22 points and UCLA held off No. 8 Michigan State 88-84 in the Big Ten Tournament quarterfinals on Friday night despite losing star Tyler ",
+          "published": "2026-03-14",
+          "url": "http://www.espn.com/ncb/recap?gameId=401851383"
+        },
+        {
+          "headline": "UCLA loses Bilodeau but ousts Michigan St. in Big Ten quarters",
+          "description": "UCLA star Tyler Bilodeau suffered a right leg injury that will likely sideline him for at least one game, but the Bruins held off No. 8 Michigan State 88-84 to advance to the Big Ten tournament semifi",
+          "published": "2026-03-14",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48201354/ucla-loses-bilodeau-ousts-michigan-st-big-ten-quarters"
+        }
+      ],
+      "has_override": false,
       "has_news_flag": true
     },
     "252": {
