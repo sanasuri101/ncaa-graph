@@ -30,6 +30,51 @@
     "venue": "UD Arena"
   },
   {
+    "id": "401856436",
+    "date": "2026-03-19",
+    "name": "Miami (OH) RedHawks at SMU Mustangs",
+    "team1_id": "2567",
+    "team1_name": "SMU Mustangs",
+    "team1_score": "79",
+    "team1_winner": false,
+    "team2_id": "193",
+    "team2_name": "Miami (OH) RedHawks",
+    "team2_score": "89",
+    "team2_winner": true,
+    "neutral": true,
+    "venue": "UD Arena"
+  },
+  {
+    "id": "401858341",
+    "date": "2026-03-19",
+    "name": "Murray State Racers at Nevada Wolf Pack",
+    "team1_id": "2440",
+    "team1_name": "Nevada Wolf Pack",
+    "team1_score": "89",
+    "team1_winner": true,
+    "team2_id": "93",
+    "team2_name": "Murray State Racers",
+    "team2_score": "75",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "Lawlor Events Center"
+  },
+  {
+    "id": "401856437",
+    "date": "2026-03-18",
+    "name": "Prairie View A&M Panthers at Lehigh Mountain Hawks",
+    "team1_id": "2329",
+    "team1_name": "Lehigh Mountain Hawks",
+    "team1_score": "55",
+    "team1_winner": false,
+    "team2_id": "2504",
+    "team2_name": "Prairie View A&M Panthers",
+    "team2_score": "67",
+    "team2_winner": true,
+    "neutral": true,
+    "venue": "UD Arena"
+  },
+  {
     "id": "401858193",
     "date": "2026-03-18",
     "name": "South Alabama Jaguars at Auburn Tigers",
@@ -43,5 +88,20 @@
     "team2_winner": false,
     "neutral": false,
     "venue": "Neville Arena"
+  },
+  {
+    "id": "401858342",
+    "date": "2026-03-19",
+    "name": "Sam Houston Bearkats at New Mexico Lobos",
+    "team1_id": "167",
+    "team1_name": "New Mexico Lobos",
+    "team1_score": "107",
+    "team1_winner": true,
+    "team2_id": "2534",
+    "team2_name": "Sam Houston Bearkats",
+    "team2_score": "83",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "The Pit"
   }
 ]

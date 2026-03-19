@@ -1,11 +1,42 @@
 {
-  "generated_at": "2026-03-18T06:49:41.546147+00:00",
-  "flagged_teams": 8,
+  "generated_at": "2026-03-19T06:44:13.112102+00:00",
+  "flagged_teams": 9,
   "teams": {
-    "26": {
-      "bracket_name": "UCLA",
+    "150": {
+      "bracket_name": "Duke",
       "region": "East",
-      "seed": 7,
+      "seed": 1,
+      "articles": [
+        {
+          "headline": "Duke minus Patrick Ngongba (foot) for NCAA tournament opener",
+          "description": "Duke will open the NCAA tournament Thursday without big man Patrick Ngongba, who continues to recover from a foot injury, putting some added pressure on star freshman Cameron Boozer.",
+          "published": "2026-03-19",
+          "url": "https://www.espn.com/college-football/story/_/id/48241560/duke-likely-patrick-ngongba-ncaa-tournament-opener"
+        },
+        {
+          "headline": "Duke likely without Patrick Ngongba for NCAA tournament opener",
+          "description": "Duke will open the NCAA tournament Thursday without big man Patrick Ngongba, who continues to recover from a foot injury, putting some added pressure on star freshman Cameron Boozer.",
+          "published": "2026-03-18",
+          "url": "https://www.espn.com/college-football/story/_/id/48241560/duke-likely-patrick-ngongba-ncaa-tournament-opener"
+        },
+        {
+          "headline": "Duke likely without Patrick Ngongba for NCAA tournament opener",
+          "description": "Duke will open the NCAA tournament Thursday without big man Patrick Ngongba, who continues to recover from a foot injury, putting some added pressure on star freshman Cameron Boozer.",
+          "published": "2026-03-18",
+          "url": "https://www.espn.com/college-football/story/_/id/48241560/duke-likely-patrick-ngongba-ncaa-tournament-opener"
+        },
+        {
+          "headline": "Duke likely without Patrick Ngongba for NCAA tournament opener",
+          "description": "Duke will open the NCAA tournament Thursday without big man Patrick Ngongba, who continues to recover from a foot injury, putting some added pressure on star freshman Cameron Boozer.",
+          "published": "2026-03-18",
+          "url": "https://www.espn.com/college-football/story/_/id/48241560/duke-likely-patrick-ngongba-ncaa-tournament-opener"
+        }
+      ]
+    },
+    "127": {
+      "bracket_name": "Michigan St",
+      "region": "East",
+      "seed": 3,
       "articles": [
         {
           "headline": "UCLA loses Bilodeau but ousts Michigan St. in Big Ten quarters",
@@ -33,10 +64,10 @@
         }
       ]
     },
-    "127": {
-      "bracket_name": "Michigan St",
+    "26": {
+      "bracket_name": "UCLA",
       "region": "East",
-      "seed": 3,
+      "seed": 7,
       "articles": [
         {
           "headline": "UCLA loses Bilodeau but ousts Michigan St. in Big Ten quarters",
@@ -122,16 +153,16 @@
         }
       ]
     },
-    "2633": {
-      "bracket_name": "Tennessee",
+    "2567": {
+      "bracket_name": "SMU",
       "region": "Midwest",
-      "seed": 6,
+      "seed": 11,
       "articles": [
         {
-          "headline": "Nate Ament recaps Tennessee's second-half comeback over Auburn",
-          "description": "After leading the Vols past Auburn with 27 points in the SEC Tournament, Ament describes his game-changing play in his first action back after returning from an ankle injury.",
-          "published": "2026-03-12",
-          "url": "https://www.espn.com/video/clip?id=48187935"
+          "headline": "SMU's Enfield denies misleading NCAA committee on Edwards' injury",
+          "description": "SMU coach Andy Enfield said standout guard B.J. Edwards sat out Wednesday's loss to Miami (Ohio) in the First Four because he didn't feel \"game ready\" after the team announced last Friday that he woul",
+          "published": "2026-03-19",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48246208/smu-enfield-denies-misleading-ncaa-committee-edwards-injury"
         }
       ]
     },

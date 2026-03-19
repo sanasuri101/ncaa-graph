@@ -13,5 +13,20 @@
     "team2_winner": true,
     "neutral": true,
     "venue": "UD Arena"
+  },
+  {
+    "id": "401856436",
+    "date": "2026-03-19",
+    "name": "Miami (OH) RedHawks at SMU Mustangs",
+    "team1_id": "2567",
+    "team1_name": "SMU Mustangs",
+    "team1_score": "79",
+    "team1_winner": false,
+    "team2_id": "193",
+    "team2_name": "Miami (OH) RedHawks",
+    "team2_score": "89",
+    "team2_winner": true,
+    "neutral": true,
+    "venue": "UD Arena"
   }
 ]
