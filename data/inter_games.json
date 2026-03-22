@@ -15,6 +15,21 @@
     "venue": "Bon Secours Wellness Arena"
   },
   {
+    "id": "401856530",
+    "date": "2026-03-21",
+    "name": "TCU Horned Frogs at Duke Blue Devils",
+    "team1_id": "150",
+    "team1_name": "Duke Blue Devils",
+    "team1_score": "81",
+    "team1_winner": true,
+    "team2_id": "2628",
+    "team2_name": "TCU Horned Frogs",
+    "team2_score": "58",
+    "team2_winner": false,
+    "neutral": true,
+    "venue": "Bon Secours Wellness Arena"
+  },
+  {
     "id": "401856479",
     "date": "2026-03-19",
     "name": "TCU Horned Frogs at Ohio State Buckeyes",
@@ -40,6 +55,21 @@
     "team2_id": "58",
     "team2_name": "South Florida Bulls",
     "team2_score": "79",
+    "team2_winner": false,
+    "neutral": true,
+    "venue": "KeyBank Center"
+  },
+  {
+    "id": "401856531",
+    "date": "2026-03-21",
+    "name": "Louisville Cardinals at Michigan State Spartans",
+    "team1_id": "127",
+    "team1_name": "Michigan State Spartans",
+    "team1_score": "77",
+    "team1_winner": true,
+    "team2_id": "97",
+    "team2_name": "Louisville Cardinals",
+    "team2_score": "69",
     "team2_winner": false,
     "neutral": true,
     "venue": "KeyBank Center"
@@ -120,6 +150,21 @@
     "venue": "Moda Center"
   },
   {
+    "id": "401856536",
+    "date": "2026-03-22",
+    "name": "High Point Panthers at Arkansas Razorbacks",
+    "team1_id": "8",
+    "team1_name": "Arkansas Razorbacks",
+    "team1_score": "94",
+    "team1_winner": true,
+    "team2_id": "2272",
+    "team2_name": "High Point Panthers",
+    "team2_score": "88",
+    "team2_winner": false,
+    "neutral": true,
+    "venue": "Moda Center"
+  },
+  {
     "id": "401856481",
     "date": "2026-03-19",
     "name": "Hawai'i Rainbow Warriors at Arkansas Razorbacks",
@@ -165,6 +210,21 @@
     "venue": "UD Arena"
   },
   {
+    "id": "401856537",
+    "date": "2026-03-21",
+    "name": "Texas Longhorns at Gonzaga Bulldogs",
+    "team1_id": "2250",
+    "team1_name": "Gonzaga Bulldogs",
+    "team1_score": "68",
+    "team1_winner": false,
+    "team2_id": "251",
+    "team2_name": "Texas Longhorns",
+    "team2_score": "74",
+    "team2_winner": true,
+    "neutral": true,
+    "venue": "Moda Center"
+  },
+  {
     "id": "401856485",
     "date": "2026-03-20",
     "name": "Kennesaw State Owls at Gonzaga Bulldogs",
@@ -193,6 +253,21 @@
     "team2_winner": false,
     "neutral": true,
     "venue": "Enterprise Center"
+  },
+  {
+    "id": "401856532",
+    "date": "2026-03-21",
+    "name": "Saint Louis Billikens at Michigan Wolverines",
+    "team1_id": "130",
+    "team1_name": "Michigan Wolverines",
+    "team1_score": "95",
+    "team1_winner": true,
+    "team2_id": "139",
+    "team2_name": "Saint Louis Billikens",
+    "team2_score": "72",
+    "team2_winner": false,
+    "neutral": true,
+    "venue": "KeyBank Center"
   },
   {
     "id": "401856487",
@@ -345,6 +420,21 @@
     "venue": "Paycom Center"
   },
   {
+    "id": "401856534",
+    "date": "2026-03-22",
+    "name": "Vanderbilt Commodores at Nebraska Cornhuskers",
+    "team1_id": "158",
+    "team1_name": "Nebraska Cornhuskers",
+    "team1_score": "74",
+    "team1_winner": true,
+    "team2_id": "238",
+    "team2_name": "Vanderbilt Commodores",
+    "team2_score": "72",
+    "team2_winner": false,
+    "neutral": true,
+    "venue": "Paycom Center"
+  },
+  {
     "id": "401856489",
     "date": "2026-03-19",
     "name": "Troy Trojans at Nebraska Cornhuskers",
@@ -375,6 +465,21 @@
     "venue": "Bon Secours Wellness Arena"
   },
   {
+    "id": "401856533",
+    "date": "2026-03-22",
+    "name": "VCU Rams at Illinois Fighting Illini",
+    "team1_id": "356",
+    "team1_name": "Illinois Fighting Illini",
+    "team1_score": "76",
+    "team1_winner": true,
+    "team2_id": "2670",
+    "team2_name": "VCU Rams",
+    "team2_score": "55",
+    "team2_winner": false,
+    "neutral": true,
+    "venue": "Bon Secours Wellness Arena"
+  },
+  {
     "id": "401856491",
     "date": "2026-03-20",
     "name": "Pennsylvania Quakers at Illinois Fighting Illini",
@@ -401,6 +506,21 @@
     "team2_name": "Texas A&M Aggies",
     "team2_score": "63",
     "team2_winner": true,
+    "neutral": true,
+    "venue": "Paycom Center"
+  },
+  {
+    "id": "401856535",
+    "date": "2026-03-21",
+    "name": "Texas A&M Aggies at Houston Cougars",
+    "team1_id": "248",
+    "team1_name": "Houston Cougars",
+    "team1_score": "88",
+    "team1_winner": true,
+    "team2_id": "245",
+    "team2_name": "Texas A&M Aggies",
+    "team2_score": "57",
+    "team2_winner": false,
     "neutral": true,
     "venue": "Paycom Center"
   },

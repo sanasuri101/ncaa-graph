@@ -1,41 +1,23 @@
 {
-  "generated_at": "2026-03-21T06:30:43.078145+00:00",
+  "generated_at": "2026-03-22T06:37:57.359193+00:00",
   "flagged_teams": 7,
   "teams": {
-    "2116": {
-      "bracket_name": "UCF",
+    "150": {
+      "bracket_name": "Duke",
       "region": "East",
-      "seed": 10,
+      "seed": 1,
       "articles": [
         {
-          "headline": "UCLA overcomes broken tooth and stubborn UCF 75-71 to advance in the NCAA Tournament",
-          "description": "\u2014 Mick Cronin raised a plastic cup to another NCAA Tournament victory for UCLA with an energy drink he brought with him to the podium.",
-          "published": "2026-03-21",
-          "url": "http://www.espn.com/ncb/recap?gameId=401856496"
+          "headline": "Duke 'hopeful' Patrick Ngongba II can return in 2nd round",
+          "description": "Duke center Patrick Ngongba II could return from a foot injury for the Blue Devils' second-round game vs. TCU, coach Jon Scheyer said.",
+          "published": "2026-03-20",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48260813/duke-hopeful-patrick-ngongba-ii-return-2nd-round"
         },
         {
-          "headline": "UCLA overcomes broken tooth and stubborn UCF 75-71 to advance in the NCAA Tournament",
-          "description": "\u2014 Mick Cronin raised a plastic cup to another NCAA Tournament victory for UCLA with an energy drink he brought with him to the podium.",
-          "published": "2026-03-21",
-          "url": "http://www.espn.com/ncb/recap?gameId=401856496"
-        },
-        {
-          "headline": "UCLA overcomes broken tooth and stubborn UCF 75-71 to advance in the NCAA Tournament",
-          "description": "\u2014 Mick Cronin raised a plastic cup to another NCAA Tournament victory for UCLA with an energy drink he brought with him to the podium.",
-          "published": "2026-03-21",
-          "url": "http://www.espn.com/ncb/recap?gameId=401856496"
-        },
-        {
-          "headline": "UCLA overcomes broken tooth and stubborn UCF 75-71 to advance in the NCAA Tournament",
-          "description": "\u2014 Mick Cronin raised a plastic cup to another NCAA Tournament victory for UCLA with an energy drink he brought with him to the podium.",
-          "published": "2026-03-21",
-          "url": "http://www.espn.com/ncb/recap?gameId=401856496"
-        },
-        {
-          "headline": "UCLA overcomes broken tooth and stubborn UCF 75-71 to advance in the NCAA Tournament",
-          "description": "\u2014 Mick Cronin raised a plastic cup to another NCAA Tournament victory for UCLA with an energy drink he brought with him to the podium.",
-          "published": "2026-03-21",
-          "url": "http://www.espn.com/ncb/recap?gameId=401856496"
+          "headline": "Duke minus Patrick Ngongba (foot) for NCAA tournament opener",
+          "description": "Duke will open the NCAA tournament Thursday without big man Patrick Ngongba, who continues to recover from a foot injury, putting some added pressure on star freshman Cameron Boozer.",
+          "published": "2026-03-19",
+          "url": "https://www.espn.com/college-football/story/_/id/48241560/duke-likely-patrick-ngongba-ncaa-tournament-opener"
         }
       ]
     },
@@ -55,92 +37,25 @@
           "description": "\u2014 Mick Cronin raised a plastic cup to another NCAA Tournament victory for UCLA with an energy drink he brought with him to the podium.",
           "published": "2026-03-21",
           "url": "http://www.espn.com/ncb/recap?gameId=401856496"
-        },
-        {
-          "headline": "UCLA overcomes broken tooth and stubborn UCF 75-71 to advance in the NCAA Tournament",
-          "description": "\u2014 Mick Cronin raised a plastic cup to another NCAA Tournament victory for UCLA with an energy drink he brought with him to the podium.",
-          "published": "2026-03-21",
-          "url": "http://www.espn.com/ncb/recap?gameId=401856496"
-        },
-        {
-          "headline": "UCLA overcomes broken tooth and stubborn UCF 75-71 to advance in the NCAA Tournament",
-          "description": "\u2014 Mick Cronin raised a plastic cup to another NCAA Tournament victory for UCLA with an energy drink he brought with him to the podium.",
-          "published": "2026-03-21",
-          "url": "http://www.espn.com/ncb/recap?gameId=401856496"
-        },
-        {
-          "headline": "UCLA overcomes broken tooth and stubborn UCF 75-71 to advance in the NCAA Tournament",
-          "description": "\u2014 Mick Cronin raised a plastic cup to another NCAA Tournament victory for UCLA with an energy drink he brought with him to the podium.",
-          "published": "2026-03-21",
-          "url": "http://www.espn.com/ncb/recap?gameId=401856496"
         }
       ]
     },
-    "66": {
-      "bracket_name": "Iowa State",
-      "region": "Midwest",
-      "seed": 2,
-      "articles": [
-        {
-          "headline": "Iowa State's Joshua Jefferson sprains ankle in win; X-rays negative",
-          "description": "Iowa State senior forward Joshua Jefferson suffered a sprained left ankle in Friday's 108-74 win over Tennessee State.",
-          "published": "2026-03-20",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48261200/iowa-state-joshua-jefferson-hurt-early-ncaa-tournament"
-        },
-        {
-          "headline": "Iowa State's Joshua Jefferson sprains ankle in win; X-rays negative",
-          "description": "Iowa State senior forward Joshua Jefferson suffered a sprained left ankle in Friday's 108-74 win over Tennessee State.",
-          "published": "2026-03-20",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48261200/iowa-state-joshua-jefferson-hurt-early-ncaa-tournament"
-        },
-        {
-          "headline": "Iowa State's Joshua Jefferson sprains ankle in win; X-rays negative",
-          "description": "Iowa State senior forward Joshua Jefferson suffered a sprained left ankle in Friday's 108-74 win over Tennessee State.",
-          "published": "2026-03-20",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48261200/iowa-state-joshua-jefferson-hurt-early-ncaa-tournament"
-        },
-        {
-          "headline": "Iowa State's Joshua Jefferson sprains ankle in win; X-rays negative",
-          "description": "Iowa State senior forward Joshua Jefferson suffered a sprained left ankle in Friday's 108-74 win over Tennessee State.",
-          "published": "2026-03-20",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48261200/iowa-state-joshua-jefferson-hurt-early-ncaa-tournament"
-        }
-      ]
-    },
-    "150": {
-      "bracket_name": "Duke",
+    "2116": {
+      "bracket_name": "UCF",
       "region": "East",
-      "seed": 1,
+      "seed": 10,
       "articles": [
         {
-          "headline": "Duke 'hopeful' Patrick Ngongba II can return in 2nd round",
-          "description": "Duke center Patrick Ngongba II could return from a foot injury for the Blue Devils' second-round game vs. TCU, coach Jon Scheyer said.",
-          "published": "2026-03-20",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48260813/duke-hopeful-patrick-ngongba-ii-return-2nd-round"
+          "headline": "UCLA overcomes broken tooth and stubborn UCF 75-71 to advance in the NCAA Tournament",
+          "description": "\u2014 Mick Cronin raised a plastic cup to another NCAA Tournament victory for UCLA with an energy drink he brought with him to the podium.",
+          "published": "2026-03-21",
+          "url": "http://www.espn.com/ncb/recap?gameId=401856496"
         },
         {
-          "headline": "Duke 'hopeful' Patrick Ngongba II can return in 2nd round",
-          "description": "Duke center Patrick Ngongba II could return from a foot injury for the Blue Devils' second-round game vs. TCU, coach Jon Scheyer said.",
-          "published": "2026-03-20",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48260813/duke-hopeful-patrick-ngongba-ii-return-2nd-round"
-        },
-        {
-          "headline": "Duke 'hopeful' Patrick Ngongba II can return in 2nd round",
-          "description": "Duke center Patrick Ngongba II could return from a foot injury for the Blue Devils' second-round game vs. TCU, coach Jon Scheyer said.",
-          "published": "2026-03-20",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48260813/duke-hopeful-patrick-ngongba-ii-return-2nd-round"
-        },
-        {
-          "headline": "Duke 'hopeful' Patrick Ngongba II can return in 2nd round",
-          "description": "Duke center Patrick Ngongba II could return from a foot injury for the Blue Devils' second-round game vs. TCU, coach Jon Scheyer said.",
-          "published": "2026-03-20",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48260813/duke-hopeful-patrick-ngongba-ii-return-2nd-round"
-        },
-        {
-          "headline": "Duke minus Patrick Ngongba (foot) for NCAA tournament opener",
-          "description": "Duke will open the NCAA tournament Thursday without big man Patrick Ngongba, who continues to recover from a foot injury, putting some added pressure on star freshman Cameron Boozer.",
-          "published": "2026-03-19",
-          "url": "https://www.espn.com/college-football/story/_/id/48241560/duke-likely-patrick-ngongba-ncaa-tournament-opener"
+          "headline": "UCLA overcomes broken tooth and stubborn UCF 75-71 to advance in the NCAA Tournament",
+          "description": "\u2014 Mick Cronin raised a plastic cup to another NCAA Tournament victory for UCLA with an energy drink he brought with him to the podium.",
+          "published": "2026-03-21",
+          "url": "http://www.espn.com/ncb/recap?gameId=401856496"
         }
       ]
     },
@@ -180,6 +95,19 @@
           "description": "SMU coach Andy Enfield said standout guard B.J. Edwards sat out Wednesday's loss to Miami (Ohio) in the First Four because he didn't feel \"game ready\" after the team announced last Friday that he woul",
           "published": "2026-03-19",
           "url": "https://www.espn.com/mens-college-basketball/story/_/id/48246208/smu-enfield-denies-misleading-ncaa-committee-edwards-injury"
+        }
+      ]
+    },
+    "66": {
+      "bracket_name": "Iowa State",
+      "region": "Midwest",
+      "seed": 2,
+      "articles": [
+        {
+          "headline": "Iowa State's Joshua Jefferson sprains ankle in win; X-rays negative",
+          "description": "Iowa State senior forward Joshua Jefferson suffered a sprained left ankle in Friday's 108-74 win over Tennessee State.",
+          "published": "2026-03-20",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48261200/iowa-state-joshua-jefferson-hurt-early-ncaa-tournament"
         }
       ]
     }

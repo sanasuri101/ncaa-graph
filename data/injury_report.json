@@ -1,25 +1,6 @@
 {
-  "generated_at": "2026-03-21T06:30:43.078970+00:00",
+  "generated_at": "2026-03-22T06:37:57.359653+00:00",
   "teams": {
-    "153": {
-      "bracket_name": "North Carolina",
-      "region": "South",
-      "seed": 6,
-      "adj_em_penalty": 6.0,
-      "players": [
-        {
-          "name": "Caleb Wilson",
-          "status": "Out for season - broken right thumb (surgery March 5)",
-          "impact": "Team's leading scorer (19.8 ppg) and rebounder (9.4 rpg). Top-5 NBA draft pick. Out since Feb 10 with left hand fracture, then broke right thumb dunking in practice March 5. UNC went 5-1 without him but faces tougher competition in tournament.",
-          "adj_em_impact": -6.0
-        }
-      ],
-      "notes": "UNC's go-to lineup without Wilson: Trimble/Dixon/Bogavac backcourt, Stevenson at 4, Veesaar at center. +22 net rating with that quintet in last 4 games but vs weaker ACC opponents.",
-      "override_date": "2026-03-15",
-      "news_flags": [],
-      "has_override": true,
-      "has_news_flag": false
-    },
     "26": {
       "bracket_name": "UCLA",
       "region": "East",
@@ -47,6 +28,25 @@
           "description": "\u2014 Mick Cronin raised a plastic cup to another NCAA Tournament victory for UCLA with an energy drink he brought with him to the podium.",
           "published": "2026-03-21",
           "url": "http://www.espn.com/ncb/recap?gameId=401856496"
+        }
+      ],
+      "has_override": true,
+      "has_news_flag": true
+    },
+    "2116": {
+      "bracket_name": "UCF",
+      "region": "East",
+      "seed": 10,
+      "adj_em_penalty": 0,
+      "players": [],
+      "notes": "",
+      "override_date": "",
+      "news_flags": [
+        {
+          "headline": "UCLA overcomes broken tooth and stubborn UCF 75-71 to advance in the NCAA Tournament",
+          "description": "\u2014 Mick Cronin raised a plastic cup to another NCAA Tournament victory for UCLA with an energy drink he brought with him to the podium.",
+          "published": "2026-03-21",
+          "url": "http://www.espn.com/ncb/recap?gameId=401856496"
         },
         {
           "headline": "UCLA overcomes broken tooth and stubborn UCF 75-71 to advance in the NCAA Tournament",
@@ -55,24 +55,43 @@
           "url": "http://www.espn.com/ncb/recap?gameId=401856496"
         }
       ],
-      "has_override": true,
+      "has_override": false,
       "has_news_flag": true
     },
-    "222": {
-      "bracket_name": "Villanova",
-      "region": "West",
-      "seed": 8,
-      "adj_em_penalty": 3.5,
+    "153": {
+      "bracket_name": "North Carolina",
+      "region": "South",
+      "seed": 6,
+      "adj_em_penalty": 6.0,
       "players": [
         {
-          "name": "Matt Hodge",
-          "status": "Out for season - torn ACL (March 3)",
-          "impact": "Starting forward. Season-ending ACL tear confirmed March 3.",
-          "adj_em_impact": -3.5
+          "name": "Caleb Wilson",
+          "status": "Out for season - broken right thumb (surgery March 5)",
+          "impact": "Team's leading scorer (19.8 ppg) and rebounder (9.4 rpg). Top-5 NBA draft pick. Out since Feb 10 with left hand fracture, then broke right thumb dunking in practice March 5. UNC went 5-1 without him but faces tougher competition in tournament.",
+          "adj_em_impact": -6.0
         }
       ],
-      "notes": "Hodge was a starting contributor. Villanova (24-8) must go deeper into bench.",
+      "notes": "UNC's go-to lineup without Wilson: Trimble/Dixon/Bogavac backcourt, Stevenson at 4, Veesaar at center. +22 net rating with that quintet in last 4 games but vs weaker ACC opponents.",
       "override_date": "2026-03-15",
+      "news_flags": [],
+      "has_override": true,
+      "has_news_flag": false
+    },
+    "252": {
+      "bracket_name": "BYU",
+      "region": "West",
+      "seed": 6,
+      "adj_em_penalty": 4.5,
+      "players": [
+        {
+          "name": "Richie Saunders",
+          "status": "Out for season - torn ACL (Feb 14)",
+          "impact": "Star guard. Season-ending injury.",
+          "adj_em_impact": -4.5
+        }
+      ],
+      "notes": "BYU ceiling significantly lower without Saunders.",
+      "override_date": "2026-03-09",
       "news_flags": [],
       "has_override": true,
       "has_news_flag": false
@@ -95,6 +114,101 @@
       ],
       "has_override": false,
       "has_news_flag": true
+    },
+    "222": {
+      "bracket_name": "Villanova",
+      "region": "West",
+      "seed": 8,
+      "adj_em_penalty": 3.5,
+      "players": [
+        {
+          "name": "Matt Hodge",
+          "status": "Out for season - torn ACL (March 3)",
+          "impact": "Starting forward. Season-ending ACL tear confirmed March 3.",
+          "adj_em_impact": -3.5
+        }
+      ],
+      "notes": "Hodge was a starting contributor. Villanova (24-8) must go deeper into bench.",
+      "override_date": "2026-03-15",
+      "news_flags": [],
+      "has_override": true,
+      "has_news_flag": false
+    },
+    "150": {
+      "bracket_name": "Duke",
+      "region": "East",
+      "seed": 1,
+      "adj_em_penalty": 4.0,
+      "players": [
+        {
+          "name": "Caleb Foster",
+          "status": "Out - fractured right foot (surgery March 9)",
+          "impact": "Starting PG, 8.5 ppg, 40.4% 3PT, primary ball handler. Out until Final Four at earliest.",
+          "adj_em_impact": -3.2
+        },
+        {
+          "name": "Patrick Ngongba II",
+          "status": "Questionable - right foot soreness",
+          "impact": "Starting C, 10.7 ppg, 1.1 bpg, top rim protector. Expected back for NCAA opener.",
+          "adj_em_impact": -0.8
+        }
+      ],
+      "notes": "Duke operating with 7-man rotation. Cayden Boozer moves to starting PG.",
+      "override_date": "2026-03-15",
+      "news_flags": [
+        {
+          "headline": "Duke 'hopeful' Patrick Ngongba II can return in 2nd round",
+          "description": "Duke center Patrick Ngongba II could return from a foot injury for the Blue Devils' second-round game vs. TCU, coach Jon Scheyer said.",
+          "published": "2026-03-20",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48260813/duke-hopeful-patrick-ngongba-ii-return-2nd-round"
+        },
+        {
+          "headline": "Duke minus Patrick Ngongba (foot) for NCAA tournament opener",
+          "description": "Duke will open the NCAA tournament Thursday without big man Patrick Ngongba, who continues to recover from a foot injury, putting some added pressure on star freshman Cameron Boozer.",
+          "published": "2026-03-19",
+          "url": "https://www.espn.com/college-football/story/_/id/48241560/duke-likely-patrick-ngongba-ncaa-tournament-opener"
+        }
+      ],
+      "has_override": true,
+      "has_news_flag": true
+    },
+    "2641": {
+      "bracket_name": "Texas Tech",
+      "region": "Midwest",
+      "seed": 5,
+      "adj_em_penalty": 5.5,
+      "players": [
+        {
+          "name": "JT Toppin",
+          "status": "Out for season - torn ACL",
+          "impact": "All-America forward. Season-ending injury. Major loss.",
+          "adj_em_impact": -5.5
+        }
+      ],
+      "notes": "Ceiling significantly lower without Toppin per ESPN.",
+      "override_date": "2026-03-09",
+      "news_flags": [],
+      "has_override": true,
+      "has_news_flag": false
+    },
+    "2250": {
+      "bracket_name": "Gonzaga",
+      "region": "West",
+      "seed": 3,
+      "adj_em_penalty": 1.5,
+      "players": [
+        {
+          "name": "Braden Huff",
+          "status": "Questionable - left knee injury (out since Jan 15, targeting NCAA tournament return)",
+          "impact": "Leading scorer (17.8 ppg, 66.2% FG) \u2014 out since Jan 15. Gonzaga went 8-1 without him. Torvik rating already reflects 2 months of absence. Penalty reflects uncertainty about his readiness/effectiveness if he returns.",
+          "adj_em_impact": -1.5
+        }
+      ],
+      "notes": "Graham Ike (19.9 ppg) has stepped up. Huff could return for Round 1 (Mar 19-20) but game-ready status unknown. If confirmed fully available, remove this override.",
+      "override_date": "2026-03-15",
+      "news_flags": [],
+      "has_override": true,
+      "has_news_flag": false
     },
     "228": {
       "bracket_name": "Clemson",
@@ -121,44 +235,6 @@
       ],
       "has_override": true,
       "has_news_flag": true
-    },
-    "252": {
-      "bracket_name": "BYU",
-      "region": "West",
-      "seed": 6,
-      "adj_em_penalty": 4.5,
-      "players": [
-        {
-          "name": "Richie Saunders",
-          "status": "Out for season - torn ACL (Feb 14)",
-          "impact": "Star guard. Season-ending injury.",
-          "adj_em_impact": -4.5
-        }
-      ],
-      "notes": "BYU ceiling significantly lower without Saunders.",
-      "override_date": "2026-03-09",
-      "news_flags": [],
-      "has_override": true,
-      "has_news_flag": false
-    },
-    "2641": {
-      "bracket_name": "Texas Tech",
-      "region": "Midwest",
-      "seed": 5,
-      "adj_em_penalty": 5.5,
-      "players": [
-        {
-          "name": "JT Toppin",
-          "status": "Out for season - torn ACL",
-          "impact": "All-America forward. Season-ending injury. Major loss.",
-          "adj_em_impact": -5.5
-        }
-      ],
-      "notes": "Ceiling significantly lower without Toppin per ESPN.",
-      "override_date": "2026-03-09",
-      "news_flags": [],
-      "has_override": true,
-      "has_news_flag": false
     },
     "245": {
       "bracket_name": "Texas A&M",
@@ -198,69 +274,6 @@
       "has_override": true,
       "has_news_flag": false
     },
-    "150": {
-      "bracket_name": "Duke",
-      "region": "East",
-      "seed": 1,
-      "adj_em_penalty": 4.0,
-      "players": [
-        {
-          "name": "Caleb Foster",
-          "status": "Out - fractured right foot (surgery March 9)",
-          "impact": "Starting PG, 8.5 ppg, 40.4% 3PT, primary ball handler. Out until Final Four at earliest.",
-          "adj_em_impact": -3.2
-        },
-        {
-          "name": "Patrick Ngongba II",
-          "status": "Questionable - right foot soreness",
-          "impact": "Starting C, 10.7 ppg, 1.1 bpg, top rim protector. Expected back for NCAA opener.",
-          "adj_em_impact": -0.8
-        }
-      ],
-      "notes": "Duke operating with 7-man rotation. Cayden Boozer moves to starting PG.",
-      "override_date": "2026-03-15",
-      "news_flags": [
-        {
-          "headline": "Duke 'hopeful' Patrick Ngongba II can return in 2nd round",
-          "description": "Duke center Patrick Ngongba II could return from a foot injury for the Blue Devils' second-round game vs. TCU, coach Jon Scheyer said.",
-          "published": "2026-03-20",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48260813/duke-hopeful-patrick-ngongba-ii-return-2nd-round"
-        },
-        {
-          "headline": "Duke 'hopeful' Patrick Ngongba II can return in 2nd round",
-          "description": "Duke center Patrick Ngongba II could return from a foot injury for the Blue Devils' second-round game vs. TCU, coach Jon Scheyer said.",
-          "published": "2026-03-20",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48260813/duke-hopeful-patrick-ngongba-ii-return-2nd-round"
-        },
-        {
-          "headline": "Duke 'hopeful' Patrick Ngongba II can return in 2nd round",
-          "description": "Duke center Patrick Ngongba II could return from a foot injury for the Blue Devils' second-round game vs. TCU, coach Jon Scheyer said.",
-          "published": "2026-03-20",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48260813/duke-hopeful-patrick-ngongba-ii-return-2nd-round"
-        }
-      ],
-      "has_override": true,
-      "has_news_flag": true
-    },
-    "2250": {
-      "bracket_name": "Gonzaga",
-      "region": "West",
-      "seed": 3,
-      "adj_em_penalty": 1.5,
-      "players": [
-        {
-          "name": "Braden Huff",
-          "status": "Questionable - left knee injury (out since Jan 15, targeting NCAA tournament return)",
-          "impact": "Leading scorer (17.8 ppg, 66.2% FG) \u2014 out since Jan 15. Gonzaga went 8-1 without him. Torvik rating already reflects 2 months of absence. Penalty reflects uncertainty about his readiness/effectiveness if he returns.",
-          "adj_em_impact": -1.5
-        }
-      ],
-      "notes": "Graham Ike (19.9 ppg) has stepped up. Huff could return for Round 1 (Mar 19-20) but game-ready status unknown. If confirmed fully available, remove this override.",
-      "override_date": "2026-03-15",
-      "news_flags": [],
-      "has_override": true,
-      "has_news_flag": false
-    },
     "66": {
       "bracket_name": "Iowa State",
       "region": "Midwest",
@@ -275,49 +288,6 @@
           "description": "Iowa State senior forward Joshua Jefferson suffered a sprained left ankle in Friday's 108-74 win over Tennessee State.",
           "published": "2026-03-20",
           "url": "https://www.espn.com/mens-college-basketball/story/_/id/48261200/iowa-state-joshua-jefferson-hurt-early-ncaa-tournament"
-        },
-        {
-          "headline": "Iowa State's Joshua Jefferson sprains ankle in win; X-rays negative",
-          "description": "Iowa State senior forward Joshua Jefferson suffered a sprained left ankle in Friday's 108-74 win over Tennessee State.",
-          "published": "2026-03-20",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48261200/iowa-state-joshua-jefferson-hurt-early-ncaa-tournament"
-        },
-        {
-          "headline": "Iowa State's Joshua Jefferson sprains ankle in win; X-rays negative",
-          "description": "Iowa State senior forward Joshua Jefferson suffered a sprained left ankle in Friday's 108-74 win over Tennessee State.",
-          "published": "2026-03-20",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48261200/iowa-state-joshua-jefferson-hurt-early-ncaa-tournament"
-        }
-      ],
-      "has_override": false,
-      "has_news_flag": true
-    },
-    "2116": {
-      "bracket_name": "UCF",
-      "region": "East",
-      "seed": 10,
-      "adj_em_penalty": 0,
-      "players": [],
-      "notes": "",
-      "override_date": "",
-      "news_flags": [
-        {
-          "headline": "UCLA overcomes broken tooth and stubborn UCF 75-71 to advance in the NCAA Tournament",
-          "description": "\u2014 Mick Cronin raised a plastic cup to another NCAA Tournament victory for UCLA with an energy drink he brought with him to the podium.",
-          "published": "2026-03-21",
-          "url": "http://www.espn.com/ncb/recap?gameId=401856496"
-        },
-        {
-          "headline": "UCLA overcomes broken tooth and stubborn UCF 75-71 to advance in the NCAA Tournament",
-          "description": "\u2014 Mick Cronin raised a plastic cup to another NCAA Tournament victory for UCLA with an energy drink he brought with him to the podium.",
-          "published": "2026-03-21",
-          "url": "http://www.espn.com/ncb/recap?gameId=401856496"
-        },
-        {
-          "headline": "UCLA overcomes broken tooth and stubborn UCF 75-71 to advance in the NCAA Tournament",
-          "description": "\u2014 Mick Cronin raised a plastic cup to another NCAA Tournament victory for UCLA with an energy drink he brought with him to the podium.",
-          "published": "2026-03-21",
-          "url": "http://www.espn.com/ncb/recap?gameId=401856496"
         }
       ],
       "has_override": false,
