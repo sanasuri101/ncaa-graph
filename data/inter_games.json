@@ -45,6 +45,21 @@
     "venue": "Bon Secours Wellness Arena"
   },
   {
+    "id": "401856558",
+    "date": "2026-03-22",
+    "name": "St. John's Red Storm at Kansas Jayhawks",
+    "team1_id": "2305",
+    "team1_name": "Kansas Jayhawks",
+    "team1_score": "65",
+    "team1_winner": false,
+    "team2_id": "2599",
+    "team2_name": "St. John's Red Storm",
+    "team2_score": "67",
+    "team2_winner": true,
+    "neutral": true,
+    "venue": "Viejas Arena"
+  },
+  {
     "id": "401856482",
     "date": "2026-03-19",
     "name": "South Florida Bulls at Louisville Cardinals",
@@ -105,6 +120,21 @@
     "venue": "Xfinity Mobile Arena"
   },
   {
+    "id": "401856559",
+    "date": "2026-03-23",
+    "name": "UCLA Bruins at UConn Huskies",
+    "team1_id": "41",
+    "team1_name": "UConn Huskies",
+    "team1_score": "73",
+    "team1_winner": true,
+    "team2_id": "26",
+    "team2_name": "UCLA Bruins",
+    "team2_score": "57",
+    "team2_winner": false,
+    "neutral": true,
+    "venue": "Xfinity Mobile Arena"
+  },
+  {
     "id": "401856497",
     "date": "2026-03-21",
     "name": "Furman Paladins at UConn Huskies",
@@ -118,6 +148,21 @@
     "team2_winner": false,
     "neutral": true,
     "venue": "Xfinity Mobile Arena"
+  },
+  {
+    "id": "401856565",
+    "date": "2026-03-23",
+    "name": "Utah State Aggies at Arizona Wildcats",
+    "team1_id": "12",
+    "team1_name": "Arizona Wildcats",
+    "team1_score": "78",
+    "team1_winner": true,
+    "team2_id": "328",
+    "team2_name": "Utah State Aggies",
+    "team2_score": "66",
+    "team2_winner": false,
+    "neutral": true,
+    "venue": "Viejas Arena"
   },
   {
     "id": "401856528",
@@ -255,6 +300,21 @@
     "venue": "Enterprise Center"
   },
   {
+    "id": "401856564",
+    "date": "2026-03-22",
+    "name": "Miami Hurricanes at Purdue Boilermakers",
+    "team1_id": "2509",
+    "team1_name": "Purdue Boilermakers",
+    "team1_score": "79",
+    "team1_winner": true,
+    "team2_id": "2390",
+    "team2_name": "Miami Hurricanes",
+    "team2_score": "69",
+    "team2_winner": false,
+    "neutral": true,
+    "venue": "Enterprise Center"
+  },
+  {
     "id": "401856532",
     "date": "2026-03-21",
     "name": "Saint Louis Billikens at Michigan Wolverines",
@@ -300,6 +360,21 @@
     "venue": "Benchmark International Arena"
   },
   {
+    "id": "401856560",
+    "date": "2026-03-23",
+    "name": "Texas Tech Red Raiders at Alabama Crimson Tide",
+    "team1_id": "333",
+    "team1_name": "Alabama Crimson Tide",
+    "team1_score": "90",
+    "team1_winner": true,
+    "team2_id": "2641",
+    "team2_name": "Texas Tech Red Raiders",
+    "team2_score": "65",
+    "team2_winner": false,
+    "neutral": true,
+    "venue": "Benchmark International Arena"
+  },
+  {
     "id": "401856521",
     "date": "2026-03-20",
     "name": "Hofstra Pride at Alabama Crimson Tide",
@@ -326,6 +401,21 @@
     "team2_name": "Miami (OH) RedHawks",
     "team2_score": "56",
     "team2_winner": false,
+    "neutral": true,
+    "venue": "Xfinity Mobile Arena"
+  },
+  {
+    "id": "401856562",
+    "date": "2026-03-22",
+    "name": "Tennessee Volunteers at Virginia Cavaliers",
+    "team1_id": "258",
+    "team1_name": "Virginia Cavaliers",
+    "team1_score": "72",
+    "team1_winner": false,
+    "team2_id": "2633",
+    "team2_name": "Tennessee Volunteers",
+    "team2_score": "79",
+    "team2_winner": true,
     "neutral": true,
     "venue": "Xfinity Mobile Arena"
   },
@@ -375,6 +465,21 @@
     "venue": "Enterprise Center"
   },
   {
+    "id": "401856561",
+    "date": "2026-03-22",
+    "name": "Kentucky Wildcats at Iowa State Cyclones",
+    "team1_id": "66",
+    "team1_name": "Iowa State Cyclones",
+    "team1_score": "82",
+    "team1_winner": true,
+    "team2_id": "96",
+    "team2_name": "Kentucky Wildcats",
+    "team2_score": "63",
+    "team2_winner": false,
+    "neutral": true,
+    "venue": "Enterprise Center"
+  },
+  {
     "id": "401856524",
     "date": "2026-03-20",
     "name": "Tennessee State Tigers at Iowa State Cyclones",
@@ -388,6 +493,21 @@
     "team2_winner": false,
     "neutral": true,
     "venue": "Enterprise Center"
+  },
+  {
+    "id": "401856563",
+    "date": "2026-03-22",
+    "name": "Iowa Hawkeyes at Florida Gators",
+    "team1_id": "57",
+    "team1_name": "Florida Gators",
+    "team1_score": "72",
+    "team1_winner": false,
+    "team2_id": "2294",
+    "team2_name": "Iowa Hawkeyes",
+    "team2_score": "73",
+    "team2_winner": true,
+    "neutral": true,
+    "venue": "Benchmark International Arena"
   },
   {
     "id": "401856522",
