@@ -22,7 +22,7 @@
     <div class="brand-year">2026</div>
     <div class="brand-text">
       <div class="brand-title">NCAA <span class="brand-accent">Bracket Intelligence</span></div>
-      <div class="brand-sub" id="sub-stats">Loading…</div>
+      <div class="brand-sub" id="sub-stats">2026 NCAA Tournament</div>
     </div>
   </div>
   <nav class="main-nav">
@@ -41,6 +41,10 @@
     <button class="nav-btn" data-view="rankings">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
       Rankings
+    </button>
+    <button class="nav-btn" data-view="stats">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+      Stats
     </button>
     <button class="nav-btn" data-view="scout">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
@@ -250,6 +254,26 @@
           <div class="rankings-col-title" style="color:var(--midwest)">Overseeded</div>
           <div class="seed-div-hint" style="font-size:.7rem;margin-bottom:8px">Favorable draw</div>
           <div id="rp-rank-overseeded"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STATS VIEW — full page team stats -->
+  <div class="view" id="view-stats">
+    <div class="stats-page">
+      <div class="stats-page-header">
+        <div class="stats-page-title">Team Stats</div>
+        <div class="stats-page-picker">
+          <select id="stats-page-team-select"><option value="">Select a team…</option></select>
+          <button class="ai-action-btn" onclick="fetchStatsPageTeam()" title="Refresh">↻</button>
+        </div>
+      </div>
+      <div id="stats-page-output" class="stats-page-body">
+        <div class="scout-empty">
+          <div class="scout-empty-icon">📊</div>
+          <div class="scout-empty-text">Select a team to load their stats</div>
+          <div class="scout-empty-sub">ESPN box stats · Torvik efficiency · Four Factors</div>
         </div>
       </div>
     </div>

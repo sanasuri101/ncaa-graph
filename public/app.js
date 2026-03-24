@@ -1198,6 +1198,7 @@ function switchView(name) {
   }
   if (name === 'rankings') populateRankingsPage();
   if (name === 'scout' && window.initScoutView) initScoutView();
+  if (name === 'stats'  && window.populateStatsPageSelect) window.populateStatsPageSelect();
 }
 
 function populateRankingsPage() {

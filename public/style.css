@@ -5401,3 +5401,89 @@ section { margin-bottom: 20px; }
   .scout-left { display: none; }
 }
 
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   STATS VIEW — full page team stats
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+#view-stats {
+  overflow: hidden;
+}
+
+.stats-page {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+.stats-page-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 20px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  flex-shrink: 0;
+}
+
+.stats-page-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.1rem;
+  letter-spacing: .1em;
+  color: var(--text);
+  flex-shrink: 0;
+}
+
+.stats-page-picker {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  max-width: 360px;
+}
+
+.stats-page-picker select {
+  flex: 1;
+  height: 32px;
+  padding: 0 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg);
+  color: var(--text);
+  font-size: .78rem;
+  font-family: var(--font-body);
+  outline: none;
+  cursor: pointer;
+}
+
+.stats-page-picker select:focus { border-color: var(--accent); }
+
+.stats-page-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+/* Stats card inside the stats page gets more room */
+#stats-page-output .stats-card {
+  max-width: 100%;
+}
+
+#stats-page-output .stats-grid-2 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+@media (max-width: 700px) {
+  #stats-page-output .stats-grid-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
