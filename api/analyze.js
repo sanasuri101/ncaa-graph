@@ -18,7 +18,7 @@
  * Response: { agents: AgentResult[], confidence: ConfidenceResult, thinking: string[] }
  */
 
-import { readFileSync }                              from 'fs';
+import { readFileSync, statSync }                    from 'fs';
 import { join }                                      from 'path';
 import { Annotation, StateGraph, END, START, Send } from '@langchain/langgraph';
 
@@ -52,10 +52,31 @@ const CORS = {
 };
 
 // ── Data loading ──────────────────────────────────────────────────────────────
-let _cache = null;
+let _cache     = null;
+let _cacheMtime = 0;
+
+function getAnalyzeCacheMtime() {
+  const files = [
+    'public/data/torvik_stats.json',
+    'public/data/recent_form.json',
+    'public/data/espn_odds.json',
+    'data/injury_overrides.json',
+    'data/roster_stats.json',
+    'data/injury_news.json',
+  ];
+  let latest = 0;
+  for (const f of files) {
+    try {
+      const { mtimeMs } = statSync(join(process.cwd(), f));
+      if (mtimeMs > latest) latest = mtimeMs;
+    } catch {}
+  }
+  return latest;
+}
 
 function getData() {
-  if (_cache) return _cache;
+  const mtime = getAnalyzeCacheMtime();
+  if (_cache && mtime === _cacheMtime) return _cache;
   const graph  = JSON.parse(readFileSync(join(process.cwd(), 'public', 'data', 'graph_data.json'),  'utf8'));
   const torvik = JSON.parse(readFileSync(join(process.cwd(), 'public', 'data', 'torvik_stats.json'), 'utf8'));
   const form   = JSON.parse(readFileSync(join(process.cwd(), 'public', 'data', 'recent_form.json'),  'utf8'));
@@ -116,6 +137,7 @@ function getData() {
   } catch {}
 
   _cache = { graph, torvik, form, injuryMap, transPairs, nodeByName, edgesByNode, oddsData, injuryNews, rosterStats };
+  _cacheMtime = mtime;
   return _cache;
 }
 
@@ -260,7 +282,9 @@ function getRosterStats(teamId, rosterStats) {
 function fmtRoster(players) {
   if (!players?.length) return '';
   return players.map((p, i) => {
-    const injNote  = p.injured ? ` ⚠ ${p.injured}` : '';
+    const injNote  = p.injured
+      ? ` ⚠ ${p.injured}${p.injury_impact ? ' — ' + p.injury_impact : ''}`
+      : '';
     const ageStr   = p.age ? `, age ${p.age}` : '';
     const identity = `${p.name} (${p.exp}${ageStr}, ${p.pos}, ${p.height}, ${p.weight})`;
     const usage    = `${p.mpg} MPG | ${p.gp} GP / ${p.gs} GS`;
@@ -589,9 +613,32 @@ async function synthesisNode(state, config) {
 
   // Odds agent weight drops to 0 if no market data available yet
   const oddsAvailable = !(oddsResult.confidence === 'low' && oddsResult.key_edge === 'no market data');
-  const weights = oddsAvailable
-    ? { efficiency: 0.40, odds: 0.20, form: 0.20, matchup: 0.20 }
-    : { efficiency: 0.50, odds: 0.00, form: 0.25, matchup: 0.25 };
+
+  // Dynamic weighting: when market signal has high confidence and aligns with or dominates
+  // the efficiency model, increase market weight. When agents strongly disagree (spread > 20pp),
+  // weight toward the two closest-agreeing agents to reduce noise.
+  let weights;
+  if (!oddsAvailable) {
+    weights = { efficiency: 0.50, odds: 0.00, form: 0.25, matchup: 0.25 };
+  } else {
+    // Base weights
+    weights = { efficiency: 0.40, odds: 0.20, form: 0.20, matchup: 0.20 };
+
+    // If market confidence is high AND market-efficiency gap > 10pp, boost market weight
+    // Market aggregates injury info, travel, rest, and sharp money that models miss
+    const effPct   = safePct(effResult);
+    const oddsPct  = safePct(oddsResult);
+    const mktGap   = Math.abs(effPct - oddsPct);
+    const mktHighConf = oddsResult.confidence === 'high';
+
+    if (mktHighConf && mktGap > 10) {
+      // Market has strong signal diverging from pure efficiency — trust it more
+      weights = { efficiency: 0.30, odds: 0.35, form: 0.20, matchup: 0.15 };
+    } else if (mktGap < 5) {
+      // Market and efficiency agree closely — both reliable, slight efficiency boost
+      weights = { efficiency: 0.45, odds: 0.20, form: 0.20, matchup: 0.15 };
+    }
+  }
 
   const weightedPct = Math.round(
     (safePct(effResult)   * weights.efficiency) +

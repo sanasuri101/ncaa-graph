@@ -19,7 +19,7 @@
  *   blended  — 70% Barthag + 30% seed-implied probability
  */
 
-import { readFileSync } from 'fs';
+import { readFileSync, statSync } from 'fs';
 import { join }         from 'path';
 
 const CORS = {
@@ -29,9 +29,33 @@ const CORS = {
 };
 
 // ── Data ──────────────────────────────────────────────────────────────────────
-let _cache = null;
+let _cache     = null;
+let _cacheMtime = 0;
+
+function getCacheMtime() {
+  // Key cache to the mtime of the most-recently-modified data file
+  // If any file changed since last cache build, invalidate
+  const files = [
+    'data/all_games.json',
+    'data/bracket_config.json',
+    'public/data/torvik_stats.json',
+    'public/data/recent_form.json',
+    'data/injury_overrides.json',
+  ];
+  let latest = 0;
+  for (const f of files) {
+    try {
+      const { mtimeMs } = statSync(join(process.cwd(), f));
+      if (mtimeMs > latest) latest = mtimeMs;
+    } catch {}
+  }
+  return latest;
+}
+
 function getData() {
-  if (_cache) return _cache;
+  const mtime = getCacheMtime();
+  if (_cache && mtime === _cacheMtime) return _cache;
+  // Cache miss or stale — rebuild
   const graph    = JSON.parse(readFileSync(join(process.cwd(), 'public', 'data', 'graph_data.json'), 'utf8'));
   const torvik   = JSON.parse(readFileSync(join(process.cwd(), 'public', 'data', 'torvik_stats.json'), 'utf8'));
   const form     = JSON.parse(readFileSync(join(process.cwd(), 'public', 'data', 'recent_form.json'), 'utf8'));
@@ -77,6 +101,7 @@ function getData() {
   const actualResults = buildActualResults();
 
   _cache = { graph, torvik, form, trans, injuryMap, oppBarthag, actualResults };
+  _cacheMtime = mtime;
   return _cache;
 }
 

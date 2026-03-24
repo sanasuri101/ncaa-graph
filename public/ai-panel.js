@@ -1062,9 +1062,64 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
+
+// ── Dynamic hint pills from live upcoming games ───────────────────────────────
+async function populateScoutHints() {
+  const container = document.getElementById('scout-hint-pills');
+  if (!container) return;
+  try {
+    const res  = await fetch('data/espn_odds.json');
+    const data = await res.json();
+    const upcoming = Object.values(data.games || {})
+      .filter(g => !g.completed && g.home && g.away)
+      .sort((a, b) => (a.date || '').localeCompare(b.date || ''))
+      .slice(0, 3);
+
+    if (!upcoming.length) return;
+
+    const matchupPills = upcoming.map(g => {
+      const home = g.home?.split(' ').slice(-1)[0] || g.home;
+      const away = g.away?.split(' ').slice(-1)[0] || g.away;
+      const label = `${away} vs ${home}`;
+      return `<button class="hint-pill" onclick="scoutInsertHint('${g.away} vs ${g.home}')">${label} 🏀</button>`;
+    }).join('');
+
+    container.innerHTML = matchupPills +
+      `<button class="hint-pill" onclick="scoutInsertHint('Best upset picks remaining')">Upset picks</button>` +
+      `<button class="hint-pill" onclick="scoutInsertHint('Who are the Final Four favorites?')">Final Four</button>`;
+  } catch { /* keep static fallback */ }
+}
+
+// ── Dynamic hint pills from live upcoming games ───────────────────────────────
+async function populateScoutHints() {
+  const container = document.getElementById('scout-hint-pills');
+  if (!container) return;
+  try {
+    const res  = await fetch('data/espn_odds.json');
+    const data = await res.json();
+    const upcoming = Object.values(data.games || {})
+      .filter(g => !g.completed && g.home && g.away)
+      .sort((a, b) => (a.date || '').localeCompare(b.date || ''))
+      .slice(0, 3);
+    if (!upcoming.length) return;
+
+    const pills = upcoming.map(g => {
+      const homeShort = g.home.split(' ').pop();
+      const awayShort = g.away.split(' ').pop();
+      return `<button class="hint-pill" onclick="scoutInsertHint('${g.away} vs ${g.home}')">${awayShort} vs ${homeShort} 🏀</button>`;
+    }).join('');
+
+    container.innerHTML = pills +
+      '<button class="hint-pill" onclick="scoutInsertHint('Best upset picks remaining')">Upset picks</button>' +
+      '<button class="hint-pill" onclick="scoutInsertHint('Who are the Final Four favorites?')">Final Four</button>';
+  } catch { /* keep static fallback */ }
+}
+
+
 // ── Init scout view when activated ───────────────────────────────────────────
 function initScoutView() {
   populateScoutTeamSelect();
+  populateScoutHints();
 }
 
 // Expose

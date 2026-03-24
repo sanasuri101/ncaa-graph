@@ -61,7 +61,7 @@ def fetch_player(aid):
         sData = fs.result()
     return aData, sData
 
-def process_team(team):
+def process_team(team, injury_overrides=None):
     tid  = team['espn_id']
     name = team['bracket_name']
 
@@ -127,6 +127,7 @@ def process_team(team):
 
         return {
             'name':     aData.get('displayName', '?'),
+            'injury_impact': '',
             'pos':      pos,
             'height':   height,
             'weight':   weight,
@@ -158,6 +159,19 @@ def process_team(team):
 
     # Sort by MPG descending
     players.sort(key=lambda p: p['mpg'], reverse=True)
+
+    # Cross-reference injury_overrides.json — ESPN often marks injured players as 'active'
+    team_overrides = (injury_overrides or {}).get(str(tid), {})
+    for p in players:
+        if not p.get('injured') and team_overrides:
+            pname_lower = p['name'].lower()
+            override = team_overrides.get(pname_lower)
+            if not override:
+                last = pname_lower.split()[-1]
+                override = next((v for k, v in team_overrides.items() if k.split()[-1] == last), None)
+            if override:
+                p['injured'] = override.get('status', 'Injured - see override')
+                p['injury_impact'] = override.get('impact', '')
     print(f'  {name} ({tid}): {len(players)} players fetched', flush=True)
 
     return tid, {
@@ -168,19 +182,32 @@ def process_team(team):
     }
 
 def main():
-    cfg_path  = Path(__file__).parent.parent / 'data' / 'bracket_config.json'
-    out_path  = Path(__file__).parent.parent / 'data' / 'roster_stats.json'
-    pub_path  = Path(__file__).parent.parent / 'public' / 'data' / 'roster_stats.json'
+    cfg_path      = Path(__file__).parent.parent / 'data' / 'bracket_config.json'
+    out_path      = Path(__file__).parent.parent / 'data' / 'roster_stats.json'
+    pub_path      = Path(__file__).parent.parent / 'public' / 'data' / 'roster_stats.json'
+    overrides_path= Path(__file__).parent.parent / 'data' / 'injury_overrides.json'
 
     cfg    = json.loads(cfg_path.read_text())
     teams  = cfg['bracket']
+
+    # Load injury overrides — ESPN often marks injured players as 'active'
+    # Build: team_id -> { player_name_lower -> override_dict }
+    injury_overrides = {}
+    try:
+        raw = json.loads(overrides_path.read_text())
+        for tid, ov in raw.get('overrides', {}).items():
+            injury_overrides[tid] = {
+                p['name'].lower(): p for p in ov.get('players', [])
+            }
+    except Exception as e:
+        print(f'Warning: injury_overrides.json: {e}')
     print(f'Fetching rosters for {len(teams)} bracket teams with {WORKERS} workers...', flush=True)
 
     result = {}
     t0 = time.time()
 
     with ThreadPoolExecutor(max_workers=WORKERS) as ex:
-        futs = {ex.submit(process_team, t): t for t in teams}
+        futs = {ex.submit(process_team, t, injury_overrides): t for t in teams}
         done = 0
         for fut in as_completed(futs):
             done += 1
