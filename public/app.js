@@ -1177,7 +1177,7 @@ function initMobileFirstImpression() {
 
 // ── View switching (nav tabs) ─────────────────────────────────────────────────
 function switchView(name) {
-  // Show/hide top-level views
+  // Show/hide views
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
   const target = document.getElementById(`view-${name}`);
   if (target) target.classList.add('active');
@@ -1187,25 +1187,30 @@ function switchView(name) {
   const nb = document.querySelector(`.nav-btn[data-view="${name}"]`);
   if (nb) nb.classList.add('active');
 
-  // When graph view is activated, trigger a resize so vis.js repaints correctly
+  // ai-panel is ONLY allowed open on the graph view
+  // On every other view, close it and hide the toggle button
+  const panel     = document.getElementById('ai-panel');
+  const aiToggle  = document.getElementById('ai-toggle');
+  if (name === 'graph') {
+    // Show toggle button so user can open the panel on graph view
+    if (aiToggle) aiToggle.style.display = '';
+    // Re-open if it was open before leaving graph
+    if (panel && panel._graphWasOpen) { panel.classList.add('open'); panel._graphWasOpen = false; }
+  } else {
+    // Save open state, then close and hide
+    if (panel) {
+      panel._graphWasOpen = panel.classList.contains('open');
+      panel.classList.remove('open');
+    }
+    if (aiToggle) aiToggle.style.display = 'none';
+  }
+
+  // View-specific init
   if (name === 'graph' && window.network) {
     setTimeout(() => { try { window.network.redraw(); window.network.fit(); } catch(e) {} }, 50);
   }
-
-  // When rankings view is activated, populate the standalone rankings columns
   if (name === 'rankings') populateRankingsPage();
-
-  // When scout view is activated, init team selects
-  // Also hide the ai-panel sidebar — Scout IS the full-page chat
-  if (name === 'scout' && window.initScoutView) {
-    initScoutView();
-    const panel = document.getElementById('ai-panel');
-    if (panel) { panel._wasOpen = panel.classList.contains('open'); panel.classList.remove('open'); }
-  } else {
-    // Restore panel if it was open before switching to scout
-    const panel = document.getElementById('ai-panel');
-    if (panel && panel._wasOpen) { panel.classList.add('open'); panel._wasOpen = false; }
-  }
+  if (name === 'scout' && window.initScoutView) initScoutView();
 }
 
 function populateRankingsPage() {

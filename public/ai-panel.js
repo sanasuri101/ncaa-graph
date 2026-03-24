@@ -778,29 +778,99 @@ function populateScoutTeamSelect() {
 
 // ── Fetch + render team stats into scout left panel ───────────────────────────
 async function fetchScoutTeamStats(teamId) {
-  const sel    = document.getElementById('scout-team-select');
-  const id     = teamId || sel?.value;
+  const sel = document.getElementById('scout-team-select');
+  const id  = teamId || sel?.value;
   if (!id) return;
 
-  // Sync the select to show correct team
   if (sel && sel.value !== id) sel.value = id;
 
   const output = document.getElementById('scout-stats-output');
   const node   = ALL_NODES?.find(n => n.id === id);
-  if (!output) return;
+  if (!output || !node) return;
 
   output.innerHTML = loadingHTML('Loading stats…');
 
-  // Re-use the existing stats fetching logic from fetchTeamStats
-  // by temporarily setting the main stats-team-select and calling it
-  // then reading the rendered HTML and cloning it here
-  const mainSel = document.getElementById('stats-team-select');
-  const mainOut = document.getElementById('stats-output');
-  if (mainSel && mainOut) {
-    mainSel.value = id;
-    await fetchTeamStats();
-    // Clone rendered HTML into scout panel
-    output.innerHTML = mainOut.innerHTML;
+  const ctrl  = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), 10000);
+
+  try {
+    const [espnRes, tData] = await Promise.all([
+      fetch(
+        `https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/teams/${id}/statistics`,
+        { signal: ctrl.signal }
+      ),
+      window.getTorvik(),
+    ]);
+    clearTimeout(timer);
+
+    const espnData = await espnRes.json();
+    const cats     = espnData?.results?.stats?.categories ?? [];
+    const statsMap = {};
+    cats.forEach(cat => { cat.stats.forEach(s => { statsMap[`${cat.name}:${s.name}`] = s; }); });
+    const get = (cat, name) => statsMap[`${cat}:${name}`]?.displayValue ?? '—';
+    const pct = (cat, name) => { const v = get(cat, name); return v === '—' ? '—' : v + '%'; };
+
+    let record = `${node.wins_vs_field}W vs bracket field`;
+    try {
+      const ctrl2 = new AbortController();
+      setTimeout(() => ctrl2.abort(), 5000);
+      const tr = await fetch(
+        `https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/teams/${id}`,
+        { signal: ctrl2.signal }
+      );
+      const td = await tr.json();
+      record   = td?.team?.record?.items?.[0]?.summary ?? record;
+    } catch (_) {}
+
+    const tv     = tData?.teams?.[id]?.torvik ?? null;
+    const rgbMap = { East: '#4a7fb5', West: '#3a8c6e', South: '#b89030', Midwest: '#b84545' };
+    const rc     = rgbMap[node.region] ?? '#b0a898';
+
+    const tBlock = tv ? `
+      <div class="stats-section-label">TORVIK T-RANK</div>
+      <div class="stats-grid-2">
+        <div class="stat-cell torvik-cell"><div class="sv torvik-rank">#${tv.rank}</div><div class="sl">T-Rank</div></div>
+        <div class="stat-cell torvik-cell"><div class="sv" style="color:var(--accent)">${tv.adj_em > 0 ? '+' : ''}${tv.adj_em}</div><div class="sl">AdjEM</div></div>
+        <div class="stat-cell torvik-cell"><div class="sv" style="color:var(--west)">${tv.adj_oe}</div><div class="sl">AdjOE</div></div>
+        <div class="stat-cell torvik-cell"><div class="sv" style="color:var(--midwest)">${tv.adj_de}</div><div class="sl">AdjDE</div></div>
+        <div class="stat-cell torvik-cell"><div class="sv">${(tv.barthag * 100).toFixed(1)}%</div><div class="sl">Barthag</div></div>
+        <div class="stat-cell torvik-cell"><div class="sv">${tv.wab > 0 ? '+' : ''}${parseFloat(tv.wab).toFixed(1)}</div><div class="sl">WAB</div></div>
+        <div class="stat-cell torvik-cell"><div class="sv">${tv.adj_tempo != null ? (tv.adj_tempo >= 0.8 ? 'Fast' : tv.adj_tempo >= 0.6 ? 'Mod.' : 'Slow') + ' (' + tv.adj_tempo.toFixed(2) + ')' : '—'}</div><div class="sl">Pace</div></div>
+        <div class="stat-cell torvik-cell"><div class="sv">${tv.luck > 0 ? '+' : ''}${parseFloat(tv.luck).toFixed(3)}</div><div class="sl">Luck</div></div>
+        <div class="stat-cell torvik-cell"><div class="sv">${tv.two_p != null ? tv.two_p + '%' : '—'}</div><div class="sl">2P%</div></div>
+        <div class="stat-cell torvik-cell"><div class="sv">${tv.three_p != null ? tv.three_p + '%' : '—'}</div><div class="sl">3P%</div></div>
+        <div class="stat-cell torvik-cell"><div class="sv">${tv.ft_pct != null ? tv.ft_pct + '%' : '—'}</div><div class="sl">FT%</div></div>
+        <div class="stat-cell torvik-cell"><div class="sv">${tv.efg != null ? tv.efg + '%' : '—'}</div><div class="sl">eFG%</div></div>
+      </div>` : `<div class="torvik-missing">Torvik data unavailable</div>`;
+
+    output.innerHTML = `
+      <div class="stats-card">
+        <div class="stats-card-name" style="border-left:3px solid ${rc};padding-left:8px">${node.full_name}</div>
+        <div class="stats-card-sub">${node.region} · Seed #${node.seed} · ${record}</div>
+        <div class="stats-section-label">ESPN BOX STATS</div>
+        <div class="stats-grid-2">
+          <div class="stat-cell"><div class="sv">${get('offensive','avgPoints')}</div><div class="sl">PPG</div></div>
+          <div class="stat-cell"><div class="sv">${get('general','avgRebounds')}</div><div class="sl">RPG</div></div>
+          <div class="stat-cell"><div class="sv">${get('offensive','avgAssists')}</div><div class="sl">APG</div></div>
+          <div class="stat-cell"><div class="sv">${get('offensive','avgTurnovers')}</div><div class="sl">TOPG</div></div>
+          <div class="stat-cell"><div class="sv">${pct('offensive','fieldGoalPct')}</div><div class="sl">FG%</div></div>
+          <div class="stat-cell"><div class="sv">${pct('offensive','threePointFieldGoalPct')}</div><div class="sl">3P%</div></div>
+          <div class="stat-cell"><div class="sv">${pct('offensive','twoPointFieldGoalPct')}</div><div class="sl">2P%</div></div>
+          <div class="stat-cell"><div class="sv">${pct('offensive','freeThrowPct')}</div><div class="sl">FT%</div></div>
+          <div class="stat-cell"><div class="sv">${get('general','assistTurnoverRatio')}</div><div class="sl">AST/TO</div></div>
+          <div class="stat-cell"><div class="sv">${get('defensive','avgSteals')}</div><div class="sl">SPG</div></div>
+          <div class="stat-cell"><div class="sv">${get('defensive','avgBlocks')}</div><div class="sl">BPG</div></div>
+          <div class="stat-cell"><div class="sv">${get('offensive','avgThreePointFieldGoalsMade')} / ${get('offensive','avgThreePointFieldGoalsAttempted')}</div><div class="sl">3PM/A</div></div>
+        </div>
+        ${tBlock}
+      </div>
+      <div style="font-size:.62rem;color:var(--text-mute);margin-top:4px;line-height:1.5">
+        ESPN: 2025-26 season · Torvik: ${tData?.generated_at?.slice(0,10) ?? 'recent'}
+      </div>`;
+
+  } catch (err) {
+    clearTimeout(timer);
+    output.innerHTML = `<div class="ai-error">Failed: ${err.name === 'AbortError' ? 'Timed out' : err.message}</div>`;
   }
 }
 
@@ -944,6 +1014,14 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
     input.addEventListener('input', () => autoGrowTextarea(input));
+  }
+
+  // Wire scout team select change
+  const scoutSel = document.getElementById('scout-team-select');
+  if (scoutSel) {
+    scoutSel.addEventListener('change', () => {
+      if (scoutSel.value) fetchScoutTeamStats(scoutSel.value);
+    });
   }
 });
 

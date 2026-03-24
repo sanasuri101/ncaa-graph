@@ -74,8 +74,57 @@ function getData() {
   let oppBarthag = {};
   try { oppBarthag = JSON.parse(readFileSync(join(process.cwd(), 'data', 'opp_barthag.json'), 'utf8')).opp_barthag ?? {}; } catch {}
 
-  _cache = { graph, torvik, form, trans, injuryMap, oppBarthag };
+  const actualResults = buildActualResults();
+
+  _cache = { graph, torvik, form, trans, injuryMap, oppBarthag, actualResults };
   return _cache;
+}
+
+// ── Actual tournament results ─────────────────────────────────────────────────
+// Reads all_games.json, finds completed tournament games, builds a lookup map
+// keyed by sorted ESPN team ID pair so any two teams can be looked up fast.
+function buildActualResults() {
+  let allGames = [];
+  try { allGames = JSON.parse(readFileSync(join(process.cwd(), 'data', 'all_games.json'), 'utf8')); } catch { return { gameResults: {}, eliminated: {} }; }
+
+  let bracketIds = new Set();
+  try {
+    const cfg = JSON.parse(readFileSync(join(process.cwd(), 'data', 'bracket_config.json'), 'utf8'));
+    cfg.bracket.forEach(t => bracketIds.add(String(t.espn_id)));
+  } catch {}
+
+  const gameResults = {};
+  const eliminated  = {};
+  const winners     = {};
+
+  allGames
+    .filter(g => g.date >= '2026-03-17')
+    .sort((a, b) => a.date.localeCompare(b.date))
+    .forEach(g => {
+      const t1 = String(g.team1_id), t2 = String(g.team2_id);
+      if (!bracketIds.has(t1) && !bracketIds.has(t2)) return;
+
+      const winnerId    = g.team1_winner ? t1 : t2;
+      const loserId     = g.team1_winner ? t2 : t1;
+      const winnerScore = g.team1_winner ? g.team1_score : g.team2_score;
+      const loserScore  = g.team1_winner ? g.team2_score : g.team1_score;
+      const winnerName  = g.team1_winner ? g.team1_name  : g.team2_name;
+      const loserName   = g.team1_winner ? g.team2_name  : g.team1_name;
+
+      winners[winnerId]   = true;
+      eliminated[loserId] = { oppName: winnerName, winnerScore, loserScore, date: g.date };
+
+      const key = [t1, t2].sort().join('_');
+      gameResults[key] = { winnerId, winnerName, loserName, winnerScore, loserScore, date: g.date };
+    });
+
+  return { gameResults, eliminated };
+}
+
+function lookupActual(teamA, teamB, actualResults) {
+  if (!actualResults?.gameResults) return null;
+  const key = [String(teamA.id), String(teamB.id)].sort().join('_');
+  return actualResults.gameResults[key] ?? null;
 }
 
 // ── Seed matchup table: standard NCAA bracket pairing ─────────────────────────
@@ -407,7 +456,7 @@ function pickWinner(teamA, teamB, prob, model) {
 }
 
 // ── Build one region's bracket ────────────────────────────────────────────────
-function simulateRegion(regionName, nodes, torvik, model, form, trans, injuryMap, oppBarthag) {
+function simulateRegion(regionName, nodes, torvik, model, form, trans, injuryMap, oppBarthag, actualResults) {
   // Collect seeded teams, resolve play-in games first
   const bySlot = {}; // slot = seed (1-16 after play-ins resolved)
   const playIns = [];
@@ -445,31 +494,49 @@ function simulateRegion(regionName, nodes, torvik, model, form, trans, injuryMap
 
   const rounds = []; // rounds[0] = R64, rounds[1] = R32, rounds[2] = S16, rounds[3] = E8
 
-  // Round 1 — seed pairs
+  // Round 1 — lock actual results, predict the rest
   let survivors = [];
   const r1 = [];
   for (const [sA, sB] of SEED_PAIRS_R1) {
-    const teamA = bySlot[sA];
-    const teamB = bySlot[sB];
-    const prob  = winProb(teamA, teamB, torvik, model, 0, form, trans, injuryMap, oppBarthag);
-    const winner = pickWinner(teamA, teamB, prob, model);
-    const winnerProb = winner === teamA ? prob : 1 - prob;
-    r1.push({ teamA, teamB, winner, prob: Math.max(winnerProb, 1 - winnerProb), winnerSide: winner === teamA ? 'A' : 'B' });
+    const teamA  = bySlot[sA];
+    const teamB  = bySlot[sB];
+    const actual = lookupActual(teamA, teamB, actualResults);
+    let winner, prob, isPrediction;
+    if (actual) {
+      winner       = actual.winnerId === String(teamA.id) ? teamA : teamB;
+      prob         = 1;
+      isPrediction = false;
+    } else {
+      prob         = winProb(teamA, teamB, torvik, model, 0, form, trans, injuryMap, oppBarthag);
+      winner       = pickWinner(teamA, teamB, prob, model);
+      prob         = Math.max(winner === teamA ? prob : 1 - prob, 0.01);
+      isPrediction = true;
+    }
+    r1.push({ teamA, teamB, winner, prob, isPrediction, actual: actual ?? null });
     survivors.push(winner);
   }
   rounds.push(r1);
 
-  // Rounds 2-4 — winners advance
+  // Rounds 2-4 — lock actuals, predict rest
   for (let round = 1; round <= 3; round++) {
-    const next = [];
+    const next   = [];
     const rGames = [];
     for (let i = 0; i < survivors.length; i += 2) {
-      const teamA = survivors[i];
-      const teamB = survivors[i + 1];
-      const prob  = winProb(teamA, teamB, torvik, model, round, form, trans, injuryMap, oppBarthag);
-      const winner = pickWinner(teamA, teamB, prob, model);
-      const winnerProb = winner === teamA ? prob : 1 - prob;
-      rGames.push({ teamA, teamB, winner, prob: Math.max(winnerProb, 1 - winnerProb), winnerSide: winner === teamA ? 'A' : 'B' });
+      const teamA  = survivors[i];
+      const teamB  = survivors[i + 1];
+      const actual = lookupActual(teamA, teamB, actualResults);
+      let winner, prob, isPrediction;
+      if (actual) {
+        winner       = actual.winnerId === String(teamA.id) ? teamA : teamB;
+        prob         = 1;
+        isPrediction = false;
+      } else {
+        prob         = winProb(teamA, teamB, torvik, model, round, form, trans, injuryMap, oppBarthag);
+        winner       = pickWinner(teamA, teamB, prob, model);
+        prob         = Math.max(winner === teamA ? prob : 1 - prob, 0.01);
+        isPrediction = true;
+      }
+      rGames.push({ teamA, teamB, winner, prob, isPrediction, actual: actual ?? null });
       next.push(winner);
     }
     rounds.push(rGames);
@@ -480,7 +547,7 @@ function simulateRegion(regionName, nodes, torvik, model, form, trans, injuryMap
 }
 
 // ── Full bracket simulation ───────────────────────────────────────────────────
-function simulateBracket(model, graph, torvik, form, trans, injuryMap, oppBarthag) {
+function simulateBracket(model, graph, torvik, form, trans, injuryMap, oppBarthag, actualResults) {
   const REGIONS = ['East', 'West', 'South', 'Midwest'];
   const nodesByRegion = {};
   REGIONS.forEach(r => {
@@ -489,7 +556,7 @@ function simulateBracket(model, graph, torvik, form, trans, injuryMap, oppBartha
 
   const regionResults = {};
   REGIONS.forEach(r => {
-    regionResults[r] = simulateRegion(r, nodesByRegion[r], torvik, model, form, trans, injuryMap, oppBarthag);
+    regionResults[r] = simulateRegion(r, nodesByRegion[r], torvik, model, form, trans, injuryMap, oppBarthag, actualResults);
   });
 
   // Final Four: East vs West, South vs Midwest (standard bracket)
@@ -545,12 +612,12 @@ export default async function handler(req, res) {
     res.end(JSON.stringify({ error: 'Invalid JSON' })); return;
   }
 
-  const model = ['evidence', 'upset'].includes(body.model)
+  const model = ['evidence', 'upset', 'market'].includes(body.model)
     ? body.model : 'evidence';
 
   try {
-    const { graph, torvik, form, trans, injuryMap, oppBarthag } = getData();
-    const result = simulateBracket(model, graph, torvik, form, trans, injuryMap, oppBarthag);
+    const { graph, torvik, form, trans, injuryMap, oppBarthag, actualResults } = getData();
+    const result = simulateBracket(model, graph, torvik, form, trans, injuryMap, oppBarthag, actualResults);
     res.writeHead(200, { 'Content-Type': 'application/json', ...CORS });
     res.end(JSON.stringify(result));
   } catch (err) {

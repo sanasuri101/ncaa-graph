@@ -188,45 +188,64 @@ function renderCenter(data) {
 }
 
 // ── Individual game slot ──────────────────────────────────────────────────────
-function gameSlot(game, regionName, roundIdx) {
+function gameSlot(game, regionName) {
   if (!game) return '<div class="br-slot br-slot-empty"></div>';
-  const rc = RC[regionName];
-  return `<div class="br-slot" data-prob="${game.prob}" title="">
-    ${teamLine(game.teamA, game.winner, game.prob, rc)}
-    ${teamLine(game.teamB, game.winner, game.prob, rc)}
+  const rc      = RC[regionName];
+  const isActual = game.isPrediction === false;
+  const cls     = isActual ? 'br-slot-actual' : 'br-slot-pred';
+  const badge   = isActual ? '<span class="br-actual-badge">FINAL</span>' : '';
+  return `<div class="br-slot ${cls}" data-prob="${game.prob}" data-actual="${isActual}">
+    ${badge}
+    ${teamLine(game.teamA, game.winner, game.prob, rc, isActual, game.actual)}
+    ${teamLine(game.teamB, game.winner, game.prob, rc, isActual, game.actual)}
   </div>`;
 }
 
 function finalFourSlot(game, label) {
   if (!game) return '';
-  const rcA = RC[game.teamA?.region] || 'var(--accent)';
-  const rcB = RC[game.teamB?.region] || 'var(--accent)';
-  return `<div class="br-slot br-slot-ff" data-prob="${game.prob}">
-    <div class="br-slot-sublabel">${label}</div>
-    ${teamLine(game.teamA, game.winner, game.prob, rcA)}
-    ${teamLine(game.teamB, game.winner, game.prob, rcB)}
+  const rcA     = RC[game.teamA?.region] || 'var(--accent)';
+  const rcB     = RC[game.teamB?.region] || 'var(--accent)';
+  const isActual = game.isPrediction === false;
+  const cls     = isActual ? 'br-slot-actual' : 'br-slot-pred';
+  const badge   = isActual ? ' · FINAL' : '';
+  return `<div class="br-slot br-slot-ff ${cls}" data-prob="${game.prob}" data-actual="${isActual}">
+    <div class="br-slot-sublabel">${label}${badge}</div>
+    ${teamLine(game.teamA, game.winner, game.prob, rcA, isActual, game.actual)}
+    ${teamLine(game.teamB, game.winner, game.prob, rcB, isActual, game.actual)}
   </div>`;
 }
 
 function champSlot(game) {
   if (!game) return '';
-  const rcA = RC[game.teamA?.region] || 'var(--accent)';
-  const rcB = RC[game.teamB?.region] || 'var(--accent)';
-  return `<div class="br-slot br-slot-champ" data-prob="${game.prob}">
-    ${teamLine(game.teamA, game.winner, game.prob, rcA)}
-    ${teamLine(game.teamB, game.winner, game.prob, rcB)}
+  const rcA     = RC[game.teamA?.region] || 'var(--accent)';
+  const rcB     = RC[game.teamB?.region] || 'var(--accent)';
+  const isActual = game.isPrediction === false;
+  const cls     = isActual ? 'br-slot-actual' : 'br-slot-pred';
+  return `<div class="br-slot br-slot-champ ${cls}" data-prob="${game.prob}" data-actual="${isActual}">
+    ${teamLine(game.teamA, game.winner, game.prob, rcA, isActual, game.actual)}
+    ${teamLine(game.teamB, game.winner, game.prob, rcB, isActual, game.actual)}
   </div>`;
 }
 
-function teamLine(team, winner, prob, rc) {
+function teamLine(team, winner, prob, rc, isActual, actual) {
   if (!team) return '<div class="br-team-line br-tbd"><span class="br-seed-num"></span><span class="br-team-nm">TBD</span></div>';
   const isWinner = winner && team.id === winner.id;
   const isTBD    = team.id?.startsWith('tbd-');
-  const pct      = isWinner ? `<span class="br-win-pct">${(prob * 100).toFixed(0)}%</span>` : '';
   const seedNum  = team.seed != null ? `<span class="br-seed-num">${team.seed}</span>` : '';
-  return `<div class="br-team-line ${isWinner ? 'br-winner-line' : 'br-loser-line'} ${isTBD ? 'br-tbd' : ''}"
+
+  // Trailer: actual score OR predicted win%
+  let trailer = '';
+  if (isActual && actual) {
+    const score = isWinner ? actual.winnerScore : actual.loserScore;
+    trailer = `<span class="br-score">${score}</span>`;
+  } else if (!isActual && isWinner) {
+    trailer = `<span class="br-win-pct">${(prob * 100).toFixed(0)}%</span>`;
+  }
+
+  const elimCls = isActual && !isWinner ? 'br-eliminated' : '';
+  return `<div class="br-team-line ${isWinner ? 'br-winner-line' : 'br-loser-line'} ${elimCls} ${isTBD ? 'br-tbd' : ''}"
     style="${isWinner ? `border-left:2px solid ${rc}` : ''}">
-    ${seedNum}<span class="br-team-nm">${team.label}</span>${pct}
+    ${seedNum}<span class="br-team-nm">${team.label}</span>${trailer}
   </div>`;
 }
 
@@ -240,8 +259,8 @@ function renderPlayIns(data) {
     const rc = RC[pi.region];
     return `<div class="br-playin-card">
       <div class="br-playin-header" style="color:${rc}">${pi.region} · #${pi.seed}</div>
-      ${teamLine(pi.teamA, pi.winner, pi.prob, rc)}
-      ${teamLine(pi.teamB, pi.winner, pi.prob, rc)}
+      ${teamLine(pi.teamA, pi.winner, pi.prob, rc, false, null)}
+      ${teamLine(pi.teamB, pi.winner, pi.prob, rc, false, null)}
     </div>`;
   }).join('');
 
@@ -254,11 +273,15 @@ function renderPlayIns(data) {
 // ── Tooltips ──────────────────────────────────────────────────────────────────
 function bindTooltips() {
   document.querySelectorAll('.br-slot[data-prob]').forEach(el => {
-    const prob   = parseFloat(el.dataset.prob);
-    if (!prob) return;
-    const winner = el.querySelector('.br-winner-line .br-team-nm')?.textContent;
-    const loser  = el.querySelector('.br-loser-line .br-team-nm')?.textContent;
-    if (winner) el.title = `${winner} wins · ${(prob * 100).toFixed(1)}% · ${loser || '?'} eliminated`;
+    const isActual = el.dataset.actual === 'true';
+    const winner   = el.querySelector('.br-winner-line .br-team-nm')?.textContent?.trim();
+    const loser    = el.querySelector('.br-loser-line .br-team-nm')?.textContent?.trim();
+    const wScore   = el.querySelector('.br-winner-line .br-score')?.textContent?.trim();
+    const lScore   = el.querySelector('.br-loser-line .br-score')?.textContent?.trim();
+    if (!winner) return;
+    el.title = isActual && wScore
+      ? `FINAL: ${winner} ${wScore} · ${loser} ${lScore}`
+      : `Predicted: ${winner} wins ${(parseFloat(el.dataset.prob)*100).toFixed(0)}%`;
   });
 }
 
