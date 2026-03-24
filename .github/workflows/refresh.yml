@@ -33,6 +33,9 @@ jobs:
       - name: Fetch injury news flags
         run: python scripts/fetch_injuries.py
 
+      - name: Fetch roster stats for all bracket teams
+        run: python scripts/fetch_rosters.py
+
       - name: Recompute transitive analysis
         run: python scripts/compute_transitive.py
 
@@ -40,6 +43,7 @@ jobs:
         run: |
           mkdir -p public/data
           cp data/graph_data.json          public/data/graph_data.json
+          cp data/roster_stats.json        public/data/roster_stats.json
           cp data/not_played.json          public/data/not_played.json
           cp data/recent_form.json         public/data/recent_form.json
           cp data/torvik_stats.json        public/data/torvik_stats.json
