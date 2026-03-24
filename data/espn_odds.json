@@ -1,0 +1,2758 @@
+{
+  "generated_at": "2026-03-24T08:23:30.604997+00:00",
+  "games": {
+    "401856435": {
+      "game_id": "401856435",
+      "date": "2026-03-17",
+      "name": "UMBC Retrievers at Howard Bison",
+      "home_id": "47",
+      "away_id": "2378",
+      "home_name": "Howard Bison",
+      "away_name": "UMBC Retrievers",
+      "completed": true,
+      "neutral": true,
+      "odds": {
+        "source": "core_odds",
+        "provider": "Draft Kings",
+        "spread": -1.5,
+        "over_under": 143.5,
+        "over_odds": -110.0,
+        "under_odds": -110.0,
+        "home_moneyline": -112,
+        "away_moneyline": -108,
+        "home_implied_pct": 52.8,
+        "away_implied_pct": 51.9,
+        "open_home_ml": "EVEN",
+        "open_away_ml": "-120",
+        "line_movement": null
+      },
+      "bpi": {
+        "home_bpi_win_pct": 44.1,
+        "away_bpi_win_pct": 55.9,
+        "bpi_pred_margin": -1.5,
+        "matchup_quality": 41.3,
+        "last_modified": "2026-03-17T08:04Z"
+      }
+    },
+    "401856434": {
+      "game_id": "401856434",
+      "date": "2026-03-18",
+      "name": "Texas Longhorns at NC State Wolfpack",
+      "home_id": "152",
+      "away_id": "251",
+      "home_name": "NC State Wolfpack",
+      "away_name": "Texas Longhorns",
+      "completed": true,
+      "neutral": true,
+      "odds": {
+        "source": "core_odds",
+        "provider": "Draft Kings",
+        "spread": -1.5,
+        "over_under": 157.5,
+        "over_odds": -110.0,
+        "under_odds": -110.0,
+        "home_moneyline": -120,
+        "away_moneyline": 100,
+        "home_implied_pct": 54.5,
+        "away_implied_pct": 50.0,
+        "open_home_ml": "-120",
+        "open_away_ml": "EVEN",
+        "line_movement": 0.0
+      },
+      "bpi": {
+        "home_bpi_win_pct": 50.2,
+        "away_bpi_win_pct": 49.8,
+        "bpi_pred_margin": 0.1,
+        "matchup_quality": 83.1,
+        "last_modified": "2026-03-17T08:04Z"
+      }
+    },
+    "401856437": {
+      "game_id": "401856437",
+      "date": "2026-03-18",
+      "name": "Prairie View A&M Panthers at Lehigh Mountain Hawks",
+      "home_id": "2329",
+      "away_id": "2504",
+      "home_name": "Lehigh Mountain Hawks",
+      "away_name": "Prairie View A&M Panthers",
+      "completed": true,
+      "neutral": true,
+      "odds": {
+        "source": "core_odds",
+        "provider": "Draft Kings",
+        "spread": -3.5,
+        "over_under": 140.5,
+        "over_odds": -115.0,
+        "under_odds": -105.0,
+        "home_moneyline": -166,
+        "away_moneyline": 140,
+        "home_implied_pct": 62.4,
+        "away_implied_pct": 41.7,
+        "open_home_ml": "-120",
+        "open_away_ml": "EVEN",
+        "line_movement": 7.9
+      },
+      "bpi": {
+        "home_bpi_win_pct": 53.7,
+        "away_bpi_win_pct": 46.3,
+        "bpi_pred_margin": 0.9,
+        "matchup_quality": 28.1,
+        "last_modified": "2026-03-18T08:04Z"
+      }
+    },
+    "401856478": {
+      "game_id": "401856478",
+      "date": "2026-03-19",
+      "name": "Siena Saints at Duke Blue Devils",
+      "home_id": "150",
+      "away_id": "2561",
+      "home_name": "Duke Blue Devils",
+      "away_name": "Siena Saints",
+      "completed": true,
+      "neutral": true,
+      "odds": {
+        "source": "core_odds",
+        "provider": "Draft Kings",
+        "spread": -28.5,
+        "over_under": 137.5,
+        "over_odds": -110.0,
+        "under_odds": -110.0,
+        "home_moneyline": -20000,
+        "away_moneyline": 3500,
+        "home_implied_pct": 99.5,
+        "away_implied_pct": 2.8,
+        "open_home_ml": "-20000",
+        "open_away_ml": "+3500",
+        "line_movement": 0.0
+      },
+      "bpi": {
+        "home_bpi_win_pct": 99.0,
+        "away_bpi_win_pct": 1.0,
+        "bpi_pred_margin": 28.9,
+        "matchup_quality": 56.3,
+        "last_modified": "2026-03-19T08:05Z"
+      }
+    },
+    "401856479": {
+      "game_id": "401856479",
+      "date": "2026-03-19",
+      "name": "TCU Horned Frogs at Ohio State Buckeyes",
+      "home_id": "194",
+      "away_id": "2628",
+      "home_name": "Ohio State Buckeyes",
+      "away_name": "TCU Horned Frogs",
+      "completed": true,
+      "neutral": true,
+      "odds": {
+        "source": "core_odds",
+        "provider": "Draft Kings",
+        "spread": -2.5,
+        "over_under": 145.5,
+        "over_odds": -110.0,
+        "under_odds": -110.0,
+        "home_moneyline": -142,
+        "away_moneyline": 120,
+        "home_implied_pct": 58.7,
+        "away_implied_pct": 45.5,
+        "open_home_ml": "-218",
+        "open_away_ml": "+180",
+        "line_movement": -9.9
+      },
+      "bpi": {
+        "home_bpi_win_pct": 65.4,
+        "away_bpi_win_pct": 34.6,
+        "bpi_pred_margin": 4.0,
+        "matchup_quality": 81.5,
+        "last_modified": "2026-03-19T08:05Z"
+      }
+    },
+    "401856482": {
+      "game_id": "401856482",
+      "date": "2026-03-19",
+      "name": "South Florida Bulls at Louisville Cardinals",
+      "home_id": "97",
+      "away_id": "58",
+      "home_name": "Louisville Cardinals",
+      "away_name": "South Florida Bulls",
+      "completed": true,
+      "neutral": true,
+      "odds": {
+        "source": "core_odds",
+        "provider": "Draft Kings",
+        "spread": -3.5,
+        "over_under": 160.5,
+        "over_odds": -108.0,
+        "under_odds": -112.0,
+        "home_moneyline": -170,
+        "away_moneyline": 142,
+        "home_implied_pct": 63.0,
+        "away_implied_pct": 41.3,
+        "open_home_ml": "-345",
+        "open_away_ml": "+275",
+        "line_movement": -14.5
+      },
+      "bpi": {
+        "home_bpi_win_pct": 80.9,
+        "away_bpi_win_pct": 19.1,
+        "bpi_pred_margin": 9.0,
+        "matchup_quality": 81.5,
+        "last_modified": "2026-03-19T08:05Z"
+      }
+    },
+    "401856483": {
+      "game_id": "401856483",
+      "date": "2026-03-19",
+      "name": "North Dakota State Bison at Michigan State Spartans",
+      "home_id": "127",
+      "away_id": "2449",
+      "home_name": "Michigan State Spartans",
+      "away_name": "North Dakota State Bison",
+      "completed": true,
+      "neutral": true,
+      "odds": {
+        "source": "core_odds",
+        "provider": "Draft Kings",
+        "spread": -16.5,
+        "over_under": 144.5,
+        "over_odds": -105.0,
+        "under_odds": -115.0,
+        "home_moneyline": -1650,
+        "away_moneyline": 950,
+        "home_implied_pct": 94.3,
+        "away_implied_pct": 9.5,
+        "open_home_ml": "-1600",
+        "open_away_ml": "+900",
+        "line_movement": 0.2
+      },
+      "bpi": {
+        "home_bpi_win_pct": 94.2,
+        "away_bpi_win_pct": 5.8,
+        "bpi_pred_margin": 17.5,
+        "matchup_quality": 64.8,
+        "last_modified": "2026-03-19T08:05Z"
+      }
+    },
+    "401856480": {
+      "game_id": "401856480",
+      "date": "2026-03-19",
+      "name": "High Point Panthers at Wisconsin Badgers",
+      "home_id": "275",
+      "away_id": "2272",
+      "home_name": "Wisconsin Badgers",
+      "away_name": "High Point Panthers",
+      "completed": true,
+      "neutral": true,
+      "odds": {
+        "source": "core_odds",
+        "provider": "Draft Kings",
+        "spread": -10.5,
+        "over_under": 161.5,
+        "over_odds": -112.0,
+        "under_odds": -108.0,
+        "home_moneyline": -535,
+        "away_moneyline": 400,
+        "home_implied_pct": 84.3,
+        "away_implied_pct": 20.0,
+        "open_home_ml": "-1050",
+        "open_away_ml": "+675",
+        "line_movement": -7.0
+      },
+      "bpi": {
+        "home_bpi_win_pct": 76.3,
+        "away_bpi_win_pct": 23.7,
+        "bpi_pred_margin": 7.3,
+        "matchup_quality": 76.9,
+        "last_modified": "2026-03-19T08:05Z"
+      }
+    },
+    "401856481": {
+      "game_id": "401856481",
+      "date": "2026-03-19",
+      "name": "Hawai'i Rainbow Warriors at Arkansas Razorbacks",
+      "home_id": "8",
+      "away_id": "62",
+      "home_name": "Arkansas Razorbacks",
+      "away_name": "Hawai'i Rainbow Warriors",
+      "completed": true,
+      "neutral": true,
+      "odds": {
+        "source": "core_odds",
+        "provider": "Draft Kings",
+        "spread": -14.5,
+        "over_under": 158.5,
+        "over_odds": -108.0,
+        "under_odds": -112.0,
+        "home_moneyline": -1050,
+        "away_moneyline": 675,
+        "home_implied_pct": 91.3,
+        "away_implied_pct": 12.9,
+        "open_home_ml": "-1200",
+        "open_away_ml": "+750",
+        "line_movement": -1.0
+      },
+      "bpi": {
+        "home_bpi_win_pct": 91.6,
+        "away_bpi_win_pct": 8.4,
+        "bpi_pred_margin": 15.0,
+        "matchup_quality": 65.8,
+        "last_modified": "2026-03-19T08:05Z"
+      }
+    },
+    "401856484": {
+      "game_id": "401856484",
+      "date": "2026-03-19",
+      "name": "Texas Longhorns at BYU Cougars",
+      "home_id": "252",
+      "away_id": "251",
+      "home_name": "BYU Cougars",
+      "away_name": "Texas Longhorns",
+      "completed": true,
+      "neutral": true,
+      "odds": {
+        "source": "core_odds",
+        "provider": "Draft Kings",
+        "spread": -2.5,
+        "over_under": 156.5,
+        "over_odds": -112.0,
+        "under_odds": -108.0,
+        "home_moneyline": -155,
+        "away_moneyline": 130,
+        "home_implied_pct": 60.8,
+        "away_implied_pct": 43.5,
+        "open_home_ml": "-162",
+        "open_away_ml": "+136",
+        "line_movement": -1.0
+      },
+      "bpi": {
+        "home_bpi_win_pct": 63.0,
+        "away_bpi_win_pct": 37.0,
+        "bpi_pred_margin": 3.3,
+        "matchup_quality": 85.7,
+        "last_modified": "2026-03-19T08:05Z"
+      }
+    },
+    "401856486": {
+      "game_id": "401856486",
+      "date": "2026-03-19",
+      "name": "Howard Bison at Michigan Wolverines",
+      "home_id": "130",
+      "away_id": "47",
+      "home_name": "Michigan Wolverines",
+      "away_name": "Howard Bison",
+      "completed": true,
+      "neutral": true,
+      "odds": {
+        "source": "core_odds",
+        "provider": "Draft Kings",
+        "spread": -30.5,
+        "over_under": 151.5,
+        "over_odds": -108.0,
+        "under_odds": -112.0,
+        "home_moneyline": -20000,
+        "away_moneyline": 3500,
+        "home_implied_pct": 99.5,
+        "away_implied_pct": 2.8,
+        "open_home_ml": "-100000",
+        "open_away_ml": "+5000",
+        "line_movement": -0.4
+      },
+      "bpi": {
+        "home_bpi_win_pct": 98.9,
+        "away_bpi_win_pct": 1.1,
+        "bpi_pred_margin": 28.0,
+        "matchup_quality": 55.3,
+        "last_modified": "2026-03-19T08:05Z"
+      }
+    },
+    "401856436": {
+      "game_id": "401856436",
+      "date": "2026-03-19",
+      "name": "Miami (OH) RedHawks at SMU Mustangs",
+      "home_id": "2567",
+      "away_id": "193",
+      "home_name": "SMU Mustangs",
+      "away_name": "Miami (OH) RedHawks",
+      "completed": true,
+      "neutral": true,
+      "odds": {
+        "source": "core_odds",
+        "provider": "Draft Kings",
+        "spread": -6.5,
+        "over_under": 162.5,
+        "over_odds": -105.0,
+        "under_odds": -115.0,
+        "home_moneyline": -310,
+        "away_moneyline": 250,
+        "home_implied_pct": 75.6,
+        "away_implied_pct": 28.6,
+        "open_home_ml": "-345",
+        "open_away_ml": "+275",
+        "line_movement": -1.9
+      },
+      "bpi": {
+        "home_bpi_win_pct": 74.5,
+        "away_bpi_win_pct": 25.5,
+        "bpi_pred_margin": 6.7,
+        "matchup_quality": 68.6,
+        "last_modified": "2026-03-18T08:04Z"
+      }
+    },
+    "401858341": {
+      "game_id": "401858341",
+      "date": "2026-03-19",
+      "name": "Murray State Racers at Nevada Wolf Pack",
+      "home_id": "2440",
+      "away_id": "93",
+      "home_name": "Nevada Wolf Pack",
+      "away_name": "Murray State Racers",
+      "completed": true,
+      "neutral": false,
+      "odds": {
+        "source": "core_odds",
+        "provider": "Draft Kings",
+        "spread": -8.5,
+        "over_under": 159.5,
+        "over_odds": -112.0,
+        "under_odds": -108.0,
+        "home_moneyline": -440,
+        "away_moneyline": 340,
+        "home_implied_pct": 81.5,
+        "away_implied_pct": 22.7,
+        "open_home_ml": "-380",
+        "open_away_ml": "+300",
+        "line_movement": 2.3
+      },
+      "bpi": {
+        "home_bpi_win_pct": 78.9,
+        "away_bpi_win_pct": 21.1,
+        "bpi_pred_margin": 8.2,
+        "matchup_quality": 57.0,
+        "last_modified": "2026-03-18T08:04Z"
+      }
+    },
+    "401856488": {
+      "game_id": "401856488",
+      "date": "2026-03-19",
+      "name": "McNeese Cowboys at Vanderbilt Commodores",
+      "home_id": "238",
+      "away_id": "2377",
+      "home_name": "Vanderbilt Commodores",
+      "away_name": "McNeese Cowboys",
+      "completed": true,
+      "neutral": true,
+      "odds": {
+        "source": "core_odds",
+        "provider": "Draft Kings",
+        "spread": -12.5,
+        "over_under": 148.5,
+        "over_odds": -115.0,
+        "under_odds": -105.0,
+        "home_moneyline": -700,
+        "away_moneyline": 500,
+        "home_implied_pct": 87.5,
+        "away_implied_pct": 16.7,
+        "open_home_ml": "-550",
+        "open_away_ml": "+410",
+        "line_movement": 2.9
+      },
+      "bpi": {
+        "home_bpi_win_pct": 81.2,
+        "away_bpi_win_pct": 18.8,
+        "bpi_pred_margin": 9.1,
+        "matchup_quality": 79.0,
+        "last_modified": "2026-03-19T08:05Z"
+      }
+    },
+    "401856489": {
+      "game_id": "401856489",
+      "date": "2026-03-19",
+      "name": "Troy Trojans at Nebraska Cornhuskers",
+      "home_id": "158",
+      "away_id": "2653",
+      "home_name": "Nebraska Cornhuskers",
+      "away_name": "Troy Trojans",
+      "completed": true,
+      "neutral": true,
+      "odds": {
+        "source": "core_odds",
+        "provider": "Draft Kings",
+        "spread": -13.5,
+        "over_under": 139.5,
+        "over_odds": -110.0,
+        "under_odds": -110.0,
+        "home_moneyline": -1000,
+        "away_moneyline": 650,
+        "home_implied_pct": 90.9,
+        "away_implied_pct": 13.3,
+        "open_home_ml": "-1800",
+        "open_away_ml": "+1000",
+        "line_movement": -3.8
+      },
+      "bpi": {
+        "home_bpi_win_pct": 92.7,
+        "away_bpi_win_pct": 7.3,
+        "bpi_pred_margin": 15.9,
+        "matchup_quality": 64.1,
+        "last_modified": "2026-03-19T08:05Z"
+      }
+    },
+    "401856490": {
+      "game_id": "401856490",
+      "date": "2026-03-19",
+      "name": "VCU Rams at North Carolina Tar Heels",
+      "home_id": "153",
+      "away_id": "2670",
+      "home_name": "North Carolina Tar Heels",
+      "away_name": "VCU Rams",
+      "completed": true,
+      "neutral": true,
+      "odds": {
+        "source": "core_odds",
+        "provider": "Draft Kings",
+        "spread": -2.5,
+        "over_under": 150.5,
+        "over_odds": -115.0,
+        "under_odds": -105.0,
+        "home_moneyline": -155,
+        "away_moneyline": 130,
+        "home_implied_pct": 60.8,
+        "away_implied_pct": 43.5,
+        "open_home_ml": "-130",
+        "open_away_ml": "+110",
+        "line_movement": 4.3
+      },
+      "bpi": {
+        "home_bpi_win_pct": 61.3,
+        "away_bpi_win_pct": 38.7,
+        "bpi_pred_margin": 2.9,
+        "matchup_quality": 82.0,
+        "last_modified": "2026-03-19T08:05Z"
+      }
+    },
+    "401856492": {
+      "game_id": "401856492",
+      "date": "2026-03-19",
+      "name": "Texas A&M Aggies at Saint Mary's Gaels",
+      "home_id": "2608",
+      "away_id": "245",
+      "home_name": "Saint Mary's Gaels",
+      "away_name": "Texas A&M Aggies",
+      "completed": true,
+      "neutral": true,
+      "odds": {
+        "source": "core_odds",
+        "provider": "Draft Kings",
+        "spread": -2.5,
+        "over_under": 149.5,
+        "over_odds": -108.0,
+        "under_odds": -112.0,
+        "home_moneyline": -148,
+        "away_moneyline": 124,
+        "home_implied_pct": 59.7,
+        "away_implied_pct": 44.6,
+        "open_home_ml": "-180",
+        "open_away_ml": "+150",
+        "line_movement": -4.6
+      },
+      "bpi": {
+        "home_bpi_win_pct": 53.2,
+        "away_bpi_win_pct": 46.8,
+        "bpi_pred_margin": 0.8,
+        "matchup_quality": 86.6,
+        "last_modified": "2026-03-19T08:05Z"
+      }
+    },
+    "401856494": {
+      "game_id": "401856494",
+      "date": "2026-03-20",
+      "name": "Northern Iowa Panthers at St. John's Red Storm",
+      "home_id": "2599",
+      "away_id": "2460",
+      "home_name": "St. John's Red Storm",
+      "away_name": "Northern Iowa Panthers",
+      "completed": true,
+      "neutral": true,
+      "odds": {
+        "source": "core_odds",
+        "provider": "Draft Kings",
+        "spread": -10.5,
+        "over_under": 133.5,
+        "over_odds": -112.0,
+        "under_odds": -108.0,
+        "home_moneyline": -600,
+        "away_moneyline": 440,
+        "home_implied_pct": 85.7,
+        "away_implied_pct": 18.5,
+        "open_home_ml": "-345",
+        "open_away_ml": "+275",
+        "line_movement": 8.2
+      },
+      "bpi": {
+        "home_bpi_win_pct": 85.1,
+        "away_bpi_win_pct": 14.9,
+        "bpi_pred_margin": 10.9,
+        "matchup_quality": 73.7,
+        "last_modified": "2026-03-20T08:05Z"
+      }
+    },
+    "401856496": {
+      "game_id": "401856496",
+      "date": "2026-03-20",
+      "name": "UCF Knights at UCLA Bruins",
+      "home_id": "26",
+      "away_id": "2116",
+      "home_name": "UCLA Bruins",
+      "away_name": "UCF Knights",
+      "completed": true,
+      "neutral": true,
+      "odds": {
+        "source": "core_odds",
+        "provider": "Draft Kings",
+        "spread": -5.5,
+        "over_under": 151.5,
+        "over_odds": -110.0,
+        "under_odds": -110.0,
+        "home_moneyline": -250,
+        "away_moneyline": 205,
+        "home_implied_pct": 71.4,
+        "away_implied_pct": 32.8,
+        "open_home_ml": "-278",
+        "open_away_ml": "+225",
+        "line_movement": -2.1
+      },
+      "bpi": {
+        "home_bpi_win_pct": 72.2,
+        "away_bpi_win_pct": 27.9,
+        "bpi_pred_margin": 5.9,
+        "matchup_quality": 78.7,
+        "last_modified": "2026-03-20T08:05Z"
+      }
+    },
+    "401856529": {
+      "game_id": "401856529",
+      "date": "2026-03-20",
+      "name": "Long Island University Sharks at Arizona Wildcats",
+      "home_id": "12",
+      "away_id": "112358",
+      "home_name": "Arizona Wildcats",
+      "away_name": "Long Island University Sharks",
+      "completed": true,
+      "neutral": true,
+      "odds": {
+        "source": "core_odds",
+        "provider": "Draft Kings",
+        "spread": -30.5,
+        "over_under": 147.5,
+        "over_odds": -110.0,
+        "under_odds": -110.0,
+        "home_moneyline": -100000,
+        "away_moneyline": 5000,
+        "home_implied_pct": 99.9,
+        "away_implied_pct": 2.0,
+        "open_home_ml": "-100000",
+        "open_away_ml": "+5000",
+        "line_movement": 0.0
+      },
+      "bpi": {
+        "home_bpi_win_pct": 99.0,
+        "away_bpi_win_pct": 1.0,
+        "bpi_pred_margin": 28.5,
+        "matchup_quality": 53.0,
+        "last_modified": "2026-03-20T08:05Z"
+      }
+    },
+    "401856528": {
+      "game_id": "401856528",
+      "date": "2026-03-20",
+      "name": "Utah State Aggies at Villanova Wildcats",
+      "home_id": "222",
+      "away_id": "328",
+      "home_name": "Villanova Wildcats",
+      "away_name": "Utah State Aggies",
+      "completed": true,
+      "neutral": true,
+      "odds": {
+        "source": "core_odds",
+        "provider": "Draft Kings",
+        "spread": 1.5,
+        "over_under": 146.5,
+        "over_odds": -115.0,
+        "under_odds": -105.0,
+        "home_moneyline": 105,
+        "away_moneyline": -125,
+        "home_implied_pct": 48.8,
+        "away_implied_pct": 55.6,
+        "open_home_ml": "+110",
+        "open_away_ml": "-130",
+        "line_movement": 1.2
+      },
+      "bpi": {
+        "home_bpi_win_pct": 48.0,
+        "away_bpi_win_pct": 51.9,
+        "bpi_pred_margin": -0.5,
+        "matchup_quality": 84.3,
+        "last_modified": "2026-03-20T08:05Z"
+      }
+    },
+    "401856485": {
+      "game_id": "401856485",
+      "date": "2026-03-20",
+      "name": "Kennesaw State Owls at Gonzaga Bulldogs",
+      "home_id": "2250",
+      "away_id": "338",
+      "home_name": "Gonzaga Bulldogs",
+      "away_name": "Kennesaw State Owls",
+      "completed": true,
+      "neutral": true,
+      "odds": {
+        "source": "core_odds",
+        "provider": "Draft Kings",
+        "spread": -20.5,
+        "over_under": 152.5,
+        "over_odds": -108.0,
+        "under_odds": -112.0,
+        "home_moneyline": -3200,
+        "away_moneyline": 1400,
+        "home_implied_pct": 97.0,
+        "away_implied_pct": 6.7,
+        "open_home_ml": "-8000",
+        "open_away_ml": "+2200",
+        "line_movement": -1.8
+      },
+      "bpi": {
+        "home_bpi_win_pct": 95.6,
+        "away_bpi_win_pct": 4.4,
+        "bpi_pred_margin": 19.2,
+        "matchup_quality": 66.7,
+        "last_modified": "2026-03-19T08:05Z"
+      }
+    },
+    "401856519": {
+      "game_id": "401856519",
+      "date": "2026-03-20",
+      "name": "Queens University Royals at Purdue Boilermakers",
+      "home_id": "2509",
+      "away_id": "2511",
+      "home_name": "Purdue Boilermakers",
+      "away_name": "Queens University Royals",
+      "completed": true,
+      "neutral": true,
+      "odds": {
+        "source": "core_odds",
+        "provider": "Draft Kings",
+        "spread": -25.5,
+        "over_under": 159.5,
+        "over_odds": -112.0,
+        "under_odds": -108.0,
+        "home_moneyline": -8000,
+        "away_moneyline": 2200,
+        "home_implied_pct": 98.8,
+        "away_implied_pct": 4.3,
+        "open_home_ml": "-8000",
+        "open_away_ml": "+2200",
+        "line_movement": 0.0
+      },
+      "bpi": {
+        "home_bpi_win_pct": 97.8,
+        "away_bpi_win_pct": 2.2,
+        "bpi_pred_margin": 23.8,
+        "matchup_quality": 55.7,
+        "last_modified": "2026-03-20T08:05Z"
+      }
+    },
+    "401856487": {
+      "game_id": "401856487",
+      "date": "2026-03-20",
+      "name": "Saint Louis Billikens at Georgia Bulldogs",
+      "home_id": "61",
+      "away_id": "139",
+      "home_name": "Georgia Bulldogs",
+      "away_name": "Saint Louis Billikens",
+      "completed": true,
+      "neutral": true,
+      "odds": {
+        "source": "core_odds",
+        "provider": "Draft Kings",
+        "spread": -1.5,
+        "over_under": 167.5,
+        "over_odds": -112.0,
+        "under_odds": -108.0,
+        "home_moneyline": -130,
+        "away_moneyline": 110,
+        "home_implied_pct": 56.5,
+        "away_implied_pct": 47.6,
+        "open_home_ml": "-135",
+        "open_away_ml": "+114",
+        "line_movement": -0.9
+      },
+      "bpi": {
+        "home_bpi_win_pct": 50.7,
+        "away_bpi_win_pct": 49.3,
+        "bpi_pred_margin": 0.2,
+        "matchup_quality": 84.5,
+        "last_modified": "2026-03-19T08:05Z"
+      }
+    },
+    "401856520": {
+      "game_id": "401856520",
+      "date": "2026-03-20",
+      "name": "Akron Zips at Texas Tech Red Raiders",
+      "home_id": "2641",
+      "away_id": "2006",
+      "home_name": "Texas Tech Red Raiders",
+      "away_name": "Akron Zips",
+      "completed": true,
+      "neutral": true,
+      "odds": {
+        "source": "core_odds",
+        "provider": "Draft Kings",
+        "spread": -6.5,
+        "over_under": 154.5,
+        "over_odds": -110.0,
+        "under_odds": -110.0,
+        "home_moneyline": -270,
+        "away_moneyline": 220,
+        "home_implied_pct": 73.0,
+        "away_implied_pct": 31.2,
+        "open_home_ml": "-550",
+        "open_away_ml": "+410",
+        "line_movement": -11.6
+      },
+      "bpi": {
+        "home_bpi_win_pct": 81.9,
+        "away_bpi_win_pct": 18.1,
+        "bpi_pred_margin": 9.4,
+        "matchup_quality": 74.1,
+        "last_modified": "2026-03-20T08:05Z"
+      }
+    },
+    "401856521": {
+      "game_id": "401856521",
+      "date": "2026-03-20",
+      "name": "Hofstra Pride at Alabama Crimson Tide",
+      "home_id": "333",
+      "away_id": "2275",
+      "home_name": "Alabama Crimson Tide",
+      "away_name": "Hofstra Pride",
+      "completed": true,
+      "neutral": true,
+      "odds": {
+        "source": "core_odds",
+        "provider": "Draft Kings",
+        "spread": -11.5,
+        "over_under": 158.5,
+        "over_odds": -112.0,
+        "under_odds": -108.0,
+        "home_moneyline": -650,
+        "away_moneyline": 470,
+        "home_implied_pct": 86.7,
+        "away_implied_pct": 17.5,
+        "open_home_ml": "-600",
+        "open_away_ml": "+440",
+        "line_movement": 1.0
+      },
+      "bpi": {
+        "home_bpi_win_pct": 90.1,
+        "away_bpi_win_pct": 9.9,
+        "bpi_pred_margin": 13.8,
+        "matchup_quality": 70.0,
+        "last_modified": "2026-03-20T08:05Z"
+      }
+    },
+    "401856527": {
+      "game_id": "401856527",
+      "date": "2026-03-20",
+      "name": "Miami (OH) RedHawks at Tennessee Volunteers",
+      "home_id": "2633",
+      "away_id": "193",
+      "home_name": "Tennessee Volunteers",
+      "away_name": "Miami (OH) RedHawks",
+      "completed": true,
+      "neutral": true,
+      "odds": {
+        "source": "core_odds",
+        "provider": "Draft Kings",
+        "spread": -12.5,
+        "over_under": 148.5,
+        "over_odds": -110.0,
+        "under_odds": -110.0,
+        "home_moneyline": -550,
+        "away_moneyline": 410,
+        "home_implied_pct": 84.6,
+        "away_implied_pct": 19.6,
+        "open_home_ml": "-485",
+        "open_away_ml": "+370",
+        "line_movement": 1.7
+      },
+      "bpi": {
+        "home_bpi_win_pct": 88.9,
+        "away_bpi_win_pct": 11.1,
+        "bpi_pred_margin": 13.0,
+        "matchup_quality": 73.9,
+        "last_modified": "2026-03-20T08:05Z"
+      }
+    },
+    "401856526": {
+      "game_id": "401856526",
+      "date": "2026-03-20",
+      "name": "Wright State Raiders at Virginia Cavaliers",
+      "home_id": "258",
+      "away_id": "2750",
+      "home_name": "Virginia Cavaliers",
+      "away_name": "Wright State Raiders",
+      "completed": true,
+      "neutral": true,
+      "odds": {
+        "source": "core_odds",
+        "provider": "Draft Kings",
+        "spread": -17.5,
+        "over_under": 146.5,
+        "over_odds": -115.0,
+        "under_odds": -105.0,
+        "home_moneyline": -2400,
+        "away_moneyline": 1200,
+        "home_implied_pct": 96.0,
+        "away_implied_pct": 7.7,
+        "open_home_ml": "-3200",
+        "open_away_ml": "+1400",
+        "line_movement": -1.0
+      },
+      "bpi": {
+        "home_bpi_win_pct": 92.9,
+        "away_bpi_win_pct": 7.1,
+        "bpi_pred_margin": 16.1,
+        "matchup_quality": 62.6,
+        "last_modified": "2026-03-20T08:05Z"
+      }
+    },
+    "401856525": {
+      "game_id": "401856525",
+      "date": "2026-03-20",
+      "name": "Santa Clara Broncos at Kentucky Wildcats",
+      "home_id": "96",
+      "away_id": "2541",
+      "home_name": "Kentucky Wildcats",
+      "away_name": "Santa Clara Broncos",
+      "completed": true,
+      "neutral": true,
+      "odds": {
+        "source": "core_odds",
+        "provider": "Draft Kings",
+        "spread": -3.5,
+        "over_under": 157.5,
+        "over_odds": -108.0,
+        "under_odds": -112.0,
+        "home_moneyline": -170,
+        "away_moneyline": 142,
+        "home_implied_pct": 63.0,
+        "away_implied_pct": 41.3,
+        "open_home_ml": "-135",
+        "open_away_ml": "+114",
+        "line_movement": 5.6
+      },
+      "bpi": {
+        "home_bpi_win_pct": 72.3,
+        "away_bpi_win_pct": 27.7,
+        "bpi_pred_margin": 6.0,
+        "matchup_quality": 80.8,
+        "last_modified": "2026-03-20T08:05Z"
+      }
+    },
+    "401856524": {
+      "game_id": "401856524",
+      "date": "2026-03-20",
+      "name": "Tennessee State Tigers at Iowa State Cyclones",
+      "home_id": "66",
+      "away_id": "2634",
+      "home_name": "Iowa State Cyclones",
+      "away_name": "Tennessee State Tigers",
+      "completed": true,
+      "neutral": true,
+      "odds": {
+        "source": "core_odds",
+        "provider": "Draft Kings",
+        "spread": -24.5,
+        "over_under": 147.5,
+        "over_odds": -110.0,
+        "under_odds": -110.0,
+        "home_moneyline": -8000,
+        "away_moneyline": 2200,
+        "home_implied_pct": 98.8,
+        "away_implied_pct": 4.3,
+        "open_home_ml": "-6500",
+        "open_away_ml": "+2000",
+        "line_movement": 0.3
+      },
+      "bpi": {
+        "home_bpi_win_pct": 98.4,
+        "away_bpi_win_pct": 1.7,
+        "bpi_pred_margin": 25.6,
+        "matchup_quality": 54.5,
+        "last_modified": "2026-03-20T08:05Z"
+      }
+    },
+    "401856522": {
+      "game_id": "401856522",
+      "date": "2026-03-20",
+      "name": "Iowa Hawkeyes at Clemson Tigers",
+      "home_id": "228",
+      "away_id": "2294",
+      "home_name": "Clemson Tigers",
+      "away_name": "Iowa Hawkeyes",
+      "completed": true,
+      "neutral": true,
+      "odds": {
+        "source": "core_odds",
+        "provider": "Draft Kings",
+        "spread": 1.5,
+        "over_under": 130.5,
+        "over_odds": -115.0,
+        "under_odds": -105.0,
+        "home_moneyline": 105,
+        "away_moneyline": -125,
+        "home_implied_pct": 48.8,
+        "away_implied_pct": 55.6,
+        "open_home_ml": "+114",
+        "open_away_ml": "-135",
+        "line_movement": 2.1
+      },
+      "bpi": {
+        "home_bpi_win_pct": 50.2,
+        "away_bpi_win_pct": 49.8,
+        "bpi_pred_margin": 0.0,
+        "matchup_quality": 86.4,
+        "last_modified": "2026-03-20T08:05Z"
+      }
+    },
+    "401856491": {
+      "game_id": "401856491",
+      "date": "2026-03-20",
+      "name": "Pennsylvania Quakers at Illinois Fighting Illini",
+      "home_id": "356",
+      "away_id": "219",
+      "home_name": "Illinois Fighting Illini",
+      "away_name": "Pennsylvania Quakers",
+      "completed": true,
+      "neutral": true,
+      "odds": {
+        "source": "core_odds",
+        "provider": "Draft Kings",
+        "spread": -25.5,
+        "over_under": 150.5,
+        "over_odds": -115.0,
+        "under_odds": -105.0,
+        "home_moneyline": -10000,
+        "away_moneyline": 3000,
+        "home_implied_pct": 99.0,
+        "away_implied_pct": 3.2,
+        "open_home_ml": "-20000",
+        "open_away_ml": "+3500",
+        "line_movement": -0.5
+      },
+      "bpi": {
+        "home_bpi_win_pct": 97.3,
+        "away_bpi_win_pct": 2.7,
+        "bpi_pred_margin": 22.4,
+        "matchup_quality": 61.1,
+        "last_modified": "2026-03-19T08:05Z"
+      }
+    },
+    "401856493": {
+      "game_id": "401856493",
+      "date": "2026-03-20",
+      "name": "Idaho Vandals at Houston Cougars",
+      "home_id": "248",
+      "away_id": "70",
+      "home_name": "Houston Cougars",
+      "away_name": "Idaho Vandals",
+      "completed": true,
+      "neutral": true,
+      "odds": {
+        "source": "core_odds",
+        "provider": "Draft Kings",
+        "spread": -24.5,
+        "over_under": 137.5,
+        "over_odds": -115.0,
+        "under_odds": -105.0,
+        "home_moneyline": -8000,
+        "away_moneyline": 2200,
+        "home_implied_pct": 98.8,
+        "away_implied_pct": 4.3,
+        "open_home_ml": "-10000",
+        "open_away_ml": "+3000",
+        "line_movement": -0.2
+      },
+      "bpi": {
+        "home_bpi_win_pct": 98.2,
+        "away_bpi_win_pct": 1.8,
+        "bpi_pred_margin": 25.1,
+        "matchup_quality": 59.5,
+        "last_modified": "2026-03-19T08:05Z"
+      }
+    },
+    "401856530": {
+      "game_id": "401856530",
+      "date": "2026-03-21",
+      "name": "TCU Horned Frogs at Duke Blue Devils",
+      "home_id": "150",
+      "away_id": "2628",
+      "home_name": "Duke Blue Devils",
+      "away_name": "TCU Horned Frogs",
+      "completed": true,
+      "neutral": true,
+      "odds": {
+        "source": "core_odds",
+        "provider": "Draft Kings",
+        "spread": -12.5,
+        "over_under": 140.5,
+        "over_odds": -110.0,
+        "under_odds": -110.0,
+        "home_moneyline": -850,
+        "away_moneyline": 575,
+        "home_implied_pct": 89.5,
+        "away_implied_pct": 14.8,
+        "open_home_ml": "-850",
+        "open_away_ml": "+575",
+        "line_movement": 0.0
+      },
+      "bpi": {
+        "home_bpi_win_pct": 91.1,
+        "away_bpi_win_pct": 8.9,
+        "bpi_pred_margin": 14.5,
+        "matchup_quality": 83.5,
+        "last_modified": "2026-03-21T08:05Z"
+      }
+    },
+    "401856495": {
+      "game_id": "401856495",
+      "date": "2026-03-21",
+      "name": "California Baptist Lancers at Kansas Jayhawks",
+      "home_id": "2305",
+      "away_id": "2856",
+      "home_name": "Kansas Jayhawks",
+      "away_name": "California Baptist Lancers",
+      "completed": true,
+      "neutral": true,
+      "odds": {
+        "source": "core_odds",
+        "provider": "Draft Kings",
+        "spread": -14.5,
+        "over_under": 142.5,
+        "over_odds": -105.0,
+        "under_odds": -115.0,
+        "home_moneyline": -1050,
+        "away_moneyline": 675,
+        "home_implied_pct": 91.3,
+        "away_implied_pct": 12.9,
+        "open_home_ml": "-500",
+        "open_away_ml": "+380",
+        "line_movement": 8.0
+      },
+      "bpi": {
+        "home_bpi_win_pct": 92.6,
+        "away_bpi_win_pct": 7.4,
+        "bpi_pred_margin": 15.8,
+        "matchup_quality": 63.0,
+        "last_modified": "2026-03-20T08:05Z"
+      }
+    },
+    "401856531": {
+      "game_id": "401856531",
+      "date": "2026-03-21",
+      "name": "Louisville Cardinals at Michigan State Spartans",
+      "home_id": "127",
+      "away_id": "97",
+      "home_name": "Michigan State Spartans",
+      "away_name": "Louisville Cardinals",
+      "completed": true,
+      "neutral": true,
+      "odds": {
+        "source": "core_odds",
+        "provider": "Draft Kings",
+        "spread": -5.5,
+        "over_under": 151.5,
+        "over_odds": -110.0,
+        "under_odds": -110.0,
+        "home_moneyline": -265,
+        "away_moneyline": 215,
+        "home_implied_pct": 72.6,
+        "away_implied_pct": 31.7,
+        "open_home_ml": "-205",
+        "open_away_ml": "+170",
+        "line_movement": 5.4
+      },
+      "bpi": {
+        "home_bpi_win_pct": 49.1,
+        "away_bpi_win_pct": 50.9,
+        "bpi_pred_margin": -0.2,
+        "matchup_quality": 94.0,
+        "last_modified": "2026-03-21T08:05Z"
+      }
+    },
+    "401856497": {
+      "game_id": "401856497",
+      "date": "2026-03-21",
+      "name": "Furman Paladins at UConn Huskies",
+      "home_id": "41",
+      "away_id": "231",
+      "home_name": "UConn Huskies",
+      "away_name": "Furman Paladins",
+      "completed": true,
+      "neutral": true,
+      "odds": {
+        "source": "core_odds",
+        "provider": "Draft Kings",
+        "spread": -20.5,
+        "over_under": 133.5,
+        "over_odds": -115.0,
+        "under_odds": -105.0,
+        "home_moneyline": -4000,
+        "away_moneyline": 1600,
+        "home_implied_pct": 97.6,
+        "away_implied_pct": 5.9,
+        "open_home_ml": "-8000",
+        "open_away_ml": "+2200",
+        "line_movement": -1.2
+      },
+      "bpi": {
+        "home_bpi_win_pct": 96.4,
+        "away_bpi_win_pct": 3.6,
+        "bpi_pred_margin": 20.6,
+        "matchup_quality": 60.8,
+        "last_modified": "2026-03-20T08:05Z"
+      }
+    },
+    "401856537": {
+      "game_id": "401856537",
+      "date": "2026-03-21",
+      "name": "Texas Longhorns at Gonzaga Bulldogs",
+      "home_id": "2250",
+      "away_id": "251",
+      "home_name": "Gonzaga Bulldogs",
+      "away_name": "Texas Longhorns",
+      "completed": true,
+      "neutral": true,
+      "odds": {
+        "source": "core_odds",
+        "provider": "Draft Kings",
+        "spread": -5.5,
+        "over_under": 146.5,
+        "over_odds": -112.0,
+        "under_odds": -108.0,
+        "home_moneyline": -238,
+        "away_moneyline": 195,
+        "home_implied_pct": 70.4,
+        "away_implied_pct": 33.9,
+        "open_home_ml": "-205",
+        "open_away_ml": "+170",
+        "line_movement": 3.2
+      },
+      "bpi": {
+        "home_bpi_win_pct": 74.8,
+        "away_bpi_win_pct": 25.2,
+        "bpi_pred_margin": 6.8,
+        "matchup_quality": 86.1,
+        "last_modified": "2026-03-21T08:05Z"
+      }
+    },
+    "401856518": {
+      "game_id": "401856518",
+      "date": "2026-03-21",
+      "name": "Missouri Tigers at Miami Hurricanes",
+      "home_id": "2390",
+      "away_id": "142",
+      "home_name": "Miami Hurricanes",
+      "away_name": "Missouri Tigers",
+      "completed": true,
+      "neutral": true,
+      "odds": {
+        "source": "core_odds",
+        "provider": "Draft Kings",
+        "spread": -1.5,
+        "over_under": 144.5,
+        "over_odds": -110.0,
+        "under_odds": -110.0,
+        "home_moneyline": -125,
+        "away_moneyline": 105,
+        "home_implied_pct": 55.6,
+        "away_implied_pct": 48.8,
+        "open_home_ml": "-155",
+        "open_away_ml": "+130",
+        "line_movement": -5.2
+      },
+      "bpi": {
+        "home_bpi_win_pct": 54.8,
+        "away_bpi_win_pct": 45.2,
+        "bpi_pred_margin": 1.2,
+        "matchup_quality": 81.2,
+        "last_modified": "2026-03-20T08:05Z"
+      }
+    },
+    "401856532": {
+      "game_id": "401856532",
+      "date": "2026-03-21",
+      "name": "Saint Louis Billikens at Michigan Wolverines",
+      "home_id": "130",
+      "away_id": "139",
+      "home_name": "Michigan Wolverines",
+      "away_name": "Saint Louis Billikens",
+      "completed": true,
+      "neutral": true,
+      "odds": {
+        "source": "core_odds",
+        "provider": "Draft Kings",
+        "spread": -12.5,
+        "over_under": 161.5,
+        "over_odds": -110.0,
+        "under_odds": -110.0,
+        "home_moneyline": -800,
+        "away_moneyline": 550,
+        "home_implied_pct": 88.9,
+        "away_implied_pct": 15.4,
+        "open_home_ml": "-1100",
+        "open_away_ml": "+700",
+        "line_movement": -2.8
+      },
+      "bpi": {
+        "home_bpi_win_pct": 83.2,
+        "away_bpi_win_pct": 16.8,
+        "bpi_pred_margin": 10.0,
+        "matchup_quality": 87.7,
+        "last_modified": "2026-03-21T08:05Z"
+      }
+    },
+    "401856523": {
+      "game_id": "401856523",
+      "date": "2026-03-21",
+      "name": "Prairie View A&M Panthers at Florida Gators",
+      "home_id": "57",
+      "away_id": "2504",
+      "home_name": "Florida Gators",
+      "away_name": "Prairie View A&M Panthers",
+      "completed": true,
+      "neutral": true,
+      "odds": {
+        "source": "core_odds",
+        "provider": "Draft Kings",
+        "spread": -35.5,
+        "over_under": 154.5,
+        "over_odds": -105.0,
+        "under_odds": -105.0,
+        "home_moneyline": -100000,
+        "away_moneyline": 5000,
+        "home_implied_pct": 99.9,
+        "away_implied_pct": 2.0,
+        "open_home_ml": "-100000",
+        "open_away_ml": "+5000",
+        "line_movement": 0.0
+      },
+      "bpi": {
+        "home_bpi_win_pct": 99.4,
+        "away_bpi_win_pct": 0.7,
+        "bpi_pred_margin": 31.4,
+        "matchup_quality": 44.0,
+        "last_modified": "2026-03-20T08:05Z"
+      }
+    },
+    "401856535": {
+      "game_id": "401856535",
+      "date": "2026-03-21",
+      "name": "Texas A&M Aggies at Houston Cougars",
+      "home_id": "248",
+      "away_id": "245",
+      "home_name": "Houston Cougars",
+      "away_name": "Texas A&M Aggies",
+      "completed": true,
+      "neutral": true,
+      "odds": {
+        "source": "core_odds",
+        "provider": "Draft Kings",
+        "spread": -10.5,
+        "over_under": 142.5,
+        "over_odds": -112.0,
+        "under_odds": -108.0,
+        "home_moneyline": -520,
+        "away_moneyline": 390,
+        "home_implied_pct": 83.9,
+        "away_implied_pct": 20.4,
+        "open_home_ml": "-455",
+        "open_away_ml": "+350",
+        "line_movement": 1.9
+      },
+      "bpi": {
+        "home_bpi_win_pct": 81.3,
+        "away_bpi_win_pct": 18.7,
+        "bpi_pred_margin": 9.2,
+        "matchup_quality": 87.7,
+        "last_modified": "2026-03-21T08:05Z"
+      }
+    },
+    "401856558": {
+      "game_id": "401856558",
+      "date": "2026-03-22",
+      "name": "St. John's Red Storm at Kansas Jayhawks",
+      "home_id": "2305",
+      "away_id": "2599",
+      "home_name": "Kansas Jayhawks",
+      "away_name": "St. John's Red Storm",
+      "completed": true,
+      "neutral": true,
+      "odds": {
+        "source": "core_odds",
+        "provider": "Draft Kings",
+        "spread": 3.5,
+        "over_under": 144.5,
+        "over_odds": -112.0,
+        "under_odds": -108.0,
+        "home_moneyline": 145,
+        "away_moneyline": -175,
+        "home_implied_pct": 40.8,
+        "away_implied_pct": 63.6,
+        "open_home_ml": "+124",
+        "open_away_ml": "-148",
+        "line_movement": -3.8
+      },
+      "bpi": {
+        "home_bpi_win_pct": 42.9,
+        "away_bpi_win_pct": 57.1,
+        "bpi_pred_margin": -1.8,
+        "matchup_quality": 90.8,
+        "last_modified": "2026-03-22T08:05Z"
+      }
+    },
+    "401856536": {
+      "game_id": "401856536",
+      "date": "2026-03-22",
+      "name": "High Point Panthers at Arkansas Razorbacks",
+      "home_id": "8",
+      "away_id": "2272",
+      "home_name": "Arkansas Razorbacks",
+      "away_name": "High Point Panthers",
+      "completed": true,
+      "neutral": true,
+      "odds": {
+        "source": "core_odds",
+        "provider": "Draft Kings",
+        "spread": -12.5,
+        "over_under": 171.5,
+        "over_odds": -110.0,
+        "under_odds": -110.0,
+        "home_moneyline": -900,
+        "away_moneyline": 600,
+        "home_implied_pct": 90.0,
+        "away_implied_pct": 14.3,
+        "open_home_ml": "-1650",
+        "open_away_ml": "+950",
+        "line_movement": -4.3
+      },
+      "bpi": {
+        "home_bpi_win_pct": 78.8,
+        "away_bpi_win_pct": 21.2,
+        "bpi_pred_margin": 8.2,
+        "matchup_quality": 78.1,
+        "last_modified": "2026-03-21T08:05Z"
+      }
+    },
+    "401856564": {
+      "game_id": "401856564",
+      "date": "2026-03-22",
+      "name": "Miami Hurricanes at Purdue Boilermakers",
+      "home_id": "2509",
+      "away_id": "2390",
+      "home_name": "Purdue Boilermakers",
+      "away_name": "Miami Hurricanes",
+      "completed": true,
+      "neutral": true,
+      "odds": {
+        "source": "core_odds",
+        "provider": "Draft Kings",
+        "spread": -8.5,
+        "over_under": 146.5,
+        "over_odds": -110.0,
+        "under_odds": -110.0,
+        "home_moneyline": -380,
+        "away_moneyline": 300,
+        "home_implied_pct": 79.2,
+        "away_implied_pct": 25.0,
+        "open_home_ml": "-380",
+        "open_away_ml": "+300",
+        "line_movement": 0.0
+      },
+      "bpi": {
+        "home_bpi_win_pct": 77.8,
+        "away_bpi_win_pct": 22.1,
+        "bpi_pred_margin": 7.9,
+        "matchup_quality": 85.3,
+        "last_modified": "2026-03-22T08:05Z"
+      }
+    },
+    "401856562": {
+      "game_id": "401856562",
+      "date": "2026-03-22",
+      "name": "Tennessee Volunteers at Virginia Cavaliers",
+      "home_id": "258",
+      "away_id": "2633",
+      "home_name": "Virginia Cavaliers",
+      "away_name": "Tennessee Volunteers",
+      "completed": true,
+      "neutral": true,
+      "odds": {
+        "source": "core_odds",
+        "provider": "Draft Kings",
+        "spread": 1.5,
+        "over_under": 137.5,
+        "over_odds": -108.0,
+        "under_odds": -112.0,
+        "home_moneyline": -105,
+        "away_moneyline": -115,
+        "home_implied_pct": 51.2,
+        "away_implied_pct": 53.5,
+        "open_home_ml": "-102",
+        "open_away_ml": "-118",
+        "line_movement": 0.7
+      },
+      "bpi": {
+        "home_bpi_win_pct": 39.5,
+        "away_bpi_win_pct": 60.5,
+        "bpi_pred_margin": -2.7,
+        "matchup_quality": 91.7,
+        "last_modified": "2026-03-22T08:05Z"
+      }
+    },
+    "401856561": {
+      "game_id": "401856561",
+      "date": "2026-03-22",
+      "name": "Kentucky Wildcats at Iowa State Cyclones",
+      "home_id": "66",
+      "away_id": "96",
+      "home_name": "Iowa State Cyclones",
+      "away_name": "Kentucky Wildcats",
+      "completed": true,
+      "neutral": true,
+      "odds": {
+        "source": "core_odds",
+        "provider": "Draft Kings",
+        "spread": -5.5,
+        "over_under": 146.5,
+        "over_odds": -110.0,
+        "under_odds": -110.0,
+        "home_moneyline": -238,
+        "away_moneyline": 195,
+        "home_implied_pct": 70.4,
+        "away_implied_pct": 33.9,
+        "open_home_ml": "-218",
+        "open_away_ml": "+180",
+        "line_movement": 1.8
+      },
+      "bpi": {
+        "home_bpi_win_pct": 70.6,
+        "away_bpi_win_pct": 29.4,
+        "bpi_pred_margin": 5.5,
+        "matchup_quality": 90.4,
+        "last_modified": "2026-03-22T08:05Z"
+      }
+    },
+    "401856563": {
+      "game_id": "401856563",
+      "date": "2026-03-22",
+      "name": "Iowa Hawkeyes at Florida Gators",
+      "home_id": "57",
+      "away_id": "2294",
+      "home_name": "Florida Gators",
+      "away_name": "Iowa Hawkeyes",
+      "completed": true,
+      "neutral": true,
+      "odds": {
+        "source": "core_odds",
+        "provider": "Draft Kings",
+        "spread": -10.5,
+        "over_under": 145.5,
+        "over_odds": -112.0,
+        "under_odds": -108.0,
+        "home_moneyline": -625,
+        "away_moneyline": 455,
+        "home_implied_pct": 86.2,
+        "away_implied_pct": 18.0,
+        "open_home_ml": "-700",
+        "open_away_ml": "+500",
+        "line_movement": -1.3
+      },
+      "bpi": {
+        "home_bpi_win_pct": 78.6,
+        "away_bpi_win_pct": 21.4,
+        "bpi_pred_margin": 8.1,
+        "matchup_quality": 88.5,
+        "last_modified": "2026-03-22T08:05Z"
+      }
+    },
+    "401858349": {
+      "game_id": "401858349",
+      "date": "2026-03-22",
+      "name": "Liberty Flames at Nevada Wolf Pack",
+      "home_id": "2440",
+      "away_id": "2335",
+      "home_name": "Nevada Wolf Pack",
+      "away_name": "Liberty Flames",
+      "completed": true,
+      "neutral": false,
+      "odds": {
+        "source": "core_odds",
+        "provider": "Draft Kings",
+        "spread": -7.5,
+        "over_under": 146.5,
+        "over_odds": -115.0,
+        "under_odds": -105.0,
+        "home_moneyline": -325,
+        "away_moneyline": 260,
+        "home_implied_pct": 76.5,
+        "away_implied_pct": 27.8,
+        "open_home_ml": "-340",
+        "open_away_ml": "+270",
+        "line_movement": -0.8
+      },
+      "bpi": {
+        "home_bpi_win_pct": 71.8,
+        "away_bpi_win_pct": 28.2,
+        "bpi_pred_margin": 5.8,
+        "matchup_quality": 61.3,
+        "last_modified": "2026-03-21T08:05Z"
+      }
+    },
+    "401856534": {
+      "game_id": "401856534",
+      "date": "2026-03-22",
+      "name": "Vanderbilt Commodores at Nebraska Cornhuskers",
+      "home_id": "158",
+      "away_id": "238",
+      "home_name": "Nebraska Cornhuskers",
+      "away_name": "Vanderbilt Commodores",
+      "completed": true,
+      "neutral": true,
+      "odds": {
+        "source": "core_odds",
+        "provider": "Draft Kings",
+        "spread": 1.5,
+        "over_under": 146.5,
+        "over_odds": -108.0,
+        "under_odds": -112.0,
+        "home_moneyline": 114,
+        "away_moneyline": -135,
+        "home_implied_pct": 46.7,
+        "away_implied_pct": 57.4,
+        "open_home_ml": "+114",
+        "open_away_ml": "-135",
+        "line_movement": 0.0
+      },
+      "bpi": {
+        "home_bpi_win_pct": 46.8,
+        "away_bpi_win_pct": 53.2,
+        "bpi_pred_margin": -0.8,
+        "matchup_quality": 92.7,
+        "last_modified": "2026-03-21T08:05Z"
+      }
+    },
+    "401856533": {
+      "game_id": "401856533",
+      "date": "2026-03-22",
+      "name": "VCU Rams at Illinois Fighting Illini",
+      "home_id": "356",
+      "away_id": "2670",
+      "home_name": "Illinois Fighting Illini",
+      "away_name": "VCU Rams",
+      "completed": true,
+      "neutral": true,
+      "odds": {
+        "source": "core_odds",
+        "provider": "Draft Kings",
+        "spread": -12.5,
+        "over_under": 151.5,
+        "over_odds": -105.0,
+        "under_odds": -115.0,
+        "home_moneyline": -750,
+        "away_moneyline": 525,
+        "home_implied_pct": 88.2,
+        "away_implied_pct": 16.0,
+        "open_home_ml": "-455",
+        "open_away_ml": "+350",
+        "line_movement": 6.2
+      },
+      "bpi": {
+        "home_bpi_win_pct": 82.5,
+        "away_bpi_win_pct": 17.5,
+        "bpi_pred_margin": 9.7,
+        "matchup_quality": 83.6,
+        "last_modified": "2026-03-21T08:05Z"
+      }
+    },
+    "401856559": {
+      "game_id": "401856559",
+      "date": "2026-03-23",
+      "name": "UCLA Bruins at UConn Huskies",
+      "home_id": "41",
+      "away_id": "26",
+      "home_name": "UConn Huskies",
+      "away_name": "UCLA Bruins",
+      "completed": true,
+      "neutral": true,
+      "odds": {
+        "source": "core_odds",
+        "provider": "Draft Kings",
+        "spread": -5.5,
+        "over_under": 135.5,
+        "over_odds": -110.0,
+        "under_odds": -110.0,
+        "home_moneyline": -230,
+        "away_moneyline": 190,
+        "home_implied_pct": 69.7,
+        "away_implied_pct": 34.5,
+        "open_home_ml": "-205",
+        "open_away_ml": "+170",
+        "line_movement": 2.5
+      },
+      "bpi": {
+        "home_bpi_win_pct": 66.6,
+        "away_bpi_win_pct": 33.4,
+        "bpi_pred_margin": 4.3,
+        "matchup_quality": 89.6,
+        "last_modified": "2026-03-22T08:05Z"
+      }
+    },
+    "401856565": {
+      "game_id": "401856565",
+      "date": "2026-03-23",
+      "name": "Utah State Aggies at Arizona Wildcats",
+      "home_id": "12",
+      "away_id": "328",
+      "home_name": "Arizona Wildcats",
+      "away_name": "Utah State Aggies",
+      "completed": true,
+      "neutral": true,
+      "odds": {
+        "source": "core_odds",
+        "provider": "Draft Kings",
+        "spread": -11.5,
+        "over_under": 153.5,
+        "over_odds": -112.0,
+        "under_odds": -108.0,
+        "home_moneyline": -800,
+        "away_moneyline": 550,
+        "home_implied_pct": 88.9,
+        "away_implied_pct": 15.4,
+        "open_home_ml": "-950",
+        "open_away_ml": "+625",
+        "line_movement": -1.6
+      },
+      "bpi": {
+        "home_bpi_win_pct": 82.9,
+        "away_bpi_win_pct": 17.1,
+        "bpi_pred_margin": 9.9,
+        "matchup_quality": 87.8,
+        "last_modified": "2026-03-22T08:05Z"
+      }
+    },
+    "401856560": {
+      "game_id": "401856560",
+      "date": "2026-03-23",
+      "name": "Texas Tech Red Raiders at Alabama Crimson Tide",
+      "home_id": "333",
+      "away_id": "2641",
+      "home_name": "Alabama Crimson Tide",
+      "away_name": "Texas Tech Red Raiders",
+      "completed": true,
+      "neutral": true,
+      "odds": {
+        "source": "core_odds",
+        "provider": "Draft Kings",
+        "spread": -1.5,
+        "over_under": 164.5,
+        "over_odds": -108.0,
+        "under_odds": -112.0,
+        "home_moneyline": -118,
+        "away_moneyline": -102,
+        "home_implied_pct": 54.1,
+        "away_implied_pct": 50.5,
+        "open_home_ml": "EVEN",
+        "open_away_ml": "-120",
+        "line_movement": null
+      },
+      "bpi": {
+        "home_bpi_win_pct": 54.2,
+        "away_bpi_win_pct": 45.8,
+        "bpi_pred_margin": 1.0,
+        "matchup_quality": 91.7,
+        "last_modified": "2026-03-22T08:05Z"
+      }
+    },
+    "401856568": {
+      "game_id": "401856568",
+      "date": "2026-03-26",
+      "name": "Texas Longhorns at Purdue Boilermakers",
+      "home_id": "2509",
+      "away_id": "251",
+      "home_name": "Purdue Boilermakers",
+      "away_name": "Texas Longhorns",
+      "completed": false,
+      "neutral": true,
+      "odds": {
+        "source": "core_odds",
+        "provider": "Draft Kings",
+        "spread": -6.5,
+        "over_under": 148.5,
+        "over_odds": -115.0,
+        "under_odds": -105.0,
+        "home_moneyline": -325,
+        "away_moneyline": 260,
+        "home_implied_pct": 76.5,
+        "away_implied_pct": 27.8,
+        "open_home_ml": "-345",
+        "open_away_ml": "+275",
+        "line_movement": -1.0
+      },
+      "bpi": {
+        "home_bpi_win_pct": 75.5,
+        "away_bpi_win_pct": 24.4,
+        "bpi_pred_margin": 7.0,
+        "matchup_quality": 86.7,
+        "last_modified": "2026-03-24T08:05Z"
+      }
+    },
+    "401858360": {
+      "game_id": "401858360",
+      "date": "2026-03-26",
+      "name": "Nevada Wolf Pack at Auburn Tigers",
+      "home_id": "2",
+      "away_id": "2440",
+      "home_name": "Auburn Tigers",
+      "away_name": "Nevada Wolf Pack",
+      "completed": false,
+      "neutral": false,
+      "odds": {
+        "source": "core_odds",
+        "provider": "Draft Kings",
+        "spread": -9.5,
+        "over_under": 154.5,
+        "over_odds": -110.0,
+        "under_odds": -110.0,
+        "home_moneyline": -455,
+        "away_moneyline": 350,
+        "home_implied_pct": 82.0,
+        "away_implied_pct": 22.2,
+        "open_home_ml": "-410",
+        "open_away_ml": "+320",
+        "line_movement": 1.6
+      },
+      "bpi": {
+        "home_bpi_win_pct": 84.2,
+        "away_bpi_win_pct": 15.8,
+        "bpi_pred_margin": 10.4,
+        "matchup_quality": 72.7,
+        "last_modified": "2026-03-24T08:05Z"
+      }
+    },
+    "401856567": {
+      "game_id": "401856567",
+      "date": "2026-03-26",
+      "name": "Iowa Hawkeyes at Nebraska Cornhuskers",
+      "home_id": "158",
+      "away_id": "2294",
+      "home_name": "Nebraska Cornhuskers",
+      "away_name": "Iowa Hawkeyes",
+      "completed": false,
+      "neutral": true,
+      "odds": {
+        "source": "core_odds",
+        "provider": "Draft Kings",
+        "spread": -1.5,
+        "over_under": 133.5,
+        "over_odds": -115.0,
+        "under_odds": -105.0,
+        "home_moneyline": -130,
+        "away_moneyline": 110,
+        "home_implied_pct": 56.5,
+        "away_implied_pct": 47.6,
+        "open_home_ml": "-155",
+        "open_away_ml": "+130",
+        "line_movement": -4.3
+      },
+      "bpi": {
+        "home_bpi_win_pct": 59.6,
+        "away_bpi_win_pct": 40.4,
+        "bpi_pred_margin": 2.4,
+        "matchup_quality": 89.5,
+        "last_modified": "2026-03-24T08:05Z"
+      }
+    },
+    "401856570": {
+      "game_id": "401856570",
+      "date": "2026-03-27",
+      "name": "St. John's Red Storm at Duke Blue Devils",
+      "home_id": "150",
+      "away_id": "2599",
+      "home_name": "Duke Blue Devils",
+      "away_name": "St. John's Red Storm",
+      "completed": false,
+      "neutral": true,
+      "odds": {
+        "source": "core_odds",
+        "provider": "Draft Kings",
+        "spread": -6.5,
+        "over_under": 141.5,
+        "over_odds": -110.0,
+        "under_odds": -110.0,
+        "home_moneyline": -290,
+        "away_moneyline": 235,
+        "home_implied_pct": 74.4,
+        "away_implied_pct": 29.9,
+        "open_home_ml": "-258",
+        "open_away_ml": "+210",
+        "line_movement": 2.3
+      },
+      "bpi": {
+        "home_bpi_win_pct": 76.7,
+        "away_bpi_win_pct": 23.3,
+        "bpi_pred_margin": 7.4,
+        "matchup_quality": 92.2,
+        "last_modified": "2026-03-24T08:05Z"
+      }
+    },
+    "401856569": {
+      "game_id": "401856569",
+      "date": "2026-03-27",
+      "name": "Arkansas Razorbacks at Arizona Wildcats",
+      "home_id": "12",
+      "away_id": "8",
+      "home_name": "Arizona Wildcats",
+      "away_name": "Arkansas Razorbacks",
+      "completed": false,
+      "neutral": true,
+      "odds": {
+        "source": "core_odds",
+        "provider": "Draft Kings",
+        "spread": -7.5,
+        "over_under": 167.5,
+        "over_odds": -110.0,
+        "under_odds": -110.0,
+        "home_moneyline": -360,
+        "away_moneyline": 285,
+        "home_implied_pct": 78.3,
+        "away_implied_pct": 26.0,
+        "open_home_ml": "-455",
+        "open_away_ml": "+350",
+        "line_movement": -3.7
+      },
+      "bpi": {
+        "home_bpi_win_pct": 76.6,
+        "away_bpi_win_pct": 23.4,
+        "bpi_pred_margin": 7.4,
+        "matchup_quality": 91.1,
+        "last_modified": "2026-03-24T08:05Z"
+      }
+    },
+    "401856572": {
+      "game_id": "401856572",
+      "date": "2026-03-27",
+      "name": "Alabama Crimson Tide at Michigan Wolverines",
+      "home_id": "130",
+      "away_id": "333",
+      "home_name": "Michigan Wolverines",
+      "away_name": "Alabama Crimson Tide",
+      "completed": false,
+      "neutral": true,
+      "odds": {
+        "source": "core_odds",
+        "provider": "Draft Kings",
+        "spread": -9.5,
+        "over_under": 175.5,
+        "over_odds": -105.0,
+        "under_odds": -115.0,
+        "home_moneyline": -535,
+        "away_moneyline": 400,
+        "home_implied_pct": 84.3,
+        "away_implied_pct": 20.0,
+        "open_home_ml": "-600",
+        "open_away_ml": "+440",
+        "line_movement": -1.4
+      },
+      "bpi": {
+        "home_bpi_win_pct": 72.6,
+        "away_bpi_win_pct": 27.4,
+        "bpi_pred_margin": 6.1,
+        "matchup_quality": 92.8,
+        "last_modified": "2026-03-24T08:05Z"
+      }
+    },
+    "401856566": {
+      "game_id": "401856566",
+      "date": "2026-03-27",
+      "name": "Illinois Fighting Illini at Houston Cougars",
+      "home_id": "248",
+      "away_id": "356",
+      "home_name": "Houston Cougars",
+      "away_name": "Illinois Fighting Illini",
+      "completed": false,
+      "neutral": true,
+      "odds": {
+        "source": "core_odds",
+        "provider": "Draft Kings",
+        "spread": -3.5,
+        "over_under": 139.5,
+        "over_odds": -115.0,
+        "under_odds": -105.0,
+        "home_moneyline": -162,
+        "away_moneyline": 136,
+        "home_implied_pct": 61.8,
+        "away_implied_pct": 42.4,
+        "open_home_ml": "-162",
+        "open_away_ml": "+136",
+        "line_movement": 0.0
+      },
+      "bpi": {
+        "home_bpi_win_pct": 59.3,
+        "away_bpi_win_pct": 40.7,
+        "bpi_pred_margin": 2.3,
+        "matchup_quality": 96.7,
+        "last_modified": "2026-03-24T08:05Z"
+      }
+    },
+    "401856571": {
+      "game_id": "401856571",
+      "date": "2026-03-28",
+      "name": "Michigan State Spartans at UConn Huskies",
+      "home_id": "41",
+      "away_id": "127",
+      "home_name": "UConn Huskies",
+      "away_name": "Michigan State Spartans",
+      "completed": false,
+      "neutral": true,
+      "odds": {
+        "source": "core_odds",
+        "provider": "Draft Kings",
+        "spread": -1.5,
+        "over_under": 136.5,
+        "over_odds": -110.0,
+        "under_odds": -110.0,
+        "home_moneyline": -130,
+        "away_moneyline": 110,
+        "home_implied_pct": 56.5,
+        "away_implied_pct": 47.6,
+        "open_home_ml": "EVEN",
+        "open_away_ml": "-120",
+        "line_movement": null
+      },
+      "bpi": {
+        "home_bpi_win_pct": 53.4,
+        "away_bpi_win_pct": 46.6,
+        "bpi_pred_margin": 0.8,
+        "matchup_quality": 94.5,
+        "last_modified": "2026-03-24T08:05Z"
+      }
+    },
+    "401856573": {
+      "game_id": "401856573",
+      "date": "2026-03-28",
+      "name": "Tennessee Volunteers at Iowa State Cyclones",
+      "home_id": "66",
+      "away_id": "2633",
+      "home_name": "Iowa State Cyclones",
+      "away_name": "Tennessee Volunteers",
+      "completed": false,
+      "neutral": true,
+      "odds": {
+        "source": "core_odds",
+        "provider": "Draft Kings",
+        "spread": -4.5,
+        "over_under": 138.5,
+        "over_odds": -108.0,
+        "under_odds": -112.0,
+        "home_moneyline": -192,
+        "away_moneyline": 160,
+        "home_implied_pct": 65.8,
+        "away_implied_pct": 38.5,
+        "open_home_ml": "-218",
+        "open_away_ml": "+180",
+        "line_movement": -2.8
+      },
+      "bpi": {
+        "home_bpi_win_pct": 60.6,
+        "away_bpi_win_pct": 39.4,
+        "bpi_pred_margin": 2.7,
+        "matchup_quality": 95.0,
+        "last_modified": "2026-03-24T08:05Z"
+      }
+    }
+  },
+  "futures": {
+    "arizona": {
+      "espn_id": "12",
+      "markets": {
+        "region_west": {
+          "moneyline": "-160",
+          "implied_pct": 61.5
+        },
+        "big_12_conference_winner": {
+          "moneyline": "+320",
+          "implied_pct": 23.8
+        },
+        "championship": {
+          "moneyline": "+1600",
+          "implied_pct": 5.9
+        }
+      }
+    },
+    "purdue": {
+      "espn_id": "2509",
+      "markets": {
+        "region_west": {
+          "moneyline": "+215",
+          "implied_pct": 31.7
+        },
+        "big_ten_conference_winner": {
+          "moneyline": "+200",
+          "implied_pct": 33.3
+        },
+        "championship": {
+          "moneyline": "+1000",
+          "implied_pct": 9.1
+        }
+      }
+    },
+    "arkansas": {
+      "espn_id": "8",
+      "markets": {
+        "region_west": {
+          "moneyline": "+1000",
+          "implied_pct": 9.1
+        },
+        "southeastern_conference_winner": {
+          "moneyline": "+1000",
+          "implied_pct": 9.1
+        },
+        "championship": {
+          "moneyline": "+4000",
+          "implied_pct": 2.4
+        }
+      }
+    },
+    "texas": {
+      "espn_id": "251",
+      "markets": {
+        "region_west": {
+          "moneyline": "+2500",
+          "implied_pct": 3.8
+        },
+        "southeastern_conference_winner": {
+          "moneyline": "+3000",
+          "implied_pct": 3.2
+        },
+        "championship": {
+          "moneyline": "+10000",
+          "implied_pct": 1.0
+        }
+      }
+    },
+    "michigan": {
+      "espn_id": "130",
+      "markets": {
+        "region_midwest": {
+          "moneyline": "-145",
+          "implied_pct": 59.2
+        },
+        "big_ten_conference_winner": {
+          "moneyline": "+160",
+          "implied_pct": 38.5
+        },
+        "championship": {
+          "moneyline": "+750",
+          "implied_pct": 11.8
+        }
+      }
+    },
+    "iowa state": {
+      "espn_id": "66",
+      "markets": {
+        "region_midwest": {
+          "moneyline": "+250",
+          "implied_pct": 28.6
+        },
+        "big_12_conference_winner": {
+          "moneyline": "+450",
+          "implied_pct": 18.2
+        },
+        "championship": {
+          "moneyline": "+2500",
+          "implied_pct": 3.8
+        }
+      }
+    },
+    "tennessee": {
+      "espn_id": "2633",
+      "markets": {
+        "region_midwest": {
+          "moneyline": "+700",
+          "implied_pct": 12.5
+        },
+        "southeastern_conference_winner": {
+          "moneyline": "+600",
+          "implied_pct": 14.3
+        },
+        "championship": {
+          "moneyline": "+2500",
+          "implied_pct": 3.8
+        }
+      }
+    },
+    "alabama": {
+      "espn_id": "333",
+      "markets": {
+        "region_midwest": {
+          "moneyline": "+1500",
+          "implied_pct": 6.2
+        },
+        "southeastern_conference_winner": {
+          "moneyline": "+450",
+          "implied_pct": 18.2
+        },
+        "championship": {
+          "moneyline": "+3000",
+          "implied_pct": 3.2
+        }
+      }
+    },
+    "houston": {
+      "espn_id": "248",
+      "markets": {
+        "region_south": {
+          "moneyline": "+130",
+          "implied_pct": 43.5
+        },
+        "big_12_conference_winner": {
+          "moneyline": "+185",
+          "implied_pct": 35.1
+        },
+        "championship": {
+          "moneyline": "+1400",
+          "implied_pct": 6.7
+        }
+      }
+    },
+    "illinois": {
+      "espn_id": "356",
+      "markets": {
+        "region_south": {
+          "moneyline": "+230",
+          "implied_pct": 30.3
+        },
+        "big_ten_conference_winner": {
+          "moneyline": "+1000",
+          "implied_pct": 9.1
+        },
+        "championship": {
+          "moneyline": "+2500",
+          "implied_pct": 3.8
+        }
+      }
+    },
+    "nebraska": {
+      "espn_id": "158",
+      "markets": {
+        "region_south": {
+          "moneyline": "+370",
+          "implied_pct": 21.3
+        },
+        "big_ten_conference_winner": {
+          "moneyline": "+7500",
+          "implied_pct": 1.3
+        },
+        "championship": {
+          "moneyline": "+20000",
+          "implied_pct": 0.5
+        }
+      }
+    },
+    "iowa": {
+      "espn_id": "2294",
+      "markets": {
+        "region_south": {
+          "moneyline": "+750",
+          "implied_pct": 11.8
+        },
+        "big_ten_conference_winner": {
+          "moneyline": "+2500",
+          "implied_pct": 3.8
+        },
+        "championship": {
+          "moneyline": "+10000",
+          "implied_pct": 1.0
+        }
+      }
+    },
+    "duke": {
+      "espn_id": "150",
+      "markets": {
+        "region_east": {
+          "moneyline": "-125",
+          "implied_pct": 55.6
+        },
+        "atlantic_coast_conference_winner": {
+          "moneyline": "+105",
+          "implied_pct": 48.8
+        },
+        "championship": {
+          "moneyline": "+1100",
+          "implied_pct": 8.3
+        }
+      }
+    },
+    "michigan st": {
+      "espn_id": "127",
+      "markets": {
+        "region_east": {
+          "moneyline": "+475",
+          "implied_pct": 17.4
+        },
+        "big_ten_conference_winner": {
+          "moneyline": "+1300",
+          "implied_pct": 7.1
+        },
+        "championship": {
+          "moneyline": "+3000",
+          "implied_pct": 3.2
+        }
+      }
+    },
+    "st john's": {
+      "espn_id": "2599",
+      "markets": {
+        "region_east": {
+          "moneyline": "+475",
+          "implied_pct": 17.4
+        },
+        "big_east_conference_winner": {
+          "moneyline": "+175",
+          "implied_pct": 36.4
+        },
+        "championship": {
+          "moneyline": "+2500",
+          "implied_pct": 3.8
+        }
+      }
+    },
+    "uconn": {
+      "espn_id": "41",
+      "markets": {
+        "region_east": {
+          "moneyline": "+500",
+          "implied_pct": 16.7
+        },
+        "big_east_conference_winner": {
+          "moneyline": "-130",
+          "implied_pct": 56.5
+        },
+        "championship": {
+          "moneyline": "+1300",
+          "implied_pct": 7.1
+        }
+      }
+    },
+    "utah state": {
+      "espn_id": "328",
+      "markets": {
+        "mountain_west_conference_winner": {
+          "moneyline": "+200",
+          "implied_pct": 33.3
+        },
+        "championship": {
+          "moneyline": "+20000",
+          "implied_pct": 0.5
+        }
+      }
+    },
+    "prairie view": {
+      "espn_id": "2440",
+      "markets": {
+        "mountain_west_conference_winner": {
+          "moneyline": "+2800",
+          "implied_pct": 3.4
+        },
+        "championship": {
+          "moneyline": "+50000",
+          "implied_pct": 0.2
+        }
+      }
+    },
+    "saint louis": {
+      "espn_id": "139",
+      "markets": {
+        "ncaa(b)_-_atlantic_10_conference_winner_(reg._season)": {
+          "moneyline": "+250",
+          "implied_pct": 28.6
+        }
+      }
+    },
+    "vcu": {
+      "espn_id": "2670",
+      "markets": {
+        "ncaa(b)_-_atlantic_10_conference_winner_(reg._season)": {
+          "moneyline": "+320",
+          "implied_pct": 23.8
+        },
+        "championship": {
+          "moneyline": "+20000",
+          "implied_pct": 0.5
+        }
+      }
+    },
+    "byu": {
+      "espn_id": "252",
+      "markets": {
+        "big_12_conference_winner": {
+          "moneyline": "+650",
+          "implied_pct": 13.3
+        },
+        "championship": {
+          "moneyline": "+2500",
+          "implied_pct": 3.8
+        }
+      }
+    },
+    "texas tech": {
+      "espn_id": "2641",
+      "markets": {
+        "big_12_conference_winner": {
+          "moneyline": "+800",
+          "implied_pct": 11.1
+        },
+        "championship": {
+          "moneyline": "+4000",
+          "implied_pct": 2.4
+        }
+      }
+    },
+    "kansas": {
+      "espn_id": "2305",
+      "markets": {
+        "big_12_conference_winner": {
+          "moneyline": "+1000",
+          "implied_pct": 9.1
+        },
+        "championship": {
+          "moneyline": "+3000",
+          "implied_pct": 3.2
+        }
+      }
+    },
+    "tcu": {
+      "espn_id": "2628",
+      "markets": {
+        "big_12_conference_winner": {
+          "moneyline": "+8000",
+          "implied_pct": 1.2
+        },
+        "championship": {
+          "moneyline": "+30000",
+          "implied_pct": 0.3
+        }
+      }
+    },
+    "ucf": {
+      "espn_id": "2116",
+      "markets": {
+        "big_12_conference_winner": {
+          "moneyline": "+20000",
+          "implied_pct": 0.5
+        },
+        "championship": {
+          "moneyline": "+30000",
+          "implied_pct": 0.3
+        }
+      }
+    },
+    "louisville": {
+      "espn_id": "97",
+      "markets": {
+        "atlantic_coast_conference_winner": {
+          "moneyline": "+210",
+          "implied_pct": 32.3
+        },
+        "championship": {
+          "moneyline": "+2000",
+          "implied_pct": 4.8
+        }
+      }
+    },
+    "north carolina": {
+      "espn_id": "153",
+      "markets": {
+        "atlantic_coast_conference_winner": {
+          "moneyline": "+1000",
+          "implied_pct": 9.1
+        },
+        "championship": {
+          "moneyline": "+4000",
+          "implied_pct": 2.4
+        }
+      }
+    },
+    "nc state": {
+      "espn_id": "152",
+      "markets": {
+        "atlantic_coast_conference_winner": {
+          "moneyline": "+1100",
+          "implied_pct": 8.3
+        },
+        "championship": {
+          "moneyline": "+5000",
+          "implied_pct": 2.0
+        }
+      }
+    },
+    "clemson": {
+      "espn_id": "228",
+      "markets": {
+        "atlantic_coast_conference_winner": {
+          "moneyline": "+1600",
+          "implied_pct": 5.9
+        },
+        "championship": {
+          "moneyline": "+20000",
+          "implied_pct": 0.5
+        }
+      }
+    },
+    "virginia": {
+      "espn_id": "258",
+      "markets": {
+        "atlantic_coast_conference_winner": {
+          "moneyline": "+2200",
+          "implied_pct": 4.3
+        },
+        "championship": {
+          "moneyline": "+10000",
+          "implied_pct": 1.0
+        }
+      }
+    },
+    "smu": {
+      "espn_id": "2567",
+      "markets": {
+        "atlantic_coast_conference_winner": {
+          "moneyline": "+4000",
+          "implied_pct": 2.4
+        },
+        "championship": {
+          "moneyline": "+15000",
+          "implied_pct": 0.7
+        }
+      }
+    },
+    "miami": {
+      "espn_id": "2390",
+      "markets": {
+        "atlantic_coast_conference_winner": {
+          "moneyline": "+4000",
+          "implied_pct": 2.4
+        },
+        "championship": {
+          "moneyline": "+15000",
+          "implied_pct": 0.7
+        }
+      }
+    },
+    "south florida": {
+      "espn_id": "58",
+      "markets": {
+        "american_athletic_conference_winner": {
+          "moneyline": "+215",
+          "implied_pct": 31.7
+        }
+      }
+    },
+    "kentucky": {
+      "espn_id": "96",
+      "markets": {
+        "southeastern_conference_winner": {
+          "moneyline": "+400",
+          "implied_pct": 20.0
+        },
+        "championship": {
+          "moneyline": "+2500",
+          "implied_pct": 3.8
+        }
+      }
+    },
+    "florida": {
+      "espn_id": "57",
+      "markets": {
+        "southeastern_conference_winner": {
+          "moneyline": "+400",
+          "implied_pct": 20.0
+        },
+        "championship": {
+          "moneyline": "+2200",
+          "implied_pct": 4.3
+        }
+      }
+    },
+    "vanderbilt": {
+      "espn_id": "238",
+      "markets": {
+        "southeastern_conference_winner": {
+          "moneyline": "+700",
+          "implied_pct": 12.5
+        },
+        "championship": {
+          "moneyline": "+4000",
+          "implied_pct": 2.4
+        }
+      }
+    },
+    "missouri": {
+      "espn_id": "142",
+      "markets": {
+        "southeastern_conference_winner": {
+          "moneyline": "+2000",
+          "implied_pct": 4.8
+        },
+        "championship": {
+          "moneyline": "+15000",
+          "implied_pct": 0.7
+        }
+      }
+    },
+    "georgia": {
+      "espn_id": "61",
+      "markets": {
+        "southeastern_conference_winner": {
+          "moneyline": "+3000",
+          "implied_pct": 3.2
+        },
+        "championship": {
+          "moneyline": "+30000",
+          "implied_pct": 0.3
+        }
+      }
+    },
+    "texas a&m": {
+      "espn_id": "245",
+      "markets": {
+        "southeastern_conference_winner": {
+          "moneyline": "+5000",
+          "implied_pct": 2.0
+        },
+        "championship": {
+          "moneyline": "+20000",
+          "implied_pct": 0.5
+        }
+      }
+    },
+    "ucla": {
+      "espn_id": "26",
+      "markets": {
+        "big_ten_conference_winner": {
+          "moneyline": "+1100",
+          "implied_pct": 8.3
+        },
+        "championship": {
+          "moneyline": "+8000",
+          "implied_pct": 1.2
+        }
+      }
+    },
+    "ohio state": {
+      "espn_id": "194",
+      "markets": {
+        "big_ten_conference_winner": {
+          "moneyline": "+2000",
+          "implied_pct": 4.8
+        },
+        "championship": {
+          "moneyline": "+15000",
+          "implied_pct": 0.7
+        }
+      }
+    },
+    "wisconsin": {
+      "espn_id": "275",
+      "markets": {
+        "big_ten_conference_winner": {
+          "moneyline": "+2500",
+          "implied_pct": 3.8
+        },
+        "championship": {
+          "moneyline": "+8000",
+          "implied_pct": 1.2
+        }
+      }
+    },
+    "villanova": {
+      "espn_id": "222",
+      "markets": {
+        "big_east_conference_winner": {
+          "moneyline": "+1200",
+          "implied_pct": 7.7
+        },
+        "championship": {
+          "moneyline": "+15000",
+          "implied_pct": 0.7
+        }
+      }
+    },
+    "gonzaga": {
+      "espn_id": "2250",
+      "markets": {
+        "ncaa(b)_-_west_coast_conference_-_winner_(reg.season)": {
+          "moneyline": "-375",
+          "implied_pct": 78.9
+        },
+        "championship": {
+          "moneyline": "+1700",
+          "implied_pct": 5.6
+        }
+      }
+    },
+    "saint mary's": {
+      "espn_id": "2608",
+      "markets": {
+        "ncaa(b)_-_west_coast_conference_-_winner_(reg.season)": {
+          "moneyline": "+375",
+          "implied_pct": 21.1
+        },
+        "championship": {
+          "moneyline": "+25000",
+          "implied_pct": 0.4
+        }
+      }
+    },
+    "santa clara": {
+      "espn_id": "2541",
+      "markets": {
+        "ncaa(b)_-_west_coast_conference_-_winner_(reg.season)": {
+          "moneyline": "+1600",
+          "implied_pct": 5.9
+        },
+        "championship": {
+          "moneyline": "+50000",
+          "implied_pct": 0.2
+        }
+      }
+    },
+    "mcneese": {
+      "espn_id": "2377",
+      "markets": {
+        "championship": {
+          "moneyline": "+25000",
+          "implied_pct": 0.4
+        }
+      }
+    },
+    "high point": {
+      "espn_id": "2272",
+      "markets": {
+        "championship": {
+          "moneyline": "+50000",
+          "implied_pct": 0.2
+        }
+      }
+    }
+  }
+}
