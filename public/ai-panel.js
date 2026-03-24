@@ -501,6 +501,34 @@ function renderConfidence(conf, oddsRaw) {
     </div>`;
   }
 
+  // Build structured analysis sections if available
+  const sec = conf.sections ?? {};
+  const SECTION_DEFS = [
+    { key: 'injury_note',      label: '⚠ Injury Alert',      show: (s) => !!s },
+    { key: 'decisive_factor',  label: 'Decisive Factor',      show: () => true },
+    { key: 'key_matchup',      label: 'Key Matchup',          show: () => true },
+    { key: 'x_factors',        label: 'X-Factors',            show: () => true },
+    { key: 'risk',             label: 'The Risk',             show: () => true },
+    { key: 'market_vs_model',  label: 'Market vs Model',      show: () => true },
+    { key: 'bottom_line',      label: 'Bottom Line',          show: () => true },
+  ];
+
+  const sectionHTML = SECTION_DEFS
+    .filter(d => d.show(sec[d.key]) && sec[d.key])
+    .map(d => {
+      const isInjury     = d.key === 'injury_note';
+      const isBottomLine = d.key === 'bottom_line';
+      return `<div class="conf-section ${isInjury ? 'conf-section-injury' : ''} ${isBottomLine ? 'conf-section-bottom-line' : ''}">
+        <div class="conf-section-label">${d.label}</div>
+        <div class="conf-section-text">${escapeHtml(sec[d.key])}</div>
+      </div>`;
+    }).join('');
+
+  // Fallback to flat reasoning if no sections (old API response)
+  const analysisHTML = sectionHTML || (conf.reasoning
+    ? `<div class="conf-section"><div class="conf-section-text">${escapeHtml(conf.reasoning)}</div></div>`
+    : '');
+
   return `<div class="confidence-block" id="conf-block-${conf.team_a}-${conf.team_b}">
     <div class="conf-header">
       <span class="conf-label">AI SCOUT MULTI-AGENT ANALYSIS</span>
@@ -524,6 +552,7 @@ function renderConfidence(conf, oddsRaw) {
     <div class="conf-agents-title">Agent breakdown</div>
     <div class="conf-agents">${breakdown}</div>${marketBlock}
     <div class="conf-weights">Weights: ${weightLabel}</div>
+    <div class="conf-analysis">${analysisHTML}</div>
     <button class="conf-export-btn" onclick="saveAnalysis(this)" data-team-a="${teamA}" data-team-b="${teamB}" data-pct="${barPct}" data-range="${conf.range_low}–${conf.range_high}" data-favor="${favor}" data-disppct="${dispPct}" data-consensus="${escapeHtml(consensus)}" data-reasoning="${escapeHtml(conf.reasoning ?? '')}" data-breakdown="${escapeHtml(JSON.stringify(conf.agent_breakdown ?? []))}">+ Save analysis</button>
   </div>`;
 }

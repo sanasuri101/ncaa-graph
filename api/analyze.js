@@ -41,7 +41,8 @@ function sanitizeLLMOutput(text) {
 
 const GROQ_URL      = 'https://api.groq.com/openai/v1/chat/completions';
 const MODEL         = 'llama-3.3-70b-versatile';
-const MAX_TOKENS    = 1024;
+const MAX_TOKENS          = 1024;   // per specialist agent
+const MAX_TOKENS_SYNTHESIS = 2048;  // synthesis needs room for depth
 const FETCH_TIMEOUT = 20000;
 
 const CORS = {
@@ -194,7 +195,7 @@ function fmtTeamFull(node, torvik, form, injuryMap) {
 }
 
 // ── Groq fetch helper ─────────────────────────────────────────────────────────
-async function groqCall(systemPrompt, userPrompt, groqKey, attempt = 0) {
+async function groqCall(systemPrompt, userPrompt, groqKey, attempt = 0, maxTokens = MAX_TOKENS) {
   const ctrl  = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), FETCH_TIMEOUT);
   try {
@@ -203,7 +204,7 @@ async function groqCall(systemPrompt, userPrompt, groqKey, attempt = 0) {
       headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${groqKey}` },
       body: JSON.stringify({
         model:      MODEL,
-        max_tokens: MAX_TOKENS,
+        max_tokens: maxTokens,
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user',   content: userPrompt   },
@@ -615,12 +616,22 @@ async function synthesisNode(state, config) {
     ? 'Efficiency 40%, Market/BPI 20%, Recent Form 20%, Matchup History 20%'
     : 'Efficiency 50%, Recent Form 25%, Matchup History 25% (no market data)';
 
-  const system = `You are a senior NCAA tournament analyst — think Nate Silver meets Jay Bilas. You write like The Athletic: specific, opinionated, data-driven. No hedging. No generic observations.
-Output ONLY the analysis text. No notes, no meta-commentary, no self-referential statements, no "Note:" lines after your analysis.`;
+  const system = `You are a senior NCAA tournament analyst. Write like The Athletic: deep, specific, opinionated. This is long-form expert analysis, not a summary.
+You MUST respond with valid JSON only. No markdown fences, no backticks, no text outside the JSON object.
+Schema:
+{
+  "injury_note": "<If ANY player has ⚠ in the roster data: 2-3 sentences on the injury, which player it is, their stats, and the direct impact on this specific matchup. If no injuries flagged, return empty string.>",
+  "decisive_factor": "<4-6 sentences. The single biggest structural reason one team wins. Go deep: compare the specific efficiency metrics, explain the causal chain, cite the exact numbers from both rosters. Connect it to how the game will actually be played.>",
+  "key_matchup": "<4-5 sentences. The player vs player or unit vs unit battle that decides the game. Name both players with their full stat lines — PPG, RPG, APG, FG%, experience year, height, weight. Explain the physical and stylistic mismatch. Cite who has the advantage and why.>",
+  "x_factors": "<3-4 sentences. Two or three specific things — a player, a tendency, a situational factor — that most analysts are underweighting. Think: turnover rates, pace mismatch, rebounding margin, bench depth, specific shooting splits, Four Factors advantages. Cite numbers.>",
+  "risk": "<3-4 sentences. The specific scenario where the favorite loses. Name the players involved, the game situation, the exact vulnerability. Make it concrete — not 'if they go cold' but 'if Cadeau (2.4 TOV/game) turns it over under pressure and Illinois converts in transition'.>",
+  "market_vs_model": "<2-3 sentences. Compare the weighted model probability to the DraftKings implied probability and BPI. If they diverge by 6+ points, explain the gap and which signal to trust. If aligned, note what that consensus means for the prediction confidence.>",
+  "bottom_line": "<2-3 sentences. Your firm prediction — who wins, why, by how much. Give a specific final score. Name the decisive player performance that seals it.>"
+}`;
 
-  const user = `Synthesize these expert analyses into a deep final matchup prediction.
+  const user = `Synthesize a deep expert matchup analysis. This should be as detailed and specific as a full pre-game scouting report.
 
-TEAM DATA:
+TEAM DATA WITH FULL ROSTERS:
 ${state.team_a_data}
 
 vs
@@ -634,35 +645,60 @@ WEIGHTED WIN PROBABILITY for ${state.team_a}: ${weightedPct}% (range: ${rangeLow
 Weights: ${weightDesc}
 Agent spread: ${spread.toFixed(0)} pts (${spread < 10 ? 'strong consensus' : spread < 20 ? 'moderate agreement' : 'significant disagreement'})
 
-Write a 5-7 sentence analysis structured as follows:
-1. THE DECISIVE FACTOR: The single biggest reason one team wins. Be specific — cite the exact stat, matchup, or situational advantage that matters most.
-2. KEY MATCHUP: The player vs player or unit vs unit battle that decides the game. Name the players. Give numbers.
-3. THE RISK: What goes wrong for the favorite. The specific scenario where the upset happens.
-4. MARKET vs MODEL: If the betting line and efficiency models diverge by more than 6 points, explain why and which to trust.
-5. BOTTOM LINE: One sentence. Your prediction with a specific score range.
-
-If there are injuries flagged in the team data, make them central to the analysis — don't bury them.
-Cite exact AdjEM, AdjOE, AdjDE, Barthag, eFG%, turnover rate numbers. This is expert analysis, not a summary.`;
+RULES — follow these exactly:
+- Every section must cite specific player names AND their stats from the roster data
+- Every section must cite at least one efficiency number (AdjEM, AdjOE, AdjDE, eFG%, Barthag, TOV%, rebounding margin)
+- injury_note: if any player has ⚠ in the roster, this must be non-empty and specific
+- x_factors: go beyond the obvious — find the hidden edges that decide close games
+- bottom_line: must include a specific score prediction like "Houston wins 74-69" and name the player who seals it
+- Write like you are being paid to be right, not to be safe
+Return only the JSON object. No backticks. No preamble.`;
 
   try {
-    let reasoning = sanitizeLLMOutput(await groqCall(system, user, groqKey));
-    // Fallback: if synthesis returned empty, stitch agent reasonings together
-    if (!reasoning) {
-      reasoning = results
-        .filter(r => r.reasoning)
-        .map(r => r.reasoning)
-        .join(' ');
+    const raw   = await groqCall(system, user, groqKey, 0, MAX_TOKENS_SYNTHESIS);
+    const clean = raw.replace(/```json|```/g, '').trim();
+
+    let sections = {};
+    try {
+      sections = JSON.parse(clean);
+    } catch {
+      // Fallback: model didn't return valid JSON — use raw text as decisive_factor
+      sections = { decisive_factor: sanitizeLLMOutput(clean) || results.map(r => r.reasoning).filter(Boolean).join(' ') };
     }
+
+    // Sanitize each field
+    const san = (s) => s ? sanitizeLLMOutput(String(s)) : '';
+
+    // Build a flat reasoning string for backward compat (used by old chat path)
+    const reasoning = [
+      sections.decisive_factor,
+      sections.key_matchup,
+      sections.risk,
+      sections.market_vs_model,
+      sections.injury_note,
+      sections.bottom_line,
+    ].filter(Boolean).map(san).join('\n\n');
+
     const confidence = {
-      team_a:    state.team_a,
-      team_b:    state.team_b,
-      win_pct:   weightedPct,
-      range_low: rangeLow,
-      range_high:rangeHigh,
+      team_a:       state.team_a,
+      team_b:       state.team_b,
+      win_pct:      weightedPct,
+      range_low:    rangeLow,
+      range_high:   rangeHigh,
       agent_spread: Math.round(spread),
-      consensus: spread < 10 ? 'strong' : spread < 20 ? 'moderate' : 'split',
+      consensus:    spread < 10 ? 'strong' : spread < 20 ? 'moderate' : 'split',
       weights,
       reasoning,
+      // Structured sections for rich UI rendering
+      sections: {
+        injury_note:      san(sections.injury_note      ?? ''),
+        decisive_factor:  san(sections.decisive_factor  ?? ''),
+        key_matchup:      san(sections.key_matchup      ?? ''),
+        x_factors:        san(sections.x_factors        ?? ''),
+        risk:             san(sections.risk              ?? ''),
+        market_vs_model:  san(sections.market_vs_model  ?? ''),
+        bottom_line:      san(sections.bottom_line      ?? ''),
+      },
       agent_breakdown: results.map(r => ({
         agent:      r.agent,
         win_pct:    r.win_pct,

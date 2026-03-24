@@ -4553,6 +4553,59 @@ section { margin-bottom: 20px; }
   .bracket-center { width: 130px; }
 }
 
+
+/* ── Confidence analysis sections ───────────────────────────────────────────── */
+.conf-analysis {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-top: 10px;
+  border-top: 1px solid var(--border);
+}
+
+.conf-section {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+.conf-section:last-child { border-bottom: none; }
+
+.conf-section-label {
+  font-size: .6rem;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 5px;
+}
+
+.conf-section-text {
+  font-size: .82rem;
+  color: var(--text);
+  line-height: 1.65;
+  font-weight: 400;
+}
+
+.conf-section-injury {
+  background: rgba(184, 69, 69, .06);
+  border-left: 3px solid var(--midwest);
+}
+
+.conf-section-injury .conf-section-label {
+  color: var(--midwest);
+}
+
+.conf-section-bottom-line {
+  background: var(--surface2);
+}
+
+.conf-section-bottom-line .conf-section-text {
+  font-weight: 600;
+  font-size: .86rem;
+  color: var(--text);
+}
+
 /* ══════════════════════════════════════════════════════════════════════════════
    ODDS VIEW
    ══════════════════════════════════════════════════════════════════════════════ */
