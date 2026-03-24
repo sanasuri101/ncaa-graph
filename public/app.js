@@ -1196,7 +1196,16 @@ function switchView(name) {
   if (name === 'rankings') populateRankingsPage();
 
   // When scout view is activated, init team selects
-  if (name === 'scout' && window.initScoutView) initScoutView();
+  // Also hide the ai-panel sidebar — Scout IS the full-page chat
+  if (name === 'scout' && window.initScoutView) {
+    initScoutView();
+    const panel = document.getElementById('ai-panel');
+    if (panel) { panel._wasOpen = panel.classList.contains('open'); panel.classList.remove('open'); }
+  } else {
+    // Restore panel if it was open before switching to scout
+    const panel = document.getElementById('ai-panel');
+    if (panel && panel._wasOpen) { panel.classList.add('open'); panel._wasOpen = false; }
+  }
 }
 
 function populateRankingsPage() {

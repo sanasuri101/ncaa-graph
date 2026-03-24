@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-24T09:10:53.363537+00:00",
+  "generated_at": "2026-03-24T10:15:13.418374+00:00",
   "games": {
     "401856435": {
       "game_id": "401856435",
@@ -394,39 +394,6 @@
         "away_bpi_win_pct": 25.5,
         "bpi_pred_margin": 6.7,
         "matchup_quality": 68.6,
-        "last_modified": "2026-03-18T08:04Z"
-      }
-    },
-    "401858341": {
-      "game_id": "401858341",
-      "date": "2026-03-19",
-      "name": "Murray State Racers at Nevada Wolf Pack",
-      "home_id": "2440",
-      "away_id": "93",
-      "home_name": "Nevada Wolf Pack",
-      "away_name": "Murray State Racers",
-      "completed": true,
-      "neutral": false,
-      "odds": {
-        "source": "core_odds",
-        "provider": "Draft Kings",
-        "spread": -8.5,
-        "over_under": 159.5,
-        "over_odds": -112.0,
-        "under_odds": -108.0,
-        "home_moneyline": -440,
-        "away_moneyline": 340,
-        "home_implied_pct": 81.5,
-        "away_implied_pct": 22.7,
-        "open_home_ml": "-380",
-        "open_away_ml": "+300",
-        "line_movement": 2.3
-      },
-      "bpi": {
-        "home_bpi_win_pct": 78.9,
-        "away_bpi_win_pct": 21.1,
-        "bpi_pred_margin": 8.2,
-        "matchup_quality": 57.0,
         "last_modified": "2026-03-18T08:04Z"
       }
     },
@@ -1585,39 +1552,6 @@
         "last_modified": "2026-03-22T08:05Z"
       }
     },
-    "401858349": {
-      "game_id": "401858349",
-      "date": "2026-03-22",
-      "name": "Liberty Flames at Nevada Wolf Pack",
-      "home_id": "2440",
-      "away_id": "2335",
-      "home_name": "Nevada Wolf Pack",
-      "away_name": "Liberty Flames",
-      "completed": true,
-      "neutral": false,
-      "odds": {
-        "source": "core_odds",
-        "provider": "Draft Kings",
-        "spread": -7.5,
-        "over_under": 146.5,
-        "over_odds": -115.0,
-        "under_odds": -105.0,
-        "home_moneyline": -325,
-        "away_moneyline": 260,
-        "home_implied_pct": 76.5,
-        "away_implied_pct": 27.8,
-        "open_home_ml": "-340",
-        "open_away_ml": "+270",
-        "line_movement": -0.8
-      },
-      "bpi": {
-        "home_bpi_win_pct": 71.8,
-        "away_bpi_win_pct": 28.2,
-        "bpi_pred_margin": 5.8,
-        "matchup_quality": 61.3,
-        "last_modified": "2026-03-21T08:05Z"
-      }
-    },
     "401856534": {
       "game_id": "401856534",
       "date": "2026-03-22",
@@ -1816,39 +1750,6 @@
         "last_modified": "2026-03-24T08:05Z"
       }
     },
-    "401858360": {
-      "game_id": "401858360",
-      "date": "2026-03-26",
-      "name": "Nevada Wolf Pack at Auburn Tigers",
-      "home_id": "2",
-      "away_id": "2440",
-      "home_name": "Auburn Tigers",
-      "away_name": "Nevada Wolf Pack",
-      "completed": false,
-      "neutral": false,
-      "odds": {
-        "source": "core_odds",
-        "provider": "Draft Kings",
-        "spread": -9.5,
-        "over_under": 154.5,
-        "over_odds": -110.0,
-        "under_odds": -110.0,
-        "home_moneyline": -455,
-        "away_moneyline": 350,
-        "home_implied_pct": 82.0,
-        "away_implied_pct": 22.2,
-        "open_home_ml": "-410",
-        "open_away_ml": "+320",
-        "line_movement": 1.6
-      },
-      "bpi": {
-        "home_bpi_win_pct": 84.2,
-        "away_bpi_win_pct": 15.8,
-        "bpi_pred_margin": 10.4,
-        "matchup_quality": 72.7,
-        "last_modified": "2026-03-24T08:05Z"
-      }
-    },
     "401856567": {
       "game_id": "401856567",
       "date": "2026-03-26",
@@ -1995,9 +1896,9 @@
         "source": "core_odds",
         "provider": "Draft Kings",
         "spread": -3.5,
-        "over_under": 139.5,
-        "over_odds": -115.0,
-        "under_odds": -105.0,
+        "over_under": 140.5,
+        "over_odds": -105.0,
+        "under_odds": -115.0,
         "home_moneyline": -162,
         "away_moneyline": 136,
         "home_implied_pct": 61.8,
@@ -2364,19 +2265,6 @@
         "championship": {
           "moneyline": "+20000",
           "implied_pct": 0.5
-        }
-      }
-    },
-    "prairie view": {
-      "espn_id": "2440",
-      "markets": {
-        "mountain_west_conference_winner": {
-          "moneyline": "+2800",
-          "implied_pct": 3.4
-        },
-        "championship": {
-          "moneyline": "+50000",
-          "implied_pct": 0.2
         }
       }
     },

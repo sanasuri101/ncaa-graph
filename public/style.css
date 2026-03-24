@@ -5119,7 +5119,15 @@ section { margin-bottom: 20px; }
    SCOUT VIEW — full-page two-column chat layout
    ══════════════════════════════════════════════════════════════════════════════ */
 
-#view-scout { overflow: hidden; }
+/* Scout view takes full app-body — overlays everything including ai-panel */
+#view-scout {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 10;
+  overflow: hidden;
+  display: none;
+}
+#view-scout.active { display: flex; }
 
 .scout-page {
   display: flex;
@@ -5240,18 +5248,42 @@ section { margin-bottom: 20px; }
 .scout-messages {
   flex: 1;
   overflow-y: auto;
-  padding: 20px 24px;
+  padding: 24px 32px;
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 20px;
   scrollbar-width: thin;
   scrollbar-color: var(--border) transparent;
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
+  /* fill full width of scout-right */
+  align-self: stretch;
 }
 
-/* Confidence block in scout view gets full width */
-#view-scout .confidence-block {
-  max-width: 680px;
+/* Override max-width for the messages container when in scout — 
+   use full column width */
+.scout-right .scout-messages {
+  max-width: 100%;
+  padding: 24px 28px;
 }
+
+/* User messages in scout view — wider */
+#view-scout .chat-msg-user,
+#view-scout .chat-bubble-user {
+  max-width: 75%;
+  font-size: .9rem;
+}
+
+/* AI messages in scout view — full width */
+#view-scout .chat-bubble-ai { max-width: 100%; }
+#view-scout .chat-bubble-ai-body { font-size: .88rem; line-height: 1.7; }
+
+/* Confidence block in scout view gets full width */
+#view-scout .confidence-block { max-width: 100%; }
+
+/* Thinking block in scout view */
+#view-scout .thinking-block { max-width: 100%; }
 
 /* ── Scout input area ────────────────────────────────────────────────────────── */
 .scout-input-area {

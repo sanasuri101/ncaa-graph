@@ -37,7 +37,7 @@
     },
     {
       "bracket_name": "Northern Iowa",
-      "espn_id": "2271",
+      "espn_id": "2460",
       "displayName": "Northern Iowa",
       "region": "East",
       "seed": 12
@@ -121,7 +121,7 @@
     },
     {
       "bracket_name": "Long Island",
-      "espn_id": "2652",
+      "espn_id": "112358",
       "displayName": "Long Island",
       "region": "West",
       "seed": 16
@@ -226,7 +226,7 @@
     },
     {
       "bracket_name": "Queens",
-      "espn_id": "2952",
+      "espn_id": "2511",
       "displayName": "Queens",
       "region": "West",
       "seed": 15
@@ -247,7 +247,7 @@
     },
     {
       "bracket_name": "Howard",
-      "espn_id": "2261",
+      "espn_id": "47",
       "displayName": "Howard",
       "region": "Midwest",
       "seed": 16
@@ -366,7 +366,7 @@
     },
     {
       "bracket_name": "Prairie View",
-      "espn_id": "2440",
+      "espn_id": "2504",
       "displayName": "Prairie View",
       "region": "South",
       "seed": 16
