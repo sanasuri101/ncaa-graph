@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-23T06:57:34.792873+00:00",
+  "generated_at": "2026-03-24T06:51:32.350071+00:00",
   "flagged_teams": 9,
   "teams": {
     "2305": {
@@ -30,37 +30,6 @@
           "description": "Longtime Kansas coach Bill Self said after Sunday's season-ending loss to St. John's that he has not yet made a decision about his coaching future, later adding that any decision will be based solely ",
           "published": "2026-03-23",
           "url": "https://www.espn.com/mens-college-basketball/story/_/id/48283793/bill-self-says-coaching-future-kansas-determined"
-        }
-      ]
-    },
-    "96": {
-      "bracket_name": "Kentucky",
-      "region": "Midwest",
-      "seed": 7,
-      "articles": [
-        {
-          "headline": "Manga keeps Kentucky's Jayden Quaintance grounded in March Madness",
-          "description": "The Kentucky forward has gotten into manga as a way to help time pass while he heals from injury.",
-          "published": "2026-03-22",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48273040/march-madness-2026-jayden-quaintance-kentucky-wildcats-manga"
-        },
-        {
-          "headline": "Manga keeps Kentucky's Jayden Quaintance grounded in March Madness",
-          "description": "The Kentucky forward has gotten into manga as a way to help time pass while he heals from injury.",
-          "published": "2026-03-22",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48273040/march-madness-2026-jayden-quaintance-kentucky-wildcats-manga"
-        },
-        {
-          "headline": "Manga keeps Kentucky's Jayden Quaintance grounded in March Madness",
-          "description": "The Kentucky forward has gotten into manga as a way to help time pass while he heals from injury.",
-          "published": "2026-03-22",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48273040/march-madness-2026-jayden-quaintance-kentucky-wildcats-manga"
-        },
-        {
-          "headline": "Manga keeps Kentucky's Jayden Quaintance grounded in March Madness",
-          "description": "The Kentucky forward has gotten into manga as a way to help time pass while he heals from injury.",
-          "published": "2026-03-22",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48273040/march-madness-2026-jayden-quaintance-kentucky-wildcats-manga"
         }
       ]
     },
@@ -164,6 +133,19 @@
           "description": "Iowa State senior forward Joshua Jefferson suffered a sprained left ankle in Friday's 108-74 win over Tennessee State.",
           "published": "2026-03-20",
           "url": "https://www.espn.com/mens-college-basketball/story/_/id/48261200/iowa-state-joshua-jefferson-hurt-early-ncaa-tournament"
+        }
+      ]
+    },
+    "96": {
+      "bracket_name": "Kentucky",
+      "region": "Midwest",
+      "seed": 7,
+      "articles": [
+        {
+          "headline": "Manga keeps Kentucky's Jayden Quaintance grounded in March Madness",
+          "description": "The Kentucky forward has gotten into manga as a way to help time pass while he heals from injury.",
+          "published": "2026-03-22",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48273040/march-madness-2026-jayden-quaintance-kentucky-wildcats-manga"
         }
       ]
     }
