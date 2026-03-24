@@ -325,7 +325,8 @@ async function sendChat() {
       // Push full context into history so follow-up questions have it
       const analysisContext = `Multi-agent analysis of ${matchup.team_a} vs ${matchup.team_b}: ${reasoning}`;
       chatHistory.push({ role: 'assistant', content: analysisContext });
-      thinkEl.innerHTML = `${thinkHtml}<div class="chat-bubble-ai-label">Scout · Multi-Agent</div>${confHtml}<div class="chat-bubble-ai-body">${renderMarkdown(reasoning)}</div>`;
+      // confHtml already contains all structured sections — don't repeat reasoning below it
+      thinkEl.innerHTML = `${thinkHtml}<div class="chat-bubble-ai-label">Scout · Multi-Agent</div>${confHtml}`;
 
     } else {
       // Standard single-agent path
@@ -978,8 +979,8 @@ async function sendScoutChat() {
       const confHtml  = data.confidence?.win_pct !== undefined ? renderConfidence(data.confidence, data.odds_data) : '';
       const reasoning = data.confidence?.reasoning ?? 'Analysis complete.';
       _scoutHistory.push({ role: 'assistant', content: `Multi-agent analysis of ${matchup.team_a} vs ${matchup.team_b}: ${reasoning}` });
-
-      aiEl.innerHTML = `<div class="chat-bubble-ai-label">Scout · Multi-Agent</div>${thinkHtml}${confHtml}<div class="chat-bubble-ai-body">${renderMarkdown(reasoning)}</div>`;
+      // confHtml already contains all structured sections — don't repeat reasoning below it
+      aiEl.innerHTML = `<div class="chat-bubble-ai-label">Scout · Multi-Agent</div>${thinkHtml}${confHtml}`;
 
     } else {
       // Standard chat path

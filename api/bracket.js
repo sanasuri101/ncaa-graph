@@ -559,11 +559,13 @@ function simulateBracket(model, graph, torvik, form, trans, injuryMap, oppBartha
     regionResults[r] = simulateRegion(r, nodesByRegion[r], torvik, model, form, trans, injuryMap, oppBarthag, actualResults);
   });
 
-  // Final Four: East vs West, South vs Midwest (standard bracket)
+  // Final Four: East vs South (left half), Midwest vs West (right half)
+  // Left half of bracket: East (top-left) + South (bottom-left) -> their winners meet
+  // Right half of bracket: Midwest (top-right) + West (bottom-right) -> their winners meet
   const ff1A = regionResults['East'].winner;
-  const ff1B = regionResults['West'].winner;
-  const ff2A = regionResults['South'].winner;
-  const ff2B = regionResults['Midwest'].winner;
+  const ff1B = regionResults['South'].winner;
+  const ff2A = regionResults['Midwest'].winner;
+  const ff2B = regionResults['West'].winner;
 
   const ff1Prob = winProb(ff1A, ff1B, torvik, model, 4, form, trans, injuryMap, oppBarthag);
   const ff2Prob = winProb(ff2A, ff2B, torvik, model, 4, form, trans, injuryMap, oppBarthag);
