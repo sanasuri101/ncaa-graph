@@ -27,6 +27,9 @@ jobs:
       - name: Fetch Torvik stats
         run: python scripts/fetch_torvik.py
 
+      - name: Fetch ESPN odds, BPI predictions, and futures
+        run: python scripts/fetch_odds.py
+
       - name: Fetch injury news flags
         run: python scripts/fetch_injuries.py
 
@@ -41,6 +44,7 @@ jobs:
           cp data/recent_form.json         public/data/recent_form.json
           cp data/torvik_stats.json        public/data/torvik_stats.json
           cp data/transitive_analysis.json public/data/transitive_analysis.json
+          cp data/espn_odds.json           public/data/espn_odds.json
 
       - name: Commit updated data
         run: |
