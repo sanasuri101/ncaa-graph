@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap');
+/* Fonts loaded via <link> in index.html — Bebas Neue + DM Sans + DM Mono */
 
 /* ── Reset & Base ──────────────────────────────────────────────────────────── */
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -23,7 +23,7 @@
   --south:   #b89030;
   --midwest: #b84545;
 
-  --font-serif: 'Instrument Serif', Georgia, serif;
+  --font-serif: 'Bebas Neue', 'Instrument Serif', Georgia, serif;
   --font-body:  'DM Sans', system-ui, sans-serif;
   --font-mono:  'DM Mono', monospace;
 
@@ -47,8 +47,9 @@ html, body {
 body { display: flex; flex-direction: column; }
 
 
-/* ── Header ─────────────────────────────────────────────────────────────────── */
-header {
+/* ── Site Header ────────────────────────────────────────────────────────────── */
+header { display: none; } /* old header removed */
+.site-header {
   height: 56px;
   background: var(--surface);
   border-bottom: 1px solid var(--border);
@@ -3944,3 +3945,1028 @@ section { margin-bottom: 20px; }
   cursor: default;
   opacity: 1;
 }
+
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   NEW LAYOUT SYSTEM — nav-based views
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+/* ── Site header ─────────────────────────────────────────────────────────────── */
+.site-header {
+  height: 56px;
+  flex-shrink: 0;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  gap: 16px;
+  z-index: 100;
+}
+
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.brand-year {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2rem;
+  line-height: 1;
+  color: var(--accent);
+  letter-spacing: .02em;
+}
+
+.brand-text { display: flex; flex-direction: column; gap: 1px; }
+
+.brand-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.05rem;
+  letter-spacing: .08em;
+  color: var(--text);
+  line-height: 1;
+}
+
+.brand-accent { color: var(--accent); }
+
+.brand-sub {
+  font-size: .65rem;
+  color: var(--text-mute);
+  font-family: var(--font-mono);
+  letter-spacing: .03em;
+}
+
+/* ── Main nav ─────────────────────────────────────────────────────────────────── */
+.main-nav {
+  display: flex;
+  gap: 2px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 12px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-dim);
+  font-family: var(--font-body);
+  font-size: .78rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all .15s;
+  letter-spacing: .02em;
+}
+
+.nav-btn:hover {
+  background: var(--surface2);
+  color: var(--text);
+}
+
+.nav-btn.active {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+
+.nav-btn.active svg { stroke: #fff; }
+
+/* ── Header right ─────────────────────────────────────────────────────────────── */
+.header-actions {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.region-pills {
+  display: flex;
+  gap: 4px;
+}
+
+.rpill {
+  font-size: .6rem;
+  font-family: var(--font-mono);
+  font-weight: 500;
+  padding: 2px 6px;
+  border-radius: 4px;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+}
+
+.rpill.east    { background: rgba(74,127,181,.15); color: var(--east); }
+.rpill.west    { background: rgba(58,140,110,.15); color: var(--west); }
+.rpill.south   { background: rgba(184,144,48,.15); color: var(--south); }
+.rpill.midwest { background: rgba(184,69,69,.15);  color: var(--midwest); }
+
+.scout-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 12px;
+  background: var(--text);
+  color: var(--bg);
+  border: none;
+  border-radius: 6px;
+  font-size: .78rem;
+  font-weight: 600;
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: opacity .15s;
+  letter-spacing: .02em;
+}
+
+.scout-btn:hover { opacity: .85; }
+.scout-btn svg   { stroke: var(--bg); }
+
+/* ── App body & views ──────────────────────────────────────────────────────────── */
+.app-body {
+  flex: 1;
+  min-height: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.view {
+  display: none;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.view.active { display: flex; flex-direction: column; }
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   BRACKET VIEW
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+.bracket-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  gap: 12px;
+}
+
+.bc-left {
+  display: flex;
+  gap: 6px;
+}
+
+.br-model-btn {
+  padding: 6px 14px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-dim);
+  font-size: .78rem;
+  font-weight: 500;
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: all .15s;
+}
+
+.br-model-btn:hover { background: var(--surface2); color: var(--text); }
+
+.br-model-btn.active {
+  background: var(--text);
+  color: var(--bg);
+  border-color: var(--text);
+}
+
+.br-run-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: .82rem;
+  font-weight: 600;
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: opacity .15s;
+  letter-spacing: .02em;
+}
+
+.br-run-btn:hover   { opacity: .88; }
+.br-run-btn:disabled { opacity: .55; cursor: not-allowed; }
+
+/* ── Bracket stage — scrollable full area ──────────────────────────────────── */
+.bracket-stage {
+  flex: 1;
+  overflow: auto;
+  padding: 20px;
+  background: var(--bg);
+}
+
+.bracket-splash {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 300px;
+  gap: 12px;
+  color: var(--text-dim);
+}
+
+.splash-icon  { font-size: 3.5rem; }
+.splash-title { font-family: 'Bebas Neue', sans-serif; font-size: 2.2rem; letter-spacing: .1em; color: var(--text); }
+.splash-sub   { font-size: .82rem; color: var(--text-dim); }
+
+/* ── Bracket results layout — real bracket tree ────────────────────────────── */
+.br-results { display: flex; flex-direction: column; gap: 24px; min-width: 1100px; }
+
+.br-champion-block {
+  text-align: center;
+  padding: 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  margin-bottom: 8px;
+}
+
+.br-champion-label {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.4rem;
+  letter-spacing: .1em;
+  color: var(--text-dim);
+  margin-bottom: 4px;
+}
+
+.br-champion-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2.8rem;
+  letter-spacing: .06em;
+  line-height: 1;
+}
+
+.br-champion-meta {
+  font-size: .72rem;
+  font-family: var(--font-mono);
+  color: var(--text-dim);
+  margin-top: 4px;
+}
+
+.br-section-header {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1rem;
+  letter-spacing: .15em;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 6px;
+  margin-bottom: 12px;
+}
+
+/* Region grid: 2x2 */
+.br-regions-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.br-region {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.br-region-header {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.1rem;
+  letter-spacing: .1em;
+  padding: 10px 14px 6px;
+  border-bottom: 2px solid currentColor;
+}
+
+.br-region-winner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  background: var(--surface2);
+  border-bottom: 1px solid var(--border);
+}
+
+.br-region-winner-label { font-size: .62rem; font-family: var(--font-mono); color: var(--text-dim); letter-spacing: .06em; text-transform: uppercase; }
+.br-region-winner-name  { font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: .05em; }
+
+.br-rounds {
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+  padding: 10px;
+}
+
+.br-round {
+  flex: 1;
+  min-width: 130px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0 6px;
+  border-right: 1px solid var(--border);
+}
+
+.br-round:last-child { border-right: none; }
+
+.br-round-label {
+  font-family: var(--font-mono);
+  font-size: .58rem;
+  font-weight: 500;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 4px;
+}
+
+.br-game {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color .15s;
+}
+
+.br-game:hover { border-color: var(--accent); }
+
+.br-team {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 7px;
+  font-size: .72rem;
+  line-height: 1.2;
+  border-bottom: 1px solid var(--border);
+}
+
+.br-team:last-child { border-bottom: none; }
+
+.br-winner {
+  background: var(--surface);
+  font-weight: 600;
+  color: var(--text);
+}
+
+.br-loser {
+  background: transparent;
+  color: var(--text-mute);
+  text-decoration: line-through;
+  text-decoration-color: var(--border);
+}
+
+.br-tbd { color: var(--text-mute); font-style: italic; }
+
+.br-seed {
+  font-family: var(--font-mono);
+  font-size: .6rem;
+  color: var(--text-dim);
+  min-width: 14px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.br-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.br-prob {
+  font-family: var(--font-mono);
+  font-size: .6rem;
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+/* Play-in & Final Four */
+.br-playin-grid, .br-ff-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.br-playin-game, .br-ff-game {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.br-playin-region, .br-ff-label {
+  font-size: .6rem;
+  font-family: var(--font-mono);
+  color: var(--text-dim);
+  padding: 5px 8px;
+  background: var(--surface2);
+  border-bottom: 1px solid var(--border);
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+.br-championship {
+  max-width: 320px;
+  margin: 0 auto;
+}
+
+.br-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 40px;
+  font-size: .82rem;
+  color: var(--text-dim);
+}
+
+.br-loading-spinner {
+  width: 16px; height: 16px;
+  border: 2px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin .7s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.br-error {
+  padding: 20px;
+  color: var(--midwest);
+  font-size: .82rem;
+  text-align: center;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   ODDS VIEW
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+.view#view-odds { overflow-y: auto; }
+
+.odds-page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 20px 24px;
+  width: 100%;
+}
+
+.odds-header-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.odds-page-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.8rem;
+  letter-spacing: .06em;
+  color: var(--text);
+  line-height: 1;
+}
+
+.odds-source-label {
+  font-size: .65rem;
+  font-family: var(--font-mono);
+  color: var(--text-mute);
+  margin-top: 3px;
+  letter-spacing: .04em;
+}
+
+.odds-tab-row {
+  display: flex;
+  gap: 4px;
+}
+
+.odds-tab {
+  padding: 6px 14px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-dim);
+  font-size: .78rem;
+  font-weight: 500;
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: all .15s;
+}
+
+.odds-tab:hover   { background: var(--surface2); color: var(--text); }
+.odds-tab.active  { background: var(--text); color: var(--bg); border-color: var(--text); }
+
+.odds-loading, .odds-empty, .odds-error {
+  text-align: center;
+  padding: 48px 20px;
+  color: var(--text-dim);
+  font-size: .85rem;
+}
+
+.odds-error { color: var(--midwest); }
+
+/* Date groups */
+.odds-date-group { margin-bottom: 28px; }
+
+.odds-date-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--border);
+}
+
+.odds-date-label {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.1rem;
+  letter-spacing: .08em;
+  color: var(--text);
+}
+
+.odds-round-badge {
+  font-size: .6rem;
+  font-family: var(--font-mono);
+  font-weight: 500;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: 4px;
+  background: var(--accent);
+  color: #fff;
+}
+
+/* Game cards grid */
+.odds-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 12px;
+}
+
+.odds-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  transition: border-color .15s, box-shadow .15s;
+}
+
+.odds-card:hover {
+  border-color: var(--accent);
+  box-shadow: 0 2px 12px rgba(194,85,26,.1);
+}
+
+.oc-completed { opacity: .75; }
+
+.gc-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px 8px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface2);
+}
+
+.gc-matchup {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+
+.gc-team { flex: 1; min-width: 0; }
+.gc-home { text-align: left; }
+.gc-away { text-align: right; }
+
+.gc-team-name {
+  display: block;
+  font-weight: 600;
+  font-size: .82rem;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gc-team-role {
+  display: block;
+  font-size: .58rem;
+  font-family: var(--font-mono);
+  color: var(--text-mute);
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+.gc-vs {
+  font-size: .62rem;
+  font-family: var(--font-mono);
+  color: var(--text-mute);
+  flex-shrink: 0;
+}
+
+.gc-final-badge {
+  font-size: .55rem;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  letter-spacing: .08em;
+  padding: 2px 6px;
+  border-radius: 3px;
+  background: var(--surface3);
+  color: var(--text-dim);
+  flex-shrink: 0;
+}
+
+/* Lines row */
+.gc-lines {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  padding: 10px 12px;
+  gap: 4px;
+  border-bottom: 1px solid var(--border);
+}
+
+.gc-line-block { text-align: center; }
+
+.gc-line-label {
+  font-size: .56rem;
+  font-family: var(--font-mono);
+  font-weight: 500;
+  color: var(--text-mute);
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  margin-bottom: 3px;
+}
+
+.gc-line-value {
+  font-family: var(--font-mono);
+  font-size: .85rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.gc-implied {
+  font-size: .65rem;
+  font-weight: 400;
+  color: var(--text-dim);
+}
+
+/* BPI bar */
+.gc-bpi-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.gc-bpi-label {
+  font-size: .56rem;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  color: var(--accent);
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  flex-shrink: 0;
+  width: 20px;
+}
+
+.gc-bpi-home, .gc-bpi-away {
+  font-family: var(--font-mono);
+  font-size: .72rem;
+  font-weight: 600;
+  color: var(--text);
+  flex-shrink: 0;
+  width: 38px;
+}
+
+.gc-bpi-home { text-align: right; }
+.gc-bpi-away { text-align: left; }
+
+.gc-bpi-bar {
+  flex: 1;
+  height: 5px;
+  background: var(--surface3);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.gc-bpi-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 3px;
+  transition: width .4s ease;
+}
+
+.gc-bpi-quality {
+  font-size: .58rem;
+  font-family: var(--font-mono);
+  color: var(--text-mute);
+  flex-shrink: 0;
+}
+
+/* Open line + movement */
+.gc-open {
+  padding: 4px 12px;
+  font-size: .62rem;
+  font-family: var(--font-mono);
+  color: var(--text-dim);
+  border-bottom: 1px solid var(--border);
+}
+
+.gc-movement {
+  padding: 6px 12px;
+  font-size: .7rem;
+  color: var(--text);
+  background: var(--surface2);
+}
+
+.gc-movement strong { color: var(--accent); }
+
+.mv-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-size: .6rem;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+
+.mv-up   { background: rgba(58,140,110,.12); color: var(--west); }
+.mv-down { background: rgba(184,69,69,.12);  color: var(--midwest); }
+
+/* ── Futures ─────────────────────────────────────────────────────────────────── */
+.futures-page {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+  align-items: start;
+}
+
+.futures-section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+}
+
+.futures-section-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.05rem;
+  letter-spacing: .1em;
+  color: var(--text);
+  margin-bottom: 12px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border);
+}
+
+.futures-region-title.east    { color: var(--east); }
+.futures-region-title.west    { color: var(--west); }
+.futures-region-title.south   { color: var(--south); }
+.futures-region-title.midwest { color: var(--midwest); }
+
+.futures-grid { display: flex; flex-direction: column; gap: 6px; }
+
+.future-row {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.future-row:last-child { border-bottom: none; }
+
+.future-rank {
+  font-size: .72rem;
+  flex-shrink: 0;
+  width: 22px;
+  text-align: center;
+}
+
+.future-name {
+  flex: 1;
+  font-size: .8rem;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-transform: capitalize;
+}
+
+.future-bar-wrap {
+  width: 60px;
+  height: 4px;
+  background: var(--surface3);
+  border-radius: 2px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.future-bar {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 2px;
+}
+
+.future-pct {
+  font-family: var(--font-mono);
+  font-size: .7rem;
+  font-weight: 600;
+  color: var(--accent);
+  width: 36px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.future-ml {
+  font-family: var(--font-mono);
+  font-size: .68rem;
+  color: var(--text-dim);
+  width: 42px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   GRAPH VIEW — wraps existing graph + sidebar
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+#view-graph { flex-direction: column; }
+
+.graph-toolbar {
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  gap: 6px;
+  height: 40px;
+  flex-shrink: 0;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.graph-toolbar::-webkit-scrollbar { display: none; }
+
+.gtb-group {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.gtb-label {
+  font-size: .58rem;
+  font-family: var(--font-mono);
+  font-weight: 500;
+  letter-spacing: .07em;
+  color: var(--text-mute);
+  flex-shrink: 0;
+}
+
+.gtb-btn {
+  padding: 3px 8px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--text-dim);
+  font-size: .72rem;
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: all .12s;
+  white-space: nowrap;
+}
+
+.gtb-btn:hover  { background: var(--surface2); color: var(--text); }
+.gtb-btn.active { background: var(--text); color: var(--bg); border-color: var(--text); }
+
+.gtb-icon {
+  width: 26px; height: 26px;
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--text-dim);
+  font-size: .75rem;
+  cursor: pointer;
+  transition: all .12s;
+}
+
+.gtb-icon:hover { background: var(--surface2); color: var(--text); }
+
+.gtb-sep {
+  width: 1px; height: 16px;
+  background: var(--border);
+  flex-shrink: 0;
+}
+
+.gtb-search-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.graph-toolbar input[type="text"] {
+  height: 26px;
+  padding: 0 8px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--bg);
+  color: var(--text);
+  font-size: .72rem;
+  font-family: var(--font-body);
+  width: 130px;
+  outline: none;
+}
+
+.graph-toolbar input[type="text"]:focus { border-color: var(--accent); }
+
+.graph-layout {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+}
+
+/* Keep existing #network and .sidebar styles intact */
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   RANKINGS VIEW
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+#view-rankings { overflow-y: auto; }
+
+.rankings-page {
+  padding: 20px 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.rankings-cols {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+
+.rankings-col {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+}
+
+.rankings-col-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.05rem;
+  letter-spacing: .1em;
+  color: var(--text);
+  margin-bottom: 12px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   LEGEND DOT (graph sidebar)
+   ══════════════════════════════════════════════════════════════════════════════ */
+.leg-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   RESPONSIVE
+   ══════════════════════════════════════════════════════════════════════════════ */
+@media (max-width: 900px) {
+  .rankings-cols { grid-template-columns: 1fr 1fr; }
+  .br-regions-grid { grid-template-columns: 1fr; }
+  .brand-year { font-size: 1.5rem; }
+  .main-nav .nav-btn span:not(svg) { display: none; } /* icon only */
+  .region-pills { display: none; }
+}
+
+@media (max-width: 600px) {
+  .rankings-cols { grid-template-columns: 1fr; }
+  .odds-cards { grid-template-columns: 1fr; }
+  .futures-page { grid-template-columns: 1fr; }
+  .gc-lines { grid-template-columns: repeat(2, 1fr); }
+  .header-actions .last-updated { display: none; }
+}
+

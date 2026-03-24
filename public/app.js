@@ -227,7 +227,7 @@ function applyFilters() {
 
 function setView(view) {
   currentView = view;
-  document.querySelectorAll('.view-btn').forEach(b => {
+  document.querySelectorAll('.view-btn, .gtb-btn[data-view]').forEach(b => {
     b.classList.toggle('active', b.dataset.view === view);
   });
   applyFilters();
@@ -699,7 +699,7 @@ function validateBracketIntegrity() {
       <span>Seedings are projections only — official bracket releases March 15. ${issues.join(' · ')}</span>
       <button onclick="this.parentElement.remove()" style="margin-left:auto;background:none;border:none;color:#fff;cursor:pointer;font-size:.9rem">✕</button>
     `;
-    document.querySelector('.toolbar').before(banner);
+    const gtb = document.querySelector('.graph-toolbar'); if (gtb) gtb.before(banner);
   }
 }
 
@@ -1027,7 +1027,7 @@ function initMobileUI() {
 
   const aiPanel  = document.getElementById('ai-panel');
   const sidebar  = document.querySelector('.sidebar');
-  const main     = document.querySelector('.main');
+  const main     = document.querySelector('.app-body') || document.querySelector('.main');
   if (!aiPanel || !sidebar || !main) return;
 
   // ── Floating sidebar toggle button ───────────────────────────────────────
@@ -1174,3 +1174,77 @@ function initMobileFirstImpression() {
 
 // Run after data loads — called directly from hideLoading
 // (MutationObserver approach was fragile due to CSS fade timing)
+
+// ── View switching (nav tabs) ─────────────────────────────────────────────────
+function switchView(name) {
+  // Show/hide top-level views
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  const target = document.getElementById(`view-${name}`);
+  if (target) target.classList.add('active');
+
+  // Update nav buttons
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  const nb = document.querySelector(`.nav-btn[data-view="${name}"]`);
+  if (nb) nb.classList.add('active');
+
+  // When graph view is activated, trigger a resize so vis.js repaints correctly
+  if (name === 'graph' && window.network) {
+    setTimeout(() => { try { window.network.redraw(); window.network.fit(); } catch(e) {} }, 50);
+  }
+
+  // When rankings view is activated, populate the standalone rankings columns
+  if (name === 'rankings') populateRankingsPage();
+}
+
+function populateRankingsPage() {
+  if (!ALL_NODES || !ALL_NODES.length) return;
+  const maxW = Math.max(...ALL_NODES.map(n => n.wins_vs_field))   || 1;
+  const maxL = Math.max(...ALL_NODES.map(n => n.losses_vs_field)) || 1;
+
+  const byWins = [...ALL_NODES].sort((a, b) => b.wins_vs_field - a.wins_vs_field);
+  const makeRow = (n, i, valKey, color, maxV) => `
+    <div class="rank-item" onclick="switchView('graph');setTimeout(()=>focusTeam('${n.id}'),80)">
+      <span class="rank-num">${i + 1}</span>
+      <span class="rank-name">${n.label}</span>
+      <span class="rank-val" style="color:${color}">${n[valKey]}</span>
+    </div>
+    <div class="rank-bar-row"><div class="rank-bar" style="background:${color};width:${(n[valKey] / maxV * 100).toFixed(0)}%"></div></div>`;
+
+  const wEl = document.getElementById('rp-rank-wins');
+  const eEl = document.getElementById('rp-rank-efficiency');
+  if (wEl) wEl.innerHTML = byWins.map((n, i) => makeRow(n, i, 'wins_vs_field', 'var(--west)', maxW)).join('');
+
+  // Efficiency from Torvik
+  window.getTorvik && window.getTorvik().then(tvData => {
+    if (!tvData) return;
+    const byEff = ALL_NODES.map(n => {
+      const tv = tvData?.teams?.[n.id]?.torvik;
+      return tv ? { n, rank: tv.rank, em: tv.adj_em } : null;
+    }).filter(Boolean).sort((a, b) => a.rank - b.rank);
+
+    if (eEl) eEl.innerHTML = byEff.map((t, i) => `
+      <div class="rank-item" onclick="switchView('graph');setTimeout(()=>focusTeam('${t.n.id}'),80)">
+        <span class="rank-num">${i + 1}</span>
+        <span class="rank-name">${t.n.label}</span>
+        <span class="rank-val" style="color:var(--accent)">+${t.em > 0 ? t.em : t.em}</span>
+      </div>
+      <div class="rank-bar-row"><div class="rank-bar" style="background:var(--accent);width:${Math.max((t.em + 5) / 40 * 100, 4).toFixed(0)}%"></div></div>`
+    ).join('');
+
+    // Mirror underseeded/overseeded into rankings page columns
+    const uSrc = document.getElementById('rank-underseeded')?.innerHTML;
+    const oSrc = document.getElementById('rank-overseeded')?.innerHTML;
+    const urEl = document.getElementById('rp-rank-underseeded');
+    const orEl = document.getElementById('rp-rank-overseeded');
+    if (urEl && uSrc) urEl.innerHTML = uSrc;
+    if (orEl && oSrc) orEl.innerHTML = oSrc;
+  });
+}
+
+// Wire nav buttons
+document.querySelectorAll('.nav-btn[data-view]').forEach(btn => {
+  btn.addEventListener('click', () => switchView(btn.dataset.view));
+});
+
+// Expose for bracket.js and odds.js
+window.switchView = switchView;

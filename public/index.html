@@ -3,123 +3,259 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>NCAA 2025-26 · Head-to-Head Graph</title>
+<title>NCAA 2026 · Bracket Intelligence</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css"/>
 <link rel="stylesheet" href="style.css"/>
-
-<!-- PostHog Analytics — replace YOUR_POSTHOG_KEY with your project API key from posthog.com -->
 <script>
   !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+" (stub)"},o="init push capture register register_once register_for_session unregister unregister_for_session getFeatureFlag getFeatureFlagPayload isFeatureEnabled reloadFeatureFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSessionId getSurveys getActiveMatchingSurveys renderSurvey canRenderSurvey getNextSurveyStep identify setPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException loadToolbar get_property getSessionProperty createPersonProfile opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing clear_opt_in_out_capturing debug".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
-  posthog.init('phc_5IRyImhe54YTWp8s6YWRIqrJVRHnwo1HkNKxow2dSqU', {
-    api_host: 'https://us.i.posthog.com',
-    person_profiles: 'identified_only',
-    capture_pageview: true,       // auto-tracks page loads
-    capture_pageleave: true,      // tracks when users leave
-    autocapture: false,           // we'll track specific events manually
-  });
+  posthog.init('phc_5IRyImhe54YTWp8s6YWRIqrJVRHnwo1HkNKxow2dSqU',{api_host:'https://us.i.posthog.com',person_profiles:'identified_only',capture_pageview:true,capture_pageleave:true,autocapture:false});
 </script>
-
 </head>
 <body>
 
-<header>
-  <div class="header-left">
-    <div class="logo-mark">March Madness</div>
-    <div class="header-text">
-      <h1>2026 NCAA <span class="accent">Bracket Intelligence</span></h1>
-      <p class="sub" id="sub-stats">Loading data...</p>
+<header class="site-header">
+  <div class="header-brand">
+    <div class="brand-year">2026</div>
+    <div class="brand-text">
+      <div class="brand-title">NCAA <span class="brand-accent">Bracket Intelligence</span></div>
+      <div class="brand-sub" id="sub-stats">Loading…</div>
     </div>
   </div>
-  <div class="header-right">
-    <div class="legend-pills">
-      <span class="pill east">East</span>
-      <span class="pill west">West</span>
-      <span class="pill south">South</span>
-      <span class="pill midwest">Midwest</span>
+  <nav class="main-nav">
+    <button class="nav-btn active" data-view="bracket">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="6" height="4" rx="1"/><rect x="16" y="3" width="6" height="4" rx="1"/><rect x="9" y="10" width="6" height="4" rx="1"/><line x1="8" y1="5" x2="9" y2="5"/><line x1="15" y1="5" x2="16" y2="5"/><line x1="12" y1="10" x2="12" y2="7"/></svg>
+      Bracket
+    </button>
+    <button class="nav-btn" data-view="odds">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+      Odds
+    </button>
+    <button class="nav-btn" data-view="graph">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="5" cy="12" r="2"/><circle cx="19" cy="5" r="2"/><circle cx="19" cy="19" r="2"/><line x1="7" y1="12" x2="17" y2="6"/><line x1="7" y1="12" x2="17" y2="18"/></svg>
+      Graph
+    </button>
+    <button class="nav-btn" data-view="rankings">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+      Rankings
+    </button>
+  </nav>
+  <div class="header-actions">
+    <div class="region-pills">
+      <span class="rpill east">East</span>
+      <span class="rpill west">West</span>
+      <span class="rpill south">South</span>
+      <span class="rpill midwest">Midwest</span>
     </div>
     <div class="last-updated" id="last-updated"></div>
-    <button class="ai-toggle-btn" id="ai-toggle" title="AI Scout — stats, chat">
+    <button class="scout-btn" id="ai-toggle">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
       AI Scout
     </button>
   </div>
 </header>
 
-<div class="toolbar">
-  <div class="toolbar-group">
-    <span class="toolbar-label">SHOW</span>
-    <button class="view-btn active" data-view="played" id="btn-played">
-      Played <span class="count" id="cnt-played">—</span>
-    </button>
-    <button class="view-btn" data-view="notplayed" id="btn-notplayed">
-      Never Met <span class="count" id="cnt-notplayed">—</span>
-    </button>
-    <button class="view-btn" data-view="both" id="btn-both">Both</button>
-  </div>
-  <div class="toolbar-sep"></div>
-  <div class="toolbar-group">
-    <span class="toolbar-label">REGION</span>
-    <select id="region-filter">
-      <option value="all">All</option>
-      <option value="East">East</option>
-      <option value="West">West</option>
-      <option value="South">South</option>
-      <option value="Midwest">Midwest</option>
-      <option value="bubble">Bubble</option>
-      <option value="same">Same Region</option>
-      <option value="cross">Cross Region</option>
-    </select>
-  </div>
-  <div class="toolbar-sep"></div>
-  <div class="toolbar-group">
-    <span class="toolbar-label">LAYOUT</span>
-    <select id="layout-sel">
-      <option value="physics">Force</option>
-      <option value="region">By Region</option>
-    </select>
-  </div>
-  <div class="toolbar-sep"></div>
-  <div class="toolbar-group">
-    <button class="icon-btn" id="fit-btn" title="Reset view">⟳</button>
-    <button class="icon-btn" id="phys-btn" title="Toggle physics">⏸</button>
-  </div>
-  <div class="toolbar-sep"></div>
-  <div class="toolbar-group search-group">
-    <input type="text" id="search" placeholder="Search team..." autocomplete="off" spellcheck="false"/>
-    <div id="search-dropdown"></div>
-  </div>
-  <div class="toolbar-sep"></div>
-  <div class="toolbar-group" id="custom-selector-group">
-    <span class="toolbar-label">CUSTOM</span>
-    <div class="custom-search-wrap">
-      <input type="text" id="custom-team-input" placeholder="Add teams..." autocomplete="off" spellcheck="false"/>
-      <div id="custom-dropdown"></div>
+<div class="app-body">
+
+  <!-- BRACKET VIEW -->
+  <div class="view active" id="view-bracket">
+    <div class="bracket-controls">
+      <div class="bc-left">
+        <button class="br-model-btn active" data-model="evidence" onclick="selectBracketModel(this)">Evidence Model</button>
+        <button class="br-model-btn" data-model="upset" onclick="selectBracketModel(this)">Upset Heavy</button>
+      </div>
+      <button class="br-run-btn" id="br-generate-btn" onclick="generateBracket()">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        Simulate Bracket
+      </button>
     </div>
-    <button class="view-btn" onclick="addAllToCustom()" title="Add all 68 bracket teams">+ All 68</button>
-    <button class="view-btn" id="custom-clear-btn" onclick="clearCustom()" title="Remove all teams from graph" style="display:none">✕ Clear</button>
+    <div class="bracket-stage" id="bracket-stage">
+      <div class="bracket-splash">
+        <div class="splash-icon">🏆</div>
+        <div class="splash-title">2026 NCAA Tournament</div>
+        <div class="splash-sub">Choose a model above and simulate the full 63-game bracket</div>
+      </div>
+    </div>
   </div>
-</div>
 
-<!-- Custom selection pills bar -->
-<div class="custom-pills-bar" id="custom-pills-bar" style="display:none">
-  <span class="pills-count-badge" id="pills-count-badge">0</span>
-  <div class="pills-wrap" id="custom-pills"></div>
-  <button class="view-btn pills-clear-btn" onclick="clearCustom()" style="flex-shrink:0;margin-left:4px">✕ Clear</button>
-</div>
-
-<div class="toolbar" id="toolbar2" style="padding-top:0;height:auto;min-height:0;border-top:none;padding-bottom:4px;display:flex;align-items:center;padding-left:16px;gap:8px">
-  <div class="toolbar-group">
-    <button class="view-btn" id="scatter-btn" onclick="toggleScatter()" title="Efficiency scatter plot">
-      ◎ Efficiency
-    </button>
+  <!-- ODDS VIEW -->
+  <div class="view" id="view-odds">
+    <div class="odds-page">
+      <div class="odds-header-row">
+        <div>
+          <div class="odds-page-title">Live Betting Lines</div>
+          <div class="odds-source-label">DraftKings via ESPN · Updated daily</div>
+        </div>
+        <div class="odds-tab-row">
+          <button class="odds-tab active" data-odds-tab="upcoming">Upcoming</button>
+          <button class="odds-tab" data-odds-tab="completed">Completed</button>
+          <button class="odds-tab" data-odds-tab="futures">Futures</button>
+        </div>
+      </div>
+      <div id="odds-content"><div class="odds-loading">Loading odds…</div></div>
+    </div>
   </div>
+
+  <!-- GRAPH VIEW -->
+  <div class="view" id="view-graph">
+    <div class="graph-toolbar">
+      <div class="gtb-group">
+        <span class="gtb-label">SHOW</span>
+        <button class="gtb-btn active" data-view="played" id="btn-played">Played <span class="count" id="cnt-played">—</span></button>
+        <button class="gtb-btn" data-view="notplayed" id="btn-notplayed">Never Met <span class="count" id="cnt-notplayed">—</span></button>
+        <button class="gtb-btn" data-view="both" id="btn-both">Both</button>
+      </div>
+      <div class="gtb-sep"></div>
+      <div class="gtb-group">
+        <span class="gtb-label">REGION</span>
+        <select id="region-filter">
+          <option value="all">All</option>
+          <option value="East">East</option>
+          <option value="West">West</option>
+          <option value="South">South</option>
+          <option value="Midwest">Midwest</option>
+          <option value="same">Same Region</option>
+          <option value="cross">Cross Region</option>
+        </select>
+      </div>
+      <div class="gtb-sep"></div>
+      <div class="gtb-group">
+        <span class="gtb-label">LAYOUT</span>
+        <select id="layout-sel">
+          <option value="physics">Force</option>
+          <option value="region">By Region</option>
+        </select>
+      </div>
+      <div class="gtb-sep"></div>
+      <div class="gtb-group">
+        <button class="gtb-icon" id="fit-btn" title="Reset view">⟳</button>
+        <button class="gtb-icon" id="phys-btn" title="Toggle physics">⏸</button>
+      </div>
+      <div class="gtb-sep"></div>
+      <div class="gtb-group gtb-search-wrap">
+        <input type="text" id="search" placeholder="Search team…" autocomplete="off" spellcheck="false"/>
+        <div id="search-dropdown"></div>
+      </div>
+      <div class="gtb-sep"></div>
+      <div class="gtb-group gtb-search-wrap">
+        <span class="gtb-label">CUSTOM</span>
+        <input type="text" id="custom-team-input" placeholder="Add teams…" autocomplete="off" spellcheck="false"/>
+        <div id="custom-dropdown"></div>
+        <button class="gtb-btn" onclick="addAllToCustom()">+ All 68</button>
+        <button class="gtb-btn" id="custom-clear-btn" onclick="clearCustom()" style="display:none">✕ Clear</button>
+      </div>
+      <div class="gtb-sep"></div>
+      <div class="gtb-group">
+        <button class="gtb-btn" id="scatter-btn" onclick="toggleScatter()">◎ Efficiency</button>
+      </div>
+    </div>
+    <div class="custom-pills-bar" id="custom-pills-bar" style="display:none">
+      <span class="pills-count-badge" id="pills-count-badge">0</span>
+      <div class="pills-wrap" id="custom-pills"></div>
+      <button class="gtb-btn pills-clear-btn" onclick="clearCustom()">✕ Clear</button>
+    </div>
+    <div class="graph-layout">
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-tabs" id="sidebar-tabs">
+          <button class="stab active" data-tab="tab-overview">Overview</button>
+          <button class="stab" data-tab="tab-rankings">Rankings</button>
+          <button class="stab" data-tab="tab-detail">Detail</button>
+          <button class="stab" data-tab="tab-transitive">Paths</button>
+        </div>
+        <div class="tab-content active" id="tab-overview">
+          <section>
+            <div class="section-label">ABOUT</div>
+            <div class="hint-text">Each node is a bracket team. Edges show head-to-head results this season. Arrow points from winner to loser.</div>
+          </section>
+          <section style="margin-top:14px">
+            <div class="section-label">LEGEND</div>
+            <div class="legend-list">
+              <div class="leg-item"><div class="leg-dot" style="background:var(--east)"></div>East</div>
+              <div class="leg-item"><div class="leg-dot" style="background:var(--west)"></div>West</div>
+              <div class="leg-item"><div class="leg-dot" style="background:var(--south)"></div>South</div>
+              <div class="leg-item"><div class="leg-dot" style="background:var(--midwest)"></div>Midwest</div>
+              <div class="leg-item"><div class="leg-line dashed"></div>Never played</div>
+            </div>
+          </section>
+          <section style="margin-top:14px">
+            <div class="section-label">NODE SIZE</div>
+            <div class="hint-text">Larger = more wins vs bracket field. Thicker edge = larger margin.</div>
+          </section>
+        </div>
+        <div class="tab-content" id="tab-rankings">
+          <section><div class="section-label">WINS VS FIELD</div><div id="rank-wins"></div></section>
+          <section style="margin-top:16px"><div class="section-label">LOSSES VS FIELD</div><div id="rank-losses"></div></section>
+          <section style="margin-top:16px"><div class="section-label">UNDERSEEDED</div><div class="seed-div-hint">T-Rank says better than seed</div><div id="rank-underseeded"></div></section>
+          <section style="margin-top:12px"><div class="section-label">OVERSEEDED</div><div class="seed-div-hint">Favorable draw</div><div id="rank-overseeded"></div></section>
+        </div>
+        <div class="tab-content" id="tab-detail">
+          <div id="detail-box"><div class="detail-empty">Click a team or game edge to see details</div></div>
+        </div>
+        <div class="tab-content" id="tab-bracket" style="display:none"></div>
+        <div class="tab-content" id="tab-transitive">
+          <div class="paths-picker">
+            <div class="paths-search-wrap">
+              <input type="text" class="paths-team-input" id="paths-input-a" placeholder="Team A…" autocomplete="off" spellcheck="false"/>
+              <div class="paths-dropdown" id="paths-drop-a"></div>
+              <div class="paths-selected" id="paths-sel-a"></div>
+            </div>
+            <div class="paths-vs-divider">vs</div>
+            <div class="paths-search-wrap">
+              <input type="text" class="paths-team-input" id="paths-input-b" placeholder="Team B…" autocomplete="off" spellcheck="false"/>
+              <div class="paths-dropdown" id="paths-drop-b"></div>
+              <div class="paths-selected" id="paths-sel-b"></div>
+            </div>
+            <button class="paths-run-btn" id="paths-run-btn" onclick="runPathsFromInputs()">Find Paths</button>
+          </div>
+          <div id="trans-output">
+            <div class="trans-intro">
+              <div class="trans-intro-title">Transitive Paths</div>
+              <div class="trans-intro-body">Traces indirect evidence through common opponents.</div>
+            </div>
+          </div>
+        </div>
+      </aside>
+      <div id="network">
+        <div id="loading-overlay">
+          <div class="spinner"></div>
+          <div class="loading-text">Loading 2026 NCAA bracket data…</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RANKINGS VIEW -->
+  <div class="view" id="view-rankings">
+    <div class="rankings-page">
+      <div class="rankings-cols">
+        <div class="rankings-col">
+          <div class="rankings-col-title" style="color:var(--east)">Wins vs Field</div>
+          <div id="rp-rank-wins"></div>
+        </div>
+        <div class="rankings-col">
+          <div class="rankings-col-title">T-Rank Efficiency</div>
+          <div id="rp-rank-efficiency"></div>
+        </div>
+        <div class="rankings-col">
+          <div class="rankings-col-title" style="color:var(--west)">Underseeded</div>
+          <div class="seed-div-hint" style="font-size:.7rem;margin-bottom:8px">T-Rank better than seed</div>
+          <div id="rp-rank-underseeded"></div>
+        </div>
+        <div class="rankings-col">
+          <div class="rankings-col-title" style="color:var(--midwest)">Overseeded</div>
+          <div class="seed-div-hint" style="font-size:.7rem;margin-bottom:8px">Favorable draw</div>
+          <div id="rp-rank-overseeded"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </div>
 
-<!-- Efficiency scatter overlay -->
+<!-- SCATTER -->
 <div class="scatter-overlay" id="scatter-overlay">
   <div class="scatter-panel" id="scatter-panel">
     <div class="scatter-header">
@@ -141,203 +277,73 @@
       <div class="scatter-tooltip" id="scatter-tooltip"></div>
     </div>
     <div class="scatter-footer">
-      <span class="scatter-axis-hint">← Better defense (lower AdjDE) · Better offense (higher AdjOE) →</span>
+      <span class="scatter-axis-hint">← Better defense · Better offense →</span>
       <span id="scatter-hovered"></span>
     </div>
   </div>
 </div>
 
-<div class="main" id="main-layout">
-  <div id="network">
-    <div id="loading-overlay">
-      <div class="spinner"></div>
-      <div class="loading-text">Loading 2026 NCAA bracket data...</div>
+<!-- AI SCOUT -->
+<aside class="ai-panel" id="ai-panel">
+  <div class="mob-drag-handle" id="mob-drag-handle" aria-hidden="true"></div>
+  <div class="ai-scout-header">
+    <div class="ai-scout-brand">
+      <div class="ai-scout-wordmark">
+        <div class="ai-scout-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
+        </div>
+        <div class="ai-scout-name">AI <span>Scout</span></div>
+      </div>
+    </div>
+    <div class="ai-tab-row">
+      <button class="ai-tab active" data-mode="stats">Stats</button>
+      <button class="ai-tab" data-mode="chat">Chat</button>
+      <button class="ai-tab mob-only-tab" data-mode="overview">Overview</button>
+      <button class="ai-tab mob-only-tab" data-mode="rankings">Rankings</button>
+      <button class="ai-tab mob-only-tab" data-mode="bracket">Bracket</button>
+      <button class="ai-tab mob-only-tab" data-mode="detail">Detail</button>
+      <button class="ai-tab mob-only-tab" data-mode="paths">Paths</button>
     </div>
   </div>
-
-  <!-- LEFT: graph sidebar -->
-  <div class="resize-handle" id="sidebar-resize-handle"></div>
-  <aside class="sidebar" id="sidebar">
-    <div class="sidebar-tabs">
-      <button class="stab active" data-tab="overview">Overview</button>
-      <button class="stab" data-tab="rankings">Rankings</button>
-      <button class="stab" data-tab="detail">Detail</button>
-      <button class="stab" data-tab="transitive" id="trans-tab-btn" title="Transitive matchup paths">Paths</button>
-      <button class="stab" data-tab="bracket">Bracket</button>
+  <div class="ai-mode-content active" id="panel-stats">
+    <div class="ai-team-picker">
+      <select id="stats-team-select"><option value="">Select a team…</option></select>
+      <button class="ai-action-btn" id="stats-fetch-btn" onclick="fetchTeamStats()" title="Refresh">↻</button>
     </div>
-
-    <div class="tab-content active" id="tab-overview">
-      <section>
-        <div class="section-label">GRAPH STATS</div>
-        <div class="stat-grid">
-          <div class="stat-box"><div class="stat-val" id="st-teams">—</div><div class="stat-lbl">Teams</div></div>
-          <div class="stat-box"><div class="stat-val" id="st-games">—</div><div class="stat-lbl">Total Games</div></div>
-          <div class="stat-box"><div class="stat-val" id="st-inter">—</div><div class="stat-lbl">Inter-Bracket</div></div>
-          <div class="stat-box"><div class="stat-val" id="st-rematches">—</div><div class="stat-lbl">Rematches</div></div>
-        </div>
-      </section>
-      <section>
-        <div class="section-label">REGION COLORS — NODES</div>
-        <div class="legend-list">
-          <div class="leg-item"><div class="leg-dot" style="background:#3B82F6"></div>East Region</div>
-          <div class="leg-item"><div class="leg-dot" style="background:#10B981"></div>West Region</div>
-          <div class="leg-item"><div class="leg-dot" style="background:#F59E0B"></div>South Region</div>
-          <div class="leg-item"><div class="leg-dot" style="background:#EF4444"></div>Midwest Region</div>
-        </div>
-      </section>
-      <section>
-        <div class="section-label">EDGE COLORS — GAMES</div>
-        <div class="legend-list">
-          <div class="leg-item"><div class="leg-line" style="background:#94a3b8"></div>Cross-region game</div>
-          <div class="leg-item"><div class="leg-line" style="background:#3B82F6"></div>East same-region</div>
-          <div class="leg-item"><div class="leg-line" style="background:#10B981"></div>West same-region</div>
-          <div class="leg-item"><div class="leg-line" style="background:#F59E0B"></div>South same-region</div>
-          <div class="leg-item"><div class="leg-line" style="background:#EF4444"></div>Midwest same-region</div>
-          <div class="leg-item"><div class="leg-line dashed"></div>Never played (click for path analysis)</div>
-        </div>
-      </section>
-      <section>
-        <div class="section-label">NODE SIZE</div>
-        <div class="hint-text">Larger node = more wins vs bracket field. Thicker edge = larger point margin. Click any dashed edge to see transitive matchup paths.</div>
-      </section>
-    </div>
-
-    <div class="tab-content" id="tab-rankings">
-      <section>
-        <div class="section-label">WINS VS BRACKET FIELD</div>
-        <div id="rank-wins"></div>
-      </section>
-      <section style="margin-top:16px">
-        <div class="section-label">LOSSES VS BRACKET FIELD</div>
-        <div id="rank-losses"></div>
-      </section>
-      <section style="margin-top:16px">
-        <div class="section-label">UNDERSEEDED — T-RANK SAYS BETTER</div>
-        <div class="seed-div-hint">Efficiency says these teams are better than their seed. Upset bait.</div>
-        <div id="rank-underseeded"></div>
-      </section>
-      <section style="margin-top:12px">
-        <div class="section-label">OVERSEEDED — SEED BETTER THAN T-RANK</div>
-        <div class="seed-div-hint">These teams got a favorable draw relative to their efficiency rating.</div>
-        <div id="rank-overseeded"></div>
-      </section>
-    </div>
-
-    <div class="tab-content" id="tab-detail">
-      <div id="detail-box">
-        <div class="detail-empty">Click a team or game edge to see details</div>
+    <div id="stats-output" class="ai-output"><div class="ai-placeholder">Select a team to load their 2025-26 stats.</div></div>
+  </div>
+  <div class="ai-mode-content" id="panel-chat">
+    <div class="chat-area" id="chat-messages">
+      <div class="chat-bubble-ai mob-welcome-msg">
+        <div class="chat-bubble-ai-label">Scout</div>
+        <div class="chat-bubble-ai-body">Ask me about any matchup, upset, or team. Try: <em>Duke vs Florida</em> or <em>sleeper picks.</em></div>
       </div>
     </div>
-
-    <div class="tab-content" id="tab-bracket"></div>
-
-    <div class="tab-content" id="tab-transitive">
-      <div class="paths-picker">
-        <div class="paths-search-wrap">
-          <input type="text" class="paths-team-input" id="paths-input-a" placeholder="Team A — type to search..." autocomplete="off" spellcheck="false"/>
-          <div class="paths-dropdown" id="paths-drop-a"></div>
-          <div class="paths-selected" id="paths-sel-a"></div>
-        </div>
-        <div class="paths-vs-divider">vs</div>
-        <div class="paths-search-wrap">
-          <input type="text" class="paths-team-input" id="paths-input-b" placeholder="Team B — type to search..." autocomplete="off" spellcheck="false"/>
-          <div class="paths-dropdown" id="paths-drop-b"></div>
-          <div class="paths-selected" id="paths-sel-b"></div>
-        </div>
-        <button class="paths-run-btn" id="paths-run-btn" onclick="runPathsFromInputs()">
-          Find Paths
+    <div id="saved-analyses-panel" style="display:none"></div>
+    <div class="chat-foot">
+      <div class="chat-hints-row">
+        <button class="hint-pill" onclick="insertHint('Duke vs Florida')">Duke vs Florida 🏀</button>
+        <button class="hint-pill" onclick="insertHint('Give me a sleeper pick from each region')">Sleeper picks</button>
+        <button class="hint-pill" onclick="insertHint('Who are the most dangerous upset teams?')">Upset threats</button>
+        <button class="hint-pill" onclick="insertHint('Which teams have the best efficiency margin?')">Top efficiency</button>
+      </div>
+      <div class="chat-input-wrap">
+        <textarea id="chat-input" placeholder="Ask about matchups, upsets, sleepers…" rows="3" spellcheck="false"></textarea>
+        <button class="chat-send" id="chat-send-btn" onclick="sendChat()" style="display:flex">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13"/><path d="M22 2L15 22 11 13 2 9l20-7z"/></svg>
+        </button>
+        <button class="chat-stop" id="chat-stop-btn" onclick="stopChat()" title="Stop" style="display:none">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
         </button>
       </div>
-      <div id="trans-output">
-        <div class="trans-intro">
-          <div class="trans-intro-title">Transitive Paths</div>
-          <div class="trans-intro-body">For any two teams that haven't played each other, this traces indirect evidence through common opponents. Click any dashed edge in the graph, or search two teams above.</div>
-        </div>
-      </div>
     </div>
-  </aside>
-
-  <!-- RIGHT: AI Scout panel -->
-  <aside class="ai-panel" id="ai-panel">
-
-    <!-- Drag handle — real element so we can attach non-passive touch listeners -->
-    <div class="mob-drag-handle" id="mob-drag-handle" aria-hidden="true"></div>
-
-    <!-- Header -->
-    <div class="ai-scout-header">
-      <div class="ai-scout-brand">
-        <div class="ai-scout-wordmark">
-          <div class="ai-scout-icon">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
-          </div>
-          <div class="ai-scout-name">AI <span>Scout</span></div>
-        </div>
-
-      </div>
-      <div class="ai-tab-row">
-        <button class="ai-tab active" data-mode="stats">Stats</button>
-        <button class="ai-tab" data-mode="chat">Chat</button>
-        <button class="ai-tab mob-only-tab" data-mode="overview">Overview</button>
-        <button class="ai-tab mob-only-tab" data-mode="rankings">Rankings</button>
-        <button class="ai-tab mob-only-tab" data-mode="bracket">Bracket</button>
-        <button class="ai-tab mob-only-tab" data-mode="detail">Detail</button>
-        <button class="ai-tab mob-only-tab" data-mode="paths">Paths</button>
-      </div>
-    </div>
-
-
-
-    <!-- STATS MODE -->
-    <div class="ai-mode-content active" id="panel-stats">
-      <div class="ai-team-picker">
-        <select id="stats-team-select">
-          <option value="">Select a team...</option>
-        </select>
-        <button class="ai-action-btn" id="stats-fetch-btn" onclick="fetchTeamStats()" title="Refresh stats">
-          ↻
-        </button>
-      </div>
-      <div id="stats-output" class="ai-output">
-        <div class="ai-placeholder">Select a team to load their 2025-26 stats.</div>
-      </div>
-    </div>
-
-    <!-- CHAT MODE -->
-    <div class="ai-mode-content" id="panel-chat">
-      <div class="chat-area" id="chat-messages">
-        <div class="chat-bubble-ai mob-welcome-msg">
-          <div class="chat-bubble-ai-label">Scout</div>
-          <div class="chat-bubble-ai-body">Ask me about any matchup, upset, or team in the 2026 bracket. Try: <em>Duke vs Florida</em> or <em>sleeper picks.</em></div>
-        </div>
-      </div>
-      <!-- Saved analyses cart — hidden until first save -->
-      <div id="saved-analyses-panel" style="display:none"></div>
-      <div class="chat-foot">
-        <div class="chat-hints-row">
-          <button class="hint-pill" onclick="insertHint('Duke vs Florida')">Duke vs Florida 🏀</button>
-          <button class="hint-pill" onclick="insertHint('Give me a sleeper pick from each region')">Sleeper picks</button>
-          <button class="hint-pill" onclick="insertHint('Who are the most dangerous upset teams in round 1?')">Upset threats</button>
-          <button class="hint-pill" onclick="insertHint('Which teams have the best efficiency margin going into the tournament?')">Top efficiency</button>
-        </div>
-        <div class="chat-input-wrap">
-          <textarea id="chat-input" placeholder="Ask about matchups, upsets, sleepers..." rows="3" spellcheck="false"></textarea>
-          <button class="chat-send" id="chat-send-btn" onclick="sendChat()" style="display:flex">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13"/><path d="M22 2L15 22 11 13 2 9l20-7z"/></svg>
-          </button>
-          <button class="chat-stop" id="chat-stop-btn" onclick="stopChat()" title="Stop" style="display:none">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
-          </button>
-        </div>
-      </div>
-    </div>
-    <!-- Mobile-only: sidebar content panels -->
-    <div class="ai-mode-content mob-sidebar-panel" id="mob-panel-overview"></div>
-    <div class="ai-mode-content mob-sidebar-panel" id="mob-panel-rankings"></div>
-    <div class="ai-mode-content mob-sidebar-panel" id="mob-panel-bracket"></div>
-    <div class="ai-mode-content mob-sidebar-panel" id="mob-panel-detail"></div>
-    <div class="ai-mode-content mob-sidebar-panel" id="mob-panel-paths"></div>
-  </aside>
-</div>
+  </div>
+  <div class="ai-mode-content mob-sidebar-panel" id="mob-panel-overview"></div>
+  <div class="ai-mode-content mob-sidebar-panel" id="mob-panel-rankings"></div>
+  <div class="ai-mode-content mob-sidebar-panel" id="mob-panel-bracket"></div>
+  <div class="ai-mode-content mob-sidebar-panel" id="mob-panel-detail"></div>
+  <div class="ai-mode-content mob-sidebar-panel" id="mob-panel-paths"></div>
+</aside>
 
 <script src="app.js"></script>
 <script src="transitive.js"></script>
@@ -346,5 +352,6 @@
 <script src="style-bars.js"></script>
 <script src="bracket.js"></script>
 <script src="ai-panel.js"></script>
+<script src="odds.js"></script>
 </body>
 </html>

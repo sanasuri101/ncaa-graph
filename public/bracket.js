@@ -30,33 +30,15 @@ const REGION_COLOR = {
   Midwest: 'var(--midwest)',
 };
 
-// ── Entry point — called when Bracket tab is activated ────────────────────────
+// ── Entry point — called once on page load ─────────────────────────────────
+// The HTML already contains bracket-controls and bracket-stage.
+// Nothing to inject — just mark as ready.
 function initBracket() {
-  const container = document.getElementById('tab-bracket');
-  if (!container) return;
-  if (container.dataset.initialized) return;
-  container.dataset.initialized = '1';
-  container.innerHTML = buildBracketShell();
-  bindBracketEvents();
+  // No-op: shell is in index.html. generateBracket() handles everything.
 }
 
 function buildBracketShell() {
-  const modelBtns = Object.entries(MODEL_META).map(([key, m]) => `
-    <button class="br-model-btn ${key === 'evidence' ? 'active' : ''}" data-model="${key}" onclick="selectBracketModel(this)">
-      <span class="br-model-label">${m.label}</span>
-      <span class="br-model-desc">${m.desc}</span>
-    </button>`).join('');
-
-  return `
-    <div class="bracket-panel">
-      <div class="bracket-header">
-        <div class="bracket-title">Bracket Generator</div>
-        <div class="bracket-subtitle">${(META?.season ? '20' + META.season.split('-')[1] : new Date().getFullYear())} NCAA Tournament · Pick your prediction model</div>
-      </div>
-      <div class="br-model-row">${modelBtns}</div>
-      <button class="br-generate-btn" id="br-generate-btn" onclick="generateBracket()">Generate Bracket</button>
-      <div id="br-output"></div>
-    </div>`;
+  return ''; // shell is static HTML
 }
 
 function selectBracketModel(btn) {
@@ -72,11 +54,14 @@ function bindBracketEvents() {
 
 // ── Fetch + render ────────────────────────────────────────────────────────────
 async function generateBracket() {
-  const btn = document.getElementById('br-generate-btn');
-  const out = document.getElementById('br-output');
+  const btn   = document.getElementById('br-generate-btn');
+  const stage = document.getElementById('bracket-stage');
+  if (!btn || !stage) return;
   btn.disabled = true;
-  btn.textContent = 'Simulating…';
-  out.innerHTML = '<div class="br-loading">Running 63 games…</div>';
+  btn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Simulating…';
+  stage.innerHTML = '<div class="br-loading"><div class="br-loading-spinner"></div>Running 63 games…</div>';
+  // alias so renderFullBracket can write into stage
+  const out = { set innerHTML(v) { stage.innerHTML = v; } };
 
   if (window.posthog) posthog.capture('bracket_simulated', { model: _bracketModel });
   try {
@@ -91,13 +76,13 @@ async function generateBracket() {
     clearTimeout(timer);
     if (!res.ok) throw new Error(`Server error ${res.status}`);
     _bracketData = await res.json();
-    out.innerHTML = renderFullBracket(_bracketData);
+    stage.innerHTML = renderFullBracket(_bracketData);
     bindGameTooltips();
   } catch (err) {
-    out.innerHTML = `<div class="br-error">${err.message}</div>`;
+    stage.innerHTML = `<div class="br-error">${err.message}</div>`;
   } finally {
     btn.disabled = false;
-    btn.textContent = 'Generate Bracket';
+    btn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg> Simulate Bracket';
   }
 }
 
