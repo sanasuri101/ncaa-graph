@@ -1125,16 +1125,6 @@ function initMobileUI() {
     }, { passive: false });
   }
 
-  // ── When AI Scout button is tapped, open the bottom sheet ────────────────
-  const aiToggle = document.getElementById('ai-toggle');
-  if (aiToggle) {
-    const original = aiToggle.onclick;
-    aiToggle.addEventListener('click', () => {
-      if (window.innerWidth <= 768) {
-        aiPanel.classList.add('open');
-      }
-    });
-  }
 }
 
 // Run after DOM is ready
@@ -1190,10 +1180,8 @@ function switchView(name) {
   // ai-panel is ONLY allowed open on the graph view
   // On every other view, close it and hide the toggle button
   const panel     = document.getElementById('ai-panel');
-  const aiToggle  = document.getElementById('ai-toggle');
   if (name === 'graph') {
     // Show toggle button so user can open the panel on graph view
-    if (aiToggle) aiToggle.style.display = '';
     // Re-open if it was open before leaving graph
     if (panel && panel._graphWasOpen) { panel.classList.add('open'); panel._graphWasOpen = false; }
   } else {
@@ -1202,7 +1190,6 @@ function switchView(name) {
       panel._graphWasOpen = panel.classList.contains('open');
       panel.classList.remove('open');
     }
-    if (aiToggle) aiToggle.style.display = 'none';
   }
 
   // View-specific init
