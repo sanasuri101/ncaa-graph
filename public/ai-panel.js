@@ -521,7 +521,7 @@ function renderConfidence(conf, oddsRaw) {
       const isBottomLine = d.key === 'bottom_line';
       return `<div class="conf-section ${isInjury ? 'conf-section-injury' : ''} ${isBottomLine ? 'conf-section-bottom-line' : ''}">
         <div class="conf-section-label">${d.label}</div>
-        <div class="conf-section-text">${escapeHtml(sec[d.key])}</div>
+        <div class="conf-section-text">${renderMarkdown(sec[d.key])}</div>
       </div>`;
     }).join('');
 
@@ -954,10 +954,17 @@ async function sendScoutChat() {
       if (metaEl) metaEl.textContent = `${matchup.team_a} vs ${matchup.team_b}`;
 
       // Auto-load team A stats in left panel
-      const nodeA = ALL_NODES?.find(n =>
-        n.label.toLowerCase() === matchup.team_a.toLowerCase() ||
-        n.full_name.toLowerCase().includes(matchup.team_a.toLowerCase())
-      );
+      // Exact label match first, then word-boundary full_name match
+      // Prevents "Michigan" from matching "Michigan State"
+      const _teamAQ = matchup.team_a.toLowerCase();
+      const nodeA = ALL_NODES?.find(n => n.label.toLowerCase() === _teamAQ)
+        ?? ALL_NODES?.find(n => n.full_name.toLowerCase() === _teamAQ)
+        ?? ALL_NODES?.find(n => {
+            const fn = n.full_name.toLowerCase();
+            // only match if query is a whole word in the full name
+            const re = new RegExp('\\b' + _teamAQ.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b');
+            return re.test(fn) && !fn.startsWith(_teamAQ + ' state') && !fn.startsWith(_teamAQ + ' st');
+          });
       if (nodeA) fetchScoutTeamStats(nodeA.id);
 
       const agentSteps = (data.agent_results || []).map(r =>
