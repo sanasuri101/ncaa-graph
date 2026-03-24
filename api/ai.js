@@ -8,7 +8,7 @@
  *   GROQ_KEY — Groq API key
  */
 
-import { readFileSync } from 'fs';
+import { readFileSync, statSync } from 'fs';
 import { join }         from 'path';
 
 // ── Output sanitizer — strip CoT/meta-commentary before text reaches client ─────
@@ -86,7 +86,8 @@ const TOOLS = [
           },
           region: {
             type: 'string',
-            enum: ['East', 'West', 'South', 'Midwest', 'bubble', 'all'],
+            enum: ['East', 'West', 'South', 'Midwest', 'all'],
+            description: 'Filter by region, or all for full bracket',
           },
           limit: { anyOf: [{ type: 'number' }, { type: 'string' }], description: 'How many results (e.g. 10)' },
         },
@@ -97,7 +98,17 @@ const TOOLS = [
 ];
 
 // ── Data cache — populated once at cold start ─────────────────────────────────
-let _cache = null;
+let _cache     = null;
+let _cacheMtime = 0;
+
+function getAiCacheMtime() {
+  const files = ['public/data/graph_data.json','public/data/torvik_stats.json','data/all_games.json','data/injury_overrides.json'];
+  let latest = 0;
+  for (const f of files) {
+    try { const { mtimeMs } = statSync(join(process.cwd(), f)); if (mtimeMs > latest) latest = mtimeMs; } catch {}
+  }
+  return latest;
+}
 
 function readJSON(name) {
   // public/ is outputDirectory — Vercel copies it to cwd at deploy time
@@ -112,7 +123,8 @@ function readDataJSON(name) {
 }
 
 function getData() {
-  if (_cache) return _cache;
+  const mtime = getAiCacheMtime();
+  if (_cache && mtime === _cacheMtime) return _cache;
   const graph  = readJSON('graph_data.json');
   const torvik = readJSON('torvik_stats.json');
   const form   = readJSON('recent_form.json');
@@ -149,7 +161,32 @@ function getData() {
     (edgesByNode[e.to]   = edgesByNode[e.to]   || []).push(e);
   });
 
-  _cache = { graph, torvik, form, transPairs, injuryMap, nodeByName, edgesByNode };
+  // Build set of alive teams from actual tournament results
+  // Teams that won at least once and have not been eliminated
+  const aliveTeamIds = new Set();
+  try {
+    const allGames = JSON.parse(readFileSync(join(process.cwd(), 'data', 'all_games.json'), 'utf8'));
+    let bracketIds = new Set(graph.nodes.map(n => String(n.id)));
+    const winners  = new Set();
+    const losers   = new Set();
+    allGames
+      .filter(g => g.date >= '2026-03-17')
+      .forEach(g => {
+        const t1 = String(g.team1_id), t2 = String(g.team2_id);
+        if (!bracketIds.has(t1) && !bracketIds.has(t2)) return;
+        const winnerId = g.team1_winner ? t1 : t2;
+        const loserId  = g.team1_winner ? t2 : t1;
+        winners.add(winnerId);
+        losers.add(loserId);
+      });
+    // Alive = won at least once AND not eliminated
+    for (const id of winners) {
+      if (!losers.has(id)) aliveTeamIds.add(id);
+    }
+  } catch {}
+
+  _cache = { graph, torvik, form, transPairs, injuryMap, nodeByName, edgesByNode, aliveTeamIds };
+  _cacheMtime = mtime;
   return _cache;
 }
 
@@ -199,7 +236,7 @@ function resolveTeam(name, nodeByName) {
 
 function fmtTeam(node, torvik, form, injuryMap) {
   const tv   = torvik?.teams?.[node.id]?.torvik;
-  const seed = node.seed != null ? `#${node.seed}` : 'bubble';
+  const seed = node.seed != null ? `#${node.seed}` : 'all';
   const base = `${node.full_name} (${node.region} ${seed}, ${tv?.conf ?? '?'}) Season: ${tv?.record ?? node.wins_vs_field + '-' + node.losses_vs_field} | vs bracket field: ${node.wins_vs_field}W-${node.losses_vs_field}L`;
   if (!tv) return base + ' | no Torvik data';
 
@@ -326,8 +363,15 @@ function toolGetMatchup({ team_a, team_b }) {
 
 function toolGetStandings({ sort_by, region = 'all', limit = 10 }) {
   limit = parseInt(limit, 10) || 10;
-  const { graph, torvik } = getData();
+  const { graph, torvik, aliveTeamIds } = getData();
   let teams = graph.nodes.map(n => ({ node: n, tv: torvik?.teams?.[n.id]?.torvik }));
+
+  // Only show teams still alive in the tournament
+  // If aliveTeamIds is populated (tournament underway), filter to alive teams only
+  if (aliveTeamIds && aliveTeamIds.size > 0) {
+    teams = teams.filter(t => aliveTeamIds.has(String(t.node.id)));
+  }
+
   if (region !== 'all') teams = teams.filter(t => t.node.region === region);
 
   const val = t => {
@@ -342,7 +386,7 @@ function toolGetStandings({ sort_by, region = 'all', limit = 10 }) {
   teams.sort((a, b) => val(b) - val(a));
   const { form } = getData();
   return teams.slice(0, Math.min(limit, 25)).map((t, i) => {
-    const seed     = t.node.seed != null ? `#${t.node.seed}` : 'bubble';
+    const seed     = t.node.seed != null ? `#${t.node.seed}` : 'all';
     const teamForm = form?.teams?.[t.node.id];
     const formStr  = teamForm ? ` | ${teamForm.last10} L10 ${teamForm.streak}` : '';
     const tv_s     = t.tv
@@ -438,7 +482,14 @@ function buildSystemPrompt(userMsg, graph, torvik, form, injuryMap, prefetchedCo
 
   const _metaSeason = graph?.meta?.season ?? '';
   const _seasonYear = _metaSeason ? _metaSeason.split('-')[1] : String(new Date().getFullYear());
-  let prompt = `You are AI Scout, an expert NCAA basketball analyst for the ${_seasonYear} March Madness tournament. You have access to real-time Torvik efficiency data, head-to-head results, recent form, and injury reports for all 68 bracket teams.\n\n`;
+  // Build alive team count for prompt context
+  const { aliveTeamIds } = getData();
+  const aliveCount = aliveTeamIds?.size || 16;
+  const roundName = aliveCount >= 16 ? 'Sweet 16' : aliveCount >= 8 ? 'Elite Eight' : aliveCount >= 4 ? 'Final Four' : 'Championship';
+
+  let prompt = `You are AI Scout, an expert NCAA basketball analyst for the ${_seasonYear} March Madness tournament. We are in the ${roundName} — ${aliveCount} teams remain. You have access to Torvik efficiency data, head-to-head results, recent form, and injury reports.\n\n`;
+
+  prompt += `CRITICAL: Only reference teams that are STILL ALIVE in the tournament. Do not mention eliminated teams as contenders or use them in upset picks. When listing top teams, only include the ${aliveCount} teams still playing.\n\n`;
 
   prompt += `STRICT RULES — violating any of these is a failure:\n`;
   prompt += `1. NEVER say you lack data. All stats are in DATA below. If a team is not in DATA, call get_team_stats immediately.\n`;

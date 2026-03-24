@@ -93,8 +93,9 @@ def fetch_torvik() -> dict:
         with urllib.request.urlopen(req, timeout=20) as resp:
             raw = json.loads(resp.read())
     except Exception as exc:
-        print(f"ERROR fetching Torvik: {exc}", file=sys.stderr)
-        sys.exit(1)
+        print(f"WARNING: Torvik fetch failed ({exc}). Keeping existing torvik_stats.json.", file=sys.stderr)
+        # Don't exit — keep existing data file intact rather than wiping it
+        return {}
 
     out = {}
     for entry in raw:

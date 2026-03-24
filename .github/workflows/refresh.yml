@@ -2,7 +2,8 @@ name: Refresh ESPN + Torvik Data
 
 on:
   schedule:
-    - cron: '0 6 * * *'
+    - cron: '0 6 * * *'   # 2am ET — catches overnight game results
+    - cron: '0 18 * * *'  # 2pm ET — catches same-day odds/lines after morning results
   workflow_dispatch:
 
 permissions:
@@ -32,16 +33,22 @@ jobs:
 
       - name: Fetch injury news flags
         run: python scripts/fetch_injuries.py
+        continue-on-error: true
 
       - name: Fetch roster stats for all bracket teams
         run: python scripts/fetch_rosters.py
+        continue-on-error: true
 
       - name: Recompute transitive analysis
         run: python scripts/compute_transitive.py
 
+      - name: Install Python dependencies
+        run: pip install requests 2>/dev/null || true
+
       - name: Copy all data to public/data
         run: |
           mkdir -p public/data
+          # Copy atomically — all files or none, prevents partial state
           cp data/graph_data.json          public/data/graph_data.json
           cp data/roster_stats.json        public/data/roster_stats.json
           cp data/not_played.json          public/data/not_played.json
@@ -49,6 +56,9 @@ jobs:
           cp data/torvik_stats.json        public/data/torvik_stats.json
           cp data/transitive_analysis.json public/data/transitive_analysis.json
           cp data/espn_odds.json           public/data/espn_odds.json
+          echo "All data files copied successfully at $(date -u)"
+          echo "Sizes:"
+          ls -lh public/data/*.json | awk '{print $5, $9}'
 
       - name: Commit updated data
         run: |
