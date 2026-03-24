@@ -82,7 +82,7 @@ function populateTeamSelect() {
 
 // ── Mode switching ────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('ai-toggle').addEventListener('click', toggleAIPanel);
+  document.getElementById('ai-toggle')?.addEventListener('click', toggleAIPanel);
 
   document.querySelectorAll('.ai-tab').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -815,8 +815,22 @@ async function fetchScoutTeamStats(teamId) {
   if (sel && sel.value !== id) sel.value = id;
 
   const output = document.getElementById('scout-stats-output');
-  const node   = ALL_NODES?.find(n => n.id === id);
-  if (!output || !node) return;
+  if (!output) return;
+
+  // Wait for ALL_NODES to be populated (graph_data.json fetch may still be in flight)
+  if (!ALL_NODES || ALL_NODES.length === 0) {
+    output.innerHTML = loadingHTML('Loading team data…');
+    await new Promise(resolve => {
+      const check = () => ALL_NODES && ALL_NODES.length > 0 ? resolve() : setTimeout(check, 200);
+      check();
+    });
+  }
+
+  const node = ALL_NODES?.find(n => n.id === id);
+  if (!node) {
+    output.innerHTML = '<div class="ai-error">Team not found. Try selecting from the dropdown.</div>';
+    return;
+  }
 
   output.innerHTML = loadingHTML('Loading stats…');
 
