@@ -80,15 +80,30 @@ def fetch_all_games() -> tuple[list, list]:
 
     for i, team in enumerate(ALL_TEAMS):
         tid = team["espn_id"]
-        url = (
-            f"https://site.api.espn.com/apis/site/v2/sports/basketball"
-            f"/mens-college-basketball/teams/{tid}/schedule?season={season_year}"
-        )
-        data = fetch(url)
-        # seasonType 2 = regular season, 3 = postseason (conf tournaments)
-        # NCAA tournament (also type 3) doesn't start until March 20, after Selection Sunday
-        # So including type 3 now captures conf tourney inter-bracket games safely
-        reg = [e for e in data.get("events", []) if e.get("seasonType", {}).get("type") in (2, 3)]
+
+        # Fetch both season types explicitly.
+        # Without the seasontype param, ESPN returns only the currently active
+        # season type — during March Madness that means postseason only, which
+        # drops the entire regular season. We must request each separately.
+        events_raw = []
+        for stype in (2, 3):
+            url = (
+                f"https://site.api.espn.com/apis/site/v2/sports/basketball"
+                f"/mens-college-basketball/teams/{tid}/schedule"
+                f"?season={season_year}&seasontype={stype}"
+            )
+            data = fetch(url)
+            events_raw.extend(data.get("events", []))
+
+        # Deduplicate by event id (unlikely but safe)
+        seen = set()
+        events = []
+        for e in events_raw:
+            if e["id"] not in seen:
+                seen.add(e["id"])
+                events.append(e)
+
+        reg = [e for e in events if e.get("seasonType", {}).get("type") in (2, 3)]
 
         for e in reg:
             gid = e["id"]
