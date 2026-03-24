@@ -686,6 +686,7 @@ export default async function handler(req, res) {
       team_b,
       agent_results: result.agent_results,
       confidence:    result.confidence,
+      odds_data:     result.odds_data ?? null,
     }));
   } catch (err) {
     res.writeHead(500, { 'Content-Type': 'application/json', ...CORS });

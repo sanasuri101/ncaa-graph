@@ -318,7 +318,7 @@ async function sendChat() {
           </div>
         </div>`;
 
-      const confHtml  = data.confidence?.win_pct !== undefined ? renderConfidence(data.confidence) : '';
+      const confHtml  = data.confidence?.win_pct !== undefined ? renderConfidence(data.confidence, data.odds_data) : '';
       const reasoning = data.confidence?.reasoning ?? 'Analysis complete.';
       // Store active matchup so follow-up messages route to chat, not re-analysis
       _activeMatchup = { team_a: matchup.team_a, team_b: matchup.team_b };
@@ -445,7 +445,7 @@ function detectMatchupIntent(msg) {
 }
 
 // ── Confidence interval renderer ─────────────────────────────────────────────
-function renderConfidence(conf) {
+function renderConfidence(conf, oddsRaw) {
   const pct     = conf.win_pct;
   const teamA   = escapeHtml(conf.team_a);
   const teamB   = escapeHtml(conf.team_b);
@@ -469,6 +469,38 @@ function renderConfidence(conf) {
     </div>`;
   }).join('');
 
+  // Build weights label dynamically from API response
+  const w = conf.weights || {};
+  const weightLabel = Object.keys(w).length
+    ? Object.entries(w)
+        .filter(([, v]) => v > 0)
+        .map(([k, v]) => `${k.charAt(0).toUpperCase() + k.slice(1)} ${Math.round(v * 100)}%`)
+        .join(' · ')
+    : 'Efficiency 50% · Form 25% · Matchup 25%';
+
+  // Build market + BPI data block from raw odds context string returned by API
+  let marketBlock = '';
+  if (oddsRaw && !oddsRaw.includes('No tournament game odds found')) {
+    const rows = oddsRaw.split('\n')
+      .filter(l => l.trim())
+      .map(l => {
+        const t = l.trim();
+        if (
+          t.startsWith('DraftKings') ||
+          t.startsWith('ESPN BPI') ||
+          t.startsWith('Futures')
+        ) {
+          return `<div class="market-header">${escapeHtml(t.replace(/:$/, ''))}</div>`;
+        }
+        return `<div class="market-row">${escapeHtml(t)}</div>`;
+      }).join('');
+    marketBlock = `
+    <div class="conf-market-block">
+      <div class="conf-agents-title">Market &amp; BPI</div>
+      <div class="market-rows">${rows}</div>
+    </div>`;
+  }
+
   return `<div class="confidence-block" id="conf-block-${conf.team_a}-${conf.team_b}">
     <div class="conf-header">
       <span class="conf-label">AI SCOUT MULTI-AGENT ANALYSIS</span>
@@ -490,8 +522,8 @@ function renderConfidence(conf) {
     </div>
     <div class="conf-favor">Favoring <strong>${favor}</strong> with ${dispPct}% confidence</div>
     <div class="conf-agents-title">Agent breakdown</div>
-    <div class="conf-agents">${breakdown}</div>
-    <div class="conf-weights">Weights: Efficiency 50% · Form 25% · Matchup 25%</div>
+    <div class="conf-agents">${breakdown}</div>${marketBlock}
+    <div class="conf-weights">Weights: ${weightLabel}</div>
     <button class="conf-export-btn" onclick="saveAnalysis(this)" data-team-a="${teamA}" data-team-b="${teamB}" data-pct="${barPct}" data-range="${conf.range_low}–${conf.range_high}" data-favor="${favor}" data-disppct="${dispPct}" data-consensus="${escapeHtml(consensus)}" data-reasoning="${escapeHtml(conf.reasoning ?? '')}" data-breakdown="${escapeHtml(JSON.stringify(conf.agent_breakdown ?? []))}">+ Save analysis</button>
   </div>`;
 }
