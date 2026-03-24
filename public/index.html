@@ -42,6 +42,10 @@
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
       Rankings
     </button>
+    <button class="nav-btn" data-view="scout">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
+      AI Scout
+    </button>
   </nav>
   <div class="header-actions">
     <div class="region-pills">
@@ -65,6 +69,7 @@
     <div class="bracket-controls">
       <div class="bc-left">
         <button class="br-model-btn active" data-model="evidence" onclick="selectBracketModel(this)">Evidence Model</button>
+        <button class="br-model-btn" data-model="market" onclick="selectBracketModel(this)">Market Consensus</button>
         <button class="br-model-btn" data-model="upset" onclick="selectBracketModel(this)">Upset Heavy</button>
       </div>
       <button class="br-run-btn" id="br-generate-btn" onclick="generateBracket()">
@@ -250,6 +255,71 @@
           <div id="rp-rank-overseeded"></div>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- SCOUT VIEW — full page chat layout -->
+  <div class="view" id="view-scout">
+    <div class="scout-page">
+
+      <!-- LEFT: Team stats panel -->
+      <div class="scout-left">
+        <div class="scout-left-header">
+          <div class="scout-left-title">Team Stats</div>
+          <div class="scout-team-picker">
+            <select id="scout-team-select"><option value="">Select a team…</option></select>
+            <button class="ai-action-btn" id="scout-fetch-btn" onclick="fetchScoutTeamStats()" title="Refresh">↻</button>
+          </div>
+        </div>
+        <div id="scout-stats-output" class="scout-stats-body">
+          <div class="scout-empty">
+            <div class="scout-empty-icon">📊</div>
+            <div class="scout-empty-text">Select a team to see full stats</div>
+            <div class="scout-empty-sub">or ask the Scout about any matchup</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: Chat panel -->
+      <div class="scout-right">
+        <div class="scout-chat-header">
+          <div class="scout-brand">
+            <div class="ai-scout-icon" style="width:22px;height:22px;border-radius:6px;background:var(--text);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#f5f2ed" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
+            </div>
+            <span class="scout-brand-name">AI Scout</span>
+          </div>
+          <div class="scout-chat-meta" id="scout-active-matchup"></div>
+        </div>
+
+        <div class="scout-messages" id="scout-messages">
+          <div class="chat-bubble-ai">
+            <div class="chat-bubble-ai-label">Scout</div>
+            <div class="chat-bubble-ai-body">Ask me about any matchup, team, or upset pick.<br>Try: <em>Duke vs St. John's</em> or <em>who should I pick in the West region?</em></div>
+          </div>
+        </div>
+
+        <div id="scout-saved-analyses" style="display:none"></div>
+
+        <div class="scout-input-area">
+          <div class="scout-hints">
+            <button class="hint-pill" onclick="scoutInsertHint('Duke vs St. Johns')">Duke vs St. John's 🏀</button>
+            <button class="hint-pill" onclick="scoutInsertHint('Who wins the West region?')">West region winner</button>
+            <button class="hint-pill" onclick="scoutInsertHint('Best upset picks remaining')">Upset picks</button>
+            <button class="hint-pill" onclick="scoutInsertHint('Michigan vs Alabama')">Michigan vs Alabama</button>
+          </div>
+          <div class="scout-input-wrap">
+            <textarea id="scout-input" placeholder="Ask about any matchup or team…" rows="2" spellcheck="false"></textarea>
+            <button class="chat-send" id="scout-send-btn" onclick="sendScoutChat()" style="display:flex">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13"/><path d="M22 2L15 22 11 13 2 9l20-7z"/></svg>
+            </button>
+            <button class="chat-stop" id="scout-stop-btn" onclick="stopScoutChat()" title="Stop" style="display:none">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 

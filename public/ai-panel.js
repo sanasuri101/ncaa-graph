@@ -748,3 +748,213 @@ function renderMarkdown(text) {
     .replace(/\n\n/g, '<br><br>')
     .replace(/\n/g, '<br>');
 }
+
+// ══════════════════════════════════════════════════════════════════════════════
+// SCOUT VIEW — full-page chat + stats
+// ══════════════════════════════════════════════════════════════════════════════
+
+let _scoutAbortCtrl   = null;
+let _scoutHistory     = [];
+let _scoutMatchup     = null;
+
+// ── Populate team select in scout view ───────────────────────────────────────
+function populateScoutTeamSelect() {
+  const sel = document.getElementById('scout-team-select');
+  if (!sel || sel.options.length > 1) return;
+  if (!ALL_NODES || ALL_NODES.length === 0) {
+    setTimeout(populateScoutTeamSelect, 500);
+    return;
+  }
+  const sorted = [...ALL_NODES].sort((a, b) => a.full_name.localeCompare(b.full_name));
+  sel.innerHTML = '<option value="">Select a team…</option>';
+  sorted.forEach(n => {
+    const opt    = document.createElement('option');
+    opt.value    = n.id;
+    const seed   = n.seed != null ? ` #${n.seed}` : '';
+    opt.textContent = `${n.full_name} (${n.region}${seed})`;
+    sel.appendChild(opt);
+  });
+}
+
+// ── Fetch + render team stats into scout left panel ───────────────────────────
+async function fetchScoutTeamStats(teamId) {
+  const sel    = document.getElementById('scout-team-select');
+  const id     = teamId || sel?.value;
+  if (!id) return;
+
+  // Sync the select to show correct team
+  if (sel && sel.value !== id) sel.value = id;
+
+  const output = document.getElementById('scout-stats-output');
+  const node   = ALL_NODES?.find(n => n.id === id);
+  if (!output) return;
+
+  output.innerHTML = loadingHTML('Loading stats…');
+
+  // Re-use the existing stats fetching logic from fetchTeamStats
+  // by temporarily setting the main stats-team-select and calling it
+  // then reading the rendered HTML and cloning it here
+  const mainSel = document.getElementById('stats-team-select');
+  const mainOut = document.getElementById('stats-output');
+  if (mainSel && mainOut) {
+    mainSel.value = id;
+    await fetchTeamStats();
+    // Clone rendered HTML into scout panel
+    output.innerHTML = mainOut.innerHTML;
+  }
+}
+
+// ── Send message in scout chat ────────────────────────────────────────────────
+async function sendScoutChat() {
+  const input = document.getElementById('scout-input');
+  const msg   = input?.value.trim();
+  if (!msg) return;
+
+  input.value = '';
+  autoGrowTextarea(input);
+
+  const messages = document.getElementById('scout-messages');
+  if (!messages) return;
+
+  // User bubble
+  messages.insertAdjacentHTML('beforeend', `
+    <div class="chat-msg-user">${escapeHtml(msg)}</div>`);
+
+  // AI bubble placeholder
+  const aiEl = document.createElement('div');
+  aiEl.className = 'chat-bubble-ai';
+  aiEl.innerHTML = `<div class="chat-bubble-ai-label">Scout</div><div class="chat-bubble-ai-body">${loadingHTML('Thinking…')}</div>`;
+  messages.appendChild(aiEl);
+  messages.scrollTop = messages.scrollHeight;
+
+  // Update send/stop buttons
+  const sendBtn = document.getElementById('scout-send-btn');
+  const stopBtn = document.getElementById('scout-stop-btn');
+  if (sendBtn) sendBtn.style.display = 'none';
+  if (stopBtn) stopBtn.style.display = 'flex';
+
+  _scoutAbortCtrl = new AbortController();
+
+  try {
+    _scoutHistory.push({ role: 'user', content: msg });
+
+    // Detect matchup intent using existing function
+    const matchup = detectMatchupIntent(msg);
+    const useMultiAgent = matchup !== null;
+
+    if (useMultiAgent) {
+      aiEl.innerHTML = `<div class="chat-bubble-ai-label">Scout · Multi-Agent</div><div class="chat-bubble-ai-body">${loadingHTML('Running 4 specialist agents…')}</div>`;
+      messages.scrollTop = messages.scrollHeight;
+
+      const data = await callAnalyze(matchup.team_a, matchup.team_b, _scoutAbortCtrl.signal);
+      _scoutMatchup = { team_a: matchup.team_a, team_b: matchup.team_b };
+
+      // Update matchup meta in header
+      const metaEl = document.getElementById('scout-active-matchup');
+      if (metaEl) metaEl.textContent = `${matchup.team_a} vs ${matchup.team_b}`;
+
+      // Auto-load team A stats in left panel
+      const nodeA = ALL_NODES?.find(n =>
+        n.label.toLowerCase() === matchup.team_a.toLowerCase() ||
+        n.full_name.toLowerCase().includes(matchup.team_a.toLowerCase())
+      );
+      if (nodeA) fetchScoutTeamStats(nodeA.id);
+
+      const agentSteps = (data.agent_results || []).map(r =>
+        `${r.agent} agent: ${r.win_pct}% for ${matchup.team_a}`
+      );
+      agentSteps.push('synthesis: weighted confidence interval');
+
+      const thinkHtml = `
+        <div class="thinking-block thinking-done">
+          <div class="thinking-header">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            <span class="thinking-label">Multi-agent analysis complete</span>
+          </div>
+          <div class="thinking-steps">
+            ${agentSteps.map(s => `<div class="thinking-step">${escapeHtml(s)}</div>`).join('')}
+          </div>
+        </div>`;
+
+      const confHtml  = data.confidence?.win_pct !== undefined ? renderConfidence(data.confidence, data.odds_data) : '';
+      const reasoning = data.confidence?.reasoning ?? 'Analysis complete.';
+      _scoutHistory.push({ role: 'assistant', content: `Multi-agent analysis of ${matchup.team_a} vs ${matchup.team_b}: ${reasoning}` });
+
+      aiEl.innerHTML = `<div class="chat-bubble-ai-label">Scout · Multi-Agent</div>${thinkHtml}${confHtml}<div class="chat-bubble-ai-body">${renderMarkdown(reasoning)}</div>`;
+
+    } else {
+      // Standard chat path
+      const historyForApi = _scoutHistory.slice(-12);
+      const { text, thinking } = await callAI(historyForApi, msg, _scoutAbortCtrl.signal);
+      _scoutHistory.push({ role: 'assistant', content: text });
+
+      const thinkHtml = thinking.length ? `
+        <div class="thinking-block thinking-done">
+          <div class="thinking-header">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            <span class="thinking-label">Thought for a moment</span>
+          </div>
+          <div class="thinking-steps">${thinking.map(t => `<div class="thinking-step">${escapeHtml(t)}</div>`).join('')}</div>
+        </div>` : '';
+
+      aiEl.innerHTML = `<div class="chat-bubble-ai-label">Scout</div>${thinkHtml}<div class="chat-bubble-ai-body">${renderMarkdown(text)}</div>`;
+    }
+
+  } catch (err) {
+    if (err.name === 'AbortError') {
+      aiEl.innerHTML = `<div class="chat-bubble-ai-label">Scout</div><div class="chat-bubble-ai-body" style="color:var(--text-mute)">Stopped.</div>`;
+    } else {
+      aiEl.innerHTML = `<div class="chat-bubble-ai-label">Scout</div><div class="chat-bubble-ai-body" style="color:var(--midwest)">${escapeHtml(err.message)}</div>`;
+    }
+  } finally {
+    if (sendBtn) sendBtn.style.display = 'flex';
+    if (stopBtn) stopBtn.style.display = 'none';
+    messages.scrollTop = messages.scrollHeight;
+  }
+}
+
+function stopScoutChat() {
+  _scoutAbortCtrl?.abort();
+}
+
+function scoutInsertHint(text) {
+  const input = document.getElementById('scout-input');
+  if (input) {
+    input.value = text;
+    input.focus();
+    autoGrowTextarea(input);
+  }
+}
+
+// ── Auto-grow textarea ────────────────────────────────────────────────────────
+function autoGrowTextarea(el) {
+  if (!el) return;
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+}
+
+// ── Wire scout input enter key ────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  const input = document.getElementById('scout-input');
+  if (input) {
+    input.addEventListener('keydown', e => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendScoutChat();
+      }
+    });
+    input.addEventListener('input', () => autoGrowTextarea(input));
+  }
+});
+
+// ── Init scout view when activated ───────────────────────────────────────────
+function initScoutView() {
+  populateScoutTeamSelect();
+}
+
+// Expose
+window.fetchScoutTeamStats = fetchScoutTeamStats;
+window.sendScoutChat       = sendScoutChat;
+window.stopScoutChat       = stopScoutChat;
+window.scoutInsertHint     = scoutInsertHint;
+window.initScoutView       = initScoutView;

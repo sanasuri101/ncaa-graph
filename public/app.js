@@ -1194,6 +1194,9 @@ function switchView(name) {
 
   // When rankings view is activated, populate the standalone rankings columns
   if (name === 'rankings') populateRankingsPage();
+
+  // When scout view is activated, init team selects
+  if (name === 'scout' && window.initScoutView) initScoutView();
 }
 
 function populateRankingsPage() {
