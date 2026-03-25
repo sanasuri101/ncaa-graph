@@ -424,9 +424,18 @@ function insertHint(text) {
 function detectMatchupIntent(msg) {
   if (!window.ALL_NODES) return null;
 
-  // Two normalization functions:
-  // normLabel — for stored team labels (no st->saint, preserves abbreviations)
-  // normInput — for user input (expands common abbreviations so "st.louis" matches "saint louis")
+  // Abbreviation map — must match ALIASES in api/ai.js
+  const ABBREVS = {
+    'isu': 'iowa state', 'iowa st': 'iowa state',
+    'msu': 'michigan st', 'mich st': 'michigan st', 'michigan state': 'michigan st',
+    'ku': 'kansas',   'osu': 'ohio state',
+    'fsu': 'florida state', 'wvu': 'west virginia',
+    'a&m': 'texas a&m', 'tamu': 'texas a&m',
+    "st john's": 'saint johns', 'st johns': 'saint johns', 'sjr': 'saint johns',
+    'uconn': 'uconn', 'unc': 'north carolina',
+    'pitt': 'pittsburgh',
+  };
+
   function normLabel(s) {
     return s.toLowerCase().trim()
       .replace(/[.'`]/g, '')
@@ -434,15 +443,19 @@ function detectMatchupIntent(msg) {
       .trim();
   }
   function normInput(s) {
-    return s.toLowerCase().trim()
-      // Handle "st.louis" BEFORE stripping dots — dot is the separator here
+    let out = s.toLowerCase().trim()
       .replace(/(?<!\w)st\.([a-z])/g, 'saint $1')
-      // Now strip remaining punctuation
       .replace(/[.'`]/g, '')
-      // Standalone "st" word -> "saint" (handles "st johns", "wright st")
       .replace(/\bst\b/g, 'saint')
       .replace(/\s+/g, ' ')
       .trim();
+    // Expand abbreviations — try longest first to avoid partial matches
+    const sorted = Object.keys(ABBREVS).sort((a, b) => b.length - a.length);
+    for (const abbrev of sorted) {
+      const re = new RegExp('\\b' + abbrev.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b', 'g');
+      out = out.replace(re, ABBREVS[abbrev]);
+    }
+    return out;
   }
 
   if (!msg.trim()) return null;
