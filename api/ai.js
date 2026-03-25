@@ -34,6 +34,19 @@ import {
   REGIONS_ORDERED,
 } from "./data.js";
 
+// ── Session context builder ────────────────────────────────────────────────────
+function buildSessionContext(allMessages, intent) {
+  const userMsgs = (allMessages ?? []).filter((m) => m.role === "user");
+  const topics = userMsgs
+    .slice(-4)
+    .map((m) => (m.content ?? "").slice(0, 80).trim());
+  return JSON.stringify({
+    turns: userMsgs.length,
+    topics,
+    lastIntent: intent?.type ?? "dynamic",
+  });
+}
+
 // ── Sanitizer ──────────────────────────────────────────────────────────────────
 function sanitize(text) {
   if (!text) return "";
@@ -112,7 +125,16 @@ function buildTools() {
 }
 
 // ── System prompt ──────────────────────────────────────────────────────────────
-function buildSystemPrompt(userMsg, graph, torvik, form, injuryMap, prefetchedContext, intent) {
+function buildSystemPrompt(
+  userMsg,
+  graph,
+  torvik,
+  form,
+  injuryMap,
+  prefetchedContext,
+  intent,
+  sessionContext,
+) {
   const { aliveTeamIds, teamOdds } = getData();
   const aliveCount = aliveTeamIds?.size || 16;
   const round =
@@ -234,6 +256,18 @@ function buildSystemPrompt(userMsg, graph, torvik, form, injuryMap, prefetchedCo
   }
 
   p += `\nCite exact numbers throughout. No hedging, no filler phrases, no "it's worth noting". Direct statements only.\n`;
+
+  if (sessionContext) {
+    try {
+      const ctx = JSON.parse(sessionContext);
+      if (ctx.turns > 0) {
+        p += `\n\nCONVERSATION HISTORY: ${ctx.turns} prior turn${ctx.turns !== 1 ? "s" : ""}. Recent topics: ${ctx.topics.join(" → ")}.`;
+      }
+    } catch {
+      /* ignore malformed context */
+    }
+  }
+
   if (context) p += `\n\nDATA:\n${context}`;
   return p;
 }
@@ -253,6 +287,8 @@ function makeWriter(res) {
       res.write(`data: ${JSON.stringify({ type: "tool", text })}\n\n`),
     text: (text) =>
       res.write(`data: ${JSON.stringify({ type: "text", text })}\n\n`),
+    context: (text) =>
+      res.write(`data: ${JSON.stringify({ type: "context", text })}\n\n`),
     done: () => {
       res.write('data: {"type":"done"}\n\n');
       res.end();
@@ -328,22 +364,28 @@ export default async function handler(req, res) {
       injuryMap,
       prefetch.context,
       intent,
+      body.sessionContext,
     );
 
+    // Always include last 2 turn-pairs regardless of char count (fixes hasHistory false negatives)
     const BUDGET = 3000;
-    const history = [];
-    let used = 0;
-    for (let i = body.messages.length - 1; i >= 0; i--) {
-      const len = (body.messages[i].content ?? "").length;
+    const GUARANTEED_PAIRS = 2;
+    const guaranteed = body.messages.slice(-(GUARANTEED_PAIRS * 2));
+    const older = body.messages.slice(0, -(GUARANTEED_PAIRS * 2));
+    const history = [...guaranteed];
+    let used = guaranteed.reduce((s, m) => s + (m.content ?? "").length, 0);
+    for (let i = older.length - 1; i >= 0; i--) {
+      const len = (older[i].content ?? "").length;
       if (used + len > BUDGET) break;
-      history.unshift(body.messages[i]);
+      history.unshift(older[i]);
       used += len;
     }
 
     const messages = [{ role: "system", content: system }, ...history];
 
     if (intent.type === "general") {
-      const hasHistory = history.some(
+      // Check full body.messages, not trimmed history, to avoid false negatives
+      const hasHistory = body.messages.some(
         (m) => m.role === "assistant" && m.content?.length > 20,
       );
       if (hasHistory) {
@@ -367,6 +409,7 @@ export default async function handler(req, res) {
       for await (const chunk of result.textStream) {
         writer.text(chunk);
       }
+      writer.context(buildSessionContext(body.messages, intent));
       writer.done();
       return;
     }
@@ -398,6 +441,7 @@ export default async function handler(req, res) {
     for await (const chunk of result.textStream) {
       writer.text(chunk);
     }
+    writer.context(buildSessionContext(body.messages, intent));
     writer.done();
   } catch (err) {
     writer.error(err.message ?? "Internal server error");
