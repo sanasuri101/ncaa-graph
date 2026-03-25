@@ -153,11 +153,18 @@ function normalizeTeamName(s) {
 }
 
 const TEAM_ALIASES = {
-  'unc': 'north carolina', 'uconn': 'uconn huskies', 'ucf': 'ucf knights',
-  'ucla': 'ucla bruins',   'umbc': 'umbc retrievers', 'vcu': 'vcu rams',
-  'tcu': 'tcu horned frogs', 'smu': 'smu mustangs',  'byu': 'byu cougars',
-  'lsu': 'lsu tigers',     'ndsu': 'north dakota state', 'a&m': 'texas a&m',
-  'liu': 'long island university', 'sam houston': 'sam houston bearkats',
+  'unc':       'north carolina',          'uconn':    'uconn huskies',
+  'ucf':       'ucf knights',             'ucla':     'ucla bruins',
+  'umbc':      'umbc retrievers',         'vcu':      'vcu rams',
+  'tcu':       'tcu horned frogs',        'smu':      'smu mustangs',
+  'byu':       'byu cougars',             'lsu':      'lsu tigers',
+  'liu':       'long island university',  'sam houston': 'sam houston bearkats',
+  'isu':       'iowa state cyclones',     'iowa st':  'iowa state cyclones',
+  'msu':       'michigan state spartans', 'mich st':  'michigan state spartans',
+  'ku':        'kansas jayhawks',         'osu':      'ohio state buckeyes',
+  'a&m':       'texas a&m aggies',        'tamu':     'texas a&m aggies',
+  "st john's": 'saint johns red storm',   'sjr':      'saint johns red storm',
+  'st johns':  'saint johns red storm',
 };
 
 function resolveTeam(name, nodeByName) {
@@ -703,14 +710,39 @@ Return only the JSON object. No backticks. No preamble.`;
 
   try {
     const raw   = await groqCall(system, user, groqKey, 0, MAX_TOKENS_SYNTHESIS);
-    const clean = raw.replace(/```json|```/g, '').trim();
+    // Strip markdown fences and any preamble text before the JSON object
+    let clean = raw.replace(/```json|```/g, '').trim();
+    const jsonStart = clean.indexOf('{');
+    const jsonEnd   = clean.lastIndexOf('}');
+    if (jsonStart > 0 && jsonEnd > jsonStart) {
+      clean = clean.slice(jsonStart, jsonEnd + 1);
+    }
 
     let sections = {};
     try {
-      sections = JSON.parse(clean);
+      const parsed = JSON.parse(clean);
+      // Guard: model sometimes wraps entire JSON inside decisive_factor value
+      if (typeof parsed.decisive_factor === 'string' && parsed.decisive_factor.trim().startsWith('{')) {
+        try {
+          const inner = JSON.parse(parsed.decisive_factor);
+          sections = inner.decisive_factor ? inner : parsed;
+        } catch { sections = parsed; }
+      } else {
+        sections = parsed;
+      }
     } catch {
-      // Fallback: model didn't return valid JSON — use raw text as decisive_factor
-      sections = { decisive_factor: sanitizeLLMOutput(clean) || results.map(r => r.reasoning).filter(Boolean).join(' ') };
+      // Fallback: not valid JSON — distribute text across section fields
+      const fallbackText = sanitizeLLMOutput(clean) || results.map(r => r.reasoning).filter(Boolean).join(' ');
+      const paras = fallbackText.split('\n\n').filter(Boolean);
+      sections = {
+        decisive_factor: paras[0] ?? fallbackText,
+        key_matchup:     paras[1] ?? '',
+        x_factors:       paras[2] ?? '',
+        risk:            paras[3] ?? '',
+        market_vs_model: paras[4] ?? '',
+        bottom_line:     paras[paras.length - 1] ?? '',
+        injury_note:     '',
+      };
     }
 
     // Sanitize each field

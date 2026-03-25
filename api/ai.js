@@ -133,11 +133,20 @@ function getData() {
 
 // ── Name normalization ────────────────────────────────────────────────────────
 const ALIASES = {
-  'unc': 'north carolina', 'uconn': 'uconn huskies', 'ucf': 'ucf knights',
-  'ucla': 'ucla bruins',   'umbc': 'umbc retrievers', 'vcu': 'vcu rams',
-  'tcu': 'tcu horned frogs', 'smu': 'smu mustangs',  'byu': 'byu cougars',
-  'liu': 'long island university', "st john's": 'saint johns red storm',
-  'st johns': 'saint johns red storm', 'saint johns': 'saint johns red storm',
+  'unc':       'north carolina',          'uconn':    'uconn huskies',
+  'ucf':       'ucf knights',             'ucla':     'ucla bruins',
+  'umbc':      'umbc retrievers',         'vcu':      'vcu rams',
+  'tcu':       'tcu horned frogs',        'smu':      'smu mustangs',
+  'byu':       'byu cougars',             'lsu':      'lsu tigers',
+  'liu':       'long island university',
+  'isu':       'iowa state cyclones',     'iowa st':  'iowa state cyclones',
+  'msu':       'michigan state spartans', 'mich st':  'michigan state spartans',
+  'ku':        'kansas jayhawks',         'osu':      'ohio state buckeyes',
+  'fsu':       'florida state seminoles', 'wvu':      'west virginia mountaineers',
+  'a&m':       'texas a&m aggies',        'tamu':     'texas a&m aggies',
+  'pitt':      'pittsburgh panthers',
+  "st john's": 'saint johns red storm',   'sjr':      'saint johns red storm',
+  'st johns':  'saint johns red storm',   'saint johns': 'saint johns red storm',
 };
 
 function normName(s) {
@@ -159,6 +168,9 @@ function resolveTeam(name, nodeByName) {
       if (k === query) return true;
       if (k.startsWith(query + ' ') || k.startsWith(query + '-')) return true;
       if (query.startsWith(k + ' ') || query.startsWith(k + '-')) return true;
+      // Nickname: "wolverines" matches "michigan wolverines" (last word)
+      const words = k.split(' ');
+      if (words.length > 1 && words[words.length - 1] === query) return true;
       return false;
     })
     .sort((a, b) => {
@@ -364,24 +376,43 @@ function classifyIntent(msg, graph) {
     return { type: 'top_teams_all' };
 
   if (graph) {
-    const mNorm = normName(msg);
-    const found = graph.nodes.filter(n => {
-      const lbl = normName(n.label);
-      const re  = new RegExp('\\b' + lbl.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b');
-      return re.test(mNorm);
-    });
-    // Only treat as basketball team query if there's basketball context OR it's a clear matchup
-    if (found.length >= 2) return { type: 'matchup', team_a: found[0].label, team_b: found[1].label };
-    if (found.length === 1) {
-      // Only treat as team lookup if there's basketball context
-      // "Duke University job" should NOT match — require hasBball or explicit analysis words
-      // Reject if there's clearly non-basketball context — return general immediately
-      const hasNonBballContext = /university|college admission|job|career|hire|school|professor|campus|degree|graduate|apply|application/i.test(m);
-      if (hasNonBballContext) return { type: 'general' };
+    // Expand aliases in message: "isu" → "iowa state cyclones" before node matching
+    let mNorm = normName(msg);
+    for (const [alias, expansion] of Object.entries(ALIASES)) {
+      const aliasNorm = normName(alias);
+      const re = new RegExp('\\b' + aliasNorm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b', 'g');
+      mNorm = mNorm.replace(re, normName(expansion));
+    }
+    // Normalize state abbreviations: "michigan state" → "michigan st" for label matching
+    const mAbbrev = mNorm
+      .replace(/\bmichigan state\b/g, 'michigan st')
+      .replace(/\b(\w+) state\b/g, '$1 st');
 
-      // Treat as team lookup if there's basketball signal OR analysis intent about this team
-      const hasAnalysisWords = /tell me|how is|stats|analysis|record|rank|efficiency|looking|how.*doing|how.*playing|how.*perform|season|chance|odds|beat|win|lose|matchup|tournament|bracket|predict|advance/i.test(m);
-      if (hasNcaaSignal || hasAnalysisWords) return { type: 'team_lookup', team: found[0].label };
+    const found = graph.nodes.filter(n => {
+      const lbl  = normName(n.label);
+      const full = normName(n.full_name);
+      const rLbl  = new RegExp('\\b' + lbl.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b');
+      const rFull = new RegExp('\\b' + full.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b');
+      return rLbl.test(mNorm) || rFull.test(mNorm) || rLbl.test(mAbbrev) || rFull.test(mAbbrev);
+    });
+
+    // 2+ found: return as matchup. Only dedup if 3+ to handle edge cases.
+    if (found.length >= 2) {
+      let teams = found;
+      if (found.length > 2) {
+        teams = found.filter((n, i) => {
+          const nl = normName(n.label);
+          return !found.some((o, j) => j !== i && normName(o.label).startsWith(nl + ' '));
+        }).slice(0, 2);
+        if (teams.length < 2) teams = found.slice(0, 2);
+      }
+      return { type: 'matchup', team_a: teams[0].label, team_b: teams[1].label };
+    }
+    if (found.length === 1) {
+      const hasNonBball = /university|college admission|job|career|hire|school|professor|campus|degree|graduate|apply|application/i.test(m);
+      if (hasNonBball) return { type: 'general' };
+      const hasAnalysis = /tell me|how is|stats|analysis|record|rank|efficiency|looking|how.*doing|how.*playing|how.*perform|season|chance|odds|beat|win|lose|matchup|tournament|bracket|predict|advance/i.test(m);
+      if (hasNcaaSignal || hasAnalysis) return { type: 'team_lookup', team: found[0].label };
     }
   }
 
@@ -654,7 +685,8 @@ export default async function handler(req, res) {
 
     // Step 4a: off-topic — immediate polite redirect, no Groq call needed
     if (intent.type === 'general') {
-      send(200, { text: "I'm focused on the 2026 NCAA Tournament. Ask me about matchups, upset picks, team efficiency, Final Four predictions, or bracket strategy.", thinking: [] });
+      writer.text("I'm focused on the 2026 NCAA Tournament. Ask me about matchups, upset picks, team efficiency, Final Four predictions, or bracket strategy.");
+      writer.done();
       return;
     }
 
