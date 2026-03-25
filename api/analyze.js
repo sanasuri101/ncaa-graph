@@ -406,95 +406,38 @@ Respond with valid JSON only. No markdown. Schema: { "agent": "odds", "win_pct":
 async function synthesisNode(state, config) {
   const groqKey = config.configurable?.groqKey;
   const results = state.agent_results ?? [];
-  await new Promise(r=>setTimeout(r, 500));
+  await new Promise(r => setTimeout(r, 500));
 
-  const get = name => results.find(r=>r.agent===name) ?? { win_pct:50, confidence:'low', key_edge:'', reasoning:'' };
-  const eff  = get('efficiency'), frm = get('form'), mtch = get('matchup'), odds = get('odds');
-  const safe = r => { const n=Number(r.win_pct); return isNaN(n)?50:Math.max(1,Math.min(99,n)); };
+  const get = name => results.find(r => r.agent === name) ?? { win_pct: 50, confidence: 'low', key_edge: '', reasoning: '' };
+  const eff = get('efficiency'), frm = get('form'), mtch = get('matchup'), odds = get('odds');
+  const safe = r => { const n = Number(r.win_pct); return isNaN(n) ? 50 : Math.max(1, Math.min(99, n)); };
 
-  const oddsAvailable = !(odds.confidence==='low' && (odds.key_edge==='error'||odds.key_edge==='no market data'));
+  const oddsAvailable = !(odds.confidence === 'low' && (odds.key_edge === 'error' || odds.key_edge === 'no market data'));
   let weights = oddsAvailable
-    ? { efficiency:0.40, odds:0.20, form:0.20, matchup:0.20 }
-    : { efficiency:0.50, odds:0.00, form:0.25, matchup:0.25 };
+    ? { efficiency: 0.40, odds: 0.20, form: 0.20, matchup: 0.20 }
+    : { efficiency: 0.50, odds: 0.00, form: 0.25, matchup: 0.25 };
   if (oddsAvailable) {
-    const gap = Math.abs(safe(eff)-safe(odds));
-    if (odds.confidence==='high'&&gap>10) weights = { efficiency:0.30, odds:0.35, form:0.20, matchup:0.15 };
-    else if (gap<5) weights = { efficiency:0.45, odds:0.20, form:0.20, matchup:0.15 };
+    const gap = Math.abs(safe(eff) - safe(odds));
+    if (odds.confidence === 'high' && gap > 10) weights = { efficiency: 0.30, odds: 0.35, form: 0.20, matchup: 0.15 };
+    else if (gap < 5) weights = { efficiency: 0.45, odds: 0.20, form: 0.20, matchup: 0.15 };
   }
 
-  const weightedPct = Math.round(safe(eff)*weights.efficiency+safe(odds)*weights.odds+safe(frm)*weights.form+safe(mtch)*weights.matchup);
+  const weightedPct = Math.round(safe(eff)*weights.efficiency + safe(odds)*weights.odds + safe(frm)*weights.form + safe(mtch)*weights.matchup);
   const pcts        = oddsAvailable ? [safe(eff),safe(frm),safe(mtch),safe(odds)] : [safe(eff),safe(frm),safe(mtch)];
-  const spread      = Math.max(...pcts)-Math.min(...pcts);
-  const half        = Math.round(spread/2+3);
-  const rangeLow    = Math.max(1, weightedPct-half);
-  const rangeHigh   = Math.min(99, weightedPct+half);
-
-  const agentSummary = results.map(r=>`${r.agent.toUpperCase()}: ${r.win_pct}% for ${state.team_a} (${r.confidence})\nEdge: ${r.key_edge}\n${r.reasoning}`).join('\n\n');
-  const weightDesc   = oddsAvailable
+  const spread      = Math.max(...pcts) - Math.min(...pcts);
+  const half        = Math.round(spread / 2 + 3);
+  const rangeLow    = Math.max(1,  weightedPct - half);
+  const rangeHigh   = Math.min(99, weightedPct + half);
+  const weightDesc  = oddsAvailable
     ? `Efficiency ${Math.round(weights.efficiency*100)}%, Market/BPI ${Math.round(weights.odds*100)}%, Form ${Math.round(weights.form*100)}%, Matchup ${Math.round(weights.matchup*100)}%`
     : 'Efficiency 50%, Form 25%, Matchup 25% (no market data)';
 
-  // Build synthesis tool set — synthesis can fetch additional detail to verify claims
-  const groq = createGroq({ apiKey: groqKey });
-  const { nodeByName } = getData();
-  const nodeA = resolveTeam(state.team_a, nodeByName);
-  const nodeB = resolveTeam(state.team_b, nodeByName);
+  const agentSummary = results.map(r =>
+    `${r.agent.toUpperCase()}: ${r.win_pct}% for ${state.team_a} (${r.confidence})\nEdge: ${r.key_edge}\n${r.reasoning}`
+  ).join('\n\n');
 
-  const synthTools = {
-    get_efficiency_stats: tool({
-      description: 'Get efficiency stats for a team to verify a specific claim.',
-      parameters: z.object({ team: z.string() }),
-      execute: async ({ team }) => {
-        const { torvik, injuryMap, nodeByName } = getData();
-        const n = resolveTeam(team, nodeByName);
-        return n ? fmtTeamEfficiency(n, torvik, injuryMap) : `Not found: ${team}`;
-      },
-    }),
-    get_roster: tool({
-      description: 'Get current roster with stats for a team.',
-      parameters: z.object({ team: z.string() }),
-      execute: async ({ team }) => {
-        const { rosterStats, nodeByName } = getData();
-        const n = resolveTeam(team, nodeByName);
-        if (!n) return `Not found: ${team}`;
-        const players = rosterStats?.[String(n.id)]?.players ?? [];
-        return `${n.full_name} roster:\n${fmtRoster(players)}`;
-      },
-    }),
-    get_injury_detail: tool({
-      description: 'Get injury news and model penalty for a team.',
-      parameters: z.object({ team: z.string() }),
-      execute: async ({ team }) => {
-        const { injuryMap, injuryNews, nodeByName } = getData();
-        const n = resolveTeam(team, nodeByName);
-        if (!n) return `Not found: ${team}`;
-        const inj  = injuryMap?.[n.id];
-        const news = injuryNews?.[n.id]?.articles ?? [];
-        const lines = [];
-        if (inj) lines.push(`Penalty: AdjEM -${inj.penalty} | ${inj.players.map(p=>`${p.name} (${p.status})`).join(', ')}`);
-        if (news.length) lines.push('Headlines:', ...news.slice(0,3).map(a=>`  • ${a.headline}`));
-        return lines.length ? lines.join('\n') : `No injury data for ${n.full_name}`;
-      },
-    }),
-  };
-
-  const synthSystem = `You are a senior NCAA tournament analyst. Write like The Athletic — specific, opinionated, deeply cited.
-You have tools — use them to verify claims or get more roster detail before writing.
-CRITICAL: Only cite players and stats from the data provided or tool results. Never invent stats from training memory.
-You MUST respond with valid JSON only. No markdown fences, no text outside the JSON object.
-Each field has a distinct job. Do NOT repeat content across fields. Write every field to its full required length.
-
-{
-  "injury_note": "<If ⚠ appears in the data: 3-4 sentences. Name the injured player, give full stat line (PPG/RPG/APG/FG%/MPG/PER), their role, the AdjEM penalty applied, the direct impact on THIS matchup — rotation depth, scoring burden shift, defensive holes. Empty string if no injuries.>",
-  "decisive_factor": "<5-7 sentences. The single biggest structural reason one team wins. Start with the injury-adjusted AdjEM gap — state it as points per 100 possessions. Note that Barthag is pre-injury and adjust accordingly. Compare AdjOE vs opponent AdjDE for offensive edge; AdjDE vs opponent AdjOE for defensive edge. Cite eFG%, Four Factors. Explain the causal chain from numbers to how the game is played. Name specific players driving those numbers from the roster.>",
-  "key_matchup": "<5-6 sentences. The player vs player battle that decides the game. Name BOTH players with complete stat lines — PPG/RPG/APG/FG%/3P%/height/weight/experience from the roster data. Explain the physical matchup. Explain the stylistic clash. Who has the edge in which specific game situations? Cite numbers to support every claim.>",
-  "x_factors": "<4-5 sentences. Three specific underweighted factors most previews miss. For each: name it, give the exact number, explain why it matters in this specific matchup. Consider: TOV% differential, adj_tempo mismatch, ORB% edge, bench depth, FTR, shooting splits against this defensive style.>",
-  "risk": "<4-5 sentences. The specific scenario where the projected winner loses. Name the player on the underdog who could blow it open — give their stats. Describe the exact game situation concretely: not 'if they go cold' but 'if [player A] (X TOV/game) turns it over under pressure and [player B] (Y PPG off bench) goes 4-for-6 from three in the second half'.>",
-  "market_vs_model": "<3-4 sentences. State the exact model probability, DraftKings implied probability, and ESPN BPI figure. If they diverge by 6+ points explain why — what the market is pricing in that the model misses. If no market data say so, then analyze what efficiency consensus implies about uncertainty and which team benefits from information asymmetry.>",
-  "bottom_line": "<3 sentences exactly. Who wins and the single decisive reason. Specific final score. The player who seals it and the exact play — a specific shot, stop, or rebound.>"
-}`;
-
-  const synthPrompt = `Write a deep expert analysis of ${state.team_a} vs ${state.team_b}.
+  // ── Shared context block passed to every section call ──────────────────────
+  const ctx = `${state.team_a} vs ${state.team_b}
 
 EFFICIENCY & INJURY DATA:
 ${state.eff_data}
@@ -515,80 +458,90 @@ AGENT REPORTS:
 ${agentSummary}
 
 WEIGHTED WIN PROBABILITY for ${state.team_a}: ${weightedPct}% (range: ${rangeLow}-${rangeHigh}%)
-Weights: ${weightDesc} | Agent spread: ${spread.toFixed(0)}pp (${spread<10?'strong consensus':spread<20?'moderate agreement':'significant disagreement'})
+Weights: ${weightDesc} | Agent spread: ${spread.toFixed(0)}pp`;
 
-Use your tools if you need to verify a specific claim or get more roster detail.
-Then return the JSON analysis.
-RULES — every one non-negotiable:
-1. Every player and stat MUST come from the data above or a tool call — no training memory
-2. Each field has a different job — do NOT copy sentences between fields
-3. decisive_factor: 5-7 sentences, start with injury-adjusted AdjEM gap, cite Barthag, AdjOE vs AdjDE
-4. key_matchup: MUST name both players with full stat lines from the roster data
-5. x_factors: 3 specific factors with exact numbers each
-6. risk: name the specific underdog player, describe the exact concrete scenario
-7. bottom_line: exactly 3 sentences, specific score, specific player, specific play
-Return ONLY the JSON object. No backticks. No preamble. Write every section to its full required length.`;
+  const baseSystem = `You are a senior NCAA tournament analyst. Write like The Athletic — specific, opinionated, cited.
+CRITICAL: Only cite players and stats from the data provided. Never use training memory for player names or stats.
+Respond with only the requested content — no JSON wrapper, no labels, no preamble.`;
 
-  try {
-    const { text } = await generateText({
-      model:     groq(MODEL),
-      maxTokens: MAX_TOKENS_SY,
-      maxSteps:  MAX_STEPS_SYNTH,
-      tools:     synthTools,
-      toolChoice:'auto',
-      system:    synthSystem,
-      prompt:    synthPrompt,
-    });
-
-    let clean = text.replace(/```json|```/g,'').trim();
-    const s=clean.indexOf('{'), e=clean.lastIndexOf('}');
-    if (s>0&&e>s) clean=clean.slice(s,e+1);
-
-    const KEYS = ['injury_note','decisive_factor','key_matchup','x_factors','risk','market_vs_model','bottom_line'];
-    let sections = {};
+  // ── One Groq call per section — prevents copy-paste across fields ──────────
+  async function getSection(fieldName, instruction, maxTok = 700) {
     try {
-      const parsed = JSON.parse(clean);
-      const df = parsed.decisive_factor;
-      if (df&&typeof df==='object') sections=df.decisive_factor?df:parsed;
-      else if (typeof df==='string'&&df.trim().startsWith('{')) {
-        try { const i=JSON.parse(df); sections=i.decisive_factor?i:parsed; } catch { sections=parsed; }
-      } else sections=parsed;
-      const filled = KEYS.filter(k=>typeof sections[k]==='string'&&sections[k].length>10);
-      if (filled.length<3) throw new Error('insufficient content');
-    } catch {
-      const fb = sanitizeLLMOutput(clean)||results.map(r=>r.reasoning).filter(Boolean).join(' ');
-      const paras = fb.split('\n\n').filter(Boolean);
-      sections = { decisive_factor:paras[0]??fb, key_matchup:paras[1]??'', x_factors:paras[2]??'', risk:paras[3]??'', market_vs_model:paras[4]??'', bottom_line:paras[paras.length-1]??'', injury_note:'' };
-    }
-
-    const san = s => s ? sanitizeLLMOutput(String(s)) : '';
-    const reasoningParts = ['decisive_factor','key_matchup','risk','market_vs_model','bottom_line']
-      .map(k=>san(sections[k])).filter(s=>s.length>10);
-    const reasoning = reasoningParts.join('\n\n') || `${state.team_a} vs ${state.team_b}: model ${weightedPct}% for ${state.team_a}.`;
-
-    return {
-      confidence: {
-        team_a:state.team_a, team_b:state.team_b,
-        win_pct:weightedPct, range_low:rangeLow, range_high:rangeHigh,
-        agent_spread:Math.round(spread),
-        consensus:spread<10?'strong':spread<20?'moderate':'split',
-        weights, reasoning,
-        sections: {
-          injury_note:     san(sections.injury_note     ??''),
-          decisive_factor: san(sections.decisive_factor ??''),
-          key_matchup:     san(sections.key_matchup     ??''),
-          x_factors:       san(sections.x_factors       ??''),
-          risk:            san(sections.risk             ??''),
-          market_vs_model: san(sections.market_vs_model ??''),
-          bottom_line:     san(sections.bottom_line      ??''),
-        },
-        agent_breakdown: results.map(r=>({ agent:r.agent, win_pct:r.win_pct, confidence:r.confidence, key_edge:r.key_edge })),
-      },
-    };
-  } catch(err) {
-    return { confidence: { error: err.message } };
+      const raw = await groqCall(
+        baseSystem,
+        `${ctx}\n\nWrite ONLY the "${fieldName}" section of the analysis.\n\n${instruction}\n\nRespond with the section text only. No field name label, no JSON, no preamble.`,
+        groqKey,
+        maxTok
+      );
+      return sanitizeLLMOutput(raw) || '';
+    } catch { return ''; }
   }
+
+  // Run all sections — injury_note and market_vs_model are quick, run first
+  // decisive_factor, key_matchup, x_factors, risk run in parallel for speed
+  const [injuryNote, marketVsModel] = await Promise.all([
+    getSection('injury_note',
+      `If ⚠ appears in the roster data: 3-4 sentences. Name the injured player(s), give their full stat line (PPG/RPG/APG/FG%/MPG/PER), describe their role, state the AdjEM penalty, and explain the direct impact on this specific matchup. If no injuries in the data, return exactly: (none)`,
+      400),
+    getSection('market_vs_model',
+      `3-4 sentences. State the exact model probability (${weightedPct}%), the DraftKings implied probability, and the ESPN BPI figure. If they diverge by 6+ points explain why. If no market data, say so and explain what the efficiency consensus implies about true probability.`,
+      400),
+  ]);
+
+  const [decisiveFactor, keyMatchup, xFactors, risk] = await Promise.all([
+    getSection('decisive_factor',
+      `5-7 sentences. The single biggest structural reason one team wins. Start with the injury-adjusted AdjEM gap (in points per 100 possessions). State Barthag as the pre-injury baseline and explain why it overstates the injured team's chances. Compare AdjOE vs opponent AdjDE for offensive edge; AdjDE vs opponent AdjOE for defensive edge. Cite eFG% and Four Factors. Explain the causal chain from these numbers to how the game will actually be played. Name specific players from the roster driving those numbers.`,
+      900),
+    getSection('key_matchup',
+      `5-6 sentences. The specific player vs player battle that decides the game. Name BOTH players with their complete stat lines from the ROSTER DATA — PPG/RPG/APG/FG%/3P%/height/weight/experience year. Explain the physical matchup. Explain the stylistic clash and who exploits what. State who has the edge and in which specific game situations. Every claim must be supported by a number from the roster.`,
+      900),
+    getSection('x_factors',
+      `4-5 sentences. Three specific underweighted factors most previews will miss. For each: name it precisely, give the exact number from the data, explain why it matters specifically in this matchup. Consider: TOV% differential, adj_tempo mismatch (faster team controls pace), ORB% edge for second chances, bench depth, FTR, specific shooting splits.`,
+      700),
+    getSection('risk',
+      `4-5 sentences. The specific scenario where the projected winner (${weightedPct >= 50 ? state.team_a : state.team_b}) loses. Name the player on the underdog team who could blow it open — give their stats from the roster. Describe the exact game situation concretely: not "if they go cold" but "if [player] (X TOV/game) turns it over and [player B] (Y PPG) goes 4-for-6 from three in the second half."`,
+      700),
+  ]);
+
+  // Bottom line is a separate forced-format call — 3 sentences, no room to ramble
+  const bottomLine = await getSection('bottom_line',
+    `Exactly 3 sentences. No more, no less.
+Sentence 1: Who wins and the single decisive structural reason (one clause).
+Sentence 2: The specific final score (e.g. "Michigan wins 82-71").
+Sentence 3: The player who seals it and the exact play — a specific shot, defensive stop, or rebound.`,
+    250);
+
+  const san = s => s ? sanitizeLLMOutput(String(s)) : '';
+
+  // Clean up injury_note — if model returned (none) or similar, use empty string
+  const cleanInjury = /^\(none\)|^none$|^no injury|^neither team/i.test(injuryNote.trim()) ? '' : san(injuryNote);
+
+  const reasoningParts = [decisiveFactor, keyMatchup, risk, marketVsModel, bottomLine]
+    .map(san).filter(s => s.length > 10);
+  const reasoning = reasoningParts.join('\n\n') ||
+    `${state.team_a} vs ${state.team_b}: model ${weightedPct}% for ${state.team_a}.`;
+
+  return {
+    confidence: {
+      team_a: state.team_a, team_b: state.team_b,
+      win_pct: weightedPct, range_low: rangeLow, range_high: rangeHigh,
+      agent_spread: Math.round(spread),
+      consensus: spread < 10 ? 'strong' : spread < 20 ? 'moderate' : 'split',
+      weights, reasoning,
+      sections: {
+        injury_note:     cleanInjury,
+        decisive_factor: san(decisiveFactor),
+        key_matchup:     san(keyMatchup),
+        x_factors:       san(xFactors),
+        risk:            san(risk),
+        market_vs_model: san(marketVsModel),
+        bottom_line:     san(bottomLine),
+      },
+      agent_breakdown: results.map(r => ({ agent: r.agent, win_pct: r.win_pct, confidence: r.confidence, key_edge: r.key_edge })),
+    },
+  };
 }
+
 
 // ── Build graph ───────────────────────────────────────────────────────────────
 function buildGraph() {
