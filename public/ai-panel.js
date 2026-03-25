@@ -329,18 +329,60 @@ async function sendChat() {
       thinkEl.innerHTML = `${thinkHtml}<div class="chat-bubble-ai-label">Scout · Multi-Agent</div>${confHtml}`;
 
     } else {
-      // Standard single-agent path
+      // Standard single-agent path — streaming
       if (window.posthog) posthog.capture('chat_query', { has_active_matchup: !!_activeMatchup });
-      const { text, thinking } = await callAI(historyForApi, msg, _chatAbortCtrl.signal);
+
+      const thinkingSteps = [];
+      let streamedText = '';
+
+      // Set up streaming bubble immediately
+      const bodyEl = document.createElement('div');
+      bodyEl.className = 'chat-bubble-ai-body';
+      bodyEl.innerHTML = loadingHTML('Thinking…');
+      thinkEl.innerHTML = '';
+      thinkEl.appendChild(bodyEl);
+
+      const { text, thinking } = await callAI(historyForApi, msg, _chatAbortCtrl.signal, {
+        onThinking: (label) => {
+          thinkingSteps.push(label);
+          // Render thinking steps as they arrive
+          const thinkHtml = `
+            <div class="thinking-block thinking-done">
+              <div class="thinking-header">
+                <span class="thinking-spinner"></span>
+                <span class="thinking-label">Thinking…</span>
+              </div>
+              <div class="thinking-steps">
+                ${thinkingSteps.map(s => `<div class="thinking-step">${escapeHtml(s)}</div>`).join('')}
+              </div>
+            </div>`;
+          thinkEl.innerHTML = thinkHtml + '<div class="chat-bubble-ai-label">Scout</div><div class="chat-bubble-ai-body chat-streaming"></div>';
+        },
+        onChunk: (chunk) => {
+          streamedText += chunk;
+          // Find or create the streaming body element and update it
+          let el = thinkEl.querySelector('.chat-streaming');
+          if (!el) {
+            el = document.createElement('div');
+            el.className = 'chat-bubble-ai-body chat-streaming';
+            thinkEl.appendChild(el);
+          }
+          el.innerHTML = renderMarkdown(streamedText);
+          messagesEl.scrollTop = messagesEl.scrollHeight;
+        },
+      });
+
       chatHistory.push({ role: 'assistant', content: text });
-      const thinkHtml = thinking.length ? `
+
+      // Final render — mark thinking done, finalize text
+      const thinkHtml = thinkingSteps.length ? `
         <div class="thinking-block thinking-done">
           <div class="thinking-header">
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
             <span class="thinking-label">Thought for a moment</span>
           </div>
           <div class="thinking-steps">
-            ${thinking.map(s => `<div class="thinking-step">${escapeHtml(s)}</div>`).join('')}
+            ${thinkingSteps.map(s => `<div class="thinking-step">${escapeHtml(s)}</div>`).join('')}
           </div>
         </div>` : '';
       thinkEl.innerHTML = `${thinkHtml}<div class="chat-bubble-ai-label">Scout</div><div class="chat-bubble-ai-body">${renderMarkdown(text)}</div>`;
@@ -709,12 +751,16 @@ async function callAnalyze(teamA, teamB, signal) {
   }
 }
 
-// ── Core AI call — single JSON response, abort supported ────────────────────
+// ── Core AI call — streaming SSE response ───────────────────────────────────
 const WORKER_URL    = '/api/ai';
 const FETCH_TIMEOUT = 30000;
 
-async function callAI(messages, userMsg, signal) {
-  const ctrl  = new AbortController();
+// callAI streams the response, calling callbacks as chunks arrive.
+// onThinking(label) — called when a thinking/tool step label arrives
+// onChunk(text)     — called for each streamed text chunk
+// Returns the full assembled text when stream completes.
+async function callAI(messages, userMsg, signal, { onThinking, onChunk } = {}) {
+  const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), FETCH_TIMEOUT);
   signal?.addEventListener('abort', () => ctrl.abort(), { once: true });
 
@@ -726,13 +772,59 @@ async function callAI(messages, userMsg, signal) {
       signal:  ctrl.signal,
     });
     clearTimeout(timer);
+
     if (!res.ok) {
       const errData = await res.json().catch(() => ({}));
       throw new Error(errData?.error?.message ?? `API error ${res.status}`);
     }
-    const data = await res.json();
-    if (data.error) throw new Error(data.error.message ?? 'Unknown error');
-    return { text: data.text || 'No response — please try again.', thinking: data.thinking ?? [] };
+
+    // Check if response is SSE stream (new) or JSON (fallback)
+    const contentType = res.headers.get('content-type') ?? '';
+    if (!contentType.includes('text/event-stream')) {
+      // Fallback: old JSON response format
+      const data = await res.json();
+      if (data.error) throw new Error(data.error.message ?? 'Unknown error');
+      (data.thinking ?? []).forEach(t => onThinking?.(t));
+      onChunk?.(data.text ?? '');
+      return { text: data.text || 'No response — please try again.', thinking: data.thinking ?? [] };
+    }
+
+    // SSE stream — read line by line
+    const reader  = res.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+    let fullText = '';
+    const thinking = [];
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split('\n');
+      buffer = lines.pop(); // keep incomplete line
+
+      for (const line of lines) {
+        if (!line.startsWith('data: ')) continue;
+        const raw = line.slice(6).trim();
+        if (!raw) continue;
+        let evt;
+        try { evt = JSON.parse(raw); } catch { continue; }
+
+        if (evt.type === 'thinking' || evt.type === 'tool') {
+          thinking.push(evt.text);
+          onThinking?.(evt.text);
+        } else if (evt.type === 'text') {
+          fullText += evt.text;
+          onChunk?.(evt.text);
+        } else if (evt.type === 'error') {
+          throw new Error(evt.text ?? 'Stream error');
+        } else if (evt.type === 'done') {
+          break;
+        }
+      }
+    }
+
+    return { text: fullText || 'No response — try rephrasing.', thinking };
   } catch (err) {
     clearTimeout(timer);
     if (err.name === 'AbortError') { const e = new Error('aborted'); e.name = 'AbortError'; throw e; }
@@ -1122,18 +1214,48 @@ async function sendScoutChat() {
       aiEl.innerHTML = `<div class="chat-bubble-ai-label">Scout · Multi-Agent</div>${thinkHtml}${confHtml}`;
 
     } else {
-      // Standard chat path
+      // Standard chat path — streaming
       const historyForApi = _scoutHistory.slice(-12);
-      const { text, thinking } = await callAI(historyForApi, msg, _scoutAbortCtrl.signal);
+      const thinkingSteps = [];
+      let streamedText = '';
+
+      // Render thinking steps and text chunks as they arrive
+      const { text, thinking } = await callAI(historyForApi, msg, _scoutAbortCtrl.signal, {
+        onThinking: (label) => {
+          thinkingSteps.push(label);
+          aiEl.innerHTML = `
+            <div class="thinking-block thinking-done">
+              <div class="thinking-header">
+                <span class="thinking-spinner"></span>
+                <span class="thinking-label">Thinking…</span>
+              </div>
+              <div class="thinking-steps">${thinkingSteps.map(s => `<div class="thinking-step">${escapeHtml(s)}</div>`).join('')}</div>
+            </div>
+            <div class="chat-bubble-ai-label">Scout</div>
+            <div class="chat-bubble-ai-body chat-streaming"></div>`;
+        },
+        onChunk: (chunk) => {
+          streamedText += chunk;
+          let el = aiEl.querySelector('.chat-streaming');
+          if (!el) {
+            el = document.createElement('div');
+            el.className = 'chat-bubble-ai-body chat-streaming';
+            aiEl.appendChild(el);
+          }
+          el.innerHTML = renderMarkdown(streamedText);
+          messages.scrollTop = messages.scrollHeight;
+        },
+      });
+
       _scoutHistory.push({ role: 'assistant', content: text });
 
-      const thinkHtml = thinking.length ? `
+      const thinkHtml = thinkingSteps.length ? `
         <div class="thinking-block thinking-done">
           <div class="thinking-header">
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
             <span class="thinking-label">Thought for a moment</span>
           </div>
-          <div class="thinking-steps">${thinking.map(t => `<div class="thinking-step">${escapeHtml(t)}</div>`).join('')}</div>
+          <div class="thinking-steps">${thinkingSteps.map(s => `<div class="thinking-step">${escapeHtml(s)}</div>`).join('')}</div>
         </div>` : '';
 
       aiEl.innerHTML = `<div class="chat-bubble-ai-label">Scout</div>${thinkHtml}<div class="chat-bubble-ai-body">${renderMarkdown(text)}</div>`;

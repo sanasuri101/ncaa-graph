@@ -5487,3 +5487,16 @@ section { margin-bottom: 20px; }
   }
 }
 
+
+/* ── Streaming text cursor ───────────────────────────────────────────────────── */
+.chat-streaming::after {
+  content: '▋';
+  display: inline-block;
+  animation: blink .7s step-end infinite;
+  color: var(--accent);
+  margin-left: 1px;
+  font-size: .8em;
+  vertical-align: middle;
+}
+@keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
+

@@ -1,108 +1,61 @@
 /**
- * api/ai.js — Vercel serverless function (Node.js), AI proxy with tool calling
+ * api/ai.js — NCAA bracket AI chat using Vercel AI SDK + Groq
  *
- * Request body:  { messages: Message[], userMsg: string }
- * Response body: Groq API shape { choices: [{ message: { content: string } }] }
+ * Architecture:
+ *   1. classifyIntent() — deterministic pattern match, no LLM
+ *   2. preFetch()       — load relevant data, no LLM
+ *   3. Known intents    — data in prompt, streamText() no tools, streams to client
+ *   4. Dynamic          — streamText() with tools{} + maxSteps, streams to client
  *
- * Environment variables required:
- *   GROQ_KEY — Groq API key
+ * Streaming protocol (SSE-like, custom):
+ *   data: {"type":"thinking","text":"..."}   — thinking step label
+ *   data: {"type":"text","text":"..."}        — text chunk
+ *   data: {"type":"tool","text":"..."}        — tool call label
+ *   data: {"type":"done"}                     — stream complete
+ *   data: {"type":"error","text":"..."}       — error
  */
 
 import { readFileSync, statSync } from 'fs';
-import { join }         from 'path';
+import { join }                   from 'path';
+import { createGroq }             from '@ai-sdk/groq';
+import { streamText, generateText, tool } from 'ai';
+import { z }                      from 'zod';
 
-// ── Output sanitizer — strip CoT/meta-commentary before text reaches client ─────
-function sanitizeLLMOutput(text) {
-  if (!text) return text;
+// ── Sanitizer ─────────────────────────────────────────────────────────────────
+function sanitize(text) {
+  if (!text) return '';
   return text
     .replace(/<think>[\s\S]*?<\/think>/gi, '')
-    .replace(/^(Note|Explanation|Reasoning|Disclaimer|Commentary|Instructions?|Reminder|Summary of instructions?)[:\s].*$/gim, '')
-    .replace(/^(I (have|will|am|did)|The response|This response|As instructed|Following the|Per the|Based on the instructions?)[^\n]*/gim, '')
+    .replace(/^(Note|Explanation|Reasoning|Disclaimer|Commentary|Reminder)[:\s].*/gim, '')
+    .replace(/^(I (have|will|am|did)|The response|As instructed|Following the|Per the|Based on the instructions?)[^\n]*/gim, '')
     .replace(/\n{3,}/g, '\n\n')
     .trim();
 }
 
-const GROQ_URL      = 'https://api.groq.com/openai/v1/chat/completions';
+// ── Constants ─────────────────────────────────────────────────────────────────
 const MODEL         = 'llama-3.3-70b-versatile';
 const MAX_TOKENS    = 2048;
-const GROQ_TPM_CAP  = 5500;  // Groq free tier: 6000 TPM, keep buffer
-const CHARS_PER_TOK = 4;
-const TOOL_MAX_ITER = 6;
-const FETCH_TIMEOUT = 15000;
+const MAX_STEPS     = 3;   // max tool call rounds before forced answer
 
-// ── CORS headers ──────────────────────────────────────────────────────────────
 const CORS = {
   'Access-Control-Allow-Origin':  '*',
   'Access-Control-Allow-Methods': 'POST, OPTIONS',
   'Access-Control-Allow-Headers': 'Content-Type',
 };
 
-// ── Tool definitions ──────────────────────────────────────────────────────────
-const TOOLS = [
-  {
-    type: 'function',
-    function: {
-      name: 'get_team_stats',
-      description: 'Get full stats for one or more teams. Use when asked about specific teams.',
-      parameters: {
-        type: 'object',
-        properties: {
-          team_names: {
-            type: 'array',
-            items: { type: 'string' },
-            description: 'Team names as they appear in the bracket (e.g. ["Duke", "Michigan"])',
-          },
-        },
-        required: ['team_names'],
-      },
-    },
-  },
-  {
-    type: 'function',
-    function: {
-      name: 'get_matchup',
-      description: 'Get head-to-head history and common opponents between two teams. Use when comparing or predicting a matchup.',
-      parameters: {
-        type: 'object',
-        properties: {
-          team_a: { type: 'string' },
-          team_b: { type: 'string' },
-        },
-        required: ['team_a', 'team_b'],
-      },
-    },
-  },
-  {
-    type: 'function',
-    function: {
-      name: 'get_standings',
-      description: 'Get ranked list of teams by a metric. Use for "best teams", "strongest region", "top seeds" questions.',
-      parameters: {
-        type: 'object',
-        properties: {
-          sort_by: {
-            type: 'string',
-            enum: ['adj_em', 'barthag', 'rank', 'wins_vs_field', 'seed'],
-          },
-          region: {
-            type: 'string',
-            enum: ['East', 'West', 'South', 'Midwest', 'all'],
-            description: 'Filter by region, or all for full bracket',
-          },
-          limit: { anyOf: [{ type: 'number' }, { type: 'string' }], description: 'How many results (e.g. 10)' },
-        },
-        required: ['sort_by'],
-      },
-    },
-  },
-];
-
-// ── Data cache — populated once at cold start ─────────────────────────────────
-let _cache     = null;
+// ── Cache ─────────────────────────────────────────────────────────────────────
+let _cache      = null;
 let _cacheMtime = 0;
 
-function getAiCacheMtime() {
-  const files = ['public/data/graph_data.json','public/data/torvik_stats.json','data/all_games.json','data/injury_overrides.json'];
+function getCacheMtime() {
+  const files = [
+    'public/data/graph_data.json',
+    'public/data/torvik_stats.json',
+    'public/data/recent_form.json',
+    'public/data/espn_odds.json',
+    'data/all_games.json',
+    'data/injury_overrides.json',
+  ];
   let latest = 0;
   for (const f of files) {
     try { const { mtimeMs } = statSync(join(process.cwd(), f)); if (mtimeMs > latest) latest = mtimeMs; } catch {}
@@ -110,42 +63,29 @@ function getAiCacheMtime() {
   return latest;
 }
 
-function readJSON(name) {
-  // public/ is outputDirectory — Vercel copies it to cwd at deploy time
-  const p = join(process.cwd(), 'public', 'data', name);
-  return JSON.parse(readFileSync(p, 'utf8'));
-}
-
-function readDataJSON(name) {
-  // For backend-only files in data/ (injury_overrides, transitive source copy)
-  const p = join(process.cwd(), 'data', name);
-  return JSON.parse(readFileSync(p, 'utf8'));
-}
+function readJSON(name)     { return JSON.parse(readFileSync(join(process.cwd(), 'public', 'data', name), 'utf8')); }
+function readDataJSON(name) { return JSON.parse(readFileSync(join(process.cwd(), 'data', name), 'utf8')); }
 
 function getData() {
-  const mtime = getAiCacheMtime();
+  const mtime = getCacheMtime();
   if (_cache && mtime === _cacheMtime) return _cache;
+
   const graph  = readJSON('graph_data.json');
   const torvik = readJSON('torvik_stats.json');
   const form   = readJSON('recent_form.json');
 
-  // Transitive path analysis — precomputed common-opponent chains
+  let oddsData = { games: {}, futures: {} };
+  try { oddsData = readJSON('espn_odds.json'); } catch {}
+
   let transPairs = {};
   try { transPairs = readJSON('transitive_analysis.json')?.pairs ?? {}; } catch {}
 
-  // Injury overrides — manual file, updated when key players go down
   let injuryMap = {};
   try {
     const raw = readDataJSON('injury_overrides.json');
-    for (const [espnId, override] of Object.entries(raw.overrides ?? {})) {
-      const penalty = override.adj_em_penalty ?? 0;
-      if (penalty <= 0) continue;
-      injuryMap[espnId] = {
-        penalty,
-        players: override.players ?? [],
-        notes:   override.notes ?? '',
-        updated: override.updated ?? '',
-      };
+    for (const [id, ov] of Object.entries(raw.overrides ?? {})) {
+      if ((ov.adj_em_penalty ?? 0) > 0)
+        injuryMap[id] = { penalty: ov.adj_em_penalty, players: ov.players ?? [], notes: ov.notes ?? '' };
     }
   } catch {}
 
@@ -161,545 +101,440 @@ function getData() {
     (edgesByNode[e.to]   = edgesByNode[e.to]   || []).push(e);
   });
 
-  // Build set of alive teams from actual tournament results
-  // Teams that won at least once and have not been eliminated
+  // Alive teams from tournament results
   const aliveTeamIds = new Set();
   try {
-    const allGames = JSON.parse(readFileSync(join(process.cwd(), 'data', 'all_games.json'), 'utf8'));
-    let bracketIds = new Set(graph.nodes.map(n => String(n.id)));
-    const winners  = new Set();
-    const losers   = new Set();
-    allGames
+    const bracketIds = new Set(graph.nodes.map(n => String(n.id)));
+    const winners = new Set(), losers = new Set();
+    JSON.parse(readFileSync(join(process.cwd(), 'data', 'all_games.json'), 'utf8'))
       .filter(g => g.date >= '2026-03-17')
       .forEach(g => {
         const t1 = String(g.team1_id), t2 = String(g.team2_id);
         if (!bracketIds.has(t1) && !bracketIds.has(t2)) return;
-        const winnerId = g.team1_winner ? t1 : t2;
-        const loserId  = g.team1_winner ? t2 : t1;
-        winners.add(winnerId);
-        losers.add(loserId);
+        (g.team1_winner ? winners : losers).add(t1);
+        (g.team1_winner ? losers  : winners).add(t2);
       });
-    // Alive = won at least once AND not eliminated
-    for (const id of winners) {
-      if (!losers.has(id)) aliveTeamIds.add(id);
-    }
+    for (const id of winners) if (!losers.has(id)) aliveTeamIds.add(id);
   } catch {}
 
-  _cache = { graph, torvik, form, transPairs, injuryMap, nodeByName, edgesByNode, aliveTeamIds };
+  // Market odds per team
+  const teamOdds = {};
+  for (const g of Object.values(oddsData.games ?? {})) {
+    if (!g.completed) {
+      if (g.home_id) teamOdds[g.home_id] = { game: g.name, ml: g.odds?.home_moneyline, implied: g.odds?.home_implied_pct, bpi: g.bpi?.home_bpi_win_pct };
+      if (g.away_id) teamOdds[g.away_id] = { game: g.name, ml: g.odds?.away_moneyline, implied: g.odds?.away_implied_pct, bpi: g.bpi?.away_bpi_win_pct };
+    }
+  }
+
+  _cache = { graph, torvik, form, transPairs, injuryMap, nodeByName, edgesByNode, aliveTeamIds, oddsData, teamOdds };
   _cacheMtime = mtime;
   return _cache;
 }
 
-// ── Team lookup — tolerant of partial names ───────────────────────────────────
-// Common acronym/nickname aliases
-const TEAM_ALIASES = {
-  'unc':       'north carolina',
-  'uconn':     'uconn huskies',
-  'ucf':       'ucf knights',
-  'ucla':      'ucla bruins',
-  'umbc':      'umbc retrievers',
-  'vcu':       'vcu rams',
-  'tcu':       'tcu horned frogs',
-  'smu':       'smu mustangs',
-  'byu':       'byu cougars',
-  'lsu':       'lsu tigers',
-  'ndsu':      'north dakota state',
-  'a&m':       'texas a&m',
-  'liu':       'long island university',
-  'sam houston':'sam houston bearkats',
+// ── Name normalization ────────────────────────────────────────────────────────
+const ALIASES = {
+  'unc': 'north carolina', 'uconn': 'uconn huskies', 'ucf': 'ucf knights',
+  'ucla': 'ucla bruins',   'umbc': 'umbc retrievers', 'vcu': 'vcu rams',
+  'tcu': 'tcu horned frogs', 'smu': 'smu mustangs',  'byu': 'byu cougars',
+  'liu': 'long island university', "st john's": 'saint johns red storm',
+  'st johns': 'saint johns red storm', 'saint johns': 'saint johns red storm',
 };
 
-function resolveTeam(name, nodeByName) {
-  const raw = name.toLowerCase().trim();
-  const aliasKey = Object.keys(TEAM_ALIASES).find(k => raw === k || raw.startsWith(k + ' '));
-  const queryStr = aliasKey ? TEAM_ALIASES[aliasKey] : normalizeTeamName(name);
-  const normMap = {};
-  Object.keys(nodeByName).forEach(k => { normMap[normalizeTeamName(k)] = nodeByName[k]; });
-  // Exact match
-  if (normMap[queryStr]) return normMap[queryStr];
-  // Partial — score candidates: exact-start match > contains > contained-by
-  // Also prefer longer candidates (more specific) when tie
-  const candidates = Object.keys(normMap)
-    .filter(k => k.includes(queryStr) || queryStr.includes(k))
-    .sort((a, b) => {
-      // Prefer the candidate whose key starts with query (e.g. "florida state..." > "florida gators")
-      const aStarts = a.startsWith(queryStr) ? 1 : 0;
-      const bStarts = b.startsWith(queryStr) ? 1 : 0;
-      if (aStarts !== bStarts) return bStarts - aStarts;
-      // Prefer longer key (more specific label)
-      return b.length - a.length;
-    });
-  return candidates.length ? normMap[candidates[0]] : null;
+function normName(s) {
+  return s.toLowerCase().trim()
+    .replace(/\bst\.\s*/g, 'saint ').replace(/\bst\s+/g, 'saint ')
+    .replace(/\bft\.?\s+/g, 'fort ').replace(/[.'`]/g, '').replace(/\s+/g, ' ').trim();
 }
 
+function resolveTeam(name, nodeByName) {
+  const raw   = name.toLowerCase().trim();
+  const query = normName(ALIASES[raw] ?? name);
+  const norm  = {};
+  Object.keys(nodeByName).forEach(k => { norm[normName(k)] = nodeByName[k]; });
+  if (norm[query]) return norm[query];
+  // Word-boundary containment — prevents "michigan" matching "michigan state"
+  const hits = Object.keys(norm)
+    .filter(k => {
+      if (k === query) return true;
+      if (k.startsWith(query + ' ') || k.startsWith(query + '-')) return true;
+      if (query.startsWith(k + ' ') || query.startsWith(k + '-')) return true;
+      return false;
+    })
+    .sort((a, b) => {
+      const ae = a === query ? 2 : a.startsWith(query) ? 1 : 0;
+      const be = b === query ? 2 : b.startsWith(query) ? 1 : 0;
+      return (be - ae) || (b.length - a.length);
+    });
+  return hits.length ? norm[hits[0]] : null;
+}
 
-
-function fmtTeam(node, torvik, form, injuryMap) {
+// ── Format team block ─────────────────────────────────────────────────────────
+function fmtTeam(node, torvik, form, injuryMap, teamOdds) {
   const tv   = torvik?.teams?.[node.id]?.torvik;
-  const seed = node.seed != null ? `#${node.seed}` : 'all';
-  const base = `${node.full_name} (${node.region} ${seed}, ${tv?.conf ?? '?'}) Season: ${tv?.record ?? node.wins_vs_field + '-' + node.losses_vs_field} | vs bracket field: ${node.wins_vs_field}W-${node.losses_vs_field}L`;
-  if (!tv) return base + ' | no Torvik data';
+  const seed = node.seed != null ? `#${node.seed}` : '?';
+  if (!tv) return `${node.full_name} (${node.region} ${seed}) | no Torvik data`;
 
-  const pace = tv.adj_tempo != null
-    ? (tv.adj_tempo >= 0.7 ? 'fast' : tv.adj_tempo >= 0.4 ? 'moderate' : 'slow') + ` (${tv.adj_tempo.toFixed(2)})`
-    : '?';
-
-  const shooting = [
-    tv.two_p  != null ? `2P%: ${tv.two_p}` : null,
-    tv.three_p != null ? `3P%: ${tv.three_p}` : null,
-    tv.ft_pct != null ? `FT%: ${tv.ft_pct}` : null,
-    tv.efg    != null ? `eFG%: ${tv.efg}`   : null,
-  ].filter(Boolean).join(' | ');
-
-  // Recent form from form file
-  const teamForm = form?.teams?.[node.id];
-  const formStr = teamForm
-    ? `Last10: ${teamForm.last10} | Streak: ${teamForm.streak}`
-    : '';
-
-  // Last 3 games
-  const recentGames = teamForm?.games?.slice(-3).map(g =>
-    `${g.date.slice(5)}: ${g.won ? 'W' : 'L'} ${g.score} vs ${g.opp.replace(/ (Blue Devils|Wildcats|Tar Heels|Bulldogs|Tigers|Volunteers|Gators|Trojans|Hurricanes|Ducks|Aztecs|Cowboys|Razorbacks|Sooners|Cornhuskers|Aggies|Longhorns|Jayhawks|Bruins|Bears|Beavers|Cougars|Gamecocks|Hoyas|Huskies|Crimson Tide|Commodores|Cardinal|Boilermakers|Scarlet Knights|Wolverines|Buckeyes|Badgers|Spartans|Hawkeyes|Illini|Gophers|Nittany Lions|Terrapins|Yellow Jackets|Blue Hens|Panthers|Mountaineers|Musketeers|Flyers|Rams|Owls|Eagles|Falcons|Blue Raiders|Miners|Pirates|Bearcats|Red Raiders|Lobos|Rebels|Wolf Pack|Shockers|Racers|Bison|Vikings|Pride|Penguins|Golden Eagles|Mean Green|Monarchs|Phoenix|Antelopes|Jackrabbits|Lumberjacks|Highlanders|Roadrunners|Flames|Chanticleers|Golden Flashes|Tigers|Lions|Saints|Seahawks|Nighthawks|Patriots|Colonials|Catamounts|Bulldogs|Penguins|Terriers|Ravens|Hornets|Aztecs|Aggies)$/, '').trim()}`
-  ).join('; ') ?? '';
-
-  // Injury report — only shown when overrides exist for this team
-  const inj = injuryMap?.[node.id];
-  const injStr = inj
-    ? `⚠ INJURY REPORT (AdjEM penalty: -${inj.penalty}): ` +
-      inj.players.map(p => `${p.name} — ${p.status}`).join('; ') +
-      (inj.notes ? ` | ${inj.notes}` : '')
-    : '';
+  const pace   = tv.adj_tempo != null ? (tv.adj_tempo >= 0.7 ? 'Fast' : tv.adj_tempo >= 0.4 ? 'Moderate' : 'Slow') + ` (${tv.adj_tempo.toFixed(2)})` : '?';
+  const tf     = form?.teams?.[node.id];
+  const recent = tf?.games?.slice(-3).map(g => `${g.date.slice(5)}: ${g.won ? 'W' : 'L'} ${g.score} vs ${g.opp}`).join(' | ') ?? '';
+  const inj    = injuryMap?.[node.id];
+  const injStr = inj ? `⚠ INJURY (AdjEM -${inj.penalty}): ${inj.players.map(p => `${p.name} — ${p.status}`).join('; ')}${inj.notes ? ' | ' + inj.notes : ''}` : '';
+  const odds   = teamOdds?.[node.id];
+  const oddsStr= odds ? `Market: ML ${odds.ml ?? '?'} (${odds.implied ?? '?'}% implied) | BPI: ${odds.bpi ?? '?'}% | ${odds.game}` : '';
 
   return [
-    base,
+    `${node.full_name} (${node.region} ${seed}, ${tv.conf ?? '?'})`,
+    `Record: ${tv.record} | Bracket: ${node.wins_vs_field}W-${node.losses_vs_field}L`,
     `T-Rank #${tv.rank} | AdjEM: ${tv.adj_em > 0 ? '+' : ''}${tv.adj_em} | AdjOE: ${tv.adj_oe} | AdjDE: ${tv.adj_de}`,
-    `Barthag: ${(tv.barthag * 100).toFixed(1)}% | WAB: ${parseFloat(tv.wab).toFixed(1)} | SOS Rank: ${tv.sos_rank?.toFixed(2) ?? '?'} | Pace: ${pace}`,
-    shooting ? `Shooting — ${shooting}` : '',
-    formStr,
-    recentGames ? `Recent: ${recentGames}` : '',
+    `Barthag: ${(tv.barthag * 100).toFixed(1)}% | WAB: ${parseFloat(tv.wab).toFixed(1)} | Pace: ${pace}`,
+    `Shooting: 2P% ${tv.two_p ?? '?'} | 3P% ${tv.three_p ?? '?'} | FT% ${tv.ft_pct ?? '?'} | eFG% ${tv.efg ?? '?'}`,
+    tf ? `Form: ${tf.last10} L10 | Streak: ${tf.streak}` : '',
+    recent ? `Last 3: ${recent}` : '',
+    oddsStr,
     injStr,
   ].filter(Boolean).join('\n  ');
 }
 
 // ── Tool implementations ──────────────────────────────────────────────────────
-function toolGetTeamStats({ team_names }) {
-  const { torvik, form, injuryMap, nodeByName } = getData();
-  return team_names.map(name => {
+function implGetTeamStats(teamNames) {
+  const { torvik, form, injuryMap, nodeByName, teamOdds } = getData();
+  if (!teamNames?.length) return 'No team names provided.';
+  return teamNames.map(name => {
     const node = resolveTeam(name, nodeByName);
-    return node ? fmtTeam(node, torvik, form, injuryMap) : `${name}: not found`;
-  }).join('\n\n');
+    return node ? fmtTeam(node, torvik, form, injuryMap, teamOdds) : `"${name}": not found — check spelling`;
+  }).join('\n\n---\n\n');
 }
 
-function toolGetMatchup({ team_a, team_b }) {
-  const { graph, torvik, form, transPairs, injuryMap, nodeByName, edgesByNode } = getData();
-  const nodeA = resolveTeam(team_a, nodeByName);
-  const nodeB = resolveTeam(team_b, nodeByName);
-  if (!nodeA) return `Team not found: ${team_a}`;
-  if (!nodeB) return `Team not found: ${team_b}`;
+function implGetMatchup(teamA, teamB) {
+  const { graph, torvik, form, transPairs, injuryMap, nodeByName, edgesByNode, teamOdds } = getData();
+  const nodeA = resolveTeam(teamA, nodeByName);
+  const nodeB = resolveTeam(teamB, nodeByName);
+  if (!nodeA) return `Team not found: "${teamA}"`;
+  if (!nodeB) return `Team not found: "${teamB}"`;
 
   const lines = [
     `=== ${nodeA.full_name} vs ${nodeB.full_name} ===`,
-    fmtTeam(nodeA, torvik, form, injuryMap),
-    '',
-    fmtTeam(nodeB, torvik, form, injuryMap),
+    fmtTeam(nodeA, torvik, form, injuryMap, teamOdds), '',
+    fmtTeam(nodeB, torvik, form, injuryMap, teamOdds),
   ];
 
   const aEdges = edgesByNode[nodeA.id] || [];
   const bEdges = edgesByNode[nodeB.id] || [];
+  const h2h    = aEdges.filter(e => (e.from === nodeA.id && e.to === nodeB.id) || (e.from === nodeB.id && e.to === nodeA.id));
 
-  // Head-to-head
-  const h2h = aEdges.filter(e =>
-    (e.from === nodeA.id && e.to === nodeB.id) ||
-    (e.from === nodeB.id && e.to === nodeA.id)
-  );
-
-  if (h2h.length > 0) {
-    lines.push(`\nHead-to-head (${h2h.length} game${h2h.length > 1 ? 's' : ''}):`);
-    h2h.forEach(e => {
-      const winner = e.from === nodeA.id ? nodeA.label : nodeB.label;
-      lines.push(`  ${e.date}: ${winner} won ${e.label} (+${e.margin} pts)`);
-    });
+  if (h2h.length) {
+    lines.push(`\nH2H (${h2h.length} game${h2h.length > 1 ? 's' : ''}):`);
+    h2h.forEach(e => lines.push(`  ${e.date}: ${e.from === nodeA.id ? nodeA.label : nodeB.label} won ${e.label} (+${e.margin})`));
   } else {
-    lines.push('\nHave NOT played each other this season.');
-
-    // Common bracket opponents (from graph edges)
-    const aOpps  = new Set(aEdges.map(e => e.from === nodeA.id ? e.to : e.from));
-    const bOpps  = new Set(bEdges.map(e => e.from === nodeB.id ? e.to : e.from));
-    const common = [...aOpps].filter(id => bOpps.has(id));
-    if (common.length > 0) {
-      lines.push(`\nCommon bracket opponents (${common.length}):`);
-      common.slice(0, 6).forEach(cid => {
+    lines.push('\nNo H2H this season.');
+    const aOpps = new Set(aEdges.map(e => e.from === nodeA.id ? e.to : e.from));
+    const bOpps = new Set(bEdges.map(e => e.from === nodeB.id ? e.to : e.from));
+    const common = [...aOpps].filter(id => bOpps.has(id)).slice(0, 5);
+    if (common.length) {
+      lines.push(`\nCommon opponents (${common.length}):`);
+      common.forEach(cid => {
         const cNode = graph.nodes.find(n => n.id === cid);
         const aGame = aEdges.find(e => (e.from === nodeA.id && e.to === cid) || (e.to === nodeA.id && e.from === cid));
         const bGame = bEdges.find(e => (e.from === nodeB.id && e.to === cid) || (e.to === nodeB.id && e.from === cid));
-        const aRes  = aGame ? (aGame.from === nodeA.id ? `W ${aGame.label}` : `L ${aGame.label}`) : '?';
-        const bRes  = bGame ? (bGame.from === nodeB.id ? `W ${bGame.label}` : `L ${bGame.label}`) : '?';
-        lines.push(`  vs ${cNode?.label ?? cid}: ${nodeA.label} ${aRes} | ${nodeB.label} ${bRes}`);
+        const aR = aGame ? (aGame.from === nodeA.id ? `W ${aGame.label}` : `L ${aGame.label}`) : '?';
+        const bR = bGame ? (bGame.from === nodeB.id ? `W ${bGame.label}` : `L ${bGame.label}`) : '?';
+        lines.push(`  vs ${cNode?.label ?? cid}: ${nodeA.label} ${aR} | ${nodeB.label} ${bR}`);
       });
     }
-
-    // Precomputed transitive path analysis
-    const tKey  = `${nodeA.id}_${nodeB.id}`;
-    const tKeyR = `${nodeB.id}_${nodeA.id}`;
-    const tPair = transPairs[tKey] || transPairs[tKeyR];
-    if (tPair && tPair.n > 0) {
-      const flipped = !!transPairs[tKeyR] && !transPairs[tKey];
-      const favors  = tPair.verdict === 'a' ? (flipped ? nodeB.label : nodeA.label)
-                    : tPair.verdict === 'b' ? (flipped ? nodeA.label : nodeB.label)
-                    : 'neither (unclear)';
-      lines.push(`\nTransitive evidence (${tPair.n} signal${tPair.n !== 1 ? 's' : ''}, confidence ${tPair.conf?.toFixed(0) ?? '?'}/100): favors ${favors}`);
-      (tPair.a || []).slice(0, 3).forEach(s => {
-        lines.push(`  + ${nodeA.label} beat ${s.common_name} (${s.a_score}), who beat ${nodeB.label} (${s.b_score})`);
-      });
-      (tPair.b || []).slice(0, 3).forEach(s => {
-        lines.push(`  + ${nodeB.label} beat ${s.common_name} (${s.b_score}), who beat ${nodeA.label} (${s.a_score})`);
-      });
+    const tp = transPairs[`${nodeA.id}_${nodeB.id}`] || transPairs[`${nodeB.id}_${nodeA.id}`];
+    if (tp?.n > 0) {
+      const flipped = !!transPairs[`${nodeB.id}_${nodeA.id}`] && !transPairs[`${nodeA.id}_${nodeB.id}`];
+      const favors  = tp.verdict === 'a' ? (flipped ? nodeB.label : nodeA.label)
+                    : tp.verdict === 'b' ? (flipped ? nodeA.label : nodeB.label) : 'neither';
+      lines.push(`\nTransitive (${tp.n} signals, conf ${tp.conf?.toFixed(0) ?? '?'}/100): favors ${favors}`);
+      (tp.a || []).slice(0, 2).forEach(s => lines.push(`  + ${nodeA.label} beat ${s.common_name} (${s.a_score}), who beat ${nodeB.label} (${s.b_score})`));
+      (tp.b || []).slice(0, 2).forEach(s => lines.push(`  + ${nodeB.label} beat ${s.common_name} (${s.b_score}), who beat ${nodeA.label} (${s.a_score})`));
     } else {
-      lines.push('\nNo transitive evidence found in schedule data.');
+      lines.push('\nNo transitive evidence found.');
     }
   }
   return lines.join('\n');
 }
 
-function toolGetStandings({ sort_by, region = 'all', limit = 10 }) {
-  limit = parseInt(limit, 10) || 10;
-  const { graph, torvik, aliveTeamIds } = getData();
-  let teams = graph.nodes.map(n => ({ node: n, tv: torvik?.teams?.[n.id]?.torvik }));
+function implGetStandings(sortBy, region, limit) {
+  const VALID_SORT    = ['adj_em', 'barthag', 'rank', 'wins_vs_field', 'seed'];
+  const VALID_REGIONS = ['East', 'West', 'South', 'Midwest'];
+  sortBy = VALID_SORT.includes(sortBy) ? sortBy : 'adj_em';
+  region = VALID_REGIONS.includes(region) ? region : null;
+  const parsed = parseInt(limit, 10);
+  limit = Math.min(isNaN(parsed) ? 16 : parsed, 25);
 
-  // Only show teams still alive in the tournament
-  // If aliveTeamIds is populated (tournament underway), filter to alive teams only
-  if (aliveTeamIds && aliveTeamIds.size > 0) {
-    teams = teams.filter(t => aliveTeamIds.has(String(t.node.id)));
-  }
+  const { graph, torvik, form, aliveTeamIds, teamOdds } = getData();
+  let teams = graph.nodes
+    .map(n => ({ node: n, tv: torvik?.teams?.[n.id]?.torvik }))
+    .filter(t => !aliveTeamIds.size || aliveTeamIds.has(String(t.node.id)));
 
-  if (region !== 'all') teams = teams.filter(t => t.node.region === region);
+  if (region) teams = teams.filter(t => t.node.region === region);
 
   const val = t => {
-    if (sort_by === 'adj_em')        return t.tv?.adj_em ?? -999;
-    if (sort_by === 'barthag')       return t.tv?.barthag ?? 0;
-    if (sort_by === 'rank')          return -(t.tv?.rank ?? 9999);
-    if (sort_by === 'wins_vs_field') return t.node.wins_vs_field;
-    if (sort_by === 'seed')          return -(t.node.seed ?? 99);
+    if (sortBy === 'adj_em')        return t.tv?.adj_em ?? -999;
+    if (sortBy === 'barthag')       return t.tv?.barthag ?? 0;
+    if (sortBy === 'rank')          return -(t.tv?.rank ?? 9999);
+    if (sortBy === 'wins_vs_field') return t.node.wins_vs_field;
+    if (sortBy === 'seed')          return -(t.node.seed ?? 99);
     return 0;
   };
 
   teams.sort((a, b) => val(b) - val(a));
-  const { form } = getData();
-  return teams.slice(0, Math.min(limit, 25)).map((t, i) => {
-    const seed     = t.node.seed != null ? `#${t.node.seed}` : 'all';
-    const teamForm = form?.teams?.[t.node.id];
-    const formStr  = teamForm ? ` | ${teamForm.last10} L10 ${teamForm.streak}` : '';
-    const tv_s     = t.tv
-      ? `T-Rank #${t.tv.rank} AdjEM ${t.tv.adj_em > 0 ? '+' : ''}${t.tv.adj_em} AdjOE ${t.tv.adj_oe} AdjDE ${t.tv.adj_de} Barthag ${(t.tv.barthag * 100).toFixed(1)}%`
-      : 'no Torvik';
-    return `${i + 1}. ${t.node.full_name} (${t.node.region} ${seed}, ${t.tv?.conf ?? '?'}) ${t.tv?.record ?? t.node.wins_vs_field + '-' + t.node.losses_vs_field}${formStr} | ${tv_s}`;
+
+  return teams.slice(0, limit).map((t, i) => {
+    const seed    = t.node.seed != null ? `#${t.node.seed}` : '?';
+    const tf      = form?.teams?.[t.node.id];
+    const formStr = tf ? ` | ${tf.last10} L10 ${tf.streak}` : '';
+    const tvStr   = t.tv ? `AdjEM ${t.tv.adj_em > 0 ? '+' : ''}${t.tv.adj_em} | AdjOE ${t.tv.adj_oe} | AdjDE ${t.tv.adj_de} | Barthag ${(t.tv.barthag * 100).toFixed(1)}%` : 'no Torvik';
+    const odds    = teamOdds?.[t.node.id];
+    const oddsStr = odds ? ` | ML ${odds.ml ?? '?'} (${odds.implied ?? '?'}% implied)` : '';
+    return `${i + 1}. ${t.node.full_name} (${t.node.region} ${seed})${formStr} | ${tvStr}${oddsStr}`;
   }).join('\n');
 }
 
-// ── Arg coercion — fixes Groq passing wrong types against the JSON schema ────
-function coerceArgs(name, raw) {
-  const args = { ...raw };
-  if (name === 'get_team_stats') {
-    // Accept string or array
-    if (typeof args.team_names === 'string') args.team_names = [args.team_names];
-    if (!Array.isArray(args.team_names))     args.team_names = [String(args.team_names ?? '')];
-    args.team_names = args.team_names.filter(Boolean);
-  }
-  if (name === 'get_matchup') {
-    args.team_a = String(args.team_a ?? args.team_1 ?? '').trim();
-    args.team_b = String(args.team_b ?? args.team_2 ?? '').trim();
-  }
-  if (name === 'get_standings') {
-    args.limit  = parseInt(args.limit, 10)  || 10;
-    args.region = args.region ?? 'all';
-    const validSortBy = ['adj_em', 'barthag', 'rank', 'wins_vs_field', 'seed'];
-    if (!validSortBy.includes(args.sort_by)) args.sort_by = 'barthag';
-  }
-  return args;
+// ── SDK Tool definitions — Zod schemas, no manual coercion needed ─────────────
+function buildTools() {
+  return {
+    get_team_stats: tool({
+      description: 'Get efficiency stats, form, roster and injury info for one or more teams.',
+      parameters: z.object({
+        team_names: z.array(z.string()).describe('Team names e.g. ["Duke", "Michigan"]'),
+      }),
+      execute: async ({ team_names }) => implGetTeamStats(team_names),
+    }),
+    get_matchup: tool({
+      description: 'Get head-to-head history, common opponents and transitive evidence between two teams.',
+      parameters: z.object({
+        team_a: z.string().describe('First team name'),
+        team_b: z.string().describe('Second team name'),
+      }),
+      execute: async ({ team_a, team_b }) => implGetMatchup(team_a, team_b),
+    }),
+    get_standings: tool({
+      description: 'Get ranked list of alive teams. Use for "Final Four favorites", "best teams", "top efficiency" questions.',
+      parameters: z.object({
+        sort_by: z.enum(['adj_em', 'barthag', 'rank', 'wins_vs_field', 'seed'])
+          .describe('adj_em=efficiency (use for favorites), barthag=win prob, rank=T-rank, seed=seeding'),
+        region: z.enum(['East', 'West', 'South', 'Midwest', 'all']).optional()
+          .describe('Filter to a region or all for full field'),
+        limit: z.number().int().min(1).max(25).optional()
+          .describe('Number of teams to return, default 16'),
+      }),
+      execute: async ({ sort_by, region, limit }) => implGetStandings(sort_by, region, limit),
+    }),
+  };
 }
 
-function dispatchTool(name, rawArgs) {
-  try {
-    const args = coerceArgs(name, rawArgs);
-    if (name === 'get_team_stats') return toolGetTeamStats(args);
-    if (name === 'get_matchup')    return toolGetMatchup(args);
-    if (name === 'get_standings')  return toolGetStandings(args);
-    return `Unknown tool: ${name}`;
-  } catch (err) {
-    return `Tool error (${name}): ${err.message}`;
-  }
-}
-
-// ── Token budget ──────────────────────────────────────────────────────────────
-function estTokens(content) {
-  const text = typeof content === 'string' ? content : JSON.stringify(content ?? '');
-  return Math.ceil(text.length / CHARS_PER_TOK);
-}
-
-function estMessagesTokens(messages) {
-  return messages.reduce((sum, m) => sum + estTokens(m.content), 0);
-}
-
-function trimHistory(messages, systemTokens) {
-  const budget = GROQ_TPM_CAP - systemTokens - MAX_TOKENS;
-  let used = 0;
-  const out = [];
-  for (let i = messages.length - 1; i >= 0; i--) {
-    const t = estTokens(messages[i].content);
-    if (used + t > budget) break;
-    out.unshift(messages[i]);
-    used += t;
-  }
-  return out;
-}
-
-// ── System prompt — server-side, query-scoped ─────────────────────────────────
-function buildSystemPrompt(userMsg, graph, torvik, form, injuryMap, prefetchedContext) {
-  const msgLower  = (userMsg || '').toLowerCase();
-  const mentioned = graph.nodes.filter(n =>
-    msgLower.includes(n.label.toLowerCase()) ||
-    msgLower.includes(n.full_name.toLowerCase().split(' ')[0])
-  );
-  const scope = mentioned.slice(0, 8);
-
-  const teamLines = scope.map(n => fmtTeam(n, torvik, form, injuryMap)).join('\n\n');
-  const scopedIds = new Set(scope.map(n => n.id));
-  const edges = scope.length > 0
-    ? graph.edges.filter(e => scopedIds.has(e.from) || scopedIds.has(e.to)).slice(0, 20)
-    : [];
-  const gameLines = edges.map(e => {
-    const wNode = graph.nodes.find(n => n.id === e.from);
-    const lNode = graph.nodes.find(n => n.id === e.to);
-    const w = wNode ? wNode.label : e.from;
-    const l = lNode ? lNode.label : e.to;
-    return w + ' beat ' + l + ' ' + e.label + ' on ' + (e.date || '').slice(5, 10);
-  }).join('\n');
-
-  const contextBlock = prefetchedContext ||
-    (scope.length > 0
-      ? teamLines + (gameLines ? '\n\nBRACKET GAMES:\n' + gameLines : '')
-      : '');
-
-  const _metaSeason = graph?.meta?.season ?? '';
-  const _seasonYear = _metaSeason ? _metaSeason.split('-')[1] : String(new Date().getFullYear());
-  // Build alive team count for prompt context
-  const { aliveTeamIds } = getData();
-  const aliveCount = aliveTeamIds?.size || 16;
-  const roundName = aliveCount >= 16 ? 'Sweet 16' : aliveCount >= 8 ? 'Elite Eight' : aliveCount >= 4 ? 'Final Four' : 'Championship';
-
-  let prompt = `You are AI Scout, an expert NCAA basketball analyst for the ${_seasonYear} March Madness tournament. We are in the ${roundName} — ${aliveCount} teams remain. You have access to Torvik efficiency data, head-to-head results, recent form, and injury reports.\n\n`;
-
-  prompt += `CRITICAL: Only reference teams that are STILL ALIVE in the tournament. Do not mention eliminated teams as contenders or use them in upset picks. When listing top teams, only include the ${aliveCount} teams still playing.\n\n`;
-
-  prompt += `STRICT RULES — violating any of these is a failure:\n`;
-  prompt += `1. NEVER say you lack data. All stats are in DATA below. If a team is not in DATA, call get_team_stats immediately.\n`;
-  prompt += `2. NEVER hallucinate tool calls in your response text. Tools are called automatically — never write get_matchup() or get_team_stats() in your answer.\n`;
-  prompt += `3. NEVER hedge. No "seems to", "appears to", "might", "could potentially". State exact numbers.\n`;
-  prompt += `4. ALWAYS cite specific numbers for every claim: AdjEM margin, Barthag, eFG%, 2P%, 3P%, recent record.\n`;
-  prompt += `5. For transitive comparisons (A beat B, B beat C, so A vs C?): pull all three teams stats, compute the actual efficiency gaps, and give a direct probability-based answer.\n`;
-  prompt += `6. For every matchup: state who wins and at what probability. No neutral conclusions.\n`;
-  prompt += `7. Injury context is pre-loaded. Apply AdjEM penalties where shown.\n\n`;
-
-  prompt += `TOOLS — use these when data is not in DATA below:\n`;
-  prompt += `- get_team_stats(team_names: string[]) — full stats for one or more teams\n`;
-  prompt += `- get_matchup(team_a, team_b) — head-to-head results + common opponents\n`;
-  prompt += `- get_standings(sort_by, region?, limit?) — ranked list\n`;
-  prompt += `  sort_by: adj_em | barthag | rank | wins_vs_field | seed\n`;
-  prompt += `  limit: must be a NUMBER like 10, default 10\n\n`;
-
-  prompt += `ANALYSIS FRAMEWORK:\n`;
-  prompt += `- Lead with the AdjEM gap and what it implies (every 1pt AdjEM ≈ 1pt per 100 possessions)\n`;
-  prompt += `- Offensive edge: compare AdjOE vs opponent AdjDE — state the net margin\n`;
-  prompt += `- Defensive edge: compare AdjDE vs opponent AdjOE — state the net margin\n`;
-  prompt += `- Barthag = direct head-to-head win probability on a neutral court\n`;
-  prompt += `- Recent form: weight last 5 games heavily, note any losing streaks\n`;
-  prompt += `- Tempo: if gap > 5 possessions, explain which team benefits\n`;
-  prompt += `- Close it with a specific win probability and the one stat that decides it\n`;
-
-  if (contextBlock) {
-    prompt += `\n\nDATA (use this before calling tools):\n` + contextBlock;
-  }
-  return prompt;
-}
-
-const REGIONS = ['East', 'West', 'South', 'Midwest'];
-
-function normalizeTeamName(s) {
-  return s.toLowerCase().trim()
-    .replace(/\bst\.\s*/g, 'saint ')   // "st." -> "saint " (dot required, won't match "state")
-    .replace(/\bst\s+/g,  'saint ')     // "st " -> "saint " (space required, won't match "state")
-    .replace(/\bft\.?\s+/g, 'fort ')   // "ft." or "ft " -> "fort "
-    .replace(/[.'`]/g, '')
-    .replace(/\s+/g, ' ')
-    .trim();
-}
+// ── Intent classification ─────────────────────────────────────────────────────
+const REGIONS_ORDERED = ['Midwest', 'East', 'West', 'South'];
 
 function classifyIntent(msg, graph) {
   const m = msg.toLowerCase();
+  const hasBball = /team|game|match|play|score|win|loss|seed|bracket|region|stats|rank|efficien|torvik|adj|barthag|tournament|ncaa|college|basketball|upset|predict|advance|champion|final four|elite eight|sweet/i.test(m);
 
-  // ── Short-circuit: non-basketball questions should never get tools ──────────
-  // If the message has no basketball signal and no team names, classify as general.
-  const hasBasketballSignal = /team|game|match|play|score|win|loss|seed|bracket|region|stats|rank|efficiency|torvik|adj|barthag|tournament|ncaa|college|basketball|coach|player|roster|season|conference|record|point|rebound|assist|defend|offens|schedul|upset|predict|advance|champion|final four|elite eight|sweet sixteen/i.test(m);
-
-  // Check unplayed BEFORE top_teams so "best teams that haven't played" hits correct branch
-  if (/haven.?t played|not played|could face|potential matchup|best matchup/i.test(m))
+  if (/haven.?t played|not played|could face|potential matchup/i.test(m))
     return { type: 'unplayed_matchups' };
-  if (/sleeper|dark.horse|cinderella|upset.pick|surprise pick|under.rated|overachiev/i.test(m))
+
+  if (/final four|champion|title contend|win it all|win the tournament|national title|who.*win.*whole|who.*favori|pick.*win|pick.*champion|who.*(should|would|will).*win/i.test(m))
+    return { type: 'top_teams_all' };
+
+  if (/undervalued|underrated|overvalued|market.*value|value.*market|mispriced|odds.*wrong|line.*off|market.*vs|model.*vs.*market|sharp money|betting value|are the odds|odds on |line on |spread.*right|favored correctly/i.test(m))
+    return { type: 'market_analysis' };
+
+  if (/sleeper|dark.horse|cinderella|upset.pick|surprise pick|overachiev|best upset/i.test(m))
     return { type: 'sleeper_all_regions' };
-  // Region-specific check — Midwest before West to avoid substring collision
-  const REGIONS_ORDERED = ['Midwest', 'East', 'West', 'South'];
+
   for (const r of REGIONS_ORDERED) {
-    if (m.includes(r.toLowerCase()) && /best|top|strong|effici|rank|adj.?em|barthag|who/i.test(m))
+    if (m.includes(r.toLowerCase()) && /best|top|strong|effici|rank|adj.?em|barthag|who|favor|win/i.test(m))
       return { type: 'region_standings', region: r };
   }
-  if (/best teams|top teams|strongest|who.?s best|who are the best/i.test(m))
+
+  if (/best teams|top teams|strongest|who.?s best|who are the best|top.*remaining|best.*efficiency|most efficient|best.*adj.?em|efficiency.*margin/i.test(m))
     return { type: 'top_teams_all' };
-  // Detect team names in query — pre-fetch matchup or single-team lookup
+
   if (graph) {
-    const mNorm = normalizeTeamName(msg);
-    const found = graph.nodes.filter(n =>
-      mNorm.includes(normalizeTeamName(n.label)) ||
-      mNorm.includes(normalizeTeamName(n.full_name))
-    );
-    if (found.length >= 3) return { type: 'multi_team', teams: found.slice(0, 4).map(n => n.label) };
-    if (found.length >= 2) return { type: 'matchup',     team_a: found[0].label, team_b: found[1].label };
-    if (found.length === 1) return { type: 'team_lookup', team:   found[0].label };
+    const mNorm = normName(msg);
+    const found = graph.nodes.filter(n => {
+      const lbl = normName(n.label);
+      const re  = new RegExp('\\b' + lbl.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b');
+      return re.test(mNorm);
+    });
+    if (found.length >= 2) return { type: 'matchup', team_a: found[0].label, team_b: found[1].label };
+    if (found.length === 1) return { type: 'team_lookup', team: found[0].label };
   }
 
-  // No team names found — if no basketball signal either, skip tools entirely
-  if (!hasBasketballSignal) return { type: 'general' };
-
+  if (!hasBball) return { type: 'general' };
   return { type: 'dynamic' };
 }
 
-function preFetch(intent, graph, torvik, form) {
+// ── Pre-fetch ─────────────────────────────────────────────────────────────────
+function preFetch(intent, graph, torvik) {
   const thinking = [];
   const blocks   = [];
 
-  if (intent.type === 'sleeper_all_regions') {
-    for (const region of REGIONS) {
-      thinking.push('Checking standings \u2014 ' + region);
-      blocks.push('=== ' + region.toUpperCase() + ' ===\n' + toolGetStandings({ sort_by: 'adj_em', region, limit: 16 }));
-    }
-    return { context: blocks.join('\n\n'), thinking };
-  }
-
-  if (intent.type === 'top_teams_all') {
-    thinking.push('Checking top teams overall');
-    blocks.push(toolGetStandings({ sort_by: 'adj_em', region: 'all', limit: 20 }));
-    return { context: blocks.join('\n\n'), thinking };
-  }
-
-  if (intent.type === 'unplayed_matchups') {
-    thinking.push('Checking top teams by efficiency');
-    const top = toolGetStandings({ sort_by: 'adj_em', region: 'all', limit: 8 });
-    blocks.push('TOP TEAMS:\n' + top);
-    const ranked = graph.nodes
-      .map(n => ({ n, tv: torvik && torvik.teams && torvik.teams[n.id] && torvik.teams[n.id].torvik }))
-      .filter(x => x.tv)
-      .sort((a, b) => (b.tv.adj_em || -999) - (a.tv.adj_em || -999))
-      .slice(0, 6);
-    const edgeSet = new Set(graph.edges.map(e => e.from + '-' + e.to));
-    const unplayed = [];
-    for (let i = 0; i < ranked.length; i++) {
-      for (let j = i + 1; j < ranked.length; j++) {
-        const a = ranked[i].n, b = ranked[j].n;
-        if (!edgeSet.has(a.id + '-' + b.id) && !edgeSet.has(b.id + '-' + a.id)) {
-          unplayed.push(a.full_name + ' (' + a.region + ' #' + a.seed + ') vs ' + b.full_name + ' (' + b.region + ' #' + b.seed + ')');
-          thinking.push('Unplayed: ' + a.label + ' vs ' + b.label);
-        }
+  switch (intent.type) {
+    case 'sleeper_all_regions':
+      for (const r of REGIONS_ORDERED) {
+        thinking.push(`Checking standings — ${r}`);
+        blocks.push(`=== ${r.toUpperCase()} ===\n` + implGetStandings('adj_em', r, 8));
       }
+      break;
+
+    case 'top_teams_all': {
+      thinking.push('Checking top teams by efficiency + market');
+      blocks.push('TOP TEAMS (alive, by efficiency):\n' + implGetStandings('adj_em', null, 16));
+      const { oddsData } = getData();
+      const upcoming = Object.values(oddsData?.games ?? {}).filter(g => !g.completed);
+      if (upcoming.length) {
+        blocks.push('UPCOMING GAMES + MARKET LINES:\n' + upcoming.map(g => {
+          const o = g.odds, b = g.bpi;
+          return [g.name, `Spread: ${o?.spread ?? '?'}`,
+            `${g.away} ML ${o?.away_moneyline ?? '?'} (${o?.away_implied_pct ?? '?'}%) BPI ${b?.away_bpi_win_pct ?? '?'}%`,
+            `${g.home} ML ${o?.home_moneyline ?? '?'} (${o?.home_implied_pct ?? '?'}%) BPI ${b?.home_bpi_win_pct ?? '?'}%`,
+          ].join(' | ');
+        }).join('\n'));
+      }
+      break;
     }
-    if (unplayed.length) blocks.push('TOP UNPLAYED MATCHUPS:\n' + unplayed.join('\n'));
-    return { context: blocks.join('\n\n'), thinking };
-  }
 
-  if (intent.type === 'region_standings') {
-    thinking.push('Checking standings \u2014 ' + intent.region);
-    blocks.push(toolGetStandings({ sort_by: 'adj_em', region: intent.region, limit: 16 }));
-    return { context: blocks.join('\n\n'), thinking };
-  }
-
-  if (intent.type === 'matchup') {
-    thinking.push('Analysing ' + intent.team_a + ' vs ' + intent.team_b);
-    const matchupResult = dispatchTool('get_matchup', { team_a: intent.team_a, team_b: intent.team_b });
-    blocks.push(matchupResult);
-    return { context: blocks.join('\n\n'), thinking };
-  }
-
-  if (intent.type === 'team_lookup') {
-    thinking.push('Looking up ' + intent.team + ' stats');
-    const statsResult = dispatchTool('get_team_stats', { team_names: [intent.team] });
-    blocks.push(statsResult);
-    return { context: blocks.join('\n\n'), thinking };
-  }
-
-  if (intent.type === 'multi_team') {
-    for (const team of intent.teams) {
-      thinking.push('Looking up ' + team + ' stats');
-      blocks.push(dispatchTool('get_team_stats', { team_names: [team] }));
+    case 'market_analysis': {
+      thinking.push('Checking market vs model divergence');
+      blocks.push('ALIVE TEAMS BY EFFICIENCY:\n' + implGetStandings('adj_em', null, 16));
+      const { oddsData } = getData();
+      const upcoming = Object.values(oddsData?.games ?? {}).filter(g => !g.completed);
+      if (upcoming.length) {
+        blocks.push('MARKET LINES:\n' + upcoming.map(g => {
+          const o = g.odds, b = g.bpi;
+          return [g.name, `Spread: ${o?.spread ?? '?'}`,
+            `${g.away} ML ${o?.away_moneyline ?? '?'} (${o?.away_implied_pct ?? '?'}%) BPI ${b?.away_bpi_win_pct ?? '?'}%`,
+            `${g.home} ML ${o?.home_moneyline ?? '?'} (${o?.home_implied_pct ?? '?'}%) BPI ${b?.home_bpi_win_pct ?? '?'}%`,
+          ].join(' | ');
+        }).join('\n'));
+      }
+      if (intent.team) {
+        thinking.push('Loading ' + intent.team + ' stats');
+        blocks.push(implGetTeamStats([intent.team]));
+      }
+      break;
     }
-    // Also fetch pairwise matchups for transitive analysis
-    for (let i = 0; i < intent.teams.length - 1; i++) {
-      thinking.push('Analysing ' + intent.teams[i] + ' vs ' + intent.teams[i+1]);
-      blocks.push(dispatchTool('get_matchup', { team_a: intent.teams[i], team_b: intent.teams[i+1] }));
+
+    case 'region_standings':
+      thinking.push(`Checking standings — ${intent.region}`);
+      blocks.push(implGetStandings('adj_em', intent.region, 16));
+      break;
+
+    case 'matchup':
+      thinking.push(`Analysing ${intent.team_a} vs ${intent.team_b}`);
+      blocks.push(implGetMatchup(intent.team_a, intent.team_b));
+      break;
+
+    case 'team_lookup':
+      thinking.push(`Looking up ${intent.team} stats`);
+      blocks.push(implGetTeamStats([intent.team]));
+      break;
+
+    case 'unplayed_matchups': {
+      thinking.push('Checking potential future matchups');
+      blocks.push('TOP TEAMS:\n' + implGetStandings('adj_em', null, 8));
+      const { aliveTeamIds } = getData();
+      const ranked = graph.nodes
+        .filter(n => !aliveTeamIds.size || aliveTeamIds.has(String(n.id)))
+        .map(n => ({ n, tv: torvik?.teams?.[n.id]?.torvik }))
+        .filter(x => x.tv).sort((a, b) => (b.tv.adj_em ?? -999) - (a.tv.adj_em ?? -999))
+        .slice(0, 6);
+      const edgeSet = new Set(graph.edges.map(e => `${e.from}-${e.to}`));
+      const unplayed = [];
+      for (let i = 0; i < ranked.length; i++)
+        for (let j = i + 1; j < ranked.length; j++) {
+          const a = ranked[i].n, b = ranked[j].n;
+          if (!edgeSet.has(`${a.id}-${b.id}`) && !edgeSet.has(`${b.id}-${a.id}`))
+            unplayed.push(`${a.full_name} (${a.region} #${a.seed}) vs ${b.full_name} (${b.region} #${b.seed})`);
+        }
+      if (unplayed.length) blocks.push('POTENTIAL MATCHUPS:\n' + unplayed.join('\n'));
+      break;
     }
-    return { context: blocks.join('\n\n'), thinking };
+
+    default:
+      // dynamic — inject baseline so model has real data
+      if (intent.type === 'dynamic')
+        blocks.push('ALIVE TEAMS BY EFFICIENCY:\n' + implGetStandings('adj_em', null, 16));
+      break;
   }
 
-  return { context: '', thinking: [] };
+  return { context: blocks.join('\n\n'), thinking };
 }
 
-// ── Groq fetch with timeout + retry on 429/503 ────────────────────────────────
-async function groqFetch(payload, groqKey, attempt = 0) {
-  const ctrl  = new AbortController();
-  const timer = setTimeout(() => ctrl.abort(), FETCH_TIMEOUT);
-  let res;
-  try {
-    res = await fetch(GROQ_URL, {
-      method:  'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${groqKey}` },
-      body:    JSON.stringify(payload),
-      signal:  ctrl.signal,
-    });
-  } catch (err) {
-    clearTimeout(timer);
-    if (err.name === 'AbortError') throw new Error('Groq request timed out');
-    throw err;
-  }
-  clearTimeout(timer);
+// ── System prompt ─────────────────────────────────────────────────────────────
+function buildSystemPrompt(userMsg, graph, torvik, form, injuryMap, prefetchedContext) {
+  const { aliveTeamIds, teamOdds } = getData();
+  const aliveCount = aliveTeamIds?.size || 16;
+  const round  = aliveCount >= 16 ? 'Sweet 16' : aliveCount >= 8 ? 'Elite Eight' : aliveCount >= 4 ? 'Final Four' : 'Championship';
+  const season = graph?.meta?.season?.split('-')[1] ?? String(new Date().getFullYear());
 
-  if ((res.status === 429 || res.status === 503) && attempt < 2) {
-    const wait = parseInt(res.headers.get('retry-after') || '2', 10);
-    await new Promise(r => setTimeout(r, Math.min(wait, 10) * 1000));
-    return groqFetch(payload, groqKey, attempt + 1);
+  let scopeContext = '';
+  if (!prefetchedContext) {
+    const mNorm = normName(userMsg);
+    const mentioned = graph.nodes.filter(n => {
+      const lbl = normName(n.label);
+      const re  = new RegExp('\\b' + lbl.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b');
+      return re.test(mNorm);
+    }).slice(0, 6);
+
+    if (mentioned.length) {
+      scopeContext = mentioned.map(n => fmtTeam(n, torvik, form, injuryMap, teamOdds)).join('\n\n');
+      const scopeIds = new Set(mentioned.map(n => n.id));
+      const gameLines = graph.edges.filter(e => scopeIds.has(e.from) || scopeIds.has(e.to)).slice(0, 15)
+        .map(e => `${graph.nodes.find(n => n.id === e.from)?.label ?? e.from} beat ${graph.nodes.find(n => n.id === e.to)?.label ?? e.to} ${e.label} on ${(e.date ?? '').slice(5, 10)}`);
+      if (gameLines.length) scopeContext += '\n\nRECENT RESULTS:\n' + gameLines.join('\n');
+    } else {
+      scopeContext = 'ALIVE TEAMS BY EFFICIENCY:\n' + implGetStandings('adj_em', null, 16);
+    }
   }
-  return res;
+
+  const context = prefetchedContext || scopeContext;
+
+  let p = `You are AI Scout — expert NCAA basketball analyst for the ${season} March Madness tournament.\n`;
+  p += `Round: ${round}. ${aliveCount} teams remain. Today is March 24, 2026.\n`;
+  p += `ONLY reference teams still alive. Do not mention eliminated teams.\n\n`;
+  p += `RULES: Never hedge. Cite exact stats (AdjEM, Barthag, eFG%). Every matchup must state who wins and at what probability. Apply injury AdjEM penalties explicitly.\n\n`;
+  p += `FRAMEWORK: AdjEM gap (1pt = 1pt/100 poss) → Barthag (neutral court win prob) → Four Factors → Form → Market divergence if >8pp from Barthag.\n`;
+  if (context) p += `\n\nDATA:\n${context}`;
+  return p;
 }
 
-// ── Vercel Node.js handler — (req, res) not Web API Request ──────────────────
+// ── Streaming response writer ─────────────────────────────────────────────────
+// Writes newline-delimited JSON to the response stream.
+// Each line is: data: {"type":"...","text":"..."}\n\n
+function makeWriter(res) {
+  res.writeHead(200, {
+    'Content-Type': 'text/event-stream',
+    'Cache-Control': 'no-cache',
+    'Connection': 'keep-alive',
+    ...CORS,
+  });
+  return {
+    thinking: (text) => res.write(`data: ${JSON.stringify({ type: 'thinking', text })}\n\n`),
+    tool:     (text) => res.write(`data: ${JSON.stringify({ type: 'tool',     text })}\n\n`),
+    text:     (text) => res.write(`data: ${JSON.stringify({ type: 'text',     text })}\n\n`),
+    done:     ()     => { res.write('data: {"type":"done"}\n\n'); res.end(); },
+    error:    (msg)  => { res.write(`data: ${JSON.stringify({ type: 'error', text: msg })}\n\n`); res.end(); },
+  };
+}
+
+// ── Handler ───────────────────────────────────────────────────────────────────
 export default async function handler(req, res) {
-  // CORS preflight
-  if (req.method === 'OPTIONS') {
-    res.writeHead(204, CORS);
-    res.end();
-    return;
-  }
-
+  if (req.method === 'OPTIONS') { res.writeHead(204, CORS); res.end(); return; }
   if (req.method !== 'POST') {
     res.writeHead(405, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({ error: { message: 'Method not allowed' } }));
     return;
   }
 
-  // Parse body — Node.js IncomingMessage has no .json(), read the stream
   let body;
   try {
     const raw = await new Promise((resolve, reject) => {
-      let data = '';
-      req.on('data', chunk => { data += chunk; });
-      req.on('end',  () => resolve(data));
-      req.on('error', reject);
+      let d = ''; req.on('data', c => { d += c; }); req.on('end', () => resolve(d)); req.on('error', reject);
     });
     body = JSON.parse(raw);
   } catch {
@@ -708,7 +543,7 @@ export default async function handler(req, res) {
     return;
   }
 
-  if (!body.messages || !Array.isArray(body.messages)) {
+  if (!Array.isArray(body?.messages)) {
     res.writeHead(400, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({ error: { message: 'Missing messages array' } }));
     return;
@@ -721,103 +556,80 @@ export default async function handler(req, res) {
     return;
   }
 
-  const send = (status, data) => {
-    res.writeHead(status, { 'Content-Type': 'application/json', ...CORS });
-    res.end(JSON.stringify(data));
-  };
-
-  const TOOL_LABELS = {
-    get_team_stats: (a) => `Looking up ${(a.team_names ?? []).join(', ') || 'team'} stats`,
-    get_matchup:    (a) => `Analysing ${a.team_a ?? '?'} vs ${a.team_b ?? '?'}`,
-    get_standings:  (a) => `Checking standings${a.region ? ' — ' + a.region : ''}`,
-  };
+  const writer = makeWriter(res);
 
   try {
     const userMsg = body.userMsg || '';
-
     const { graph, torvik, form, injuryMap } = getData();
-    // ── Step 1: classify intent and pre-fetch deterministically ──────────────
-    const intent  = classifyIntent(userMsg, graph);
-    const prefetch = preFetch(intent, graph, torvik, form);
-    const thinking = [...prefetch.thinking];
 
-    // ── Step 2: build system prompt, inject pre-fetched data as context ──────
-    const system  = buildSystemPrompt(userMsg, graph, torvik, form, injuryMap, prefetch.context);
-    const sysToks = estTokens(system);
-    const history = trimHistory(body.messages, sysToks);
+    // Step 1: classify + pre-fetch
+    const intent   = classifyIntent(userMsg, graph);
+    const prefetch = preFetch(intent, graph, torvik);
 
-    // ── Step 3: for known intents, skip tool calling entirely ────────────────
+    // Step 2: emit thinking labels to client immediately
+    for (const t of prefetch.thinking) writer.thinking(t);
+
+    // Step 3: build system prompt
+    const system = buildSystemPrompt(userMsg, graph, torvik, form, injuryMap, prefetch.context);
+
+    // Trim history to fit token budget (rough estimate — SDK tracks exact usage)
+    const BUDGET = 3000; // chars for history
+    const history = [];
+    let used = 0;
+    for (let i = body.messages.length - 1; i >= 0; i--) {
+      const len = (body.messages[i].content ?? '').length;
+      if (used + len > BUDGET) break;
+      history.unshift(body.messages[i]);
+      used += len;
+    }
+
+    const messages = [{ role: 'system', content: system }, ...history];
+
+    // Step 4: known intents — no tools, stream directly
     if (intent.type !== 'dynamic') {
-      const messages = [{ role: 'system', content: system }, ...history];
-      const groqRes  = await groqFetch({ model: MODEL, max_tokens: MAX_TOKENS, messages, tool_choice: 'none' }, groqKey);
-      const groqData = await groqRes.json();
-      if (!groqRes.ok) {
-        send(groqRes.status, { error: { message: groqData?.error?.message ?? 'Groq error' } });
-        return;
+      const groq   = createGroq({ apiKey: groqKey });
+      const result = streamText({
+        model:      groq(MODEL),
+        messages,
+        maxTokens:  MAX_TOKENS,
+      });
+
+      for await (const chunk of result.textStream) {
+        writer.text(sanitize(chunk));
       }
-      const text = groqData.choices?.[0]?.message?.content || 'No response — please try again.';
-      send(200, { text: sanitizeLLMOutput(text), thinking });
+      writer.done();
       return;
     }
 
-    // ── Step 4: dynamic — open-ended tool calling for unclassified queries ───
-    let messages = [{ role: 'system', content: system }, ...history];
+    // Step 5: dynamic — stream with tools + maxSteps
+    const groq  = createGroq({ apiKey: groqKey });
+    const tools = buildTools();
 
-    for (let iter = 0; iter < TOOL_MAX_ITER; iter++) {
-      const groqRes  = await groqFetch({ model: MODEL, max_tokens: MAX_TOKENS, messages, tools: TOOLS, tool_choice: 'auto' }, groqKey);
-      const groqData = await groqRes.json();
-
-      if (!groqRes.ok) {
-        send(groqRes.status, { error: { message: groqData?.error?.message ?? 'Groq error' } });
-        return;
-      }
-
-      const choice    = groqData.choices?.[0];
-      const reason    = choice?.finish_reason;
-      const toolCalls = choice?.message?.tool_calls;
-      const content   = choice?.message?.content ?? '';
-
-      if (reason === 'stop' || reason === 'length') {
-        send(200, { text: sanitizeLLMOutput(content) || '', thinking });
-        return;
-      }
-
-      // Model failed to generate valid tool args — answer from context
-      if (!toolCalls?.length) {
-        const fallbackRes  = await groqFetch({ model: MODEL, max_tokens: MAX_TOKENS, messages, tool_choice: 'none' }, groqKey);
-        const fallbackData = await fallbackRes.json();
-        const fallbackText = fallbackData.choices?.[0]?.message?.content ?? '';
-        send(200, { text: sanitizeLLMOutput(fallbackText) || 'Unable to answer — try rephrasing.', thinking });
-        return;
-      }
-
-      messages.push(choice.message);
-      for (const tc of toolCalls) {
-        let args = {};
-        let parseOk = false;
-        try { args = JSON.parse(tc.function.arguments); parseOk = true; } catch {}
-        if (!parseOk) {
-          messages.push({ role: 'tool', tool_call_id: tc.id, content: 'Could not parse tool arguments.' });
-          continue;
+    const result = streamText({
+      model:     groq(MODEL),
+      messages,
+      maxTokens: MAX_TOKENS,
+      tools,
+      maxSteps:  MAX_STEPS,
+      onStepFinish: ({ toolCalls }) => {
+        // Emit tool labels as they fire so client shows thinking steps in real time
+        if (toolCalls) {
+          for (const tc of toolCalls) {
+            const label = tc.toolName === 'get_team_stats' ? `Looking up ${(tc.args?.team_names ?? []).join(', ')}`
+                        : tc.toolName === 'get_matchup'    ? `Analysing ${tc.args?.team_a} vs ${tc.args?.team_b}`
+                        : `Checking standings${tc.args?.region && tc.args.region !== 'all' ? ' — ' + tc.args.region : ''}`;
+            writer.tool(label);
+          }
         }
-        thinking.push(TOOL_LABELS[tc.function.name]?.(args) ?? tc.function.name);
-        const result = dispatchTool(tc.function.name, args || {});
-        messages.push({ role: 'tool', tool_call_id: tc.id, content: String(result) });
-      }
+      },
+    });
 
-      if (estMessagesTokens(messages) > GROQ_TPM_CAP - MAX_TOKENS) break;
+    for await (const chunk of result.textStream) {
+      writer.text(sanitize(chunk));
     }
-
-    // Final synthesis — no tools, just write the answer
-    const sysToksNow = estTokens(messages[0].content);
-    const trimmed    = [messages[0], ...trimHistory(messages.slice(1), sysToksNow)];
-    const groqRes    = await groqFetch({ model: MODEL, max_tokens: MAX_TOKENS, messages: trimmed, tool_choice: 'none' }, groqKey);
-    const groqData   = await groqRes.json();
-    const finalText  = groqData.choices?.[0]?.message?.content;
-    const fallback   = !finalText ? messages.filter(m => m.role === 'tool').slice(-1)[0]?.content : null;
-    send(200, { text: sanitizeLLMOutput(finalText || fallback) || 'No response — please try again.', thinking });
+    writer.done();
 
   } catch (err) {
-    send(500, { error: { message: 'Internal server error' } });
+    writer.error(err.message ?? 'Internal server error');
   }
 }
