@@ -1,65 +1,60 @@
 /**
- * api/analyze.js — Multi-agent matchup analysis using LangGraph.js
+ * api/analyze.js — Agentic multi-agent matchup analysis using LangGraph.js
  *
  * Architecture:
  *   START
- *     └─► router node — validates teams, fans out via Send()
- *           ├─► efficiency_agent  (Torvik AdjEM/OE/DE/Barthag)
- *           ├─► form_agent        (last-10, streak, recent margins)
- *           ├─► matchup_agent     (H2H, common opponents, pace)
- *           └─► odds_agent        (DraftKings spread/ML, ESPN BPI, line movement, futures)
- *     └─► synthesis_node — weights all three, produces confidence interval
+ *     └─► router — validates teams, initialises state (no data pre-loading)
+ *           ├─► efficiency_agent  — calls tools to get what IT decides it needs
+ *           ├─► form_agent        — calls tools to get what IT decides it needs
+ *           ├─► matchup_agent     — calls tools to get what IT decides it needs
+ *           └─► odds_agent        — calls tools to get what IT decides it needs
+ *     └─► synthesis — calls tools to verify, dig deeper, then writes sections
  *   END
  *
- * The three specialist agents run in parallel (LangGraph Send API).
- * Synthesis fires only after all three complete.
+ * Each agent uses Vercel AI SDK generateText() with tools + maxSteps:3.
+ * Agents decide what data they need and fetch it via tool calls.
+ * This is genuinely agentic — specialisation comes from the agent's goal,
+ * not from what data was pre-injected.
  *
  * Request:  POST { team_a: string, team_b: string }
- * Response: { agents: AgentResult[], confidence: ConfidenceResult, thinking: string[] }
+ * Response: { agents: AgentResult[], confidence: ConfidenceResult }
  */
 
 import { readFileSync, statSync }                    from 'fs';
 import { join }                                      from 'path';
 import { Annotation, StateGraph, END, START, Send } from '@langchain/langgraph';
+import { generateText, tool }                        from 'ai';
+import { createGroq }                                from '@ai-sdk/groq';
+import { z }                                         from 'zod';
 
-// ── Constants ─────────────────────────────────────────────────────────────────
-// ── Output sanitizer — strip CoT leakage before any LLM text reaches the client ──
-// Removes: Note:/Explanation:/Reasoning: headers, <think> blocks, instruction echoes
+// ── Sanitizer ─────────────────────────────────────────────────────────────────
 function sanitizeLLMOutput(text) {
   if (!text) return '';
-  // Hard limit — truncate absurdly long fields (injection attempts tend to be verbose)
   let s = String(text).slice(0, 2000);
-  // Strip thinking/reasoning leakage
   s = s.replace(/<think>[\s\S]*?<\/think>/gi, '');
-  // Strip prompt injection patterns — lines that look like instructions to the model
   s = s.replace(/^(Note|Disclaimer|Reminder|Instructions?|System|Ignore previous|Return only|You must|Your (task|job|role)|RULES?|IMPORTANT)[:\s][^\n]*/gim, '');
-  // Strip raw JSON blob leakage — catches both complete and truncated JSON objects
-  // Pattern: starts with { then whitespace then " (key-value structure)
   if (/^\s*\{[\s\n]*"/.test(s)) return '';
-  // Strip backtick fences that snuck through
   s = s.replace(/```[\w]*\n?|```/g, '');
-  // Collapse excess whitespace
   s = s.replace(/\n{3,}/g, '\n\n').trim();
   return s || '';
 }
 
-// Sanitize a team name from user input before it enters any prompt
 function sanitizeTeamName(name) {
   if (!name || typeof name !== 'string') return '';
-  // Strip anything that looks like prompt injection
   return name
-    .slice(0, 60)                                     // hard length cap
-    .replace(/[\n\r\t]/g, ' ')                      // no newlines in team names
-    .replace(/[`"\\]/g, '')                          // no backticks/quotes/backslashes
-    .replace(/\b(ignore|system|return|instructions?|json|you must|your (role|task))[\s\S]*/gi, '') // injection keywords
+    .slice(0, 60)
+    .replace(/[\n\r\t]/g, ' ')
+    .replace(/[`"\\]/g, '')
+    .replace(/\b(ignore|system|return|instructions?|json|you must|your (role|task))[\s\S]*/gi, '')
     .trim();
 }
 
-const GROQ_URL      = 'https://api.groq.com/openai/v1/chat/completions';
+// ── Constants ─────────────────────────────────────────────────────────────────
 const MODEL         = 'llama-3.3-70b-versatile';
-const MAX_TOKENS          = 1024;   // per specialist agent
-const MAX_TOKENS_SYNTHESIS = 2048;  // synthesis needs room for depth
-const FETCH_TIMEOUT = 20000;
+const MAX_TOKENS    = 1024;
+const MAX_TOKENS_SY = 2048;
+const MAX_STEPS     = 4;   // max tool call rounds per agent
+const FETCH_TIMEOUT = 25000;
 
 const CORS = {
   'Access-Control-Allow-Origin':  '*',
@@ -68,24 +63,18 @@ const CORS = {
 };
 
 // ── Data loading ──────────────────────────────────────────────────────────────
-let _cache     = null;
+let _cache      = null;
 let _cacheMtime = 0;
 
 function getAnalyzeCacheMtime() {
   const files = [
-    'public/data/torvik_stats.json',
-    'public/data/recent_form.json',
-    'public/data/espn_odds.json',
-    'data/injury_overrides.json',
-    'data/roster_stats.json',
-    'data/injury_news.json',
+    'public/data/torvik_stats.json', 'public/data/recent_form.json',
+    'public/data/espn_odds.json',    'data/injury_overrides.json',
+    'data/roster_stats.json',        'data/injury_news.json',
   ];
   let latest = 0;
   for (const f of files) {
-    try {
-      const { mtimeMs } = statSync(join(process.cwd(), f));
-      if (mtimeMs > latest) latest = mtimeMs;
-    } catch {}
+    try { const { mtimeMs } = statSync(join(process.cwd(), f)); if (mtimeMs > latest) latest = mtimeMs; } catch {}
   }
   return latest;
 }
@@ -93,23 +82,17 @@ function getAnalyzeCacheMtime() {
 function getData() {
   const mtime = getAnalyzeCacheMtime();
   if (_cache && mtime === _cacheMtime) return _cache;
+
   const graph  = JSON.parse(readFileSync(join(process.cwd(), 'public', 'data', 'graph_data.json'),  'utf8'));
   const torvik = JSON.parse(readFileSync(join(process.cwd(), 'public', 'data', 'torvik_stats.json'), 'utf8'));
   const form   = JSON.parse(readFileSync(join(process.cwd(), 'public', 'data', 'recent_form.json'),  'utf8'));
 
-  // Injury overrides — read-only, never written by this file
   let injuryMap = {};
   try {
     const raw = JSON.parse(readFileSync(join(process.cwd(), 'data', 'injury_overrides.json'), 'utf8'));
-    for (const [espnId, override] of Object.entries(raw.overrides ?? {})) {
-      const penalty = override.adj_em_penalty ?? 0;
-      if (penalty <= 0) continue;
-      injuryMap[espnId] = {
-        penalty,
-        players: override.players ?? [],
-        notes:   override.notes ?? '',
-        updated: override.updated ?? '',
-      };
+    for (const [id, ov] of Object.entries(raw.overrides ?? {})) {
+      if ((ov.adj_em_penalty ?? 0) > 0)
+        injuryMap[id] = { penalty: ov.adj_em_penalty, players: ov.players ?? [], notes: ov.notes ?? '' };
     }
   } catch {}
 
@@ -125,62 +108,41 @@ function getData() {
     (edgesByNode[e.to]   = edgesByNode[e.to]   || []).push(e);
   });
 
-  // Transitive path analysis — precomputed common-opponent chains
   let transPairs = {};
-  try {
-    const tp = JSON.parse(readFileSync(join(process.cwd(), 'data', 'transitive_analysis.json'), 'utf8'));
-    transPairs = tp.pairs ?? {};
-  } catch {}
+  try { transPairs = JSON.parse(readFileSync(join(process.cwd(), 'data', 'transitive_analysis.json'), 'utf8')).pairs ?? {}; } catch {}
 
-  // ESPN odds + BPI data — generated by scripts/fetch_odds.py
   let oddsData = { games: {}, futures: {} };
-  try {
-    oddsData = JSON.parse(readFileSync(join(process.cwd(), 'public', 'data', 'espn_odds.json'), 'utf8'));
-  } catch { /* file absent before first odds run — degrade gracefully */ }
+  try { oddsData = JSON.parse(readFileSync(join(process.cwd(), 'public', 'data', 'espn_odds.json'), 'utf8')); } catch {}
 
-  // Injury news keyed by ESPN team ID -> { bracket_name, articles[] }
   let injuryNews = {};
-  try {
-    const newsRaw = JSON.parse(readFileSync(join(process.cwd(), 'data', 'injury_news.json'), 'utf8'));
-    injuryNews = newsRaw?.teams ?? {};
-  } catch {}
+  try { injuryNews = JSON.parse(readFileSync(join(process.cwd(), 'data', 'injury_news.json'), 'utf8'))?.teams ?? {}; } catch {}
 
-  // Pre-fetched roster stats for all 76 bracket teams
-  // Generated by scripts/fetch_rosters.py — keyed by ESPN team ID
   let rosterStats = {};
-  try {
-    rosterStats = JSON.parse(readFileSync(join(process.cwd(), 'data', 'roster_stats.json'), 'utf8')).teams ?? {};
-  } catch {}
+  try { rosterStats = JSON.parse(readFileSync(join(process.cwd(), 'data', 'roster_stats.json'), 'utf8')).teams ?? {}; } catch {}
 
   _cache = { graph, torvik, form, injuryMap, transPairs, nodeByName, edgesByNode, oddsData, injuryNews, rosterStats };
   _cacheMtime = mtime;
   return _cache;
 }
 
-// ── Team resolution (same normalization as api/ai.js) ────────────────────────
+// ── Team resolution ───────────────────────────────────────────────────────────
 function normalizeTeamName(s) {
   return s.toLowerCase().trim()
-    .replace(/\bst\.\s*/g, 'saint ')
-    .replace(/\bst\s+/g,   'saint ')
-    .replace(/\bft\.?\s+/g, 'fort ')
-    .replace(/[.'`]/g, '')
-    .replace(/\s+/g, ' ')
-    .trim();
+    .replace(/\bst\.\s*/g, 'saint ').replace(/\bst\s+/g, 'saint ')
+    .replace(/\bft\.?\s+/g, 'fort ').replace(/[.'`]/g, '').replace(/\s+/g, ' ').trim();
 }
 
 const TEAM_ALIASES = {
-  'unc':       'north carolina',          'uconn':    'uconn huskies',
-  'ucf':       'ucf knights',             'ucla':     'ucla bruins',
-  'umbc':      'umbc retrievers',         'vcu':      'vcu rams',
-  'tcu':       'tcu horned frogs',        'smu':      'smu mustangs',
-  'byu':       'byu cougars',             'lsu':      'lsu tigers',
-  'liu':       'long island university',  'sam houston': 'sam houston bearkats',
-  'isu':       'iowa state cyclones',     'iowa st':  'iowa state cyclones',
-  'msu':       'michigan state spartans', 'mich st':  'michigan state spartans',
-  'ku':        'kansas jayhawks',         'osu':      'ohio state buckeyes',
-  'a&m':       'texas a&m aggies',        'tamu':     'texas a&m aggies',
-  "st john's": 'saint johns red storm',   'sjr':      'saint johns red storm',
-  'st johns':  'saint johns red storm',
+  'unc': 'north carolina', 'uconn': 'uconn huskies', 'ucf': 'ucf knights',
+  'ucla': 'ucla bruins',   'umbc': 'umbc retrievers', 'vcu': 'vcu rams',
+  'tcu': 'tcu horned frogs', 'smu': 'smu mustangs',  'byu': 'byu cougars',
+  'lsu': 'lsu tigers',     'liu': 'long island university', 'sam houston': 'sam houston bearkats',
+  'isu': 'iowa state cyclones',     'iowa st': 'iowa state cyclones',
+  'msu': 'michigan state spartans', 'mich st': 'michigan state spartans',
+  'ku': 'kansas jayhawks',          'osu': 'ohio state buckeyes',
+  'a&m': 'texas a&m aggies',        'tamu': 'texas a&m aggies',
+  "st john's": 'saint johns red storm', 'sjr': 'saint johns red storm',
+  'st johns': 'saint johns red storm',
 };
 
 function resolveTeam(name, nodeByName) {
@@ -192,281 +154,260 @@ function resolveTeam(name, nodeByName) {
   if (normMap[queryStr]) return normMap[queryStr];
   const candidates = Object.keys(normMap)
     .filter(k => k.includes(queryStr) || queryStr.includes(k))
-    .sort((a, b) => {
-      const aS = a.startsWith(queryStr) ? 1 : 0;
-      const bS = b.startsWith(queryStr) ? 1 : 0;
-      if (aS !== bS) return bS - aS;
-      return b.length - a.length;
-    });
+    .sort((a, b) => (b.startsWith(queryStr) ? 1 : 0) - (a.startsWith(queryStr) ? 1 : 0) || b.length - a.length);
   return candidates.length ? normMap[candidates[0]] : null;
 }
 
-// ── Data formatters ───────────────────────────────────────────────────────────
-function fmtTeamFull(node, torvik, form, injuryMap) {
+// ── Tool implementations (pure functions over cached data) ────────────────────
+
+function implEfficiencyStats(teamName) {
+  const { torvik, injuryMap, nodeByName } = getData();
+  const node = resolveTeam(teamName, nodeByName);
+  if (!node) return `Team not found: "${teamName}"`;
   const tv = torvik?.teams?.[node.id]?.torvik;
-  const tf = form?.teams?.[node.id];
-  if (!tv) return `${node.full_name}: no Torvik data`;
-
-  const pace = tv.adj_tempo >= 0.7 ? 'fast' : tv.adj_tempo >= 0.4 ? 'moderate' : 'slow';
-  const recent = tf?.games?.slice(-5).map(g =>
-    `${g.date.slice(5)}: ${g.won ? 'W' : 'L'} ${g.score} vs ${g.opp}`
-  ).join(', ') ?? 'no recent data';
-
+  if (!tv) return `No Torvik data for ${node.full_name}`;
   const inj = injuryMap?.[node.id];
   const injStr = inj
-    ? `⚠ INJURY REPORT (model AdjEM penalty applied: -${inj.penalty}): ` +
-      inj.players.map(p => `${p.name} — ${p.status}`).join('; ') +
-      (inj.notes ? ` | ${inj.notes}` : '')
+    ? `\n⚠ INJURY (AdjEM penalty -${inj.penalty}): ${inj.players.map(p => `${p.name} — ${p.status}`).join('; ')}${inj.notes ? ' | ' + inj.notes : ''}`
     : '';
-
-  // Four Factors context
-  const ffStr = tv ? [
-    `eFG%: ${tv.efg ?? '?'} | TOV%: ${tv.tov_rate ?? '?'} | ORB%: ${tv.orb_rate ?? '?'} | FTR: ${tv.ftr ?? '?'}`,
-    `Opp eFG%: ${tv.opp_efg ?? '?'} | Opp TOV%: ${tv.opp_tov ?? '?'}`,
-  ].join(' | ') : '';
-
   return [
-    `${node.full_name} (${node.region !== 'bubble' ? `${node.region} #${node.seed}` : 'bubble'}, ${tv.conf})`,
-    `Record: ${tv.record} | vs bracket field: ${node.wins_vs_field}W-${node.losses_vs_field}L`,
+    `${node.full_name} (${node.region} #${node.seed}, ${tv.conf})`,
     `T-Rank #${tv.rank} | AdjEM: ${tv.adj_em > 0 ? '+' : ''}${tv.adj_em} | AdjOE: ${tv.adj_oe} | AdjDE: ${tv.adj_de}`,
-    `Barthag: ${(tv.barthag * 100).toFixed(1)}% | WAB: ${parseFloat(tv.wab).toFixed(1)} | SOS: ${tv.sos_rank?.toFixed(2) ?? '?'} | Pace: ${pace} (adj tempo: ${tv.adj_tempo?.toFixed(2) ?? '?'})`,
-    `Shooting: 2P% ${tv.two_p} | 3P% ${tv.three_p} | FT% ${tv.ft_pct} | eFG% ${tv.efg}`,
-    `Four Factors: ${ffStr}`,
-    `Luck: ${tv.luck > 0 ? '+' : ''}${parseFloat(tv.luck ?? 0).toFixed(3)} (${tv.luck > 0.03 ? 'overperforming' : tv.luck < -0.03 ? 'underperforming' : 'neutral'})`,
-    `Form: ${tf?.last10 ?? '?'} last 10 | Streak: ${tf?.streak ?? '?'}`,
-    `Last 5: ${recent}`,
+    `Barthag: ${(tv.barthag * 100).toFixed(1)}% (neutral court win prob) | WAB: ${parseFloat(tv.wab).toFixed(1)}`,
+    `Shooting: eFG% ${tv.efg} | 2P% ${tv.two_p} | 3P% ${tv.three_p} | FT% ${tv.ft_pct}`,
+    `Four Factors: TOV% ${tv.tov_rate} | ORB% ${tv.orb_rate} | FTR ${tv.ftr}`,
+    `Opp: eFG% ${tv.opp_efg} | TOV% ${tv.opp_tov}`,
+    `Pace: adj_tempo ${tv.adj_tempo?.toFixed(2)} | Luck: ${parseFloat(tv.luck ?? 0).toFixed(3)}`,
+    `Record: ${tv.record} | SOS rank: ${tv.sos_rank?.toFixed(2) ?? '?'}`,
     injStr,
   ].filter(Boolean).join('\n');
 }
 
-// ── Groq fetch helper ─────────────────────────────────────────────────────────
-async function groqCall(systemPrompt, userPrompt, groqKey, attempt = 0, maxTokens = MAX_TOKENS) {
-  const ctrl  = new AbortController();
-  const timer = setTimeout(() => ctrl.abort(), FETCH_TIMEOUT);
-  try {
-    const res = await fetch(GROQ_URL, {
-      method:  'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${groqKey}` },
-      body: JSON.stringify({
-        model:      MODEL,
-        max_tokens: maxTokens,
-        messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user',   content: userPrompt   },
-        ],
-      }),
-      signal: ctrl.signal,
-    });
-    clearTimeout(timer);
-    if (res.status === 429 && attempt < 2) {
-      const wait = parseInt(res.headers.get('retry-after') || '5', 10);
-      await new Promise(r => setTimeout(r, Math.min(wait, 10) * 1000));
-      return groqCall(systemPrompt, userPrompt, groqKey, attempt + 1);
-    }
-    if (!res.ok) {
-      const errBody = await res.json().catch(() => ({}));
-      throw new Error(`Groq ${res.status}: ${errBody?.error?.message ?? 'unknown error'}`);
-    }
-    const data = await res.json();
-    return data.choices?.[0]?.message?.content ?? '';
-  } catch (err) {
-    clearTimeout(timer);
-    throw err;
-  }
+function implRecentForm(teamName) {
+  const { form, nodeByName } = getData();
+  const node = resolveTeam(teamName, nodeByName);
+  if (!node) return `Team not found: "${teamName}"`;
+  const tf = form?.teams?.[node.id];
+  if (!tf) return `No form data for ${node.full_name}`;
+  const games = tf.games?.slice(-10) ?? [];
+  const margins = games.map(g => {
+    const [a, b] = (g.score ?? '0-0').split('-').map(Number);
+    return g.won ? (a - b) : (b - a);
+  });
+  const avgMargin = margins.length ? (margins.reduce((s, m) => s + m, 0) / margins.length).toFixed(1) : '?';
+  const last5     = games.slice(-5).map(g => `${g.won ? 'W' : 'L'} ${g.score} vs ${g.opp} (${g.date.slice(5)})`).join(' | ');
+  return [
+    `${node.full_name} recent form:`,
+    `Last 10: ${tf.last10} | Streak: ${tf.streak}`,
+    `Avg margin last 10: ${avgMargin > 0 ? '+' : ''}${avgMargin} pts`,
+    `Last 5: ${last5}`,
+  ].join('\n');
 }
 
-// ── LangGraph State definition ────────────────────────────────────────────────
-// Each agent writes its result into agent_results (array, appended).
-// Synthesis reads all results and writes final confidence.
+function implRoster(teamName) {
+  const { rosterStats, nodeByName } = getData();
+  const node = resolveTeam(teamName, nodeByName);
+  if (!node) return `Team not found: "${teamName}"`;
+  const players = rosterStats?.[String(node.id)]?.players ?? [];
+  if (!players.length) return `No roster data for ${node.full_name}`;
+  return `${node.full_name} roster (top by minutes):\n` + players.slice(0, 8).map((p, i) => {
+    const inj = p.injured ? ` ⚠ ${p.injured}` : '';
+    return `  ${i+1}. ${p.name} (${p.exp}, ${p.pos}, ${p.height})${inj}\n` +
+           `     ${p.mpg} MPG | ${p.ppg}/${p.rpg}/${p.apg} pts/reb/ast | FG ${p.fg}% | 3P ${p.three_pct}% | PER ${p.per}`;
+  }).join('\n');
+}
+
+function implInjuryNews(teamName) {
+  const { injuryNews, injuryMap, nodeByName } = getData();
+  const node = resolveTeam(teamName, nodeByName);
+  if (!node) return `Team not found: "${teamName}"`;
+  const news    = injuryNews?.[node.id]?.articles ?? [];
+  const penalty = injuryMap?.[node.id];
+  const lines   = [];
+  if (penalty) lines.push(`Model injury penalty: AdjEM -${penalty.penalty} | Players: ${penalty.players.map(p => `${p.name} (${p.status})`).join(', ')}`);
+  if (news.length) lines.push('Recent headlines:', ...news.slice(0, 4).map(n => `  • ${n.headline}`));
+  return lines.length ? lines.join('\n') : `No injury data for ${node.full_name}`;
+}
+
+function implH2H(teamA, teamB) {
+  const { graph, nodeByName, edgesByNode } = getData();
+  const nodeA = resolveTeam(teamA, nodeByName);
+  const nodeB = resolveTeam(teamB, nodeByName);
+  if (!nodeA) return `Team not found: "${teamA}"`;
+  if (!nodeB) return `Team not found: "${teamB}"`;
+  const edges = edgesByNode[nodeA.id] ?? [];
+  const h2h   = edges.filter(e =>
+    (e.from === nodeA.id && e.to === nodeB.id) ||
+    (e.from === nodeB.id && e.to === nodeA.id)
+  );
+  if (!h2h.length) return `No H2H games between ${nodeA.label} and ${nodeB.label} this season.`;
+  return `H2H: ${nodeA.label} vs ${nodeB.label}:\n` + h2h.map(e => {
+    const winner = e.from === nodeA.id ? nodeA.label : nodeB.label;
+    return `  ${e.date}: ${winner} won ${e.label} by ${e.margin}`;
+  }).join('\n');
+}
+
+function implCommonOpponents(teamA, teamB) {
+  const { graph, nodeByName, edgesByNode } = getData();
+  const nodeA = resolveTeam(teamA, nodeByName);
+  const nodeB = resolveTeam(teamB, nodeByName);
+  if (!nodeA) return `Team not found: "${teamA}"`;
+  if (!nodeB) return `Team not found: "${teamB}"`;
+  const aEdges = edgesByNode[nodeA.id] ?? [];
+  const bEdges = edgesByNode[nodeB.id] ?? [];
+  const aOpps  = new Set(aEdges.map(e => e.from === nodeA.id ? e.to : e.from));
+  const bOpps  = new Set(bEdges.map(e => e.from === nodeB.id ? e.to : e.from));
+  const common = [...aOpps].filter(id => bOpps.has(id)).slice(0, 8);
+  if (!common.length) return 'No common opponents found.';
+  return `Common opponents (${common.length}):\n` + common.map(cid => {
+    const cNode = graph.nodes.find(n => n.id === cid);
+    const aGame = aEdges.find(e => (e.from === nodeA.id && e.to === cid) || (e.to === nodeA.id && e.from === cid));
+    const bGame = bEdges.find(e => (e.from === nodeB.id && e.to === cid) || (e.to === nodeB.id && e.from === cid));
+    const aRes  = aGame ? (aGame.from === nodeA.id ? `W ${aGame.label}` : `L ${aGame.label}`) : '?';
+    const bRes  = bGame ? (bGame.from === nodeB.id ? `W ${bGame.label}` : `L ${bGame.label}`) : '?';
+    return `  vs ${cNode?.label ?? cid}: ${nodeA.label} ${aRes} | ${nodeB.label} ${bRes}`;
+  }).join('\n');
+}
+
+function implTransitive(teamA, teamB) {
+  const { transPairs, nodeByName } = getData();
+  const nodeA = resolveTeam(teamA, nodeByName);
+  const nodeB = resolveTeam(teamB, nodeByName);
+  if (!nodeA) return `Team not found: "${teamA}"`;
+  if (!nodeB) return `Team not found: "${teamB}"`;
+  const key  = `${nodeA.id}_${nodeB.id}`;
+  const keyR = `${nodeB.id}_${nodeA.id}`;
+  const tp   = transPairs[key] || transPairs[keyR];
+  if (!tp?.n) return 'No transitive evidence found.';
+  const flipped = !!transPairs[keyR] && !transPairs[key];
+  const favors  = tp.verdict === 'a' ? (flipped ? nodeB.label : nodeA.label)
+                : tp.verdict === 'b' ? (flipped ? nodeA.label : nodeB.label) : 'neither';
+  const chains  = [
+    ...(tp.a || []).slice(0, 3).map(s => `  ${nodeA.label} beat ${s.common_name} (${s.a_score}), who beat ${nodeB.label} (${s.b_score})`),
+    ...(tp.b || []).slice(0, 3).map(s => `  ${nodeB.label} beat ${s.common_name} (${s.b_score}), who beat ${nodeA.label} (${s.a_score})`),
+  ];
+  return `Transitive evidence (${tp.n} signals, conf ${tp.conf?.toFixed(0) ?? '?'}/100): favors ${favors}\n${chains.join('\n')}`;
+}
+
+function implOdds(teamA, teamB) {
+  const { oddsData, nodeByName } = getData();
+  const nodeA = resolveTeam(teamA, nodeByName);
+  const nodeB = resolveTeam(teamB, nodeByName);
+  if (!nodeA) return `Team not found: "${teamA}"`;
+  if (!nodeB) return `Team not found: "${teamB}"`;
+  const games = Object.values(oddsData?.games ?? {});
+  const game  = games.find(g =>
+    (g.home_id === nodeA.id && g.away_id === nodeB.id) ||
+    (g.home_id === nodeB.id && g.away_id === nodeA.id)
+  );
+  if (!game) return 'No tournament game odds found for this matchup yet.';
+  const isAHome = game.home_id === nodeA.id;
+  const odds = game.odds, bpi = game.bpi;
+  const lines = [];
+  if (odds) {
+    const aML  = isAHome ? odds.home_moneyline   : odds.away_moneyline;
+    const bML  = isAHome ? odds.away_moneyline   : odds.home_moneyline;
+    const aImp = isAHome ? odds.home_implied_pct : odds.away_implied_pct;
+    const bImp = isAHome ? odds.away_implied_pct : odds.home_implied_pct;
+    const openA = isAHome ? odds.open_home_ml : odds.open_away_ml;
+    const mvmt  = odds.line_movement != null ? (isAHome ? odds.line_movement : -odds.line_movement) : null;
+    lines.push(`DraftKings: Spread ${odds.spread >= 0 ? '+' : ''}${odds.spread} | O/U ${odds.over_under}`);
+    lines.push(`${teamA} ML: ${aML} (${aImp}% implied) | ${teamB} ML: ${bML} (${bImp}% implied)`);
+    if (openA != null) lines.push(`Opening ML ${teamA}: ${openA}${mvmt != null ? ` → ${mvmt > 0 ? '+' : ''}${mvmt.toFixed(1)}% shift (${mvmt > 2 ? 'sharp money on ' + teamA : mvmt < -2 ? 'sharp money on ' + teamB : 'no significant movement'})` : ''}`);
+  }
+  if (bpi) {
+    const aBpi = isAHome ? bpi.home_bpi_win_pct : bpi.away_bpi_win_pct;
+    const bBpi = isAHome ? bpi.away_bpi_win_pct : bpi.home_bpi_win_pct;
+    lines.push(`ESPN BPI: ${teamA} ${aBpi}% | ${teamB} ${bBpi}% | margin ${bpi.bpi_pred_margin > 0 ? '+' : ''}${bpi.bpi_pred_margin} | quality ${bpi.matchup_quality}/100`);
+  }
+  const futA = oddsData?.futures?.[teamA.toLowerCase()];
+  const futB = oddsData?.futures?.[teamB.toLowerCase()];
+  if (futA?.markets || futB?.markets) {
+    const fmtFut = (fut, name) => !fut?.markets ? '' :
+      `${name}: ` + Object.entries(fut.markets).map(([k, v]) => `${k.replace(/_/g,' ')}: ${v.moneyline} (${v.implied_pct}%)`).join(' | ');
+    if (futA) lines.push('Futures — ' + fmtFut(futA, teamA));
+    if (futB) lines.push('Futures — ' + fmtFut(futB, teamB));
+  }
+  return lines.join('\n');
+}
+
+// ── Shared tool definitions (Zod schemas, used by all agents) ─────────────────
+function buildAgentTools(teamA, teamB) {
+  return {
+    get_efficiency_stats: tool({
+      description: 'Get Torvik efficiency metrics for a team: AdjEM, AdjOE, AdjDE, Barthag, eFG%, Four Factors, pace, injury penalties.',
+      parameters: z.object({ team: z.string().describe(`Team name. Use "${teamA}" or "${teamB}"`) }),
+      execute: async ({ team }) => implEfficiencyStats(team),
+    }),
+    get_recent_form: tool({
+      description: 'Get last-10 record, current streak, and last 5 game results with scores and opponents.',
+      parameters: z.object({ team: z.string().describe(`Team name. Use "${teamA}" or "${teamB}"`) }),
+      execute: async ({ team }) => implRecentForm(team),
+    }),
+    get_roster: tool({
+      description: 'Get top-8 players by minutes with full stat lines (PPG/RPG/APG/FG%/PER) and injury flags.',
+      parameters: z.object({ team: z.string().describe(`Team name. Use "${teamA}" or "${teamB}"`) }),
+      execute: async ({ team }) => implRoster(team),
+    }),
+    get_injury_news: tool({
+      description: 'Get injury model penalties and recent injury headlines for a team.',
+      parameters: z.object({ team: z.string().describe(`Team name. Use "${teamA}" or "${teamB}"`) }),
+      execute: async ({ team }) => implInjuryNews(team),
+    }),
+    get_h2h: tool({
+      description: 'Get head-to-head game results between the two teams this season.',
+      parameters: z.object({
+        team_a: z.string().describe(`First team. Use "${teamA}"`),
+        team_b: z.string().describe(`Second team. Use "${teamB}"`),
+      }),
+      execute: async ({ team_a, team_b }) => implH2H(team_a, team_b),
+    }),
+    get_common_opponents: tool({
+      description: 'Get common opponents both teams have faced this season with results for each.',
+      parameters: z.object({
+        team_a: z.string().describe(`First team. Use "${teamA}"`),
+        team_b: z.string().describe(`Second team. Use "${teamB}"`),
+      }),
+      execute: async ({ team_a, team_b }) => implCommonOpponents(team_a, team_b),
+    }),
+    get_transitive: tool({
+      description: 'Get precomputed transitive win chains (A beat X who beat B) showing indirect evidence.',
+      parameters: z.object({
+        team_a: z.string().describe(`First team. Use "${teamA}"`),
+        team_b: z.string().describe(`Second team. Use "${teamB}"`),
+      }),
+      execute: async ({ team_a, team_b }) => implTransitive(team_a, team_b),
+    }),
+    get_odds: tool({
+      description: 'Get DraftKings moneyline, spread, O/U, implied probabilities, line movement, ESPN BPI, and futures.',
+      parameters: z.object({
+        team_a: z.string().describe(`First team. Use "${teamA}"`),
+        team_b: z.string().describe(`Second team. Use "${teamB}"`),
+      }),
+      execute: async ({ team_a, team_b }) => implOdds(team_a, team_b),
+    }),
+  };
+}
+
+// ── LangGraph State ───────────────────────────────────────────────────────────
 const GraphState = Annotation.Root({
   team_a:        Annotation({ reducer: (_, b) => b }),
   team_b:        Annotation({ reducer: (_, b) => b }),
-  team_a_data:   Annotation({ reducer: (_, b) => b }),
-  team_b_data:   Annotation({ reducer: (_, b) => b }),
-  matchup_data:  Annotation({ reducer: (_, b) => b }),
-  odds_data:     Annotation({ reducer: (_, b) => b }),
   agent_results: Annotation({ reducer: (a, b) => [...(a ?? []), ...(Array.isArray(b) ? b : [b])] }),
   confidence:    Annotation({ reducer: (_, b) => b }),
   error:         Annotation({ reducer: (_, b) => b }),
 });
 
-// ── Node: router ──────────────────────────────────────────────────────────────
-// Validates teams, enriches state with data. Returns plain object — NOT Send.
-// Send/fan-out happens in routerEdge (the conditional edge function).
-
-// ── Roster stats lookup (from pre-fetched roster_stats.json) ────────────────
-// No live API calls — data is refreshed daily by scripts/fetch_rosters.py
-function getRosterStats(teamId, rosterStats) {
-  return rosterStats?.[String(teamId)]?.players ?? [];
-}
-
-// Format roster into a dense readable block for LLM agents
-// Shows all players sorted by MPG with full individual stats
-function fmtRoster(players) {
-  if (!players?.length) return '';
-  return players.map((p, i) => {
-    const injNote  = p.injured
-      ? ` ⚠ ${p.injured}${p.injury_impact ? ' — ' + p.injury_impact : ''}`
-      : '';
-    const ageStr   = p.age ? `, age ${p.age}` : '';
-    const identity = `${p.name} (${p.exp}${ageStr}, ${p.pos}, ${p.height}, ${p.weight})`;
-    const usage    = `${p.mpg} MPG | ${p.gp} GP / ${p.gs} GS`;
-    const scoring  = `${p.ppg}/${p.rpg}/${p.apg} pts/reb/ast`;
-    const shooting = `FG ${p.fg}% | 3P ${p.three_pct}% | FT ${p.ft_pct}%`;
-    const defense  = `STL ${p.spg} | BLK ${p.bpg} | TOV ${p.tov}`;
-    const adv      = `PER ${p.per}`;
-    return `  ${i + 1}. ${identity}${injNote}\n     ${usage} | ${scoring} | ${shooting} | ${defense} | ${adv}`;
-  }).join('\n');
-}
-
+// ── Router — validates teams only, no data pre-loading ────────────────────────
 function routerNode(state) {
-  const { graph, torvik, form, injuryMap, transPairs, nodeByName, edgesByNode, oddsData, injuryNews, rosterStats } = getData();
+  const { nodeByName } = getData();
   const nodeA = resolveTeam(state.team_a, nodeByName);
   const nodeB = resolveTeam(state.team_b, nodeByName);
-
-  if (!nodeA || !nodeB) {
+  if (!nodeA || !nodeB)
     return { error: `Team not found: ${!nodeA ? state.team_a : state.team_b}` };
-  }
-
-  // Load pre-fetched roster stats from roster_stats.json (no live API calls)
-  const rosterA    = getRosterStats(nodeA.id, rosterStats);
-  const rosterB    = getRosterStats(nodeB.id, rosterStats);
-  const rosterAStr = fmtRoster(rosterA);
-  const rosterBStr = fmtRoster(rosterB);
-
-  let teamAData = fmtTeamFull(nodeA, torvik, form, injuryMap);
-  let teamBData = fmtTeamFull(nodeB, torvik, form, injuryMap);
-
-  if (rosterAStr) teamAData += `\n\nROSTER (top 8 by minutes):\n${rosterAStr}`;
-  if (rosterBStr) teamBData += `\n\nROSTER (top 8 by minutes):\n${rosterBStr}`;
-
-  const aEdges = edgesByNode[nodeA.id] || [];
-  const bEdges = edgesByNode[nodeB.id] || [];
-  const h2h    = aEdges.filter(e =>
-    (e.from === nodeA.id && e.to === nodeB.id) ||
-    (e.from === nodeB.id && e.to === nodeA.id)
-  );
-  const aOpps = new Set(aEdges.map(e => e.from === nodeA.id ? e.to : e.from));
-  const bOpps = new Set(bEdges.map(e => e.from === nodeB.id ? e.to : e.from));
-  const common = [...aOpps].filter(id => bOpps.has(id)).slice(0, 6);
-
-  const commonLines = common.map(cid => {
-    const cNode = graph.nodes.find(n => n.id === cid);
-    const aGame = aEdges.find(e => (e.from === nodeA.id && e.to === cid) || (e.to === nodeA.id && e.from === cid));
-    const bGame = bEdges.find(e => (e.from === nodeB.id && e.to === cid) || (e.to === nodeB.id && e.from === cid));
-    const aRes  = aGame ? (aGame.from === nodeA.id ? `W ${aGame.label} by ${aGame.margin}` : `L ${aGame.label} by ${aGame.margin}`) : '?';
-    const bRes  = bGame ? (bGame.from === nodeB.id ? `W ${bGame.label} by ${bGame.margin}` : `L ${bGame.label} by ${bGame.margin}`) : '?';
-    return `  vs ${cNode?.label ?? cid}: ${nodeA.label} ${aRes} | ${nodeB.label} ${bRes}`;
-  });
-
-  // Transitive path evidence from precomputed analysis
-  const tKey  = `${nodeA.id}_${nodeB.id}`;
-  const tKeyR = `${nodeB.id}_${nodeA.id}`;
-  const tPair = transPairs[tKey] || transPairs[tKeyR];
-  let transLines = '';
-  if (tPair && tPair.n > 0) {
-    const flipped = !!transPairs[tKeyR] && !transPairs[tKey];
-    const favors  = tPair.verdict === 'a' ? (flipped ? nodeB.label : nodeA.label)
-                  : tPair.verdict === 'b' ? (flipped ? nodeA.label : nodeB.label)
-                  : 'neither';
-    const chains  = [
-      ...(tPair.a || []).slice(0, 2).map(s =>
-        `  ${nodeA.label} beat ${s.common_name} (${s.a_score}), who beat ${nodeB.label} (${s.b_score})`),
-      ...(tPair.b || []).slice(0, 2).map(s =>
-        `  ${nodeB.label} beat ${s.common_name} (${s.b_score}), who beat ${nodeA.label} (${s.a_score})`),
-    ];
-    transLines = `Transitive evidence (${tPair.n} signals, conf ${tPair.conf?.toFixed(0) ?? '?'}/100, favors ${favors}):\n${chains.join('\n')}`;
-  } else {
-    transLines = 'Transitive evidence: none found in schedule data.';
-  }
-
-  const matchupData = [
-    h2h.length
-      ? `H2H: ${h2h.map(e => `${e.from === nodeA.id ? nodeA.label : nodeB.label} won ${e.label} by ${e.margin} on ${e.date}`).join(', ')}`
-      : 'H2H: No head-to-head games this season.',
-    common.length
-      ? `Common bracket opponents (${common.length}):\n${commonLines.join('\n')}`
-      : 'No common bracket opponents.',
-    transLines,
-  ].join('\n');
-
-  // ── Build odds context from espn_odds.json ──────────────────────────────
-  // Find the most recent tournament game featuring these two teams
-  const oddsLines = [];
-  const gamesArr  = Object.values(oddsData?.games ?? {});
-  // Look for a game with both team IDs (home vs away)
-  const matchGame = gamesArr.find(g =>
-    (g.home_id === nodeA.id && g.away_id === nodeB.id) ||
-    (g.home_id === nodeB.id && g.away_id === nodeA.id)
-  );
-
-  if (matchGame) {
-    const isAHome = matchGame.home_id === nodeA.id;
-    const odds    = matchGame.odds;
-    const bpi     = matchGame.bpi;
-
-    if (odds) {
-      const aML    = isAHome ? odds.home_moneyline    : odds.away_moneyline;
-      const bML    = isAHome ? odds.away_moneyline    : odds.home_moneyline;
-      const aImp   = isAHome ? odds.home_implied_pct  : odds.away_implied_pct;
-      const bImp   = isAHome ? odds.away_implied_pct  : odds.home_implied_pct;
-      const openAML= isAHome ? odds.open_home_ml      : odds.open_away_ml;
-      const mvmt   = odds.line_movement !== null && odds.line_movement !== undefined
-        ? (isAHome ? odds.line_movement : -odds.line_movement)
-        : null;
-
-      oddsLines.push(`DraftKings (${odds.provider}):`);
-      oddsLines.push(`  Spread: ${odds.spread >= 0 ? '+' : ''}${odds.spread} | O/U: ${odds.over_under}`);
-      oddsLines.push(`  ${state.team_a} ML: ${aML} (${aImp}% implied) | ${state.team_b} ML: ${bML} (${bImp}% implied)`);
-      if (openAML !== null && openAML !== undefined) {
-        oddsLines.push(`  Opening ML for ${state.team_a}: ${openAML}${mvmt !== null ? ` → ${mvmt > 0 ? '+' : ''}${mvmt.toFixed(1)}% shift (${mvmt > 0 ? 'sharp money on ' + state.team_a : mvmt < 0 ? 'sharp money on ' + state.team_b : 'no movement'})` : ''}`);
-      }
-    }
-
-    if (bpi) {
-      const aBpi = isAHome ? bpi.home_bpi_win_pct : bpi.away_bpi_win_pct;
-      const bBpi = isAHome ? bpi.away_bpi_win_pct : bpi.home_bpi_win_pct;
-      oddsLines.push(`ESPN BPI (accounts for travel, rest, site, altitude):`);
-      oddsLines.push(`  ${state.team_a}: ${aBpi}% | ${state.team_b}: ${bBpi}% | Pred margin: ${bpi.bpi_pred_margin > 0 ? '+' : ''}${bpi.bpi_pred_margin} | Matchup quality: ${bpi.matchup_quality}/100`);
-    }
-  } else {
-    oddsLines.push('No tournament game odds found for this matchup yet.');
-  }
-
-  // Futures: championship and regional odds per team
-  const futA = oddsData?.futures?.[state.team_a.toLowerCase()];
-  const futB = oddsData?.futures?.[state.team_b.toLowerCase()];
-  if (futA?.markets || futB?.markets) {
-    oddsLines.push('Futures (DraftKings):');
-    const fmtFut = (fut, name) => {
-      if (!fut?.markets) return `  ${name}: no futures data`;
-      const mkts = Object.entries(fut.markets)
-        .map(([k, v]) => `${k.replace('region_', '').replace('_', ' ')}: ${v.moneyline} (${v.implied_pct}%)`)
-        .join(' | ');
-      return `  ${name}: ${mkts}`;
-    };
-    if (futA) oddsLines.push(fmtFut(futA, state.team_a));
-    if (futB) oddsLines.push(fmtFut(futB, state.team_b));
-  }
-
-  const oddsContextStr = oddsLines.join('\n');
-
-  // Append injury news narratives (keyed by ESPN team ID)
-  const newsA = injuryNews?.[nodeA.id]?.articles;
-  const newsB = injuryNews?.[nodeB.id]?.articles;
-  const teamAFull = newsA?.length
-    ? teamAData + `\nRecent injury news: ${newsA.slice(0,3).map(n => n.headline).join('; ')}`
-    : teamAData;
-  const teamBFull = newsB?.length
-    ? teamBData + `\nRecent injury news: ${newsB.slice(0,3).map(n => n.headline).join('; ')}`
-    : teamBData;
-
-  return { team_a_data: teamAFull, team_b_data: teamBFull, matchup_data: matchupData, odds_data: oddsContextStr };
+  return {};
 }
 
-// ── Conditional edge function: routerEdge ─────────────────────────────────────
-// LangGraph requires Send to come from the edge fn, not from the node itself.
-// This fans out to 3 specialist agents in parallel.
 function routerEdge(state) {
   if (state.error) return [END];
   return [
@@ -477,236 +418,174 @@ function routerEdge(state) {
   ];
 }
 
-// ── Node: efficiency_agent ────────────────────────────────────────────────────
-// Uses Barthag (a literal head-to-head win probability) + AdjEM margin.
-async function efficiencyAgent(state, config) {
-  const groqKey = config.configurable?.groqKey;
-  const system  = `You are an NCAA basketball efficiency analyst. Your job is to assess matchup probability using only efficiency metrics.
-Respond with valid JSON only. No markdown, no explanation, no notes, no self-commentary outside the JSON object itself.
-Schema: { "agent": "efficiency", "win_pct": <number 0-100 for ${state.team_a}>, "confidence": "low|medium|high", "key_edge": "<one specific stat advantage>", "reasoning": "<2-3 sentences citing exact numbers>" }`;
+// ── Agent factory — builds an agentic node with tool access ──────────────────
+function makeAgent({ agentName, systemPrompt, maxTokens = MAX_TOKENS }) {
+  return async function agentNode(state, config) {
+    const groqKey = config.configurable?.groqKey;
+    const groq    = createGroq({ apiKey: groqKey });
+    const tools   = buildAgentTools(state.team_a, state.team_b);
 
-  const user = `Analyze this matchup using efficiency data only.
+    try {
+      const { text, toolCalls } = await generateText({
+        model:     groq(MODEL),
+        maxTokens,
+        maxSteps:  MAX_STEPS,
+        tools,
+        system:    systemPrompt,
+        prompt:    `Analyze the matchup: ${state.team_a} vs ${state.team_b}.\n\nUse your tools to fetch the data you need. Then return your assessment as valid JSON with this exact schema:\n{\n  "agent": "${agentName}",\n  "win_pct": <number 0-100 for ${state.team_a}>,\n  "confidence": "low|medium|high",\n  "key_edge": "<one specific advantage you found>",\n  "reasoning": "<2-3 sentences citing exact numbers from the data you retrieved>"\n}\n\nReturn ONLY the JSON object. No markdown, no preamble.`,
+      });
 
-${state.team_a_data}
+      let result;
+      try {
+        const clean = text.replace(/```json|```/g, '').trim();
+        const s = clean.indexOf('{'), e = clean.lastIndexOf('}');
+        result = JSON.parse(s >= 0 && e > s ? clean.slice(s, e+1) : clean);
+      } catch {
+        // Parse failed — extract what we can from tool results
+        result = {
+          agent:      agentName,
+          win_pct:    50,
+          confidence: 'low',
+          key_edge:   'parse error',
+          reasoning:  sanitizeLLMOutput(text).slice(0, 200) || `${agentName} analysis error`,
+        };
+      }
 
-vs
+      if (result.reasoning) result.reasoning = sanitizeLLMOutput(result.reasoning);
+      result.agent = agentName; // enforce correct agent name
+      return { agent_results: [result] };
 
-${state.team_b_data}
-
-Note: Barthag is a direct win probability estimate. An AdjEM gap >10 points is decisive, 5-10 is meaningful, <5 is a toss-up.
-Return win probability for ${state.team_a}.`;
-
-  try {
-    const raw    = await groqCall(system, user, groqKey);
-    const clean  = raw.replace(/```json|```/g, '').trim();
-    const result = JSON.parse(clean);
-    if (result.reasoning) result.reasoning = sanitizeLLMOutput(result.reasoning);
-    return { agent_results: [result] };
-  } catch (err) {
-    console.error('[efficiency_agent] error:', err?.message ?? err);
-    return { agent_results: [{ agent: 'efficiency', win_pct: 50, confidence: 'low', key_edge: 'parse error', reasoning: `Efficiency analysis error: ${err?.message ?? 'unknown'}` }] };
-  }
+    } catch (err) {
+      console.error(`[${agentName}] error:`, err?.message ?? err);
+      return { agent_results: [{ agent: agentName, win_pct: 50, confidence: 'low', key_edge: 'error', reasoning: err?.message ?? 'unknown error' }] };
+    }
+  };
 }
 
-// ── Node: form_agent ──────────────────────────────────────────────────────────
-// Focuses on momentum: last-10, streak, recent scoring margins.
-async function formAgent(state, config) {
-  const groqKey = config.configurable?.groqKey;
-  const system  = `You are an NCAA basketball momentum and form analyst. Assess matchup probability using only recent performance data.
-Respond with valid JSON only. No markdown, no explanation, no notes, no self-commentary outside the JSON object itself.
-Schema: { "agent": "form", "win_pct": <number 0-100 for ${state.team_a}>, "confidence": "low|medium|high", "key_edge": "<one specific form advantage>", "reasoning": "<2-3 sentences citing specific recent games or trends>" }`;
+// ── Four specialist agents ────────────────────────────────────────────────────
 
-  const user = `Analyze this matchup using recent form data only.
+const efficiencyAgent = makeAgent({
+  agentName:    'efficiency',
+  systemPrompt: `You are an NCAA basketball efficiency analyst. Your job: assess matchup win probability using efficiency metrics.
 
-${state.team_a_data}
+WHAT TO DO:
+1. Call get_efficiency_stats for BOTH teams — compare AdjEM, AdjOE, AdjDE, Barthag
+2. Call get_roster for BOTH teams — look for injury flags (⚠) that affect efficiency
+3. If you find injuries, call get_injury_news to quantify the impact
+4. Compute the AdjEM gap. >10 pts = decisive, 5-10 = meaningful, <5 = toss-up
+5. Barthag IS the neutral-court win probability — use it directly
+6. Return your JSON assessment
 
-vs
+Focus: efficiency numbers, four factors, injury-adjusted AdjEM. Ignore form and market.`,
+});
 
-${state.team_b_data}
+const formAgent = makeAgent({
+  agentName:    'form',
+  systemPrompt: `You are an NCAA basketball momentum analyst. Your job: assess matchup win probability using recent form.
 
-Focus on: last-10 W-L record, current win/loss streak, and scoring trends in the last 5 games.
-Return win probability for ${state.team_a}.`;
+WHAT TO DO:
+1. Call get_recent_form for BOTH teams — get last-10 record and streak
+2. Call get_roster for BOTH teams — check for injured key players who affect recent results
+3. Look for: teams on winning streaks, scoring margin trends, performance in last 5 games
+4. A team that's 8-2 in last 10 and winning by 12+ is peaking. A 5-5 team with losses to ranked opponents is different from 5-5 against weak competition
+5. Return your JSON assessment
 
-  try {
-    const raw    = await groqCall(system, user, groqKey);
-    const clean  = raw.replace(/```json|```/g, '').trim();
-    const result = JSON.parse(clean);
-    if (result.reasoning) result.reasoning = sanitizeLLMOutput(result.reasoning);
-    return { agent_results: [result] };
-  } catch (err) {
-    console.error('[form_agent] error:', err?.message ?? err);
-    return { agent_results: [{ agent: 'form', win_pct: 50, confidence: 'low', key_edge: 'parse error', reasoning: `Form analysis error: ${err?.message ?? 'unknown'}` }] };
-  }
-}
+Focus: momentum, recent scoring margins, streak quality. Ignore season-long efficiency.`,
+});
 
-// ── Node: matchup_agent ───────────────────────────────────────────────────────
-// Focuses on H2H, common opponents, pace mismatch.
-async function matchupAgent(state, config) {
-  const groqKey = config.configurable?.groqKey;
-  const system  = `You are an NCAA basketball matchup specialist. Assess win probability using head-to-head history and common opponent analysis.
-Respond with valid JSON only. No markdown, no explanation, no notes, no self-commentary outside the JSON object itself.
-Schema: { "agent": "matchup", "win_pct": <number 0-100 for ${state.team_a}>, "confidence": "low|medium|high", "key_edge": "<one specific matchup advantage>", "reasoning": "<2-3 sentences citing H2H or common opponent results>" }`;
+const matchupAgent = makeAgent({
+  agentName:    'matchup',
+  systemPrompt: `You are an NCAA basketball matchup specialist. Your job: assess win probability using head-to-head history, common opponents, and stylistic matchup.
 
-  const user = `Analyze this matchup using head-to-head and common opponent data.
+WHAT TO DO:
+1. Call get_h2h — check for direct results between these teams
+2. Call get_common_opponents — find teams both have played and compare results
+3. Call get_transitive — get indirect evidence chains
+4. Call get_efficiency_stats for BOTH teams — compare pace (adj_tempo). Pace mismatch matters: a fast team vs a slow team usually sees the faster team win the tempo battle
+5. Return your JSON assessment
 
-${state.team_a_data}
+Focus: direct evidence, common opponents, transitive chains, pace mismatch. Weight H2H > common opponents > transitive.`,
+});
 
-vs
+const oddsAgent = makeAgent({
+  agentName:    'odds',
+  systemPrompt: `You are a sports betting market analyst. Your job: assess win probability using market data and ESPN BPI.
 
-${state.team_b_data}
+WHAT TO DO:
+1. Call get_odds — get DraftKings ML, spread, implied probabilities, line movement, BPI
+2. Call get_injury_news for BOTH teams — market may not have priced in recent injuries
+3. If no odds data: return 50% confidence low
+4. Market-implied probability aggregates all public information. BPI is an independent model
+5. Line movement >3% = sharp money. Ignore movement <2%
+6. If market and BPI agree within 5pp: high confidence. If they diverge >10pp: note the conflict
+7. Return your JSON assessment
 
-Head-to-head and common opponent data:
-${state.matchup_data}
+Focus: market signals, BPI, line movement, injury news not yet priced in. Do not use efficiency stats.`,
+});
 
-Also consider pace mismatch: if one team plays fast and the other slow, the faster team usually dictates tempo.
-Return win probability for ${state.team_a}.`;
-
-  try {
-    const raw    = await groqCall(system, user, groqKey);
-    const clean  = raw.replace(/```json|```/g, '').trim();
-    const result = JSON.parse(clean);
-    if (result.reasoning) result.reasoning = sanitizeLLMOutput(result.reasoning);
-    return { agent_results: [result] };
-  } catch (err) {
-    console.error('[matchup_agent] error:', err?.message ?? err);
-    return { agent_results: [{ agent: 'matchup', win_pct: 50, confidence: 'low', key_edge: 'parse error', reasoning: `Matchup analysis error: ${err?.message ?? 'unknown'}` }] };
-  }
-}
-
-// ── Node: odds_agent ──────────────────────────────────────────────────────────
-// Interprets DraftKings spread/moneyline, BPI win probability, and line movement.
-// No LLM call for the market-implied probability itself — math is math.
-// LLM only synthesizes what the three signals collectively say.
-async function oddsAgent(state, config) {
-  const groqKey  = config.configurable?.groqKey;
-  const oddsCtx  = state.odds_data ?? '';
-
-  // If no odds data exists yet (pre-tournament, or file not generated), return neutral
-  if (!oddsCtx || oddsCtx.includes('No tournament game odds found')) {
-    return { agent_results: [{ agent: 'odds', win_pct: 50, confidence: 'low', key_edge: 'no market data', reasoning: 'No tournament betting lines available for this matchup yet.' }] };
-  }
-
-  const system = `You are a sports betting market analyst for NCAA basketball. Your job is to interpret betting market data and ESPN BPI predictions to assess win probability.
-Respond with valid JSON only. No markdown, no explanation, no notes outside the JSON object.
-Schema: { "agent": "odds", "win_pct": <number 0-100 for ${state.team_a}>, "confidence": "low|medium|high", "key_edge": "<one specific signal from the market or BPI>", "reasoning": "<2-3 sentences: cite the market-implied probability, BPI figure, and any meaningful line movement>" }`;
-
-  const user = `Assess win probability for ${state.team_a} vs ${state.team_b} using market and BPI data.
-
-${oddsCtx}
-
-Rules for your analysis:
-- Market-implied probability (from moneyline) is your baseline. It aggregates all available information.
-- ESPN BPI is a second independent model that accounts for travel, rest, site, altitude. Give it significant weight.
-- Line movement > 3% shift is meaningful (sharp money). Ignore movement < 2% as noise.
-- If market and BPI agree within 5%, high confidence. If they disagree by >10%, note the conflict.
-- Futures (regional/championship odds) are secondary context only — don't anchor to them.
-Return win probability for ${state.team_a}.`;
-
-  try {
-    const raw    = await groqCall(system, user, groqKey);
-    const clean  = raw.replace(/```json|```/g, '').trim();
-    const result = JSON.parse(clean);
-    if (result.reasoning) result.reasoning = sanitizeLLMOutput(result.reasoning);
-    return { agent_results: [result] };
-  } catch (err) {
-    console.error('[odds_agent] error:', err?.message ?? err);
-    return { agent_results: [{ agent: 'odds', win_pct: 50, confidence: 'low', key_edge: 'parse error', reasoning: `Odds analysis error: ${err?.message ?? 'unknown'}` }] };
-  }
-}
-
-// ── Node: synthesis ───────────────────────────────────────────────────────────
-// Weights: efficiency 40%, odds/BPI 20%, form 20%, matchup 20% (degrades if no market data).
-// Produces final confidence interval and unified reasoning.
+// ── Synthesis node ────────────────────────────────────────────────────────────
 async function synthesisNode(state, config) {
   const groqKey = config.configurable?.groqKey;
   const results = state.agent_results ?? [];
-  // Small delay so synthesis doesn't fire in the same second as the 4 parallel agents
-  await new Promise(r => setTimeout(r, 1000));
+  await new Promise(r => setTimeout(r, 500));
 
-  const effResult  = results.find(r => r.agent === 'efficiency') ?? { win_pct: 50, confidence: 'low', reasoning: '' };
-  const formResult = results.find(r => r.agent === 'form')       ?? { win_pct: 50, confidence: 'low', reasoning: '' };
-  const matchResult= results.find(r => r.agent === 'matchup')    ?? { win_pct: 50, confidence: 'low', reasoning: '' };
-  const oddsResult = results.find(r => r.agent === 'odds')       ?? { win_pct: 50, confidence: 'low', key_edge: 'no market data', reasoning: '' };
+  const groq  = createGroq({ apiKey: groqKey });
+  const tools = buildAgentTools(state.team_a, state.team_b);
 
-  const safePct = (r) => {
-    const n = Number(r.win_pct);
-    if (isNaN(n)) return 50;
-    return Math.max(1, Math.min(99, n));
-  };
+  const get = (name) => results.find(r => r.agent === name) ?? { win_pct: 50, confidence: 'low', reasoning: '' };
+  const eff = get('efficiency'), frm = get('form'), mtch = get('matchup'), odds = get('odds');
 
-  // Odds agent weight drops to 0 if no market data available yet
-  const oddsAvailable = !(oddsResult.confidence === 'low' && oddsResult.key_edge === 'no market data');
+  const safePct = r => { const n = Number(r.win_pct); return isNaN(n) ? 50 : Math.max(1, Math.min(99, n)); };
+  const oddsAvailable = !(odds.confidence === 'low' && (odds.key_edge === 'error' || odds.key_edge === 'no market data'));
 
-  // Dynamic weighting: when market signal has high confidence and aligns with or dominates
-  // the efficiency model, increase market weight. When agents strongly disagree (spread > 20pp),
-  // weight toward the two closest-agreeing agents to reduce noise.
-  let weights;
-  if (!oddsAvailable) {
-    weights = { efficiency: 0.50, odds: 0.00, form: 0.25, matchup: 0.25 };
-  } else {
-    // Base weights
-    weights = { efficiency: 0.40, odds: 0.20, form: 0.20, matchup: 0.20 };
+  let weights = oddsAvailable
+    ? { efficiency: 0.40, odds: 0.20, form: 0.20, matchup: 0.20 }
+    : { efficiency: 0.50, odds: 0.00, form: 0.25, matchup: 0.25 };
 
-    // If market confidence is high AND market-efficiency gap > 10pp, boost market weight
-    // Market aggregates injury info, travel, rest, and sharp money that models miss
-    const effPct   = safePct(effResult);
-    const oddsPct  = safePct(oddsResult);
-    const mktGap   = Math.abs(effPct - oddsPct);
-    const mktHighConf = oddsResult.confidence === 'high';
-
-    if (mktHighConf && mktGap > 10) {
-      // Market has strong signal diverging from pure efficiency — trust it more
+  if (oddsAvailable) {
+    const gap = Math.abs(safePct(eff) - safePct(odds));
+    if (odds.confidence === 'high' && gap > 10)
       weights = { efficiency: 0.30, odds: 0.35, form: 0.20, matchup: 0.15 };
-    } else if (mktGap < 5) {
-      // Market and efficiency agree closely — both reliable, slight efficiency boost
+    else if (gap < 5)
       weights = { efficiency: 0.45, odds: 0.20, form: 0.20, matchup: 0.15 };
-    }
   }
 
   const weightedPct = Math.round(
-    (safePct(effResult)   * weights.efficiency) +
-    (safePct(oddsResult)  * weights.odds)       +
-    (safePct(formResult)  * weights.form)        +
-    (safePct(matchResult) * weights.matchup)
+    safePct(eff)  * weights.efficiency +
+    safePct(odds) * weights.odds       +
+    safePct(frm)  * weights.form       +
+    safePct(mtch) * weights.matchup
   );
 
-  const activePcts = oddsAvailable
-    ? [safePct(effResult), safePct(formResult), safePct(matchResult), safePct(oddsResult)]
-    : [safePct(effResult), safePct(formResult), safePct(matchResult)];
-  const spread    = Math.max(...activePcts) - Math.min(...activePcts);
-  const halfRange = Math.round(spread / 2 + 3);
-  const rangeLow  = Math.max(1,  weightedPct - halfRange);
-  const rangeHigh = Math.min(99, weightedPct + halfRange);
+  const pcts    = oddsAvailable ? [safePct(eff), safePct(frm), safePct(mtch), safePct(odds)] : [safePct(eff), safePct(frm), safePct(mtch)];
+  const spread  = Math.max(...pcts) - Math.min(...pcts);
+  const half    = Math.round(spread / 2 + 3);
+  const rangeLow  = Math.max(1,  weightedPct - half);
+  const rangeHigh = Math.min(99, weightedPct + half);
 
   const agentSummary = results.map(r =>
-    `${r.agent.toUpperCase()} AGENT: ${r.win_pct}% for ${state.team_a} (${r.confidence} confidence)\nKey edge: ${r.key_edge}\n${r.reasoning}`
+    `${r.agent.toUpperCase()}: ${r.win_pct}% for ${state.team_a} (${r.confidence})\nEdge: ${r.key_edge}\n${r.reasoning}`
   ).join('\n\n');
 
   const weightDesc = oddsAvailable
-    ? 'Efficiency 40%, Market/BPI 20%, Recent Form 20%, Matchup History 20%'
-    : 'Efficiency 50%, Recent Form 25%, Matchup History 25% (no market data)';
+    ? `Efficiency ${Math.round(weights.efficiency*100)}%, Market/BPI ${Math.round(weights.odds*100)}%, Form ${Math.round(weights.form*100)}%, Matchup ${Math.round(weights.matchup*100)}%`
+    : 'Efficiency 50%, Form 25%, Matchup 25% (no market data)';
 
-  const system = `You are a senior NCAA tournament analyst. Write like The Athletic: deep, specific, opinionated. This is long-form expert analysis, not a summary.
-You MUST respond with valid JSON only. No markdown fences, no backticks, no text outside the JSON object.
+  const synthSystem = `You are a senior NCAA tournament analyst. Write like The Athletic: deep, specific, opinionated.
+You have access to tools. Use them to verify specific claims from the agent reports or dig deeper on anything that needs more detail.
+You MUST respond with valid JSON only. No markdown fences, no text outside the JSON.
 Schema:
 {
-  "injury_note": "<If ANY player has ⚠ in the roster data: 2-3 sentences on the injury, which player it is, their stats, and the direct impact on this specific matchup. If no injuries flagged, return empty string.>",
-  "decisive_factor": "<4-6 sentences. The single biggest structural reason one team wins. Go deep: compare the specific efficiency metrics, explain the causal chain, cite the exact numbers from both rosters. Connect it to how the game will actually be played.>",
-  "key_matchup": "<4-5 sentences. The player vs player or unit vs unit battle that decides the game. Name both players with their full stat lines — PPG, RPG, APG, FG%, experience year, height, weight. Explain the physical and stylistic mismatch. Cite who has the advantage and why.>",
-  "x_factors": "<3-4 sentences. Two or three specific things — a player, a tendency, a situational factor — that most analysts are underweighting. Think: turnover rates, pace mismatch, rebounding margin, bench depth, specific shooting splits, Four Factors advantages. Cite numbers.>",
-  "risk": "<3-4 sentences. The specific scenario where the favorite loses. Name the players involved, the game situation, the exact vulnerability. Make it concrete — not 'if they go cold' but 'if Cadeau (2.4 TOV/game) turns it over under pressure and Illinois converts in transition'.>",
-  "market_vs_model": "<2-3 sentences. Compare the weighted model probability to the DraftKings implied probability and BPI. If they diverge by 6+ points, explain the gap and which signal to trust. If aligned, note what that consensus means for the prediction confidence.>",
-  "bottom_line": "<2-3 sentences. Your firm prediction — who wins, why, by how much. Give a specific final score. Name the decisive player performance that seals it.>"
+  "injury_note": "<If ANY player has ⚠ in data: 2-3 sentences on injury, player stats, direct matchup impact. Empty string if none.>",
+  "decisive_factor": "<4-6 sentences. The single biggest structural reason one team wins. Cite exact numbers, explain the causal chain, connect to how the game is played.>",
+  "key_matchup": "<4-5 sentences. Player vs player battle that decides it. Name both with full stat lines — PPG/RPG/APG/FG%/height/weight. Explain the physical and stylistic mismatch.>",
+  "x_factors": "<3-4 sentences. Two or three specific underweighted factors. Cite numbers: TOV%, pace mismatch, rebounding margin, bench depth, Four Factors edges.>",
+  "risk": "<3-4 sentences. Specific scenario where the favorite loses. Name players, game situation, exact vulnerability. Make it concrete.>",
+  "market_vs_model": "<2-3 sentences. Compare weighted model vs DraftKings implied vs BPI. If diverge >6pp explain the gap. If aligned note the consensus.>",
+  "bottom_line": "<2-3 sentences. Who wins, why, final score. Name the player who seals it.>"
 }`;
 
-  const user = `Synthesize a deep expert matchup analysis. This should be as detailed and specific as a full pre-game scouting report.
-
-TEAM DATA WITH FULL ROSTERS:
-${state.team_a_data}
-
-vs
-
-${state.team_b_data}
+  const synthPrompt = `Synthesize a deep expert matchup analysis for ${state.team_a} vs ${state.team_b}.
 
 AGENT REPORTS:
 ${agentSummary}
@@ -715,111 +594,79 @@ WEIGHTED WIN PROBABILITY for ${state.team_a}: ${weightedPct}% (range: ${rangeLow
 Weights: ${weightDesc}
 Agent spread: ${spread.toFixed(0)} pts (${spread < 10 ? 'strong consensus' : spread < 20 ? 'moderate agreement' : 'significant disagreement'})
 
-RULES — follow these exactly:
-- Every section must cite specific player names AND their stats from the roster data
-- Every section must cite at least one efficiency number (AdjEM, AdjOE, AdjDE, eFG%, Barthag, TOV%, rebounding margin)
-- injury_note: if any player has ⚠ in the roster, this must be non-empty and specific
-- x_factors: go beyond the obvious — find the hidden edges that decide close games
-- bottom_line: must include a specific score prediction like "Houston wins 74-69" and name the player who seals it
-- Write like you are being paid to be right, not to be safe
-Return only the JSON object. No backticks. No preamble.`;
+Use your tools to verify specific claims or fetch any detail you need for depth. Then return the JSON analysis.
+Rules:
+- Cite specific player names and stats in every section
+- Cite at least one efficiency number (AdjEM, AdjOE, AdjDE, eFG%, Barthag) per section
+- injury_note: if any agent mentioned ⚠ or injury, verify with get_injury_news and be specific
+- bottom_line: must include a specific score like "Michigan wins 82-71" and name who seals it
+- Write like you are being paid to be right
+Return ONLY the JSON object. No backticks. No preamble.`;
 
   try {
-    const raw   = await groqCall(system, user, groqKey, 0, MAX_TOKENS_SYNTHESIS);
-    // Strip markdown fences and any preamble text before the JSON object
-    let clean = raw.replace(/```json|```/g, '').trim();
-    const jsonStart = clean.indexOf('{');
-    const jsonEnd   = clean.lastIndexOf('}');
-    if (jsonStart > 0 && jsonEnd > jsonStart) {
-      clean = clean.slice(jsonStart, jsonEnd + 1);
-    }
+    const { text } = await generateText({
+      model:     groq(MODEL),
+      maxTokens: MAX_TOKENS_SY,
+      maxSteps:  MAX_STEPS,
+      tools,
+      system:    synthSystem,
+      prompt:    synthPrompt,
+    });
 
-    const EXPECTED_KEYS = ['injury_note','decisive_factor','key_matchup','x_factors','risk','market_vs_model','bottom_line'];
+    let clean = text.replace(/```json|```/g, '').trim();
+    const s = clean.indexOf('{'), e = clean.lastIndexOf('}');
+    if (s > 0 && e > s) clean = clean.slice(s, e + 1);
 
+    const KEYS = ['injury_note','decisive_factor','key_matchup','x_factors','risk','market_vs_model','bottom_line'];
     let sections = {};
+
     try {
       const parsed = JSON.parse(clean);
       const df = parsed.decisive_factor;
-
-      if (df && typeof df === 'object') {
-        // Mode 3: model nested the sections object directly as an object value
-        sections = df.decisive_factor ? df : parsed;
-      } else if (typeof df === 'string' && df.trim().startsWith('{')) {
-        // Mode 2: model serialized the sections as a JSON string inside decisive_factor
-        try {
-          const inner = JSON.parse(df);
-          sections = inner.decisive_factor ? inner : parsed;
-        } catch { sections = parsed; }
-      } else {
-        // Mode 1: clean response
-        sections = parsed;
-      }
-
-      // Validate — if fewer than 3 expected keys have real string content, treat as fallback
-      const filled = EXPECTED_KEYS.filter(k => typeof sections[k] === 'string' && sections[k].length > 10);
-      if (filled.length < 3) throw new Error('insufficient section content');
-
+      if (df && typeof df === 'object') sections = df.decisive_factor ? df : parsed;
+      else if (typeof df === 'string' && df.trim().startsWith('{')) {
+        try { const inner = JSON.parse(df); sections = inner.decisive_factor ? inner : parsed; } catch { sections = parsed; }
+      } else sections = parsed;
+      const filled = KEYS.filter(k => typeof sections[k] === 'string' && sections[k].length > 10);
+      if (filled.length < 3) throw new Error('insufficient content');
     } catch {
-      // Fallback: not valid JSON or insufficient content — distribute paragraphs
-      const fallbackText = sanitizeLLMOutput(clean) || results.map(r => r.reasoning).filter(Boolean).join(' ');
-      const paras = fallbackText.split('\n\n').filter(Boolean);
-      sections = {
-        decisive_factor: paras[0] ?? fallbackText,
-        key_matchup:     paras[1] ?? '',
-        x_factors:       paras[2] ?? '',
-        risk:            paras[3] ?? '',
-        market_vs_model: paras[4] ?? '',
-        bottom_line:     paras[paras.length - 1] ?? '',
-        injury_note:     '',
-      };
+      const fb = sanitizeLLMOutput(clean) || results.map(r => r.reasoning).filter(Boolean).join(' ');
+      const paras = fb.split('\n\n').filter(Boolean);
+      sections = { decisive_factor: paras[0] ?? fb, key_matchup: paras[1] ?? '', x_factors: paras[2] ?? '', risk: paras[3] ?? '', market_vs_model: paras[4] ?? '', bottom_line: paras[paras.length-1] ?? '', injury_note: '' };
     }
-    // Sanitize each field
-    const san = (s) => s ? sanitizeLLMOutput(String(s)) : '';
 
-    // Build a flat reasoning string for backward compat (used by old chat path)
-    const reasoning = [
-      sections.decisive_factor,
-      sections.key_matchup,
-      sections.risk,
-      sections.market_vs_model,
-      sections.injury_note,
-      sections.bottom_line,
-    ].filter(Boolean).map(san).join('\n\n');
+    const san = s => s ? sanitizeLLMOutput(String(s)) : '';
 
-    const confidence = {
-      team_a:       state.team_a,
-      team_b:       state.team_b,
-      win_pct:      weightedPct,
-      range_low:    rangeLow,
-      range_high:   rangeHigh,
-      agent_spread: Math.round(spread),
-      consensus:    spread < 10 ? 'strong' : spread < 20 ? 'moderate' : 'split',
-      weights,
-      reasoning,
-      // Structured sections for rich UI rendering
-      sections: {
-        injury_note:      san(sections.injury_note      ?? ''),
-        decisive_factor:  san(sections.decisive_factor  ?? ''),
-        key_matchup:      san(sections.key_matchup      ?? ''),
-        x_factors:        san(sections.x_factors        ?? ''),
-        risk:             san(sections.risk              ?? ''),
-        market_vs_model:  san(sections.market_vs_model  ?? ''),
-        bottom_line:      san(sections.bottom_line      ?? ''),
+    const reasoningParts = ['decisive_factor','key_matchup','risk','market_vs_model','bottom_line']
+      .map(k => san(sections[k])).filter(s => s.length > 10);
+    const reasoning = reasoningParts.join('\n\n') ||
+      `${state.team_a} vs ${state.team_b}: model weighted probability ${weightedPct}% for ${state.team_a}.`;
+
+    return {
+      confidence: {
+        team_a: state.team_a, team_b: state.team_b,
+        win_pct: weightedPct, range_low: rangeLow, range_high: rangeHigh,
+        agent_spread: Math.round(spread),
+        consensus: spread < 10 ? 'strong' : spread < 20 ? 'moderate' : 'split',
+        weights, reasoning,
+        sections: {
+          injury_note:     san(sections.injury_note     ?? ''),
+          decisive_factor: san(sections.decisive_factor ?? ''),
+          key_matchup:     san(sections.key_matchup     ?? ''),
+          x_factors:       san(sections.x_factors       ?? ''),
+          risk:            san(sections.risk             ?? ''),
+          market_vs_model: san(sections.market_vs_model ?? ''),
+          bottom_line:     san(sections.bottom_line      ?? ''),
+        },
+        agent_breakdown: results.map(r => ({ agent: r.agent, win_pct: r.win_pct, confidence: r.confidence, key_edge: r.key_edge })),
       },
-      agent_breakdown: results.map(r => ({
-        agent:      r.agent,
-        win_pct:    r.win_pct,
-        confidence: r.confidence,
-        key_edge:   r.key_edge,
-      })),
     };
-    return { confidence };
   } catch (err) {
     return { confidence: { error: err.message } };
   }
 }
 
-// ── Build LangGraph graph ─────────────────────────────────────────────────────
+// ── Build graph ───────────────────────────────────────────────────────────────
 function buildGraph() {
   const workflow = new StateGraph(GraphState)
     .addNode('router',           routerNode)
@@ -829,7 +676,6 @@ function buildGraph() {
     .addNode('odds_agent',       oddsAgent)
     .addNode('synthesis',        synthesisNode);
 
-  // All four agents run in parallel, converge to synthesis
   workflow.addConditionalEdges('router', routerEdge);
   workflow.addEdge('efficiency_agent', 'synthesis');
   workflow.addEdge('form_agent',       'synthesis');
@@ -845,13 +691,9 @@ const graph = buildGraph();
 
 // ── Vercel handler ────────────────────────────────────────────────────────────
 export default async function handler(req, res) {
-  if (req.method === 'OPTIONS') {
-    res.writeHead(204, CORS);
-    res.end();
-    return;
-  }
+  if (req.method === 'OPTIONS') { res.writeHead(204, CORS); res.end(); return; }
   if (req.method !== 'POST') {
-    res.writeHead(405, CORS);
+    res.writeHead(405, { 'Content-Type': 'application/json', ...CORS });
     res.end(JSON.stringify({ error: 'Method not allowed' }));
     return;
   }
@@ -859,22 +701,12 @@ export default async function handler(req, res) {
   let body;
   try {
     const raw = await new Promise((resolve, reject) => {
-      let data = '';
-      req.on('data', chunk => { data += chunk; });
-      req.on('end',  () => resolve(data));
-      req.on('error', reject);
+      let d = ''; req.on('data', c => { d += c; }); req.on('end', () => resolve(d)); req.on('error', reject);
     });
     body = JSON.parse(raw);
   } catch {
     res.writeHead(400, { 'Content-Type': 'application/json', ...CORS });
     res.end(JSON.stringify({ error: 'Invalid JSON' }));
-    return;
-  }
-
-  const groqKey = process.env.GROQ_KEY_ANALYZE ?? process.env.GROQ_KEY;
-  if (!groqKey) {
-    res.writeHead(500, { 'Content-Type': 'application/json', ...CORS });
-    res.end(JSON.stringify({ error: 'Server configuration error' }));
     return;
   }
 
@@ -884,18 +716,24 @@ export default async function handler(req, res) {
     res.end(JSON.stringify({ error: 'team_a and team_b required' }));
     return;
   }
-  if (typeof rawA !== 'string' || typeof rawB !== 'string' ||
-      rawA.length > 200 || rawB.length > 200) {
+  if (typeof rawA !== 'string' || typeof rawB !== 'string' || rawA.length > 200 || rawB.length > 200) {
     res.writeHead(400, { 'Content-Type': 'application/json', ...CORS });
     res.end(JSON.stringify({ error: 'Invalid team names' }));
     return;
   }
-  // Sanitize team names before they enter any prompt
+
   const team_a = sanitizeTeamName(rawA);
   const team_b = sanitizeTeamName(rawB);
   if (!team_a || !team_b) {
     res.writeHead(400, { 'Content-Type': 'application/json', ...CORS });
     res.end(JSON.stringify({ error: 'Invalid team names after sanitization' }));
+    return;
+  }
+
+  const groqKey = process.env.GROQ_KEY;
+  if (!groqKey) {
+    res.writeHead(500, { 'Content-Type': 'application/json', ...CORS });
+    res.end(JSON.stringify({ error: 'Server configuration error' }));
     return;
   }
 
@@ -906,21 +744,20 @@ export default async function handler(req, res) {
     );
 
     if (result.error) {
-      res.writeHead(404, { 'Content-Type': 'application/json', ...CORS });
+      res.writeHead(400, { 'Content-Type': 'application/json', ...CORS });
       res.end(JSON.stringify({ error: result.error }));
       return;
     }
 
     res.writeHead(200, { 'Content-Type': 'application/json', ...CORS });
     res.end(JSON.stringify({
-      team_a,
-      team_b,
-      agent_results: result.agent_results,
-      confidence:    result.confidence,
-      odds_data:     result.odds_data ?? null,
+      agents:     result.agent_results ?? [],
+      confidence: result.confidence ?? {},
+      odds_data:  null,
     }));
   } catch (err) {
+    console.error('[analyze] handler error:', err);
     res.writeHead(500, { 'Content-Type': 'application/json', ...CORS });
-    res.end(JSON.stringify({ error: err.message }));
+    res.end(JSON.stringify({ error: err.message ?? 'Internal server error' }));
   }
 }
