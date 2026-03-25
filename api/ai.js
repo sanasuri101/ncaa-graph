@@ -34,7 +34,7 @@ function sanitize(text) {
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 const MODEL         = 'llama-3.3-70b-versatile';
-const MAX_TOKENS    = 2048;
+const MAX_TOKENS    = 4096;   // raised — market analysis + deep queries need room
 const MAX_STEPS     = 3;   // max tool call rounds before forced answer
 
 const CORS = {
@@ -183,6 +183,9 @@ function resolveTeam(name, nodeByName) {
 
 // ── Format team block ─────────────────────────────────────────────────────────
 function fmtTeam(node, torvik, form, injuryMap, teamOdds) {
+  const { aliveTeamIds } = getData();
+  if (aliveTeamIds?.size && !aliveTeamIds.has(String(node.id)))
+    return `${node.full_name} — ELIMINATED (no longer in 2026 NCAA Tournament)`;
   const tv   = torvik?.teams?.[node.id]?.torvik;
   const seed = node.seed != null ? `#${node.seed}` : '?';
   if (!tv) return `${node.full_name} (${node.region} ${seed}) | no Torvik data`;
@@ -195,12 +198,38 @@ function fmtTeam(node, torvik, form, injuryMap, teamOdds) {
   const odds   = teamOdds?.[node.id];
   const oddsStr= odds ? `Market: ML ${odds.ml ?? '?'} (${odds.implied ?? '?'}% implied) | BPI: ${odds.bpi ?? '?'}% | ${odds.game}` : '';
 
+  // Four Factors (all four components, offense + defense)
+  const fourFactors = [
+    `eFG%: ${tv.efg ?? '?'}`,
+    `TOV%: ${tv.tov_rate ?? '?'}`,
+    `ORB%: ${tv.orb_rate ?? '?'}`,
+    `FTR: ${tv.ftr ?? '?'}`,
+  ].join(' | ');
+  const fourFactorsDef = tv.efg_d != null
+    ? `Opp eFG%: ${(tv.efg_d * 100).toFixed(1)}`
+    : '';
+  // Resume / SOS
+  const resumeStr = [
+    tv.quad1_record ? `Quad1: ${tv.quad1_record}` : '',
+    tv.net_rank     ? `NET: #${tv.net_rank}` : '',
+    tv.sos_rank     ? `SOS: ${tv.sos_rank.toFixed(2)}` : '',
+    tv.luck         ? `Luck: ${tv.luck > 0 ? '+' : ''}${parseFloat(tv.luck).toFixed(3)}` : '',
+  ].filter(Boolean).join(' | ');
+  // Additional advanced
+  const advStr = [
+    tv.proj_barthag  ? `Proj Barthag: ${(tv.proj_barthag * 100).toFixed(1)}%` : '',
+    tv.three_pa_rate ? `3PA rate: ${tv.three_pa_rate}%` : '',
+  ].filter(Boolean).join(' | ');
+
   return [
     `${node.full_name} (${node.region} ${seed}, ${tv.conf ?? '?'})`,
     `Record: ${tv.record} | Bracket: ${node.wins_vs_field}W-${node.losses_vs_field}L`,
     `T-Rank #${tv.rank} | AdjEM: ${tv.adj_em > 0 ? '+' : ''}${tv.adj_em} | AdjOE: ${tv.adj_oe} | AdjDE: ${tv.adj_de}`,
-    `Barthag: ${(tv.barthag * 100).toFixed(1)}% | WAB: ${parseFloat(tv.wab).toFixed(1)} | Pace: ${pace}`,
-    `Shooting: 2P% ${tv.two_p ?? '?'} | 3P% ${tv.three_p ?? '?'} | FT% ${tv.ft_pct ?? '?'} | eFG% ${tv.efg ?? '?'}`,
+    `Barthag: ${(tv.barthag * 100).toFixed(1)}% | Proj Barthag: ${tv.proj_barthag ? (tv.proj_barthag*100).toFixed(1)+'%' : '?'} | WAB: ${parseFloat(tv.wab).toFixed(1)} | Pace: ${pace}`,
+    `Four Factors (off): ${fourFactors}`,
+    fourFactorsDef ? `Four Factors (def): ${fourFactorsDef}` : '',
+    `Shooting: 2P% ${tv.two_p ?? '?'} | 3P% ${tv.three_p ?? '?'} | FT% ${tv.ft_pct ?? '?'} | 3PA rate: ${tv.three_pa_rate ?? '?'}%`,
+    resumeStr ? `Resume: ${resumeStr}` : '',
     tf ? `Form: ${tf.last10} L10 | Streak: ${tf.streak}` : '',
     recent ? `Last 3: ${recent}` : '',
     oddsStr,
@@ -361,6 +390,10 @@ function classifyIntent(msg, graph) {
   if (/final four|champion|title contend|win it all|wins it all|win the tournament|wins the tournament|national title|who.*win.*whole|who.*favori|pick.*win|pick.*champion|who.*(should|would|will).*win/i.test(m))
     return { type: 'top_teams_all' };
 
+  // Rhetorical follow-ups route to dynamic before any intent check fires
+  const isRhetoricalFollowUp = /^(are you sure|are you certain|really\?|seriously\?|you sure|u sure|wait really|is that right|that seems|that can'?t be|i thought|but i thought|doesn'?t that|does(n'?t)? that)/i.test(m.trim());
+  if (isRhetoricalFollowUp) return { type: 'dynamic' };
+
   if (/undervalued|underrated|overvalued|market.*value|value.*market|mispriced|odds.*wrong|line.*off|market.*vs|model.*vs.*market|sharp money|betting value|are the odds|\bodds\b.*\?|what.*odds|value bet|value.*betting|\bml\b|moneyline|money line|plus.*minus|\bats\b|against the spread|cover the spread|covers? the spread|\bwho covers\b|beat the spread|does.*cover|spread.*right|favored correctly|the line|over.under|affect.*spread|affect.*line|affect.*odds|injury.*spread|injury.*line|injury.*odds|new line|line move|odds change|line change|prop bet|futures.*odds|implied prob|who covers|betting market|\b[+-][0-9]{3,4}\b|has it right|line.*right|market.*right|priced.*right/i.test(m))
     return { type: 'market_analysis' };
 
@@ -433,7 +466,7 @@ function classifyIntent(msg, graph) {
           if (hasNonBball) return { type: 'general' };
           const isFollowUp = /injur\w*|injury news|is.*playing\b|any injury|hurt\b|questionable|\baffect\b|\bimpact\b|\bchange\b|does that|who else|step up|what about|the news|is out|out for|will he|will she|is he\b|is she\b|when is he|when does|limited minutes|\brepeat\b|same (question|analysis|thing)|analysis for|do the same|redo|reconsider|not gonna|wont win|can.?t win|gonna lose|too weak|no chance|broke his|broke her|broke their|fractured|sprained|tweaked|hobbling|limping|missed.*game|miss.*game/i.test(m);
           if (isFollowUp) return { type: 'dynamic' };
-          const hasAnalysis = /tell me|how is|stats|analysis|record|rank|efficiency|looking|how.*doing|how.*playing|how.*perform|season|chance|beat|win|lose|matchup|tournament|bracket|predict|advance|start\w*|lineup|rotation|depth chart|bench|roster|who plays|who starts|is.*sleeper|is.*upset|upset pick|sleeper pick|dark horse|cinderella|got this|got a chance|got what|can they|will they|should I pick|path to|road to|chances of/i.test(m);
+          const hasAnalysis = /tell me|how is|stats|analysis|record|rank|efficiency|looking|how.*doing|how.*playing|how.*perform|season|chance|beat|win|lose|matchup|tournament|bracket|predict|advance|start\w*|lineup|rotation|depth chart|bench|roster|who plays|who starts|is.*sleeper|is.*upset|upset pick|sleeper pick|dark horse|cinderella|got this|got a chance|got what|can they|will they|should I pick|path to|road to|chances of|four factors|turnover rate|offensive rebound|free throw rate|opponent efg|opp efg|sos|strength of schedule|luck rating|proj.*barthag|projected.*barthag|3pa rate|three.?point attempt|net ranking|quad [0-9]|quad[0-9]|wab|wins above bubble|pace|tempo|adjoe|adjde|adjem|barthag|torvik|t-rank/i.test(m);
           const hasNcaaSig = hasNcaaSignal;
           if (hasNcaaSig || hasAnalysis) return { type: 'team_lookup', team: teams[0].label };
         }
@@ -461,7 +494,7 @@ function classifyIntent(msg, graph) {
       // so the model can use chat history, not trigger a fresh team profile lookup
       const isFollowUp = /injur\w*|injury news|is.*playing\b|any injury|hurt\b|questionable|\baffect\b|\bimpact\b|\bchange\b|does that|who else|step up|what about|the news|is out|out for|will he|will she|is he\b|is she\b|when is he|when does|limited minutes|\brepeat\b|same (question|analysis|thing)|analysis for|do the same|redo|reconsider|not gonna|wont win|can.?t win|gonna lose|too weak|no chance|broke his|broke her|broke their|fractured|sprained|tweaked|hobbling|limping|missed.*game|miss.*game/i.test(m);
       if (isFollowUp) return { type: 'dynamic' };
-      const hasAnalysis = /tell me|how is|stats|analysis|record|rank|efficiency|looking|how.*doing|how.*playing|how.*perform|season|chance|beat|win|lose|matchup|tournament|bracket|predict|advance|start\w*|lineup|rotation|depth chart|bench|roster|who plays|who starts|is.*sleeper|is.*upset|upset pick|sleeper pick|dark horse|cinderella|got this|got a chance|got what|can they|will they|should I pick|path to|road to|chances of/i.test(m);
+      const hasAnalysis = /tell me|how is|stats|analysis|record|rank|efficiency|looking|how.*doing|how.*playing|how.*perform|season|chance|beat|win|lose|matchup|tournament|bracket|predict|advance|start\w*|lineup|rotation|depth chart|bench|roster|who plays|who starts|is.*sleeper|is.*upset|upset pick|sleeper pick|dark horse|cinderella|got this|got a chance|got what|can they|will they|should I pick|path to|road to|chances of|four factors|turnover rate|offensive rebound|free throw rate|opponent efg|opp efg|\bsos\b|strength of schedule|luck rating|proj.*barthag|projected.*barthag|3pa rate|three.?point attempt|net ranking|quad [0-9]|quad[0-9]|\bwab\b|wins above bubble|\bpace\b|\btempo\b|adjoe|adjde|adjem|\bbarthag\b|\btorvik\b|t-rank|\btov\b|\borb\b|\bftr\b|efficien\w*|\btov\b|\borb\b|\bftr\b|efficien\w*/i.test(m);
       if (hasNcaaSignal || hasAnalysis) return { type: 'team_lookup', team: found[0].label };
     }
   }
@@ -571,7 +604,7 @@ function preFetch(intent, graph, torvik) {
 // Builds a full injury report across all teams — used when user asks about
 // injuries without naming a specific team.
 function buildInjuryContext() {
-  const { injuryMap, nodeByName } = getData();
+  const { injuryMap, nodeByName, aliveTeamIds } = getData();
   let injuryNews = {};
   try {
     const raw = JSON.parse(readFileSync(join(process.cwd(), 'data', 'injury_news.json'), 'utf8'));
@@ -585,8 +618,9 @@ function buildInjuryContext() {
 
   const lines = ['INJURY REPORT — ALL TEAMS:'];
 
-  // Confirmed injury overrides (model penalty applied)
+  // Confirmed injury overrides (model penalty applied) — alive teams only
   for (const [id, inj] of Object.entries(injuryMap)) {
+    if (aliveTeamIds?.size && !aliveTeamIds.has(String(id))) continue;
     const node = Object.values(nodeByName).find(n => n.id === id);
     const name = node?.full_name ?? `Team ${id}`;
     lines.push(`\n${name} (AdjEM penalty -${inj.penalty}):`);
@@ -599,9 +633,10 @@ function buildInjuryContext() {
     if (inj.notes) lines.push(`  Note: ${inj.notes}`);
   }
 
-  // Injury news headlines (includes players not yet in overrides)
+  // Injury news headlines — alive teams only
   const newsLines = [];
   for (const [id, team] of Object.entries(injuryNews)) {
+    if (aliveTeamIds?.size && !aliveTeamIds.has(String(id))) continue;
     const articles = team.articles?.slice(0, 2) ?? [];
     if (!articles.length) continue;
     const node = Object.values(nodeByName).find(n => n.id === id);
