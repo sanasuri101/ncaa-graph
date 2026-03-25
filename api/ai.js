@@ -142,6 +142,7 @@ const ALIASES = {
 
 function normName(s) {
   return s.toLowerCase().trim()
+    .replace(/'s\b/g, '')         // strip possessives: "Duke's" -> "Duke"
     .replace(/\bst\.\s*/g, 'saint ').replace(/\bst\s+/g, 'saint ')
     .replace(/\bft\.?\s+/g, 'fort ').replace(/[.'`]/g, '').replace(/\s+/g, ' ').trim();
 }
@@ -331,18 +332,27 @@ const REGIONS_ORDERED = ['Midwest', 'East', 'West', 'South'];
 
 function classifyIntent(msg, graph) {
   const m = msg.toLowerCase();
-  const hasBball = /team|game|match|play|score|win|loss|seed|bracket|region|stats|rank|efficien|torvik|adj|barthag|tournament|ncaa|college|basketball|upset|predict|advance|champion|final four|elite eight|sweet/i.test(m);
+  // Require NCAA/tournament-specific signal — generic sports words alone don't qualify
+  // This prevents "NBA tonight", "play basketball", "Super Bowl" from hitting dynamic
+  const hasNcaaSignal = /ncaa|march madness|bracket|torvik|barthag|adj.?em|adj.?oe|adj.?de|seed|sweet sixteen|elite eight|final four|t-rank|efficiency|college basketball|tournament|matchup|upset|win probability|wins it all|win it all|cut down the nets|national champion/i.test(m);
+  const hasTeamSignal = graph?.nodes?.some(n => {
+    const lbl = normName(n.label);
+    const re  = new RegExp('\\b' + lbl.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b');
+    return re.test(normName(msg));
+  }) ?? false;
+  const hasOtherSport = /\bnba\b|\bnfl\b|\bnhl\b|\bmlb\b|\bwnba\b|\bsoccer\b|\bfootball\b|\bsuper bowl\b|\bworld series\b|\bstanley cup\b/i.test(m);
+  const hasBball = (hasNcaaSignal || hasTeamSignal) && !hasOtherSport;
 
   if (/haven.?t played|not played|could face|potential matchup/i.test(m))
     return { type: 'unplayed_matchups' };
 
-  if (/final four|champion|title contend|win it all|win the tournament|national title|who.*win.*whole|who.*favori|pick.*win|pick.*champion|who.*(should|would|will).*win/i.test(m))
+  if (/final four|champion|title contend|win it all|wins it all|win the tournament|wins the tournament|national title|who.*win.*whole|who.*favori|pick.*win|pick.*champion|who.*(should|would|will).*win/i.test(m))
     return { type: 'top_teams_all' };
 
   if (/undervalued|underrated|overvalued|market.*value|value.*market|mispriced|odds.*wrong|line.*off|market.*vs|model.*vs.*market|sharp money|betting value|are the odds|odds on |line on |spread.*right|favored correctly/i.test(m))
     return { type: 'market_analysis' };
 
-  if (/sleeper|dark.horse|cinderella|upset.pick|surprise pick|overachiev|best upset/i.test(m))
+  if (/sleeper|dark.horse|cinderella|upset.pick|surprise pick|overachiev|best upset|who.*should.*pick|pick.*bracket|bracket.*pick/i.test(m))
     return { type: 'sleeper_all_regions' };
 
   for (const r of REGIONS_ORDERED) {
@@ -360,8 +370,19 @@ function classifyIntent(msg, graph) {
       const re  = new RegExp('\\b' + lbl.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b');
       return re.test(mNorm);
     });
+    // Only treat as basketball team query if there's basketball context OR it's a clear matchup
     if (found.length >= 2) return { type: 'matchup', team_a: found[0].label, team_b: found[1].label };
-    if (found.length === 1) return { type: 'team_lookup', team: found[0].label };
+    if (found.length === 1) {
+      // Only treat as team lookup if there's basketball context
+      // "Duke University job" should NOT match — require hasBball or explicit analysis words
+      // Reject if there's clearly non-basketball context — return general immediately
+      const hasNonBballContext = /university|college admission|job|career|hire|school|professor|campus|degree|graduate|apply|application/i.test(m);
+      if (hasNonBballContext) return { type: 'general' };
+
+      // Treat as team lookup if there's basketball signal OR analysis intent about this team
+      const hasAnalysisWords = /tell me|how is|stats|analysis|record|rank|efficiency|looking|how.*doing|how.*playing|how.*perform|season|chance|odds|beat|win|lose|matchup|tournament|bracket|predict|advance/i.test(m);
+      if (hasNcaaSignal || hasAnalysisWords) return { type: 'team_lookup', team: found[0].label };
+    }
   }
 
   if (!hasBball) return { type: 'general' };
@@ -466,7 +487,7 @@ function preFetch(intent, graph, torvik) {
 }
 
 // ── System prompt ─────────────────────────────────────────────────────────────
-function buildSystemPrompt(userMsg, graph, torvik, form, injuryMap, prefetchedContext) {
+function buildSystemPrompt(userMsg, graph, torvik, form, injuryMap, prefetchedContext, intent) {
   const { aliveTeamIds, teamOdds } = getData();
   const aliveCount = aliveTeamIds?.size || 16;
   const round  = aliveCount >= 16 ? 'Sweet 16' : aliveCount >= 8 ? 'Elite Eight' : aliveCount >= 4 ? 'Final Four' : 'Championship';
@@ -493,12 +514,58 @@ function buildSystemPrompt(userMsg, graph, torvik, form, injuryMap, prefetchedCo
   }
 
   const context = prefetchedContext || scopeContext;
+  const intentType = intent?.type ?? 'dynamic';
 
-  let p = `You are AI Scout — expert NCAA basketball analyst for the ${season} March Madness tournament.\n`;
-  p += `Round: ${round}. ${aliveCount} teams remain. Today is March 24, 2026.\n`;
-  p += `ONLY reference teams still alive. Do not mention eliminated teams.\n\n`;
-  p += `RULES: Never hedge. Cite exact stats (AdjEM, Barthag, eFG%). Every matchup must state who wins and at what probability. Apply injury AdjEM penalties explicitly.\n\n`;
-  p += `FRAMEWORK: AdjEM gap (1pt = 1pt/100 poss) → Barthag (neutral court win prob) → Four Factors → Form → Market divergence if >8pp from Barthag.\n`;
+  let p = `You are AI Scout, an expert NCAA basketball analyst. ${season} March Madness ${round}. ${aliveCount} teams remain. Today is March 24, 2026.\n`;
+  p += `Only reference teams still alive. No eliminated teams.\n\n`;
+
+  if (intentType === 'matchup' || intentType === 'team_lookup' || intentType === 'multi_team') {
+    p += `TASK: Deep matchup or team analysis.\n`;
+    p += `- Lead with the AdjEM gap (1pt = 1pt per 100 possessions). State whether it is decisive (>10), meaningful (5-10), or a toss-up (<5).\n`;
+    p += `- Barthag = neutral court win probability — state it explicitly.\n`;
+    p += `- Compare AdjOE vs opponent AdjDE for offensive edge; AdjDE vs opponent AdjOE for defensive edge.\n`;
+    p += `- Cite recent form, streaks, any injuries with their exact AdjEM penalty applied.\n`;
+    p += `- If market odds diverge from Barthag by more than 8 points, explain the gap.\n`;
+    p += `- Close with: who wins, exact win probability, and the single stat that decides it.\n`;
+
+  } else if (intentType === 'top_teams_all') {
+    p += `TASK: Identify the Final Four and championship favorites. Write this as analytical prose, not a numbered stat list.\n`;
+    p += `- For the top 4 contenders: state their path through the bracket, their dominant strength, and their one beatable weakness.\n`;
+    p += `- Compare efficiency (AdjEM) vs market implied probability for each — call out any significant divergence.\n`;
+    p += `- Name a dark horse or two that the bracket field is underestimating.\n`;
+    p += `- Be direct: pick your Final Four and state your championship pick with a specific reason.\n`;
+
+  } else if (intentType === 'sleeper_all_regions') {
+    p += `TASK: Find the best upset picks in the remaining bracket. Do not apply the same efficiency template to each game — tell the story of how each upset happens.\n`;
+    p += `- For each upset pick: name the specific matchup, then explain the mechanism — what does the underdog do well that the favorite is vulnerable to?\n`;
+    p += `- Look for: pace mismatches, defensive strengths vs offensive styles, injuries to the favorite, recent momentum shifts, market lines that overvalue seeds.\n`;
+    p += `- Rank from most to least likely. Give each pick a realistic probability range.\n`;
+    p += `- Do not just list AdjEM gaps — connect the numbers to how the game will actually be played.\n`;
+
+  } else if (intentType === 'market_analysis') {
+    p += `TASK: Find teams the market is mispricing. Lead with the biggest discrepancies.\n`;
+    p += `- Compare BPI win probability vs DraftKings implied probability (from moneyline) for each upcoming game.\n`;
+    p += `- Undervalued = BPI substantially higher than market implied. Overvalued = market implied substantially higher than BPI.\n`;
+    p += `- For each mispriced team: exact gap in percentage points, and what the market is missing (injury not priced in, recency bias, AdjDE advantage, pace mismatch).\n`;
+    p += `- Give a direct betting recommendation: value bet, fade, or no edge.\n`;
+
+  } else if (intentType === 'region_standings') {
+    p += `TASK: Break down the ${intent?.region ?? 'tournament'} region. Who advances and why?\n`;
+    p += `- Rank the remaining teams by realistic championship probability, not just seed.\n`;
+    p += `- For each: their most likely path, who they need to beat, and their biggest vulnerability.\n`;
+    p += `- Call out any upset you see coming and why the higher seed is beatable.\n`;
+
+  } else if (intentType === 'unplayed_matchups') {
+    p += `TASK: Analyze potential future matchups among the top remaining teams.\n`;
+    p += `- Look at efficiency matchups, pace mismatches, and how styles clash.\n`;
+    p += `- Project who advances from each region and what the Final Four looks like.\n`;
+
+  } else {
+    p += `Answer directly and specifically. Match the format to the question — if it's a comparison, compare; if it's a prediction, predict; if it's a list, list. No generic templates.\n`;
+  }
+
+  p += `\nCite exact numbers throughout. No hedging, no filler phrases, no "it's worth noting". Direct statements only.\n`;
+
   if (context) p += `\n\nDATA:\n${context}`;
   return p;
 }
@@ -570,7 +637,7 @@ export default async function handler(req, res) {
     for (const t of prefetch.thinking) writer.thinking(t);
 
     // Step 3: build system prompt
-    const system = buildSystemPrompt(userMsg, graph, torvik, form, injuryMap, prefetch.context);
+    const system = buildSystemPrompt(userMsg, graph, torvik, form, injuryMap, prefetch.context, intent);
 
     // Trim history to fit token budget (rough estimate — SDK tracks exact usage)
     const BUDGET = 3000; // chars for history
@@ -585,7 +652,13 @@ export default async function handler(req, res) {
 
     const messages = [{ role: 'system', content: system }, ...history];
 
-    // Step 4: known intents — no tools, stream directly
+    // Step 4a: off-topic — immediate polite redirect, no Groq call needed
+    if (intent.type === 'general') {
+      send(200, { text: "I'm focused on the 2026 NCAA Tournament. Ask me about matchups, upset picks, team efficiency, Final Four predictions, or bracket strategy.", thinking: [] });
+      return;
+    }
+
+    // Step 4b: known intents — no tools, stream directly
     if (intent.type !== 'dynamic') {
       const groq   = createGroq({ apiKey: groqKey });
       const result = streamText({
