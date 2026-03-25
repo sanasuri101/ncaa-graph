@@ -346,7 +346,7 @@ function classifyIntent(msg, graph) {
   const m = msg.toLowerCase();
   // Require NCAA/tournament-specific signal — generic sports words alone don't qualify
   // This prevents "NBA tonight", "play basketball", "Super Bowl" from hitting dynamic
-  const hasNcaaSignal = /ncaa|march madness|bracket|torvik|barthag|adj.?em|adj.?oe|adj.?de|seed|sweet sixteen|elite eight|final four|t-rank|efficiency|college basketball|tournament|matchup|upset|win probability|wins it all|win it all|cut down the nets|national champion/i.test(m);
+  const hasNcaaSignal = /ncaa|march madness|\bsweet 16\b|\bsweet sixteen\b|\belite 8\b|\belite eight\b|\bfinal four\b|\bright four\b|round of 64|round of 32|first round|second round|torvik|barthag|adj.?em|adj.?oe|adj.?de|t-rank|basketball efficiency|team efficiency|\bbasketball\b|college basketball|ncaa bracket|tournament bracket|tournament pick|region picks?|midwest region|east region|west region|south region|\bseed\b.*\bbasketball\b|\bbasketball\b.*\bseed\b|overall seed|number.*seed|\bseeds?\b.*\badvance\b|\badvance\b.*\bseeds?\b|\b[0-9]+ seed|upset pick|chalk pick|bracket advice|bracket strategy|safe pick|value pick|picks this year|\b5-12\b|\b12-5\b|\b[0-9]+-[0-9]+ matchup\b|seed upset|win probability|wins it all|win it all|cut down the nets|national champion|injured|injury|\bout\b|out for|limited minutes|ppg|rpg|apg|per|three.?point pct|tempo mismatch|pace mismatch|cover the spread|beat the spread|against the spread|over.under|moneyline|the line|step up|change anything|affect the|still win|who wins|the key|does that|does this|who else|who steps|chances now|is.*playing\b|will.*play|any injuries|injury update|injury news|\bhurt\b|questionable|game.?time decision/i.test(m);
   const hasTeamSignal = graph?.nodes?.some(n => {
     const lbl = normName(n.label);
     const re  = new RegExp('\\b' + lbl.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b');
@@ -361,14 +361,25 @@ function classifyIntent(msg, graph) {
   if (/final four|champion|title contend|win it all|wins it all|win the tournament|wins the tournament|national title|who.*win.*whole|who.*favori|pick.*win|pick.*champion|who.*(should|would|will).*win/i.test(m))
     return { type: 'top_teams_all' };
 
-  if (/undervalued|underrated|overvalued|market.*value|value.*market|mispriced|odds.*wrong|line.*off|market.*vs|model.*vs.*market|sharp money|betting value|are the odds|odds on |line on |spread.*right|favored correctly/i.test(m))
+  if (/undervalued|underrated|overvalued|market.*value|value.*market|mispriced|odds.*wrong|line.*off|market.*vs|model.*vs.*market|sharp money|betting value|are the odds|\bodds\b.*\?|what.*odds|value bet|value.*betting|\bml\b|moneyline|money line|plus.*minus|\bats\b|against the spread|cover the spread|covers? the spread|\bwho covers\b|beat the spread|does.*cover|spread.*right|favored correctly|the line|over.under|affect.*spread|affect.*line|affect.*odds|injury.*spread|injury.*line|injury.*odds|new line|line move|odds change|line change|prop bet|futures.*odds|implied prob|who covers|betting market|\b[+-][0-9]{3,4}\b|has it right|line.*right|market.*right|priced.*right/i.test(m))
     return { type: 'market_analysis' };
 
-  if (/sleeper|dark.horse|cinderella|upset.pick|surprise pick|overachiev|best upset|who.*should.*pick|pick.*bracket|bracket.*pick/i.test(m))
-    return { type: 'sleeper_all_regions' };
+  if (/sleeper|dark.horse|cinderella|upset.pick|surprise pick|overachiev|best upset|who.*should.*pick|bracket.*pick/i.test(m)) {
+    // If a specific tournament team is named, fall through to team_lookup
+    const mNormSleeper = normName(msg);
+    const namedTeam = graph?.nodes?.some(n => {
+      const lbl  = normName(n.label);
+      const full = normName(n.full_name);
+      const rLbl  = new RegExp('\\b' + lbl.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b');
+      const rFull = new RegExp('\\b' + full.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b');
+      return rLbl.test(mNormSleeper) || rFull.test(mNormSleeper);
+    }) ?? false;
+    if (!namedTeam) return { type: 'sleeper_all_regions' };
+    // else fall through to team matching below
+  }
 
   for (const r of REGIONS_ORDERED) {
-    if (m.includes(r.toLowerCase()) && /best|top|strong|effici|rank|adj.?em|barthag|who|favor|win/i.test(m))
+    if (m.includes(r.toLowerCase()) && /best|top|strong|effici|rank|adj.?em|barthag|who|favor|win|pick|bracket|like|predict|advance/i.test(m))
       return { type: 'region_standings', region: r };
   }
 
@@ -396,8 +407,11 @@ function classifyIntent(msg, graph) {
       return rLbl.test(mNorm) || rFull.test(mNorm) || rLbl.test(mAbbrev) || rFull.test(mAbbrev);
     });
 
-    // 2+ found: return as matchup. Only dedup if 3+ to handle edge cases.
+    // 2+ found: return as matchup — UNLESS injury/follow-up signal present
+    // e.g. "are there injuries for duke and arizona?" should be dynamic not matchup
     if (found.length >= 2) {
+      const hasInjurySignal = /injur\w*|\bhurt\b|is.*playing\b|any injury|out for|limited minutes|questionable|who steps up|who else/i.test(m);
+      if (hasInjurySignal) return { type: 'dynamic' };
       let teams = found;
       if (found.length > 2) {
         teams = found.filter((n, i) => {
@@ -411,7 +425,11 @@ function classifyIntent(msg, graph) {
     if (found.length === 1) {
       const hasNonBball = /university|college admission|job|career|hire|school|professor|campus|degree|graduate|apply|application/i.test(m);
       if (hasNonBball) return { type: 'general' };
-      const hasAnalysis = /tell me|how is|stats|analysis|record|rank|efficiency|looking|how.*doing|how.*playing|how.*perform|season|chance|odds|beat|win|lose|matchup|tournament|bracket|predict|advance/i.test(m);
+      // Follow-up questions like "how does that affect iowa state?" should go dynamic
+      // so the model can use chat history, not trigger a fresh team profile lookup
+      const isFollowUp = /injur\w*|injury news|is.*playing\b|any injury|hurt\b|questionable|\baffect\b|\bimpact\b|\bchange\b|does that|who else|step up|what about|the news|is out|out for|will he|will she|is he\b|is she\b|when is he|when does|limited minutes|\brepeat\b|same (question|analysis|thing)|analysis for|do the same|redo|reconsider|not gonna|wont win|can.?t win|gonna lose|too weak|no chance|broke his|broke her|broke their|fractured|sprained|tweaked|hobbling|limping|missed.*game|miss.*game/i.test(m);
+      if (isFollowUp) return { type: 'dynamic' };
+      const hasAnalysis = /tell me|how is|stats|analysis|record|rank|efficiency|looking|how.*doing|how.*playing|how.*perform|season|chance|beat|win|lose|matchup|tournament|bracket|predict|advance|start\w*|lineup|rotation|depth chart|bench|roster|who plays|who starts|is.*sleeper|is.*upset|upset pick|sleeper pick|dark horse|cinderella|got this|got a chance|got what|can they|will they|should I pick|path to|road to|chances of/i.test(m);
       if (hasNcaaSignal || hasAnalysis) return { type: 'team_lookup', team: found[0].label };
     }
   }
@@ -685,9 +703,17 @@ export default async function handler(req, res) {
 
     // Step 4a: off-topic — immediate polite redirect, no Groq call needed
     if (intent.type === 'general') {
-      writer.text("I'm focused on the 2026 NCAA Tournament. Ask me about matchups, upset picks, team efficiency, Final Four predictions, or bracket strategy.");
-      writer.done();
-      return;
+      // If there's prior conversation context, user is likely asking a follow-up
+      // e.g. "is jefferson injured?" after an Iowa State analysis — route to dynamic
+      const hasHistory = history.some(m => m.role === 'assistant' && m.content?.length > 20);
+      if (hasHistory) {
+        // Fall through to dynamic — model uses chat history for context
+        intent.type = 'dynamic';
+      } else {
+        writer.text("I'm focused on the 2026 NCAA Tournament. Ask me about matchups, upset picks, team efficiency, Final Four predictions, or bracket strategy.");
+        writer.done();
+        return;
+      }
     }
 
     // Step 4b: known intents — no tools, stream directly
