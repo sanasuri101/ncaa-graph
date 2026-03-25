@@ -668,7 +668,7 @@ export default async function handler(req, res) {
       });
 
       for await (const chunk of result.textStream) {
-        writer.text(sanitize(chunk));
+        writer.text(chunk); // raw — browser sanitizes full text on done
       }
       writer.done();
       return;
@@ -698,7 +698,7 @@ export default async function handler(req, res) {
     });
 
     for await (const chunk of result.textStream) {
-      writer.text(sanitize(chunk));
+      writer.text(chunk); // raw — browser sanitizes full text on done
     }
     writer.done();
 

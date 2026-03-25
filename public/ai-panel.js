@@ -13,6 +13,17 @@
 
 'use strict';
 
+// Sanitize full LLM output — NEVER call on individual chunks, only complete text
+function sanitize(text) {
+  if (!text) return '';
+  return text
+    .replace(/<think>[\s\S]*?<\/think>/gi, '')
+    .replace(/^(Note|Explanation|Reasoning|Disclaimer|Reminder)[:\s].*/gim, '')
+    .replace(/^(I (have|will|am|did)|The response|As instructed|Following the|Per the)[^\n]*/gim, '')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+}
+
 let _chatInFlight = false;
 let chatHistory   = [];
 let _activeMatchup = null; // tracks { team_a, team_b } after a multi-agent analysis
@@ -360,14 +371,13 @@ async function sendChat() {
         },
         onChunk: (chunk) => {
           streamedText += chunk;
-          // Find or create the streaming body element and update it
           let el = thinkEl.querySelector('.chat-streaming');
           if (!el) {
             el = document.createElement('div');
             el.className = 'chat-bubble-ai-body chat-streaming';
             thinkEl.appendChild(el);
           }
-          el.innerHTML = renderMarkdown(streamedText);
+          el.textContent = streamedText; // plain text while streaming — no broken markdown
           messagesEl.scrollTop = messagesEl.scrollHeight;
         },
       });
@@ -824,7 +834,7 @@ async function callAI(messages, userMsg, signal, { onThinking, onChunk } = {}) {
       }
     }
 
-    return { text: fullText || 'No response — try rephrasing.', thinking };
+    return { text: sanitize(fullText) || 'No response — try rephrasing.', thinking };
   } catch (err) {
     clearTimeout(timer);
     if (err.name === 'AbortError') { const e = new Error('aborted'); e.name = 'AbortError'; throw e; }
@@ -1242,7 +1252,7 @@ async function sendScoutChat() {
             el.className = 'chat-bubble-ai-body chat-streaming';
             aiEl.appendChild(el);
           }
-          el.innerHTML = renderMarkdown(streamedText);
+          el.textContent = streamedText; // plain text while streaming — no broken markdown
           messages.scrollTop = messages.scrollHeight;
         },
       });
