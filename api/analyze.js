@@ -426,33 +426,61 @@ function makeAgent({ agentName, systemPrompt, maxTokens = MAX_TOKENS }) {
     const tools   = buildAgentTools(state.team_a, state.team_b);
 
     try {
-      const { text, toolCalls } = await generateText({
+      // Phase 1: tool-calling — agent fetches the data it decides it needs
+      const toolResult = await generateText({
         model:     groq(MODEL),
         maxTokens,
         maxSteps:  MAX_STEPS,
         tools,
+        toolChoice: 'auto',
         system:    systemPrompt,
-        prompt:    `Analyze the matchup: ${state.team_a} vs ${state.team_b}.\n\nUse your tools to fetch the data you need. Then return your assessment as valid JSON with this exact schema:\n{\n  "agent": "${agentName}",\n  "win_pct": <number 0-100 for ${state.team_a}>,\n  "confidence": "low|medium|high",\n  "key_edge": "<one specific advantage you found>",\n  "reasoning": "<2-3 sentences citing exact numbers from the data you retrieved>"\n}\n\nReturn ONLY the JSON object. No markdown, no preamble.`,
+        prompt:    `Fetch all data you need to assess this matchup: ${state.team_a} vs ${state.team_b}.\nCall the tools that are relevant to your role. You MUST call at least one tool.`,
+      });
+
+      // Collect all tool results across all steps
+      const allSteps = await toolResult.steps;
+      const toolData = allSteps
+        .flatMap(step => step.toolResults ?? [])
+        .map(tr => {
+          // SDK wraps string output as {type:"text",value:"..."} or {type:"json",value:{...}}
+          const raw = tr.output ?? tr.result ?? "";
+          let txt = "";
+          if (typeof raw === "string")             txt = raw;
+          else if (raw?.type === "text")           txt = raw.value ?? "";
+          else if (raw?.type === "json")           txt = JSON.stringify(raw.value ?? {});
+          else if (raw?.value != null)             txt = String(raw.value);
+          else                                      txt = JSON.stringify(raw);
+          return `[${tr.toolName}]\n${txt}`;
+        })
+        .join('\n\n');
+
+      if (!toolData) throw new Error('No tool data retrieved');
+
+      // Phase 2: JSON generation — separate call with no tools, just the retrieved data
+      const jsonResult = await generateText({
+        model:     groq(MODEL),
+        maxTokens: 512,
+        system:    `You are a ${agentName} analyst. Return ONLY valid JSON. No markdown, no explanation, no text outside the JSON object.`,
+        prompt:    `Based on this data:\n\n${toolData}\n\nReturn your assessment as JSON:\n{\n  "agent": "${agentName}",\n  "win_pct": <number 0-100 for ${state.team_a}>,\n  "confidence": "low|medium|high",\n  "key_edge": "<one specific stat advantage from the data>",\n  "reasoning": "<2-3 sentences citing exact numbers from the data above>"\n}`,
       });
 
       let result;
       try {
-        const clean = text.replace(/```json|```/g, '').trim();
+        const clean = jsonResult.text.replace(/```json|```/g, '').trim();
         const s = clean.indexOf('{'), e = clean.lastIndexOf('}');
         result = JSON.parse(s >= 0 && e > s ? clean.slice(s, e+1) : clean);
       } catch {
-        // Parse failed — extract what we can from tool results
         result = {
           agent:      agentName,
           win_pct:    50,
           confidence: 'low',
           key_edge:   'parse error',
-          reasoning:  sanitizeLLMOutput(text).slice(0, 200) || `${agentName} analysis error`,
+          reasoning:  sanitizeLLMOutput(toolData).slice(0, 300) || `${agentName} analysis incomplete`,
         };
       }
 
       if (result.reasoning) result.reasoning = sanitizeLLMOutput(result.reasoning);
-      result.agent = agentName; // enforce correct agent name
+      result.agent = agentName;
       return { agent_results: [result] };
 
     } catch (err) {
@@ -604,13 +632,39 @@ Rules:
 Return ONLY the JSON object. No backticks. No preamble.`;
 
   try {
+    // Phase 1: synthesis agent fetches any additional data it needs
+    const synthToolResult = await generateText({
+      model:      groq(MODEL),
+      maxTokens:  1024,
+      maxSteps:   MAX_STEPS,
+      tools,
+      toolChoice: 'auto',
+      system:     synthSystem,
+      prompt:     `Review the agent reports and fetch any additional data you need to write a deep analysis of ${state.team_a} vs ${state.team_b}. Focus on verifying key claims and getting roster/injury details.\n\n${synthPrompt}`,
+    });
+
+    const synthSteps = await synthToolResult.steps;
+    const synthToolData = synthSteps
+      .flatMap(step => step.toolResults ?? [])
+      .map(tr => {
+          // SDK wraps string output as {type:"text",value:"..."} or {type:"json",value:{...}}
+          const raw = tr.output ?? tr.result ?? "";
+          let txt = "";
+          if (typeof raw === "string")             txt = raw;
+          else if (raw?.type === "text")           txt = raw.value ?? "";
+          else if (raw?.type === "json")           txt = JSON.stringify(raw.value ?? {});
+          else if (raw?.value != null)             txt = String(raw.value);
+          else                                      txt = JSON.stringify(raw);
+          return `[${tr.toolName}]\n${txt}`;
+        })
+      .join('\n\n');
+
+    // Phase 2: write the full JSON analysis with all data in context
     const { text } = await generateText({
       model:     groq(MODEL),
       maxTokens: MAX_TOKENS_SY,
-      maxSteps:  MAX_STEPS,
-      tools,
       system:    synthSystem,
-      prompt:    synthPrompt,
+      prompt:    `${synthPrompt}\n\nADDITIONAL DATA YOU FETCHED:\n${synthToolData || 'None'}`,
     });
 
     let clean = text.replace(/```json|```/g, '').trim();
