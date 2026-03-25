@@ -149,6 +149,23 @@
       "source": "ESPN",
       "updated": "2026-03-15"
     },
+    "66": {
+      "bracket_name": "Iowa State",
+      "region": "Midwest",
+      "seed": 2,
+      "adj_em_penalty": 2.5,
+      "players": [
+        {
+          "name": "Joshua Jefferson",
+          "status": "Questionable - sprained left ankle (March 20 vs Tennessee State, X-rays negative)",
+          "impact": "Second-leading scorer (16.9 ppg, 7.6 rpg, 4.9 apg, 31.8 mpg). Key forward for rebounding and playmaking. X-rays negative is encouraging but ankle status must be monitored.",
+          "adj_em_impact": -2.5
+        }
+      ],
+      "notes": "Jefferson suffered ankle sprain early in 108-74 win. X-rays negative. Monitor availability for next round.",
+      "source": "ESPN",
+      "updated": "2026-03-20"
+    },
     "26": {
       "bracket_name": "UCLA",
       "region": "South",
