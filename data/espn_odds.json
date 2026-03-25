@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-24T10:15:13.418374+00:00",
+  "generated_at": "2026-03-25T06:51:11.662806+00:00",
   "games": {
     "401856435": {
       "game_id": "401856435",
@@ -1730,7 +1730,7 @@
       "odds": {
         "source": "core_odds",
         "provider": "Draft Kings",
-        "spread": -6.5,
+        "spread": -7.5,
         "over_under": 148.5,
         "over_odds": -115.0,
         "under_odds": -105.0,
@@ -1764,9 +1764,9 @@
         "source": "core_odds",
         "provider": "Draft Kings",
         "spread": -1.5,
-        "over_under": 133.5,
-        "over_odds": -115.0,
-        "under_odds": -105.0,
+        "over_under": 132.5,
+        "over_odds": -112.0,
+        "under_odds": -108.0,
         "home_moneyline": -130,
         "away_moneyline": 110,
         "home_implied_pct": 56.5,
@@ -1830,7 +1830,7 @@
         "source": "core_odds",
         "provider": "Draft Kings",
         "spread": -7.5,
-        "over_under": 167.5,
+        "over_under": 166.5,
         "over_odds": -110.0,
         "under_odds": -110.0,
         "home_moneyline": -360,
@@ -1863,9 +1863,9 @@
         "source": "core_odds",
         "provider": "Draft Kings",
         "spread": -9.5,
-        "over_under": 175.5,
-        "over_odds": -105.0,
-        "under_odds": -115.0,
+        "over_under": 174.5,
+        "over_odds": -110.0,
+        "under_odds": -110.0,
         "home_moneyline": -535,
         "away_moneyline": 400,
         "home_implied_pct": 84.3,
@@ -1896,9 +1896,9 @@
         "source": "core_odds",
         "provider": "Draft Kings",
         "spread": -3.5,
-        "over_under": 140.5,
-        "over_odds": -105.0,
-        "under_odds": -115.0,
+        "over_under": 139.5,
+        "over_odds": -115.0,
+        "under_odds": -105.0,
         "home_moneyline": -162,
         "away_moneyline": 136,
         "home_implied_pct": 61.8,
@@ -1930,8 +1930,8 @@
         "provider": "Draft Kings",
         "spread": -1.5,
         "over_under": 136.5,
-        "over_odds": -110.0,
-        "under_odds": -110.0,
+        "over_odds": -115.0,
+        "under_odds": -105.0,
         "home_moneyline": -130,
         "away_moneyline": 110,
         "home_implied_pct": 56.5,
@@ -1987,8 +1987,8 @@
       "espn_id": "12",
       "markets": {
         "region_west": {
-          "moneyline": "-160",
-          "implied_pct": 61.5
+          "moneyline": "-150",
+          "implied_pct": 60.0
         },
         "big_12_conference_winner": {
           "moneyline": "+320",
@@ -2004,8 +2004,8 @@
       "espn_id": "2509",
       "markets": {
         "region_west": {
-          "moneyline": "+215",
-          "implied_pct": 31.7
+          "moneyline": "+220",
+          "implied_pct": 31.2
         },
         "big_ten_conference_winner": {
           "moneyline": "+200",
@@ -2021,8 +2021,8 @@
       "espn_id": "8",
       "markets": {
         "region_west": {
-          "moneyline": "+1000",
-          "implied_pct": 9.1
+          "moneyline": "+800",
+          "implied_pct": 11.1
         },
         "southeastern_conference_winner": {
           "moneyline": "+1000",
@@ -2038,8 +2038,8 @@
       "espn_id": "251",
       "markets": {
         "region_west": {
-          "moneyline": "+2500",
-          "implied_pct": 3.8
+          "moneyline": "+1800",
+          "implied_pct": 5.3
         },
         "southeastern_conference_winner": {
           "moneyline": "+3000",
@@ -2055,8 +2055,8 @@
       "espn_id": "130",
       "markets": {
         "region_midwest": {
-          "moneyline": "-145",
-          "implied_pct": 59.2
+          "moneyline": "-150",
+          "implied_pct": 60.0
         },
         "big_ten_conference_winner": {
           "moneyline": "+160",
@@ -2106,8 +2106,8 @@
       "espn_id": "333",
       "markets": {
         "region_midwest": {
-          "moneyline": "+1500",
-          "implied_pct": 6.2
+          "moneyline": "+1400",
+          "implied_pct": 6.7
         },
         "southeastern_conference_winner": {
           "moneyline": "+450",
@@ -2123,8 +2123,8 @@
       "espn_id": "248",
       "markets": {
         "region_south": {
-          "moneyline": "+130",
-          "implied_pct": 43.5
+          "moneyline": "+120",
+          "implied_pct": 45.5
         },
         "big_12_conference_winner": {
           "moneyline": "+185",
@@ -2140,8 +2140,8 @@
       "espn_id": "356",
       "markets": {
         "region_south": {
-          "moneyline": "+230",
-          "implied_pct": 30.3
+          "moneyline": "+235",
+          "implied_pct": 29.9
         },
         "big_ten_conference_winner": {
           "moneyline": "+1000",
@@ -2157,8 +2157,8 @@
       "espn_id": "158",
       "markets": {
         "region_south": {
-          "moneyline": "+370",
-          "implied_pct": 21.3
+          "moneyline": "+390",
+          "implied_pct": 20.4
         },
         "big_ten_conference_winner": {
           "moneyline": "+7500",
@@ -2174,8 +2174,8 @@
       "espn_id": "2294",
       "markets": {
         "region_south": {
-          "moneyline": "+750",
-          "implied_pct": 11.8
+          "moneyline": "+700",
+          "implied_pct": 12.5
         },
         "big_ten_conference_winner": {
           "moneyline": "+2500",
@@ -2204,6 +2204,23 @@
         }
       }
     },
+    "uconn": {
+      "espn_id": "41",
+      "markets": {
+        "region_east": {
+          "moneyline": "+450",
+          "implied_pct": 18.2
+        },
+        "big_east_conference_winner": {
+          "moneyline": "-130",
+          "implied_pct": 56.5
+        },
+        "championship": {
+          "moneyline": "+1300",
+          "implied_pct": 7.1
+        }
+      }
+    },
     "michigan st": {
       "espn_id": "127",
       "markets": {
@@ -2225,8 +2242,8 @@
       "espn_id": "2599",
       "markets": {
         "region_east": {
-          "moneyline": "+475",
-          "implied_pct": 17.4
+          "moneyline": "+500",
+          "implied_pct": 16.7
         },
         "big_east_conference_winner": {
           "moneyline": "+175",
@@ -2235,23 +2252,6 @@
         "championship": {
           "moneyline": "+2500",
           "implied_pct": 3.8
-        }
-      }
-    },
-    "uconn": {
-      "espn_id": "41",
-      "markets": {
-        "region_east": {
-          "moneyline": "+500",
-          "implied_pct": 16.7
-        },
-        "big_east_conference_winner": {
-          "moneyline": "-130",
-          "implied_pct": 56.5
-        },
-        "championship": {
-          "moneyline": "+1300",
-          "implied_pct": 7.1
         }
       }
     },

@@ -1,58 +1,20 @@
 {
-  "generated_at": "2026-03-24T09:11:19.830609+00:00",
+  "generated_at": "2026-03-25T06:51:48.230917+00:00",
   "teams": {
-    "2250": {
-      "bracket_name": "Gonzaga",
-      "region": "West",
-      "seed": 3,
-      "adj_em_penalty": 1.5,
-      "players": [
-        {
-          "name": "Braden Huff",
-          "status": "Questionable - left knee injury (out since Jan 15, targeting NCAA tournament return)",
-          "impact": "Leading scorer (17.8 ppg, 66.2% FG) \u2014 out since Jan 15. Gonzaga went 8-1 without him. Torvik rating already reflects 2 months of absence. Penalty reflects uncertainty about his readiness/effectiveness if he returns.",
-          "adj_em_impact": -1.5
-        }
-      ],
-      "notes": "Graham Ike (19.9 ppg) has stepped up. Huff could return for Round 1 (Mar 19-20) but game-ready status unknown. If confirmed fully available, remove this override.",
-      "override_date": "2026-03-15",
-      "news_flags": [],
-      "has_override": true,
-      "has_news_flag": false
-    },
-    "252": {
-      "bracket_name": "BYU",
-      "region": "West",
-      "seed": 6,
-      "adj_em_penalty": 4.5,
-      "players": [
-        {
-          "name": "Richie Saunders",
-          "status": "Out for season - torn ACL (Feb 14)",
-          "impact": "Star guard. Season-ending injury.",
-          "adj_em_impact": -4.5
-        }
-      ],
-      "notes": "BYU ceiling significantly lower without Saunders.",
-      "override_date": "2026-03-09",
-      "news_flags": [],
-      "has_override": true,
-      "has_news_flag": false
-    },
-    "2641": {
-      "bracket_name": "Texas Tech",
+    "130": {
+      "bracket_name": "Michigan",
       "region": "Midwest",
-      "seed": 5,
-      "adj_em_penalty": 5.5,
+      "seed": 1,
+      "adj_em_penalty": 1.0,
       "players": [
         {
-          "name": "JT Toppin",
+          "name": "LJ Cason",
           "status": "Out for season - torn ACL",
-          "impact": "All-America forward. Season-ending injury. Major loss.",
-          "adj_em_impact": -5.5
+          "impact": "Backup guard. Adds pressure on Elliot Cadeau.",
+          "adj_em_impact": -1.0
         }
       ],
-      "notes": "Ceiling significantly lower without Toppin per ESPN.",
+      "notes": "Cason was backup depth, moderate impact on rotation.",
       "override_date": "2026-03-09",
       "news_flags": [],
       "has_override": true,
@@ -77,54 +39,36 @@
       "has_override": false,
       "has_news_flag": true
     },
-    "2305": {
-      "bracket_name": "Kansas",
+    "150": {
+      "bracket_name": "Duke",
       "region": "East",
-      "seed": 4,
-      "adj_em_penalty": 0,
-      "players": [],
-      "notes": "",
-      "override_date": "",
-      "news_flags": [
+      "seed": 1,
+      "adj_em_penalty": 4.0,
+      "players": [
         {
-          "headline": "Bill Self says coaching future at Kansas to be determined",
-          "description": "Longtime Kansas coach Bill Self said after Sunday's season-ending loss to St. John's that he has not yet made a decision about his coaching future, later adding that any decision will be based solely ",
-          "published": "2026-03-23",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48283793/bill-self-says-coaching-future-kansas-determined"
+          "name": "Caleb Foster",
+          "status": "Out - fractured right foot (surgery March 9)",
+          "impact": "Starting PG, 8.5 ppg, 40.4% 3PT, primary ball handler. Out until Final Four at earliest.",
+          "adj_em_impact": -3.2
         },
         {
-          "headline": "Bill Self says coaching future at Kansas to be determined",
-          "description": "Longtime Kansas coach Bill Self said after Sunday's season-ending loss to St. John's that he has not yet made a decision about his coaching future, later adding that any decision will be based solely ",
-          "published": "2026-03-23",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48283793/bill-self-says-coaching-future-kansas-determined"
-        },
-        {
-          "headline": "Bill Self says coaching future at Kansas to be determined",
-          "description": "Longtime Kansas coach Bill Self said after Sunday's season-ending loss to St. John's that he has not yet made a decision about his coaching future, later adding that any decision will be based solely ",
-          "published": "2026-03-23",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48283793/bill-self-says-coaching-future-kansas-determined"
+          "name": "Patrick Ngongba II",
+          "status": "Questionable - right foot soreness",
+          "impact": "Starting C, 10.7 ppg, 1.1 bpg, top rim protector. Expected back for NCAA opener.",
+          "adj_em_impact": -0.8
         }
       ],
-      "has_override": false,
-      "has_news_flag": true
-    },
-    "245": {
-      "bracket_name": "Texas A&M",
-      "region": "South",
-      "seed": 10,
-      "adj_em_penalty": 0,
-      "players": [],
-      "notes": "",
-      "override_date": "",
+      "notes": "Duke operating with 7-man rotation. Cayden Boozer moves to starting PG.",
+      "override_date": "2026-03-15",
       "news_flags": [
         {
-          "headline": "Highlight: 11-seed Sooners continue SEC run by eliminating 6-seed Aggies",
-          "description": "With Nijel Pack leading the way with 20 points before leaving the game late with an injury, Oklahoma ousts Texas A&M, xx-xx, for its second win in as many days.",
-          "published": "2026-03-13",
-          "url": "https://www.espn.com/video/clip?id=48191653"
+          "headline": "Duke 'hopeful' Patrick Ngongba II can return in 2nd round",
+          "description": "Duke center Patrick Ngongba II could return from a foot injury for the Blue Devils' second-round game vs. TCU, coach Jon Scheyer said.",
+          "published": "2026-03-20",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48260813/duke-hopeful-patrick-ngongba-ii-return-2nd-round"
         }
       ],
-      "has_override": false,
+      "has_override": true,
       "has_news_flag": true
     },
     "222": {
@@ -146,40 +90,21 @@
       "has_override": true,
       "has_news_flag": false
     },
-    "96": {
-      "bracket_name": "Kentucky",
-      "region": "Midwest",
-      "seed": 7,
-      "adj_em_penalty": 0,
-      "players": [],
-      "notes": "",
-      "override_date": "",
-      "news_flags": [
-        {
-          "headline": "Manga keeps Kentucky's Jayden Quaintance grounded in March Madness",
-          "description": "The Kentucky forward has gotten into manga as a way to help time pass while he heals from injury.",
-          "published": "2026-03-22",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48273040/march-madness-2026-jayden-quaintance-kentucky-wildcats-manga"
-        }
-      ],
-      "has_override": false,
-      "has_news_flag": true
-    },
-    "130": {
-      "bracket_name": "Michigan",
-      "region": "Midwest",
-      "seed": 1,
-      "adj_em_penalty": 1.0,
+    "2250": {
+      "bracket_name": "Gonzaga",
+      "region": "West",
+      "seed": 3,
+      "adj_em_penalty": 1.5,
       "players": [
         {
-          "name": "LJ Cason",
-          "status": "Out for season - torn ACL",
-          "impact": "Backup guard. Adds pressure on Elliot Cadeau.",
-          "adj_em_impact": -1.0
+          "name": "Braden Huff",
+          "status": "Questionable - left knee injury (out since Jan 15, targeting NCAA tournament return)",
+          "impact": "Leading scorer (17.8 ppg, 66.2% FG) \u2014 out since Jan 15. Gonzaga went 8-1 without him. Torvik rating already reflects 2 months of absence. Penalty reflects uncertainty about his readiness/effectiveness if he returns.",
+          "adj_em_impact": -1.5
         }
       ],
-      "notes": "Cason was backup depth, moderate impact on rotation.",
-      "override_date": "2026-03-09",
+      "notes": "Graham Ike (19.9 ppg) has stepped up. Huff could return for Round 1 (Mar 19-20) but game-ready status unknown. If confirmed fully available, remove this override.",
+      "override_date": "2026-03-15",
       "news_flags": [],
       "has_override": true,
       "has_news_flag": false
@@ -199,24 +124,62 @@
       ],
       "notes": "UNC's go-to lineup without Wilson: Trimble/Dixon/Bogavac backcourt, Stevenson at 4, Veesaar at center. +22 net rating with that quintet in last 4 games but vs weaker ACC opponents.",
       "override_date": "2026-03-15",
+      "news_flags": [
+        {
+          "headline": "Who's next at UNC? Potential candidates to replace Hubert Davis, their priorities",
+          "description": "Hubert Davis is out after five seasons in Chapel Hill. Here are names expected to be on the short list.",
+          "published": "2026-03-25",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48300317/north-carolina-coaching-candidates-recruits-retention-priorities-2026"
+        },
+        {
+          "headline": "Who's next at UNC? Potential candidates to replace Hubert Davis, their priorities",
+          "description": "Hubert Davis is out after five seasons in Chapel Hill. Here are names expected to be on the short list.",
+          "published": "2026-03-25",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48300317/north-carolina-coaching-candidates-recruits-retention-priorities-2026"
+        },
+        {
+          "headline": "Who's next at UNC? Potential candidates to replace Hubert Davis, their priorities",
+          "description": "Hubert Davis is out after five seasons in Chapel Hill. Here are names expected to be on the short list.",
+          "published": "2026-03-25",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48300317/north-carolina-coaching-candidates-recruits-retention-priorities-2026"
+        }
+      ],
+      "has_override": true,
+      "has_news_flag": true
+    },
+    "252": {
+      "bracket_name": "BYU",
+      "region": "West",
+      "seed": 6,
+      "adj_em_penalty": 4.5,
+      "players": [
+        {
+          "name": "Richie Saunders",
+          "status": "Out for season - torn ACL (Feb 14)",
+          "impact": "Star guard. Season-ending injury.",
+          "adj_em_impact": -4.5
+        }
+      ],
+      "notes": "BYU ceiling significantly lower without Saunders.",
+      "override_date": "2026-03-09",
       "news_flags": [],
       "has_override": true,
       "has_news_flag": false
     },
-    "66": {
-      "bracket_name": "Iowa State",
+    "96": {
+      "bracket_name": "Kentucky",
       "region": "Midwest",
-      "seed": 2,
+      "seed": 7,
       "adj_em_penalty": 0,
       "players": [],
       "notes": "",
       "override_date": "",
       "news_flags": [
         {
-          "headline": "Iowa State's Joshua Jefferson sprains ankle in win; X-rays negative",
-          "description": "Iowa State senior forward Joshua Jefferson suffered a sprained left ankle in Friday's 108-74 win over Tennessee State.",
-          "published": "2026-03-20",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48261200/iowa-state-joshua-jefferson-hurt-early-ncaa-tournament"
+          "headline": "Manga keeps Kentucky's Jayden Quaintance grounded in March Madness",
+          "description": "The Kentucky forward has gotten into manga as a way to help time pass while he heals from injury.",
+          "published": "2026-03-22",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48273040/march-madness-2026-jayden-quaintance-kentucky-wildcats-manga"
         }
       ],
       "has_override": false,
@@ -254,37 +217,24 @@
       "has_override": true,
       "has_news_flag": true
     },
-    "150": {
-      "bracket_name": "Duke",
-      "region": "East",
-      "seed": 1,
-      "adj_em_penalty": 4.0,
+    "2641": {
+      "bracket_name": "Texas Tech",
+      "region": "Midwest",
+      "seed": 5,
+      "adj_em_penalty": 5.5,
       "players": [
         {
-          "name": "Caleb Foster",
-          "status": "Out - fractured right foot (surgery March 9)",
-          "impact": "Starting PG, 8.5 ppg, 40.4% 3PT, primary ball handler. Out until Final Four at earliest.",
-          "adj_em_impact": -3.2
-        },
-        {
-          "name": "Patrick Ngongba II",
-          "status": "Questionable - right foot soreness",
-          "impact": "Starting C, 10.7 ppg, 1.1 bpg, top rim protector. Expected back for NCAA opener.",
-          "adj_em_impact": -0.8
+          "name": "JT Toppin",
+          "status": "Out for season - torn ACL",
+          "impact": "All-America forward. Season-ending injury. Major loss.",
+          "adj_em_impact": -5.5
         }
       ],
-      "notes": "Duke operating with 7-man rotation. Cayden Boozer moves to starting PG.",
-      "override_date": "2026-03-15",
-      "news_flags": [
-        {
-          "headline": "Duke 'hopeful' Patrick Ngongba II can return in 2nd round",
-          "description": "Duke center Patrick Ngongba II could return from a foot injury for the Blue Devils' second-round game vs. TCU, coach Jon Scheyer said.",
-          "published": "2026-03-20",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48260813/duke-hopeful-patrick-ngongba-ii-return-2nd-round"
-        }
-      ],
+      "notes": "Ceiling significantly lower without Toppin per ESPN.",
+      "override_date": "2026-03-09",
+      "news_flags": [],
       "has_override": true,
-      "has_news_flag": true
+      "has_news_flag": false
     },
     "2116": {
       "bracket_name": "UCF",
@@ -326,15 +276,65 @@
       ],
       "notes": "Welling injury came March 13 \u2014 very recent, Torvik may not have fully adjusted.",
       "override_date": "2026-03-15",
+      "news_flags": [],
+      "has_override": true,
+      "has_news_flag": false
+    },
+    "2305": {
+      "bracket_name": "Kansas",
+      "region": "East",
+      "seed": 4,
+      "adj_em_penalty": 0,
+      "players": [],
+      "notes": "",
+      "override_date": "",
       "news_flags": [
         {
-          "headline": "Clemson's Carter Welling done for season with torn ACL",
-          "description": "Clemson said forward Carter Welling tore the ACL in his right knee in its opening game of the ACC tournament Wednesday.",
-          "published": "2026-03-13",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48189958/clemson-carter-welling-done-season-torn-acl"
+          "headline": "Bill Self says coaching future at Kansas to be determined",
+          "description": "Longtime Kansas coach Bill Self said after Sunday's season-ending loss to St. John's that he has not yet made a decision about his coaching future, later adding that any decision will be based solely ",
+          "published": "2026-03-23",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48283793/bill-self-says-coaching-future-kansas-determined"
         }
       ],
-      "has_override": true,
+      "has_override": false,
+      "has_news_flag": true
+    },
+    "245": {
+      "bracket_name": "Texas A&M",
+      "region": "South",
+      "seed": 10,
+      "adj_em_penalty": 0,
+      "players": [],
+      "notes": "",
+      "override_date": "",
+      "news_flags": [
+        {
+          "headline": "Highlight: 11-seed Sooners continue SEC run by eliminating 6-seed Aggies",
+          "description": "With Nijel Pack leading the way with 20 points before leaving the game late with an injury, Oklahoma ousts Texas A&M, xx-xx, for its second win in as many days.",
+          "published": "2026-03-13",
+          "url": "https://www.espn.com/video/clip?id=48191653"
+        }
+      ],
+      "has_override": false,
+      "has_news_flag": true
+    },
+    "66": {
+      "bracket_name": "Iowa State",
+      "region": "Midwest",
+      "seed": 2,
+      "adj_em_penalty": 0,
+      "players": [],
+      "notes": "",
+      "override_date": "",
+      "news_flags": [
+        {
+          "headline": "Iowa State's Joshua Jefferson sprains ankle in win; X-rays negative",
+          "description": "Iowa State senior forward Joshua Jefferson suffered a sprained left ankle in Friday's 108-74 win over Tennessee State.",
+          "published": "2026-03-20",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48261200/iowa-state-joshua-jefferson-hurt-early-ncaa-tournament"
+        }
+      ],
+      "has_override": false,
       "has_news_flag": true
     }
   }

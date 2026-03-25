@@ -30795,6 +30795,21 @@
     "venue": "The Pit"
   },
   {
+    "id": "401858358",
+    "date": "2026-03-25",
+    "name": "Saint Joseph's Hawks at New Mexico Lobos",
+    "team1_id": "167",
+    "team1_name": "New Mexico Lobos",
+    "team1_score": "84",
+    "team1_winner": true,
+    "team2_id": "2603",
+    "team2_name": "Saint Joseph's Hawks",
+    "team2_score": "69",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "The Pit"
+  },
+  {
     "id": "401823304",
     "date": "2025-11-05",
     "name": "Long Beach State Beach at San Diego State Aztecs",
