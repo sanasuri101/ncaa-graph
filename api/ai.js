@@ -346,7 +346,7 @@ function classifyIntent(msg, graph) {
   const m = msg.toLowerCase();
   // Require NCAA/tournament-specific signal — generic sports words alone don't qualify
   // This prevents "NBA tonight", "play basketball", "Super Bowl" from hitting dynamic
-  const hasNcaaSignal = /ncaa|march madness|\bsweet 16\b|\bsweet sixteen\b|\belite 8\b|\belite eight\b|\bfinal four\b|\bright four\b|round of 64|round of 32|first round|second round|torvik|barthag|adj.?em|adj.?oe|adj.?de|t-rank|basketball efficiency|team efficiency|\bbasketball\b|college basketball|ncaa bracket|tournament bracket|tournament pick|region picks?|midwest region|east region|west region|south region|\bseed\b.*\bbasketball\b|\bbasketball\b.*\bseed\b|overall seed|number.*seed|\bseeds?\b.*\badvance\b|\badvance\b.*\bseeds?\b|\b[0-9]+ seed|upset pick|chalk pick|bracket advice|bracket strategy|safe pick|value pick|picks this year|\b5-12\b|\b12-5\b|\b[0-9]+-[0-9]+ matchup\b|seed upset|win probability|wins it all|win it all|cut down the nets|national champion|injured|injury|\bout\b|out for|limited minutes|ppg|rpg|apg|per|three.?point pct|tempo mismatch|pace mismatch|cover the spread|beat the spread|against the spread|over.under|moneyline|the line|step up|change anything|affect the|still win|who wins|the key|does that|does this|who else|who steps|chances now|is.*playing\b|will.*play|any injuries|injury update|injury news|\bhurt\b|questionable|game.?time decision/i.test(m);
+  const hasNcaaSignal = /ncaa|march madness|\bsweet 16\b|\bsweet sixteen\b|\belite 8\b|\belite eight\b|\bfinal four\b|\bright four\b|round of 64|round of 32|first round|second round|torvik|barthag|adj.?em|adj.?oe|adj.?de|t-rank|basketball efficiency|team efficiency|\bbasketball\b|college basketball|ncaa bracket|tournament bracket|tournament pick|region picks?|midwest region|east region|west region|south region|\bseed\b.*\bbasketball\b|\bbasketball\b.*\bseed\b|overall seed|number.*seed|\bseeds?\b.*\badvance\b|\badvance\b.*\bseeds?\b|\b[0-9]+ seed|upset pick|upset risk|upset watch|chalk pick|bracket advice|best shot|best chance|bracket strategy|fill.*bracket|my bracket|safe pick|value pick|picks this year|\b5-12\b|\b12-5\b|\b[0-9]+-[0-9]+ matchup\b|seed upset|win probability|wins it all|win it all|cut down the nets|national champion|injured|injury|\bout\b|out for|limited minutes|ppg|rpg|apg|per|three.?point pct|tempo mismatch|pace mismatch|cover the spread|beat the spread|against the spread|over.under|moneyline|the line|step up|change anything|affect the|still win|who wins|the key|does that|does this|who else|who steps|chances now|is.*playing\b|will.*play|any injuries|injury update|injury news|\bhurt\b|questionable|game.?time decision|brok\w*|break\w*|fractur\w*|sprain\w*|tweaked|hobbling|limping/i.test(m);
   const hasTeamSignal = graph?.nodes?.some(n => {
     const lbl = normName(n.label);
     const re  = new RegExp('\\b' + lbl.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b');
@@ -355,7 +355,7 @@ function classifyIntent(msg, graph) {
   const hasOtherSport = /\bnba\b|\bnfl\b|\bnhl\b|\bmlb\b|\bwnba\b|\bsoccer\b|\bfootball\b|\bsuper bowl\b|\bworld series\b|\bstanley cup\b/i.test(m);
   const hasBball = (hasNcaaSignal || hasTeamSignal) && !hasOtherSport;
 
-  if (/haven.?t played|not played|could face|potential matchup/i.test(m))
+  if (/haven.?t played|not played|could face|can.*face|potential matchup|if they meet|if they face|possible matchup/i.test(m))
     return { type: 'unplayed_matchups' };
 
   if (/final four|champion|title contend|win it all|wins it all|win the tournament|wins the tournament|national title|who.*win.*whole|who.*favori|pick.*win|pick.*champion|who.*(should|would|will).*win/i.test(m))
@@ -408,18 +408,50 @@ function classifyIntent(msg, graph) {
     });
 
     // 2+ found: return as matchup — UNLESS injury/follow-up signal present
-    // e.g. "are there injuries for duke and arizona?" should be dynamic not matchup
     if (found.length >= 2) {
       const hasInjurySignal = /injur\w*|\bhurt\b|is.*playing\b|any injury|out for|limited minutes|questionable|who steps up|who else/i.test(m);
       if (hasInjurySignal) return { type: 'dynamic' };
-      let teams = found;
-      if (found.length > 2) {
-        teams = found.filter((n, i) => {
-          const nl = normName(n.label);
-          return !found.some((o, j) => j !== i && normName(o.label).startsWith(nl + ' '));
-        }).slice(0, 2);
-        if (teams.length < 2) teams = found.slice(0, 2);
+
+      // Dedup: remove teams whose label is a substring of another matched team's label.
+      // e.g. "iowa state" query matches both Iowa (label) and Iowa State (label).
+      // Iowa label appears inside Iowa State label → drop Iowa.
+      // Also handles Michigan/Michigan State, Ohio/Ohio State, etc.
+      let teams = found.filter((a, i) => {
+        const aLbl = normName(a.label);
+        return !found.some((b, j) => {
+          if (i === j) return false;
+          const bLbl = normName(b.label);
+          // drop a if a's label is contained within b's label (b is more specific)
+          return bLbl.includes(aLbl) && bLbl.length > aLbl.length;
+        });
+      });
+
+      if (teams.length < 2) {
+        // All were deduplicated to 1 — treat as single team query
+        if (teams.length === 1) {
+          const hasNonBball = /university|college admission|job|career|hire|school|professor/i.test(m);
+          if (hasNonBball) return { type: 'general' };
+          const isFollowUp = /injur\w*|injury news|is.*playing\b|any injury|hurt\b|questionable|\baffect\b|\bimpact\b|\bchange\b|does that|who else|step up|what about|the news|is out|out for|will he|will she|is he\b|is she\b|when is he|when does|limited minutes|\brepeat\b|same (question|analysis|thing)|analysis for|do the same|redo|reconsider|not gonna|wont win|can.?t win|gonna lose|too weak|no chance|broke his|broke her|broke their|fractured|sprained|tweaked|hobbling|limping|missed.*game|miss.*game/i.test(m);
+          if (isFollowUp) return { type: 'dynamic' };
+          const hasAnalysis = /tell me|how is|stats|analysis|record|rank|efficiency|looking|how.*doing|how.*playing|how.*perform|season|chance|beat|win|lose|matchup|tournament|bracket|predict|advance|start\w*|lineup|rotation|depth chart|bench|roster|who plays|who starts|is.*sleeper|is.*upset|upset pick|sleeper pick|dark horse|cinderella|got this|got a chance|got what|can they|will they|should I pick|path to|road to|chances of/i.test(m);
+          const hasNcaaSig = hasNcaaSignal;
+          if (hasNcaaSig || hasAnalysis) return { type: 'team_lookup', team: teams[0].label };
+        }
+        teams = found.slice(0, 2);
       }
+
+      if (found.length > 2) {
+        const deduped = teams.filter((n, i) => {
+          const nl = normName(n.label);
+          return !teams.some((o, j) => j !== i && normName(o.label).startsWith(nl + ' '));
+        }).slice(0, 2);
+        if (deduped.length >= 2) teams = deduped;
+        else teams = teams.slice(0, 2);
+      } else {
+        teams = teams.slice(0, 2);
+      }
+
+      if (teams.length < 2) return { type: 'dynamic' };
       return { type: 'matchup', team_a: teams[0].label, team_b: teams[1].label };
     }
     if (found.length === 1) {
@@ -535,6 +567,62 @@ function preFetch(intent, graph, torvik) {
   return { context: blocks.join('\n\n'), thinking };
 }
 
+// ── Injury context builder ───────────────────────────────────────────────────
+// Builds a full injury report across all teams — used when user asks about
+// injuries without naming a specific team.
+function buildInjuryContext() {
+  const { injuryMap, nodeByName } = getData();
+  let injuryNews = {};
+  try {
+    const raw = JSON.parse(readFileSync(join(process.cwd(), 'data', 'injury_news.json'), 'utf8'));
+    injuryNews = raw?.teams ?? {};
+  } catch {}
+
+  let rosterStats = {};
+  try {
+    rosterStats = JSON.parse(readFileSync(join(process.cwd(), 'data', 'roster_stats.json'), 'utf8')).teams ?? {};
+  } catch {}
+
+  const lines = ['INJURY REPORT — ALL TEAMS:'];
+
+  // Confirmed injury overrides (model penalty applied)
+  for (const [id, inj] of Object.entries(injuryMap)) {
+    const node = Object.values(nodeByName).find(n => n.id === id);
+    const name = node?.full_name ?? `Team ${id}`;
+    lines.push(`\n${name} (AdjEM penalty -${inj.penalty}):`);
+    for (const p of inj.players) {
+      // Get player stats from roster if available
+      const rp = rosterStats[id]?.players?.find(r => r.name === p.name);
+      const stats = rp ? ` | ${rp.ppg} PPG / ${rp.rpg} RPG / ${rp.apg} APG | ${rp.mpg} MPG | FG ${rp.fg}%` : '';
+      lines.push(`  ${p.name} — ${p.status}${stats}${p.impact ? ' | ' + p.impact : ''}`);
+    }
+    if (inj.notes) lines.push(`  Note: ${inj.notes}`);
+  }
+
+  // Injury news headlines (includes players not yet in overrides)
+  const newsLines = [];
+  for (const [id, team] of Object.entries(injuryNews)) {
+    const articles = team.articles?.slice(0, 2) ?? [];
+    if (!articles.length) continue;
+    const node = Object.values(nodeByName).find(n => n.id === id);
+    const name = node?.full_name ?? team.bracket_name ?? `Team ${id}`;
+    // Get player roster for any player mentioned
+    const players = rosterStats[id]?.players ?? [];
+    for (const a of articles) {
+      // Find player names mentioned in headline
+      const mentionedPlayer = players.find(p => a.headline.toLowerCase().includes(p.name.toLowerCase().split(' ').pop()));
+      const playerStats = mentionedPlayer ? ` (${mentionedPlayer.ppg} PPG / ${mentionedPlayer.rpg} RPG / ${mentionedPlayer.mpg} MPG)` : '';
+      newsLines.push(`${name}${playerStats}: ${a.headline}`);
+    }
+  }
+  if (newsLines.length) {
+    lines.push('\nRECENT INJURY NEWS:');
+    lines.push(...newsLines);
+  }
+
+  return lines.join('\n');
+}
+
 // ── System prompt ─────────────────────────────────────────────────────────────
 function buildSystemPrompt(userMsg, graph, torvik, form, injuryMap, prefetchedContext, intent) {
   const { aliveTeamIds, teamOdds } = getData();
@@ -557,12 +645,26 @@ function buildSystemPrompt(userMsg, graph, torvik, form, injuryMap, prefetchedCo
       const gameLines = graph.edges.filter(e => scopeIds.has(e.from) || scopeIds.has(e.to)).slice(0, 15)
         .map(e => `${graph.nodes.find(n => n.id === e.from)?.label ?? e.from} beat ${graph.nodes.find(n => n.id === e.to)?.label ?? e.to} ${e.label} on ${(e.date ?? '').slice(5, 10)}`);
       if (gameLines.length) scopeContext += '\n\nRECENT RESULTS:\n' + gameLines.join('\n');
+
     } else {
       scopeContext = 'ALIVE TEAMS BY EFFICIENCY:\n' + implGetStandings('adj_em', null, 16);
     }
   }
 
-  const context = prefetchedContext || scopeContext;
+  let context = prefetchedContext || scopeContext;
+
+  // Injury injection: always fires when query is injury-related, regardless of what
+  // preFetch returned. preFetch returns standings for dynamic intent, so we MUST
+  // inject AFTER context is assembled — inside !prefetchedContext it never fires.
+  const isInjuryQuery = /injur\w*|\bhurt\b|out for|is.*playing\b|will.*play|questionable|brok\w*|break\w*|fractur\w*|sprain\w*|tweak\w*|hobbl\w*|limp\w*|missed.*game|miss.*game|game.?time|any injuries|injury news|injury update/i.test(userMsg);
+  if (isInjuryQuery) {
+    const injCtx = buildInjuryContext();
+    if (context.startsWith('ALIVE TEAMS BY EFFICIENCY')) {
+      context = injCtx;
+    } else {
+      context += '\n\n' + injCtx;
+    }
+  }
   const intentType = intent?.type ?? 'dynamic';
 
   let p = `You are AI Scout, an expert NCAA basketball analyst. ${season} March Madness ${round}. ${aliveCount} teams remain. Today is March 24, 2026.\n`;
