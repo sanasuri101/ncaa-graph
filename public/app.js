@@ -714,7 +714,7 @@ function showEmptyState(show) {
       const isMobile = window.innerWidth <= 768;
       el.innerHTML = isMobile ? `
         <div class="ges-icon">⬡</div>
-        <div class="ges-title">2026 NCAA Bracket</div>
+        <div class="ges-title">NCAA Bracket</div>
         <div class="ges-sub">Head-to-head results for all 68 teams.</div>
         <div class="ges-btns">
           <button class="ges-btn" onclick="addAllToCustom()">Show all teams</button>

@@ -34,7 +34,7 @@ function sanitize(text) {
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 const MODEL         = 'llama-3.3-70b-versatile';
-const MAX_TOKENS    = 4096;   // raised — market analysis + deep queries need room
+const MAX_TOKENS    = 4096;   // raised — market/deep queries need room
 const MAX_STEPS     = 3;   // max tool call rounds before forced answer
 
 const CORS = {
@@ -107,7 +107,22 @@ function getData() {
     const bracketIds = new Set(graph.nodes.map(n => String(n.id)));
     const winners = new Set(), losers = new Set();
     JSON.parse(readFileSync(join(process.cwd(), 'data', 'all_games.json'), 'utf8'))
-      .filter(g => g.date >= '2026-03-17')
+      .filter(g => {
+        // Tournament start: read from data meta, or default to third Thursday of March
+        const meta = graph?.meta;
+        const startDate = meta?.tourney_start ?? (() => {
+          const yr = new Date().getFullYear();
+          const d  = new Date(yr, 2, 1); // March 1
+          let thursdays = 0;
+          while (d.getMonth() === 2) {
+            if (d.getDay() === 4) thursdays++;
+            if (thursdays === 3) break;
+            d.setDate(d.getDate() + 1);
+          }
+          return d.toISOString().slice(0, 10);
+        })();
+        return g.date >= startDate;
+      })
       .forEach(g => {
         const t1 = String(g.team1_id), t2 = String(g.team2_id);
         if (!bracketIds.has(t1) && !bracketIds.has(t2)) return;
@@ -183,40 +198,36 @@ function resolveTeam(name, nodeByName) {
 
 // ── Format team block ─────────────────────────────────────────────────────────
 function fmtTeam(node, torvik, form, injuryMap, teamOdds) {
+  // Eliminated teams must never appear in model context with real stats
   const { aliveTeamIds } = getData();
   if (aliveTeamIds?.size && !aliveTeamIds.has(String(node.id)))
-    return `${node.full_name} — ELIMINATED (no longer in 2026 NCAA Tournament)`;
+    return `${node.full_name} — ELIMINATED (no longer in ${new Date().getFullYear()} NCAA Tournament)`;
+
   const tv   = torvik?.teams?.[node.id]?.torvik;
   const seed = node.seed != null ? `#${node.seed}` : '?';
   if (!tv) return `${node.full_name} (${node.region} ${seed}) | no Torvik data`;
 
-  const pace   = tv.adj_tempo != null ? (tv.adj_tempo >= 0.7 ? 'Fast' : tv.adj_tempo >= 0.4 ? 'Moderate' : 'Slow') + ` (${tv.adj_tempo.toFixed(2)})` : '?';
-  const tf     = form?.teams?.[node.id];
-  const recent = tf?.games?.slice(-3).map(g => `${g.date.slice(5)}: ${g.won ? 'W' : 'L'} ${g.score} vs ${g.opp}`).join(' | ') ?? '';
-  const inj    = injuryMap?.[node.id];
-  const injStr = inj ? `⚠ INJURY (AdjEM -${inj.penalty}): ${inj.players.map(p => `${p.name} — ${p.status}`).join('; ')}${inj.notes ? ' | ' + inj.notes : ''}` : '';
-  const odds   = teamOdds?.[node.id];
-  const oddsStr= odds ? `Market: ML ${odds.ml ?? '?'} (${odds.implied ?? '?'}% implied) | BPI: ${odds.bpi ?? '?'}% | ${odds.game}` : '';
+  const pace    = tv.adj_tempo != null ? (tv.adj_tempo >= 0.7 ? 'Fast' : tv.adj_tempo >= 0.4 ? 'Moderate' : 'Slow') + ` (${tv.adj_tempo.toFixed(2)})` : '?';
+  const tf      = form?.teams?.[node.id];
+  const recent  = tf?.games?.slice(-3).map(g => `${g.date.slice(5)}: ${g.won ? 'W' : 'L'} ${g.score} vs ${g.opp}`).join(' | ') ?? '';
+  const inj     = injuryMap?.[node.id];
+  const injStr  = inj ? `⚠ INJURY (AdjEM -${inj.penalty}): ${inj.players.map(p => `${p.name} — ${p.status}`).join('; ')}${inj.notes ? ' | ' + inj.notes : ''}` : '';
+  const odds    = teamOdds?.[node.id];
+  const oddsStr = odds ? `Market: ML ${odds.ml ?? '?'} (${odds.implied ?? '?'}% implied) | BPI: ${odds.bpi ?? '?'}% | ${odds.game}` : '';
 
-  // Four Factors (all four components, offense + defense)
-  const fourFactors = [
-    `eFG%: ${tv.efg ?? '?'}`,
-    `TOV%: ${tv.tov_rate ?? '?'}`,
-    `ORB%: ${tv.orb_rate ?? '?'}`,
-    `FTR: ${tv.ftr ?? '?'}`,
-  ].join(' | ');
-  const fourFactorsDef = tv.efg_d != null
-    ? `Opp eFG%: ${(tv.efg_d * 100).toFixed(1)}`
-    : '';
-  // Resume / SOS
-  const resumeStr = [
+  // Four Factors — all four components, offense and defense
+  const ff4off = `eFG%: ${tv.efg ?? '?'} | TOV%: ${tv.tov_rate ?? '?'} | ORB%: ${tv.orb_rate ?? '?'} | FTR: ${tv.ftr ?? '?'}`;
+  const ff4def = tv.efg_d != null ? `Opp eFG%: ${(tv.efg_d * 100).toFixed(1)}` : '';
+
+  // Resume and advanced
+  const resume = [
     tv.quad1_record ? `Quad1: ${tv.quad1_record}` : '',
     tv.net_rank     ? `NET: #${tv.net_rank}` : '',
     tv.sos_rank     ? `SOS: ${tv.sos_rank.toFixed(2)}` : '',
-    tv.luck         ? `Luck: ${tv.luck > 0 ? '+' : ''}${parseFloat(tv.luck).toFixed(3)}` : '',
+    tv.luck != null ? `Luck: ${tv.luck > 0 ? '+' : ''}${parseFloat(tv.luck).toFixed(3)}` : '',
   ].filter(Boolean).join(' | ');
-  // Additional advanced
-  const advStr = [
+
+  const advanced = [
     tv.proj_barthag  ? `Proj Barthag: ${(tv.proj_barthag * 100).toFixed(1)}%` : '',
     tv.three_pa_rate ? `3PA rate: ${tv.three_pa_rate}%` : '',
   ].filter(Boolean).join(' | ');
@@ -226,10 +237,11 @@ function fmtTeam(node, torvik, form, injuryMap, teamOdds) {
     `Record: ${tv.record} | Bracket: ${node.wins_vs_field}W-${node.losses_vs_field}L`,
     `T-Rank #${tv.rank} | AdjEM: ${tv.adj_em > 0 ? '+' : ''}${tv.adj_em} | AdjOE: ${tv.adj_oe} | AdjDE: ${tv.adj_de}`,
     `Barthag: ${(tv.barthag * 100).toFixed(1)}% | Proj Barthag: ${tv.proj_barthag ? (tv.proj_barthag*100).toFixed(1)+'%' : '?'} | WAB: ${parseFloat(tv.wab).toFixed(1)} | Pace: ${pace}`,
-    `Four Factors (off): ${fourFactors}`,
-    fourFactorsDef ? `Four Factors (def): ${fourFactorsDef}` : '',
+    `Four Factors (off): ${ff4off}`,
+    ff4def ? `Four Factors (def): ${ff4def}` : '',
     `Shooting: 2P% ${tv.two_p ?? '?'} | 3P% ${tv.three_p ?? '?'} | FT% ${tv.ft_pct ?? '?'} | 3PA rate: ${tv.three_pa_rate ?? '?'}%`,
-    resumeStr ? `Resume: ${resumeStr}` : '',
+    resume ? `Resume: ${resume}` : '',
+    advanced ? `Advanced: ${advanced}` : '',
     tf ? `Form: ${tf.last10} L10 | Streak: ${tf.streak}` : '',
     recent ? `Last 3: ${recent}` : '',
     oddsStr,
@@ -239,16 +251,19 @@ function fmtTeam(node, torvik, form, injuryMap, teamOdds) {
 
 // ── Tool implementations ──────────────────────────────────────────────────────
 function implGetTeamStats(teamNames) {
-  const { torvik, form, injuryMap, nodeByName, teamOdds } = getData();
+  const { torvik, form, injuryMap, nodeByName, teamOdds, aliveTeamIds } = getData();
   if (!teamNames?.length) return 'No team names provided.';
   return teamNames.map(name => {
     const node = resolveTeam(name, nodeByName);
-    return node ? fmtTeam(node, torvik, form, injuryMap, teamOdds) : `"${name}": not found — check spelling`;
+    if (!node) return `"${name}": not found — check spelling`;
+    if (aliveTeamIds?.size && !aliveTeamIds.has(String(node.id)))
+      return `${node.full_name}: ELIMINATED — no longer in the ${new Date().getFullYear()} NCAA Tournament`;
+    return fmtTeam(node, torvik, form, injuryMap, teamOdds);
   }).join('\n\n---\n\n');
 }
 
 function implGetMatchup(teamA, teamB) {
-  const { graph, torvik, form, transPairs, injuryMap, nodeByName, edgesByNode, teamOdds } = getData();
+  const { graph, torvik, form, transPairs, injuryMap, nodeByName, edgesByNode, teamOdds, aliveTeamIds } = getData();
   const nodeA = resolveTeam(teamA, nodeByName);
   const nodeB = resolveTeam(teamB, nodeByName);
   if (!nodeA) return `Team not found: "${teamA}"`;
@@ -272,9 +287,10 @@ function implGetMatchup(teamA, teamB) {
     const aOpps = new Set(aEdges.map(e => e.from === nodeA.id ? e.to : e.from));
     const bOpps = new Set(bEdges.map(e => e.from === nodeB.id ? e.to : e.from));
     const common = [...aOpps].filter(id => bOpps.has(id)).slice(0, 5);
-    if (common.length) {
-      lines.push(`\nCommon opponents (${common.length}):`);
-      common.forEach(cid => {
+    const aliveCommon = common.filter(cid => !aliveTeamIds?.size || aliveTeamIds.has(String(cid)));
+    if (aliveCommon.length) {
+      lines.push(`\nCommon opponents still in tournament (${aliveCommon.length}):`);
+      aliveCommon.forEach(cid => {
         const cNode = graph.nodes.find(n => n.id === cid);
         const aGame = aEdges.find(e => (e.from === nodeA.id && e.to === cid) || (e.to === nodeA.id && e.from === cid));
         const bGame = bEdges.find(e => (e.from === nodeB.id && e.to === cid) || (e.to === nodeB.id && e.from === cid));
@@ -289,8 +305,13 @@ function implGetMatchup(teamA, teamB) {
       const favors  = tp.verdict === 'a' ? (flipped ? nodeB.label : nodeA.label)
                     : tp.verdict === 'b' ? (flipped ? nodeA.label : nodeB.label) : 'neither';
       lines.push(`\nTransitive (${tp.n} signals, conf ${tp.conf?.toFixed(0) ?? '?'}/100): favors ${favors}`);
-      (tp.a || []).slice(0, 2).forEach(s => lines.push(`  + ${nodeA.label} beat ${s.common_name} (${s.a_score}), who beat ${nodeB.label} (${s.b_score})`));
-      (tp.b || []).slice(0, 2).forEach(s => lines.push(`  + ${nodeB.label} beat ${s.common_name} (${s.b_score}), who beat ${nodeA.label} (${s.a_score})`));
+      // Only include chains through teams still alive (prevents citing eliminated teams)
+      const filterChain = (chains) => chains.filter(s => {
+        const cn = graph.nodes.find(n => n.full_name === s.common_name || n.label === s.common_name);
+        return !cn || !aliveTeamIds?.size || aliveTeamIds.has(String(cn.id));
+      });
+      filterChain(tp.a || []).slice(0, 2).forEach(s => lines.push(`  + ${nodeA.label} beat ${s.common_name} (${s.a_score}), who beat ${nodeB.label} (${s.b_score})`));
+      filterChain(tp.b || []).slice(0, 2).forEach(s => lines.push(`  + ${nodeB.label} beat ${s.common_name} (${s.b_score}), who beat ${nodeA.label} (${s.a_score})`));
     } else {
       lines.push('\nNo transitive evidence found.');
     }
@@ -390,7 +411,7 @@ function classifyIntent(msg, graph) {
   if (/final four|champion|title contend|win it all|wins it all|win the tournament|wins the tournament|national title|who.*win.*whole|who.*favori|pick.*win|pick.*champion|who.*(should|would|will).*win/i.test(m))
     return { type: 'top_teams_all' };
 
-  // Rhetorical follow-ups route to dynamic before any intent check fires
+  // Rhetorical follow-ups always route to dynamic — check before market_analysis
   const isRhetoricalFollowUp = /^(are you sure|are you certain|really\?|seriously\?|you sure|u sure|wait really|is that right|that seems|that can'?t be|i thought|but i thought|doesn'?t that|does(n'?t)? that)/i.test(m.trim());
   if (isRhetoricalFollowUp) return { type: 'dynamic' };
 
@@ -466,7 +487,7 @@ function classifyIntent(msg, graph) {
           if (hasNonBball) return { type: 'general' };
           const isFollowUp = /injur\w*|injury news|is.*playing\b|any injury|hurt\b|questionable|\baffect\b|\bimpact\b|\bchange\b|does that|who else|step up|what about|the news|is out|out for|will he|will she|is he\b|is she\b|when is he|when does|limited minutes|\brepeat\b|same (question|analysis|thing)|analysis for|do the same|redo|reconsider|not gonna|wont win|can.?t win|gonna lose|too weak|no chance|broke his|broke her|broke their|fractured|sprained|tweaked|hobbling|limping|missed.*game|miss.*game/i.test(m);
           if (isFollowUp) return { type: 'dynamic' };
-          const hasAnalysis = /tell me|how is|stats|analysis|record|rank|efficiency|looking|how.*doing|how.*playing|how.*perform|season|chance|beat|win|lose|matchup|tournament|bracket|predict|advance|start\w*|lineup|rotation|depth chart|bench|roster|who plays|who starts|is.*sleeper|is.*upset|upset pick|sleeper pick|dark horse|cinderella|got this|got a chance|got what|can they|will they|should I pick|path to|road to|chances of|four factors|turnover rate|offensive rebound|free throw rate|opponent efg|opp efg|sos|strength of schedule|luck rating|proj.*barthag|projected.*barthag|3pa rate|three.?point attempt|net ranking|quad [0-9]|quad[0-9]|wab|wins above bubble|pace|tempo|adjoe|adjde|adjem|barthag|torvik|t-rank/i.test(m);
+          const hasAnalysis = /tell me|how is|stats|analysis|record|rank|efficiency|looking|how.*doing|how.*playing|how.*perform|season|chance|beat|win|lose|matchup|tournament|bracket|predict|advance|start\w*|lineup|rotation|depth chart|bench|roster|who plays|who starts|is.*sleeper|is.*upset|upset pick|sleeper pick|dark horse|cinderella|got this|got a chance|got what|can they|will they|should I pick|path to|road to|chances of|four factors|\btov\b|turnover rate|\borb\b|offensive rebound|\bftr\b|free throw rate|opponent efg|opp efg|\bsos\b|strength of schedule|luck rating|proj.*barthag|projected.*barthag|3pa rate|three.?point attempt|net ranking|quad [0-9]|quad[0-9]|\bwab\b|wins above bubble|\bpace\b|\btempo\b|adjoe|adjde|adjem|\bbarthag\b|\btorvik\b|t-rank|efficien\w*/i.test(m);
           const hasNcaaSig = hasNcaaSignal;
           if (hasNcaaSig || hasAnalysis) return { type: 'team_lookup', team: teams[0].label };
         }
@@ -494,7 +515,7 @@ function classifyIntent(msg, graph) {
       // so the model can use chat history, not trigger a fresh team profile lookup
       const isFollowUp = /injur\w*|injury news|is.*playing\b|any injury|hurt\b|questionable|\baffect\b|\bimpact\b|\bchange\b|does that|who else|step up|what about|the news|is out|out for|will he|will she|is he\b|is she\b|when is he|when does|limited minutes|\brepeat\b|same (question|analysis|thing)|analysis for|do the same|redo|reconsider|not gonna|wont win|can.?t win|gonna lose|too weak|no chance|broke his|broke her|broke their|fractured|sprained|tweaked|hobbling|limping|missed.*game|miss.*game/i.test(m);
       if (isFollowUp) return { type: 'dynamic' };
-      const hasAnalysis = /tell me|how is|stats|analysis|record|rank|efficiency|looking|how.*doing|how.*playing|how.*perform|season|chance|beat|win|lose|matchup|tournament|bracket|predict|advance|start\w*|lineup|rotation|depth chart|bench|roster|who plays|who starts|is.*sleeper|is.*upset|upset pick|sleeper pick|dark horse|cinderella|got this|got a chance|got what|can they|will they|should I pick|path to|road to|chances of|four factors|turnover rate|offensive rebound|free throw rate|opponent efg|opp efg|\bsos\b|strength of schedule|luck rating|proj.*barthag|projected.*barthag|3pa rate|three.?point attempt|net ranking|quad [0-9]|quad[0-9]|\bwab\b|wins above bubble|\bpace\b|\btempo\b|adjoe|adjde|adjem|\bbarthag\b|\btorvik\b|t-rank|\btov\b|\borb\b|\bftr\b|efficien\w*|\btov\b|\borb\b|\bftr\b|efficien\w*/i.test(m);
+      const hasAnalysis = /tell me|how is|stats|analysis|record|rank|efficiency|looking|how.*doing|how.*playing|how.*perform|season|chance|beat|win|lose|matchup|tournament|bracket|predict|advance|start\w*|lineup|rotation|depth chart|bench|roster|who plays|who starts|is.*sleeper|is.*upset|upset pick|sleeper pick|dark horse|cinderella|got this|got a chance|got what|can they|will they|should I pick|path to|road to|chances of|four factors|\btov\b|turnover rate|\borb\b|offensive rebound|\bftr\b|free throw rate|opponent efg|opp efg|\bsos\b|strength of schedule|luck rating|proj.*barthag|projected.*barthag|3pa rate|three.?point attempt|net ranking|quad [0-9]|quad[0-9]|\bwab\b|wins above bubble|\bpace\b|\btempo\b|adjoe|adjde|adjem|\bbarthag\b|\btorvik\b|t-rank|efficien\w*/i.test(m);
       if (hasNcaaSignal || hasAnalysis) return { type: 'team_lookup', team: found[0].label };
     }
   }
@@ -618,7 +639,7 @@ function buildInjuryContext() {
 
   const lines = ['INJURY REPORT — ALL TEAMS:'];
 
-  // Confirmed injury overrides (model penalty applied) — alive teams only
+  // Confirmed injury overrides — alive teams only
   for (const [id, inj] of Object.entries(injuryMap)) {
     if (aliveTeamIds?.size && !aliveTeamIds.has(String(id))) continue;
     const node = Object.values(nodeByName).find(n => n.id === id);
@@ -677,7 +698,12 @@ function buildSystemPrompt(userMsg, graph, torvik, form, injuryMap, prefetchedCo
     if (mentioned.length) {
       scopeContext = mentioned.map(n => fmtTeam(n, torvik, form, injuryMap, teamOdds)).join('\n\n');
       const scopeIds = new Set(mentioned.map(n => n.id));
-      const gameLines = graph.edges.filter(e => scopeIds.has(e.from) || scopeIds.has(e.to)).slice(0, 15)
+      // Only show recent results vs alive opponents — prevents citing eliminated teams
+      const gameLines = graph.edges.filter(e => {
+        if (!scopeIds.has(e.from) && !scopeIds.has(e.to)) return false;
+        const otherId = scopeIds.has(e.from) ? e.to : e.from;
+        return !aliveTeamIds?.size || aliveTeamIds.has(String(otherId)) || scopeIds.has(otherId);
+      }).slice(0, 15)
         .map(e => `${graph.nodes.find(n => n.id === e.from)?.label ?? e.from} beat ${graph.nodes.find(n => n.id === e.to)?.label ?? e.to} ${e.label} on ${(e.date ?? '').slice(5, 10)}`);
       if (gameLines.length) scopeContext += '\n\nRECENT RESULTS:\n' + gameLines.join('\n');
 
@@ -702,7 +728,8 @@ function buildSystemPrompt(userMsg, graph, torvik, form, injuryMap, prefetchedCo
   }
   const intentType = intent?.type ?? 'dynamic';
 
-  let p = `You are AI Scout, an expert NCAA basketball analyst. ${season} March Madness ${round}. ${aliveCount} teams remain. Today is March 24, 2026.\n`;
+  const todayStr = new Date().toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric", timeZone: "America/New_York" });
+  let p = `You are AI Scout, an expert NCAA basketball analyst. ${season} March Madness ${round}. ${aliveCount} teams remain. Today is ${todayStr}.\n`;
   p += `Only reference teams still alive. No eliminated teams.\n\n`;
 
   if (intentType === 'matchup' || intentType === 'team_lookup' || intentType === 'multi_team') {
@@ -729,11 +756,11 @@ function buildSystemPrompt(userMsg, graph, torvik, form, injuryMap, prefetchedCo
     p += `- Do not just list AdjEM gaps — connect the numbers to how the game will actually be played.\n`;
 
   } else if (intentType === 'market_analysis') {
-    p += `TASK: Find teams the market is mispricing. Lead with the biggest discrepancies.\n`;
-    p += `- Compare BPI win probability vs DraftKings implied probability (from moneyline) for each upcoming game.\n`;
-    p += `- Undervalued = BPI substantially higher than market implied. Overvalued = market implied substantially higher than BPI.\n`;
-    p += `- For each mispriced team: exact gap in percentage points, and what the market is missing (injury not priced in, recency bias, AdjDE advantage, pace mismatch).\n`;
-    p += `- Give a direct betting recommendation: value bet, fade, or no edge.\n`;
+    p += `TASK: Identify market mispricing among remaining bracket games.\n`;
+    p += `- Only reference teams listed in the DATA section. Do not invent or reference eliminated teams.\n`;
+    p += `- Find the top 2-3 biggest discrepancies between BPI win probability and DraftKings implied probability.\n`;
+    p += `- For each: state exact gap in pp, explain what market is missing, give recommendation (value bet / fade / no edge).\n`;
+    p += `- Keep each entry to 2-3 sentences. Stop after 3 picks. Do not trail off mid-sentence.\n`;
 
   } else if (intentType === 'region_standings') {
     p += `TASK: Break down the ${intent?.region ?? 'tournament'} region. Who advances and why?\n`;
@@ -847,7 +874,7 @@ export default async function handler(req, res) {
         // Fall through to dynamic — model uses chat history for context
         intent.type = 'dynamic';
       } else {
-        writer.text("I'm focused on the 2026 NCAA Tournament. Ask me about matchups, upset picks, team efficiency, Final Four predictions, or bracket strategy.");
+        writer.text(`I'm focused on the ${new Date().getFullYear()} NCAA Tournament. Ask me about matchups, upset picks, team efficiency, Final Four predictions, or bracket strategy.`);
         writer.done();
         return;
       }

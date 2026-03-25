@@ -3973,12 +3973,9 @@ section { margin-bottom: 20px; }
   flex-shrink: 0;
 }
 
-.brand-year {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 2rem;
-  line-height: 1;
+.brand-credit {
   color: var(--accent);
-  letter-spacing: .02em;
+  font-style: normal;
 }
 
 .brand-text { display: flex; flex-direction: column; gap: 1px; }
@@ -5154,7 +5151,6 @@ section { margin-bottom: 20px; }
 @media (max-width: 900px) {
   .rankings-cols { grid-template-columns: 1fr 1fr; }
   .br-regions-grid { grid-template-columns: 1fr; }
-  .brand-year { font-size: 1.5rem; }
   .main-nav .nav-btn span:not(svg) { display: none; } /* icon only */
   .region-pills { display: none; }
 }

@@ -40,7 +40,9 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from urllib.request import Request, urlopen
 from urllib.error import URLError
 
-BASE    = 'https://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/seasons/2026'
+import datetime as _datetime_mod
+_season_year = _datetime_mod.datetime.now().year + 1 if _datetime_mod.datetime.now().month >= 10 else _datetime_mod.datetime.now().year
+BASE    = f'https://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/seasons/{_season_year}'
 TIMEOUT = 10
 WORKERS = 12
 

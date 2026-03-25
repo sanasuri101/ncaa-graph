@@ -83,7 +83,17 @@ def fetch_tournament_game_ids(teams: list) -> list[dict]:
     from datetime import datetime as _dt
 
     # NCAA tournament starts March 17, 2026 (First Four)
-    TOURNEY_START = "2026-03-17"
+    # Tournament start: third Thursday of March in current year
+    _yr = datetime.now().year
+    _d  = datetime(year=_yr, month=3, day=1)
+    _thursdays = 0
+    while _d.month == 3:
+        if _d.weekday() == 3:  # Thursday
+            _thursdays += 1
+        if _thursdays == 3:
+            break
+        _d += __import__("datetime").timedelta(days=1)
+    TOURNEY_START = _d.strftime("%Y-%m-%d")
 
     team_ids = {t["espn_id"] for t in teams}
     seen_ids: set[str] = set()
@@ -94,7 +104,7 @@ def fetch_tournament_game_ids(teams: list) -> list[dict]:
         tid = team["espn_id"]
         url = (
             f"https://site.api.espn.com/apis/site/v2/sports/basketball"
-            f"/mens-college-basketball/teams/{tid}/schedule?season=2026&seasontype=3"
+            f"/mens-college-basketball/teams/{tid}/schedule?season={datetime.now().year}&seasontype=3"
         )
         data = fetch(url)
         for e in data.get("events", []):
@@ -261,7 +271,7 @@ def fetch_futures(id_to_name: dict) -> dict:
     Pull regional and national championship futures from ESPN.
     Returns per-team odds keyed by bracket_name (lowercase).
     """
-    url = f"{CORE_BASE}/seasons/2026/futures"
+    url = f"{CORE_BASE}/seasons/{datetime.now().year}/futures"
     data = fetch(url)
 
     result: dict[str, dict] = {}

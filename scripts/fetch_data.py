@@ -244,6 +244,14 @@ def build_graph(inter_games: list) -> dict:
             "not_played_cnt": len(not_played),
             "season":         f"{season_year-1}-{str(season_year)[2:]}",
             "generated_at":   __import__("datetime").datetime.utcnow().isoformat() + "Z",
+            # Third Thursday of March = NCAA First Four start date
+            # This lets api/ai.js and api/bracket.js use a data-driven date
+            # instead of hardcoding "2026-03-17"
+            "tourney_start": (lambda yr: (lambda: [
+                d.strftime("%Y-%m-%d")
+                for d in [__import__("datetime").date(yr, 3, 1) + __import__("datetime").timedelta(days=i) for i in range(31)]
+                if d.weekday() == 3
+            ]()[2])(season_year))(),
         },
     }
 

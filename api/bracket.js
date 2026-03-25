@@ -123,7 +123,21 @@ function buildActualResults() {
   const winners     = {};
 
   allGames
-    .filter(g => g.date >= '2026-03-17')
+    .filter(g => {
+      const meta = graph?.meta;
+      const startDate = meta?.tourney_start ?? (() => {
+        const yr = new Date().getFullYear();
+        const d  = new Date(yr, 2, 1);
+        let thursdays = 0;
+        while (d.getMonth() === 2) {
+          if (d.getDay() === 4) thursdays++;
+          if (thursdays === 3) break;
+          d.setDate(d.getDate() + 1);
+        }
+        return d.toISOString().slice(0, 10);
+      })();
+      return g.date >= startDate;
+    })
     .sort((a, b) => a.date.localeCompare(b.date))
     .forEach(g => {
       const t1 = String(g.team1_id), t2 = String(g.team2_id);
