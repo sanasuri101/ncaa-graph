@@ -26,17 +26,32 @@ import { Annotation, StateGraph, END, START, Send } from '@langchain/langgraph';
 // ── Output sanitizer — strip CoT leakage before any LLM text reaches the client ──
 // Removes: Note:/Explanation:/Reasoning: headers, <think> blocks, instruction echoes
 function sanitizeLLMOutput(text) {
-  if (!text) return text;
-  const cleaned = text
-    // Strip XML-style thinking blocks
-    .replace(/<think>[\s\S]*?<\/think>/gi, '')
-    // Strip "Note:" / "Disclaimer:" lines only
-    .replace(/^(Note|Disclaimer|Reminder)[:\s][^\n]*/gim, '')
-    // Collapse 3+ newlines to 2
-    .replace(/\n{3,}/g, '\n\n')
+  if (!text) return '';
+  // Hard limit — truncate absurdly long fields (injection attempts tend to be verbose)
+  let s = String(text).slice(0, 2000);
+  // Strip thinking/reasoning leakage
+  s = s.replace(/<think>[\s\S]*?<\/think>/gi, '');
+  // Strip prompt injection patterns — lines that look like instructions to the model
+  s = s.replace(/^(Note|Disclaimer|Reminder|Instructions?|System|Ignore previous|Return only|You must|Your (task|job|role)|RULES?|IMPORTANT)[:\s][^\n]*/gim, '');
+  // Strip raw JSON structure leakage — if a field value looks like a full JSON object, flatten it
+  s = s.replace(/^\{[\s\S]*\}$/m, '[analysis unavailable]');
+  // Strip backtick fences that snuck through
+  s = s.replace(/```[\w]*\n?|```/g, '');
+  // Collapse excess whitespace
+  s = s.replace(/\n{3,}/g, '\n\n').trim();
+  return s || '';
+}
+
+// Sanitize a team name from user input before it enters any prompt
+function sanitizeTeamName(name) {
+  if (!name || typeof name !== 'string') return '';
+  // Strip anything that looks like prompt injection
+  return name
+    .slice(0, 60)                                     // hard length cap
+    .replace(/[\n\r\t]/g, ' ')                      // no newlines in team names
+    .replace(/[`"\\]/g, '')                          // no backticks/quotes/backslashes
+    .replace(/\b(ignore|system|return|instructions?|json|you must|your (role|task))[\s\S]*/gi, '') // injection keywords
     .trim();
-  // If sanitizer wiped everything, return original trimmed text
-  return cleaned || text.trim();
 }
 
 const GROQ_URL      = 'https://api.groq.com/openai/v1/chat/completions';
@@ -718,20 +733,33 @@ Return only the JSON object. No backticks. No preamble.`;
       clean = clean.slice(jsonStart, jsonEnd + 1);
     }
 
+    const EXPECTED_KEYS = ['injury_note','decisive_factor','key_matchup','x_factors','risk','market_vs_model','bottom_line'];
+
     let sections = {};
     try {
       const parsed = JSON.parse(clean);
-      // Guard: model sometimes wraps entire JSON inside decisive_factor value
-      if (typeof parsed.decisive_factor === 'string' && parsed.decisive_factor.trim().startsWith('{')) {
+      const df = parsed.decisive_factor;
+
+      if (df && typeof df === 'object') {
+        // Mode 3: model nested the sections object directly as an object value
+        sections = df.decisive_factor ? df : parsed;
+      } else if (typeof df === 'string' && df.trim().startsWith('{')) {
+        // Mode 2: model serialized the sections as a JSON string inside decisive_factor
         try {
-          const inner = JSON.parse(parsed.decisive_factor);
+          const inner = JSON.parse(df);
           sections = inner.decisive_factor ? inner : parsed;
         } catch { sections = parsed; }
       } else {
+        // Mode 1: clean response
         sections = parsed;
       }
+
+      // Validate — if fewer than 3 expected keys have real string content, treat as fallback
+      const filled = EXPECTED_KEYS.filter(k => typeof sections[k] === 'string' && sections[k].length > 10);
+      if (filled.length < 3) throw new Error('insufficient section content');
+
     } catch {
-      // Fallback: not valid JSON — distribute text across section fields
+      // Fallback: not valid JSON or insufficient content — distribute paragraphs
       const fallbackText = sanitizeLLMOutput(clean) || results.map(r => r.reasoning).filter(Boolean).join(' ');
       const paras = fallbackText.split('\n\n').filter(Boolean);
       sections = {
@@ -744,7 +772,6 @@ Return only the JSON object. No backticks. No preamble.`;
         injury_note:     '',
       };
     }
-
     // Sanitize each field
     const san = (s) => s ? sanitizeLLMOutput(String(s)) : '';
 
@@ -850,16 +877,24 @@ export default async function handler(req, res) {
     return;
   }
 
-  const { team_a, team_b } = body;
-  if (!team_a || !team_b) {
+  const rawA = body.team_a, rawB = body.team_b;
+  if (!rawA || !rawB) {
     res.writeHead(400, { 'Content-Type': 'application/json', ...CORS });
     res.end(JSON.stringify({ error: 'team_a and team_b required' }));
     return;
   }
-  if (typeof team_a !== 'string' || typeof team_b !== 'string' ||
-      team_a.length > 200 || team_b.length > 200) {
+  if (typeof rawA !== 'string' || typeof rawB !== 'string' ||
+      rawA.length > 200 || rawB.length > 200) {
     res.writeHead(400, { 'Content-Type': 'application/json', ...CORS });
     res.end(JSON.stringify({ error: 'Invalid team names' }));
+    return;
+  }
+  // Sanitize team names before they enter any prompt
+  const team_a = sanitizeTeamName(rawA);
+  const team_b = sanitizeTeamName(rawB);
+  if (!team_a || !team_b) {
+    res.writeHead(400, { 'Content-Type': 'application/json', ...CORS });
+    res.end(JSON.stringify({ error: 'Invalid team names after sanitization' }));
     return;
   }
 

@@ -579,14 +579,31 @@ function renderConfidence(conf, oddsRaw) {
     { key: 'bottom_line',      label: 'Bottom Line',          show: () => true },
   ];
 
+  // Coerce every section value to a safe string — model can leak objects or raw JSON
+  function coerceSectionVal(v) {
+    if (v == null || v === '') return '';
+    if (typeof v === 'object') {
+      // Object leaked through — try to extract decisive_factor, else discard
+      return typeof v.decisive_factor === 'string' ? v.decisive_factor : '';
+    }
+    const s = String(v);
+    // If the value looks like a raw JSON object, discard it
+    if (s.trim().startsWith('{') && s.trim().endsWith('}')) return '';
+    return s;
+  }
+
   const sectionHTML = SECTION_DEFS
-    .filter(d => d.show(sec[d.key]) && sec[d.key])
+    .filter(d => {
+      const val = coerceSectionVal(sec[d.key]);
+      return d.show(val) && val.length > 0;
+    })
     .map(d => {
-      const isInjury     = d.key === 'injury_note';
-      const isBottomLine = d.key === 'bottom_line';
-      return `<div class="conf-section ${isInjury ? 'conf-section-injury' : ''} ${isBottomLine ? 'conf-section-bottom-line' : ''}">
+      const val        = coerceSectionVal(sec[d.key]);
+      const isInjury   = d.key === 'injury_note';
+      const isBottom   = d.key === 'bottom_line';
+      return `<div class="conf-section ${isInjury ? 'conf-section-injury' : ''} ${isBottom ? 'conf-section-bottom-line' : ''}">
         <div class="conf-section-label">${d.label}</div>
-        <div class="conf-section-text">${renderMarkdown(sec[d.key])}</div>
+        <div class="conf-section-text">${renderMarkdown(val)}</div>
       </div>`;
     }).join('');
 
