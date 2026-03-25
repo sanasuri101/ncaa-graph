@@ -71,7 +71,7 @@
       "adj_em_penalty": 1.0,
       "players": [
         {
-          "name": "LJ Cason",
+          "name": "L.J. Cason",
           "status": "Out for season - torn ACL",
           "impact": "Backup guard. Adds pressure on Elliot Cadeau.",
           "adj_em_impact": -1.0
@@ -182,6 +182,42 @@
       "notes": "UCLA (23-11) won without him 88-84 vs Michigan St. Dent (23pts) and Perry (22pts) stepped up. Monitor for R1 availability update.",
       "source": "ESPN",
       "updated": "2026-03-15"
+    },
+    "2509": {
+      "bracket_name": "Purdue",
+      "adj_em_penalty": 2.0,
+      "players": [
+        {
+          "name": "C.J. Cox",
+          "status": "Questionable - hyperextended right knee (March 22 vs Miami, did not return)",
+          "impact": "8.3 PPG / 2.6 RPG / 24.4 MPG | 38.4% 3P | starts all 36 games. Primary perimeter defender and sharpshooter."
+        }
+      ],
+      "notes": "Cox suffered hyperextended right knee on fast break in 2nd half. Matt Painter confirmed diagnosis. Listed game-time decision for Sweet 16 vs Texas (March 26). 4 days to recover."
+    },
+    "333": {
+      "bracket_name": "Alabama",
+      "adj_em_penalty": 4.0,
+      "players": [
+        {
+          "name": "Aden Holloway",
+          "status": "Suspended - arrested March 16 on felony marijuana possession charge, removed from campus",
+          "impact": "16.8 PPG / 2.8 RPG / 3.8 APG | 28.4 MPG | 48.1% FG | 43.8% 3P | second-leading scorer."
+        }
+      ],
+      "notes": "Holloway arrested March 16, $5,000 bond, suspended by program. Coach Nate Oats confirmed team preparing without him. Will NOT play vs Michigan in Sweet 16. London Jemison expected to start."
+    },
+    "2633": {
+      "bracket_name": "Tennessee",
+      "adj_em_penalty": 1.5,
+      "players": [
+        {
+          "name": "Nate Ament",
+          "status": "Questionable - leg injury (suffered Feb 28 vs Alabama), playing through pain in obvious discomfort",
+          "impact": "17.5 PPG / 6.6 RPG / 2.5 APG | 30.2 MPG | 40.5% FG | freshman phenom, NBA draft prospect."
+        }
+      ],
+      "notes": "Ament soldiered through first weekend in visible discomfort. Not confirmed out but effectiveness is a major question mark heading into Sweet 16 vs Iowa State."
     }
   }
 }

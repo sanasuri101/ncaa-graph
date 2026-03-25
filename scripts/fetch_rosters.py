@@ -192,6 +192,25 @@ def main():
     cfg    = json.loads(cfg_path.read_text())
     teams  = cfg['bracket']
 
+    # Augment with teams that won tournament games but weren't in original bracket_config
+    try:
+        graph_path = Path(__file__).parent.parent / 'data' / 'graph_data.json'
+        graph_data = json.loads(graph_path.read_text())
+        known_ids  = {str(t['espn_id']) for t in teams}
+        for node in graph_data.get('nodes', []):
+            nid = str(node['id'])
+            if nid not in known_ids:
+                teams.append({
+                    'espn_id':      nid,
+                    'bracket_name': node.get('label', f'Team {nid}'),
+                    'displayName':  node.get('full_name', node.get('label', '')),
+                    'region':       node.get('region', ''),
+                    'seed':         node.get('seed'),
+                })
+                known_ids.add(nid)
+    except Exception as e:
+        print(f'Warning: could not augment from graph_data.json: {e}')
+
     # Load injury overrides — ESPN often marks injured players as 'active'
     # Build: team_id -> { player_name_lower -> override_dict }
     injury_overrides = {}

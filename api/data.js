@@ -521,7 +521,7 @@ export const REGIONS_ORDERED = ["Midwest", "East", "West", "South"];
 export function classifyIntent(msg, graph) {
   const m = msg.toLowerCase();
   const hasNcaaSignal =
-    /ncaa|march madness|\bsweet 16\b|\bsweet sixteen\b|\belite 8\b|\belite eight\b|\bfinal four\b|\bright four\b|round of 64|round of 32|first round|second round|torvik|barthag|adj.?em|adj.?oe|adj.?de|t-rank|basketball efficiency|team efficiency|\bbasketball\b|college basketball|ncaa bracket|tournament bracket|tournament pick|region picks?|midwest region|east region|west region|south region|\bseed\b.*\bbasketball\b|\bbasketball\b.*\bseed\b|overall seed|number.*seed|\bseeds?\b.*\badvance\b|\badvance\b.*\bseeds?\b|\b[0-9]+ seed|upset pick|upset risk|upset watch|chalk pick|bracket advice|best shot|best chance|bracket strategy|fill.*bracket|my bracket|safe pick|value pick|picks this year|\b5-12\b|\b12-5\b|\b[0-9]+-[0-9]+ matchup\b|seed upset|win probability|wins it all|win it all|cut down the nets|national champion|injured|injury|\bout\b|out for|limited minutes|ppg|rpg|apg|per|three.?point pct|tempo mismatch|pace mismatch|cover the spread|beat the spread|against the spread|over.under|moneyline|the line|step up|change anything|affect the|still win|who wins|the key|does that|does this|who else|who steps|chances now|is.*playing\b|will.*play|any injuries|injury update|injury news|\bhurt\b|questionable|game.?time decision|brok\w*|break\w*|fractur\w*|sprain\w*|tweaked|hobbling|limping|\babsent\b|\babsence\b|\bsidelined?\b/i.test(
+    /ncaa|march madness|\bsweet 16\b|\bsweet sixteen\b|\belite 8\b|\belite eight\b|\bfinal four\b|\bright four\b|round of 64|round of 32|first round|second round|torvik|barthag|adj.?em|adj.?oe|adj.?de|t-rank|basketball efficiency|team efficiency|\bbasketball\b|college basketball|ncaa bracket|tournament bracket|tournament pick|region picks?|midwest region|east region|west region|south region|\bseed\b.*\bbasketball\b|\bbasketball\b.*\bseed\b|overall seed|number.*seed|\bseeds?\b.*\badvance\b|\badvance\b.*\bseeds?\b|\b[0-9]+ seed|upset pick|upset risk|upset watch|chalk pick|bracket advice|best shot|best chance|bracket strategy|fill.*bracket|my bracket|safe pick|value pick|picks this year|\b5-12\b|\b12-5\b|\b[0-9]+-[0-9]+ matchup\b|seed upset|win probability|wins it all|win it all|cut down the nets|national champion|injured|injury|\bout\b|out for|limited minutes|ppg|rpg|apg|per|three.?point pct|tempo mismatch|pace mismatch|cover the spread|beat the spread|against the spread|over.under|moneyline|the line|step up|change anything|affect the|still win|who wins|the key|does that|does this|who else|who steps|chances now|is.*playing\b|will.*play|any injuries|injury update|injury news|\bhurt\b|questionable|game.?time decision|brok\w*|break\w*|fractur\w*|sprain\w*|tweaked|hobbling|limping|\babsent\b|\babsence\b|\bsidelined?\b|\btournament\b|\bbig dance\b|\bstatus\b|\bsuspended\b|\barrested\b|knee update|foot update|ankle update/i.test(
       m,
     );
   const hasTeamSignal =
@@ -716,6 +716,16 @@ export function classifyIntent(msg, graph) {
         return { type: "team_lookup", team: found[0].label };
     }
   }
+
+  // If query contains a known injured player's last name → dynamic + inject injury context
+  try {
+    const { injuryMap: iMap } = getData();
+    const injuredLastNames = Object.values(iMap)
+      .flatMap(inj => inj.players.map(p => p.name.split(' ').pop().toLowerCase()));
+    if (injuredLastNames.some(ln => ln.length > 2 && m.includes(ln))) {
+      return { type: 'dynamic' };
+    }
+  } catch {}
 
   if (!hasBball) return { type: "general" };
   return { type: "dynamic" };
