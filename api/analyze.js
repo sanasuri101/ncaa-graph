@@ -46,7 +46,7 @@ function sanitizeTeamName(name) {
 // ── Constants ─────────────────────────────────────────────────────────────────
 const MODEL            = 'llama-3.3-70b-versatile';
 const MAX_TOKENS       = 1024;
-const MAX_TOKENS_SY    = 2048;
+const MAX_TOKENS_SY    = 6000;   // synthesis: 7 sections × ~700 tokens depth
 const MAX_STEPS_SYNTH  = 3;
 const FETCH_TIMEOUT    = 25000;
 
@@ -144,14 +144,26 @@ function fmtTeamEfficiency(node, torvik, injuryMap) {
   const tv  = torvik?.teams?.[node.id]?.torvik;
   const inj = injuryMap?.[node.id];
   if (!tv) return `${node.full_name}: no Torvik data`;
+
+  // Show injury-adjusted AdjEM as the primary number — agents must not re-add the penalty
+  const rawEM   = tv.adj_em;
+  const penalty = inj?.penalty ?? 0;
+  const adjEM   = rawEM - penalty;
+  const emStr   = `${adjEM>0?'+':''}${adjEM.toFixed(2)}`;
+  const emNote  = penalty > 0 ? ` (raw season +${rawEM}, injury penalty -${penalty})` : '';
+
   return [
     `${node.full_name} (${node.region} #${node.seed}, ${tv.conf}) — Record: ${tv.record}`,
-    `T-Rank #${tv.rank} | AdjEM: ${tv.adj_em>0?'+':''}${tv.adj_em} | AdjOE: ${tv.adj_oe} | AdjDE: ${tv.adj_de}`,
-    `Barthag: ${(tv.barthag*100).toFixed(1)}% | WAB: ${parseFloat(tv.wab).toFixed(1)} | SOS: ${tv.sos_rank?.toFixed(2)??'?'}`,
+    `T-Rank #${tv.rank} | AdjEM: ${emStr}${emNote} | AdjOE: ${tv.adj_oe} | AdjDE: ${tv.adj_de}`,
+    `Barthag: ${(tv.barthag*100).toFixed(1)}% (pre-injury baseline) | WAB: ${parseFloat(tv.wab).toFixed(1)} | SOS: ${tv.sos_rank?.toFixed(2)??'?'}`,
     `Shooting: eFG% ${tv.efg} | 2P% ${tv.two_p} | 3P% ${tv.three_p} | FT% ${tv.ft_pct}`,
     `Four Factors: TOV% ${tv.tov_rate} | ORB% ${tv.orb_rate} | FTR ${tv.ftr} | Opp eFG% ${tv.opp_efg??'?'}`,
     `Pace: adj_tempo ${tv.adj_tempo?.toFixed(2)??'?'} | Luck: ${parseFloat(tv.luck??0).toFixed(3)}`,
-    inj ? `⚠ INJURY (AdjEM penalty -${inj.penalty}): ${inj.players.map(p=>`${p.name} — ${p.status}`).join('; ')}${inj.notes?' | '+inj.notes:''}` : '',
+    inj ? [
+      `⚠ INJURY REPORT (AdjEM already reduced by -${penalty}):`,
+      ...inj.players.map(p => `  ${p.name} — ${p.status}${p.impact?' | '+p.impact:''}`),
+      inj.notes ? `  Context: ${inj.notes}` : '',
+    ].filter(Boolean).join('\n') : '',
   ].filter(Boolean).join('\n');
 }
 
@@ -286,20 +298,28 @@ function routerNode(state) {
   const rosA = rosterStats?.[String(nodeA.id)]?.players ?? [];
   const rosB = rosterStats?.[String(nodeB.id)]?.players ?? [];
 
+  // Build injury summary string for cross-agent use
+  const injSummaryA = injuryMap?.[nodeA.id] ? `⚠ ${nodeA.label} INJURY (AdjEM -${injuryMap[nodeA.id].penalty}): ${injuryMap[nodeA.id].players.map(p=>p.name+' — '+p.status).join('; ')}${injuryMap[nodeA.id].notes?' | '+injuryMap[nodeA.id].notes:''}` : '';
+  const injSummaryB = injuryMap?.[nodeB.id] ? `⚠ ${nodeB.label} INJURY (AdjEM -${injuryMap[nodeB.id].penalty}): ${injuryMap[nodeB.id].players.map(p=>p.name+' — '+p.status).join('; ')}${injuryMap[nodeB.id].notes?' | '+injuryMap[nodeB.id].notes:''}` : '';
+  const injBlock    = [injSummaryA, injSummaryB].filter(Boolean).join('\n') || 'No injury reports.';
+
+  const tvA = torvik?.teams?.[nodeA.id]?.torvik;
+  const tvB = torvik?.teams?.[nodeB.id]?.torvik;
+
   return {
-    // Efficiency agent gets: AdjEM/Barthag/Four Factors + injury report + roster (for injury context)
+    // Efficiency agent: injury-adjusted AdjEM + roster for injury context
     eff_data: `${fmtTeamEfficiency(nodeA, torvik, injuryMap)}\n\nROSTER:\n${fmtRoster(rosA)}\n\n---\n\n${fmtTeamEfficiency(nodeB, torvik, injuryMap)}\n\nROSTER:\n${fmtRoster(rosB)}`,
 
-    // Form agent gets: last-10, streak, last-5 games + roster (who's been playing)
-    form_data: `${fmtTeamForm(nodeA, form)}\n\nROSTER:\n${fmtRoster(rosA)}\n\n---\n\n${fmtTeamForm(nodeB, form)}\n\nROSTER:\n${fmtRoster(rosB)}`,
+    // Form agent: last-10, streak, last-5 + roster (who's healthy, who's playing)
+    form_data: `${fmtTeamForm(nodeA, form)}\n\nROSTER (who's available):\n${fmtRoster(rosA)}\n\n---\n\n${fmtTeamForm(nodeB, form)}\n\nROSTER (who's available):\n${fmtRoster(rosB)}\n\nINJURY CONTEXT:\n${injBlock}`,
 
-    // Matchup agent gets: H2H, common opponents, transitive chains + pace comparison
-    matchup_data: `PACE: ${nodeA.label} adj_tempo ${torvik?.teams?.[nodeA.id]?.torvik?.adj_tempo?.toFixed(2)??'?'} | ${nodeB.label} adj_tempo ${torvik?.teams?.[nodeB.id]?.torvik?.adj_tempo?.toFixed(2)??'?'}\n\n${fmtMatchupData(nodeA, nodeB, graph, edgesByNode, transPairs)}`,
+    // Matchup agent: H2H, common opponents, transitive + pace + injury context
+    matchup_data: `PACE: ${nodeA.label} adj_tempo ${tvA?.adj_tempo?.toFixed(2)??'?'} | ${nodeB.label} adj_tempo ${tvB?.adj_tempo?.toFixed(2)??'?'}\nFaster team (higher adj_tempo) typically controls tempo.\n\nINJURY CONTEXT (affects matchup dynamics):\n${injBlock}\n\n${fmtMatchupData(nodeA, nodeB, graph, edgesByNode, transPairs)}`,
 
-    // Odds agent gets: market lines, BPI, futures
-    odds_data: fmtOdds(nodeA, nodeB, state.team_a, state.team_b, oddsData),
+    // Odds agent: market lines, BPI, futures + injury context (market may not have priced this in)
+    odds_data: `${fmtOdds(nodeA, nodeB, state.team_a, state.team_b, oddsData)}\n\nINJURY CONTEXT (check if market reflects this):\n${injBlock}`,
 
-    // Roster data stored separately for synthesis to reference
+    // Roster data for synthesis
     roster_data: `${nodeA.full_name} ROSTER:\n${fmtRoster(rosA)}\n\n${nodeB.full_name} ROSTER:\n${fmtRoster(rosB)}`,
   };
 }
@@ -319,7 +339,7 @@ async function efficiencyAgent(state, config) {
   const groqKey = config.configurable?.groqKey;
   const system = `You are an NCAA basketball efficiency analyst. Assess matchup win probability using ONLY the data provided — do NOT use any knowledge from your training. Every stat you cite must come from the data below.
 Respond with valid JSON only. No markdown. Schema: { "agent": "efficiency", "win_pct": <0-100 for ${state.team_a}>, "confidence": "low|medium|high", "key_edge": "<one specific stat advantage>", "reasoning": "<2-3 sentences citing exact numbers from the data>" }`;
-  const user = `Analyze using efficiency data only.\n\n${state.eff_data}\n\nNote: Barthag IS the neutral-court win probability. AdjEM gap >10 = decisive, 5-10 = meaningful, <5 = toss-up.\nApply any injury AdjEM penalties explicitly.\nReturn win probability for ${state.team_a}.`;
+  const user = `Analyze using efficiency data only.\n\n${state.eff_data}\n\nNOTE: The AdjEM shown is ALREADY injury-adjusted — do not re-add the penalty. Use it as-is.\nBarthag is the pre-injury baseline — if a team has an injury penalty, their true win probability is lower than Barthag suggests.\nAdjEM gap interpretation: >10 = decisive, 5-10 = meaningful, <5 = toss-up.\nReturn win probability for ${state.team_a}.`;
   try {
     const raw    = await groqCall(system, user, groqKey);
     const result = parseAgentJSON(raw, 'efficiency');
@@ -351,7 +371,7 @@ async function matchupAgent(state, config) {
   const groqKey = config.configurable?.groqKey;
   const system = `You are an NCAA basketball matchup specialist. Assess win probability using ONLY the head-to-head and common opponent data provided — do NOT use any knowledge from your training. Every result you cite must come from the data below.
 Respond with valid JSON only. No markdown. Schema: { "agent": "matchup", "win_pct": <0-100 for ${state.team_a}>, "confidence": "low|medium|high", "key_edge": "<one specific matchup advantage>", "reasoning": "<2-3 sentences citing H2H or common opponent results from the data>" }`;
-  const user = `Analyze using head-to-head and common opponent data only.\n\n${state.matchup_data}\n\nWeight evidence: H2H > common opponents > transitive chains.\nPace mismatch matters: faster team (higher adj_tempo) usually controls tempo.\nReturn win probability for ${state.team_a}.`;
+  const user = `Analyze using head-to-head, common opponent, and pace data.\n\n${state.matchup_data}\n\nWeight evidence: H2H > common opponents > transitive chains.\nPace: faster team (higher adj_tempo) typically controls tempo and dictates game flow.\nInjuries: if a team is missing key players, adjust your matchup assessment — a depleted 7-man rotation changes H2H dynamics.\nReturn win probability for ${state.team_a}.`;
   try {
     const raw    = await groqCall(system, user, groqKey);
     const result = parseAgentJSON(raw, 'matchup');
@@ -370,7 +390,7 @@ async function oddsAgent(state, config) {
   }
   const system = `You are a sports betting market analyst. Assess win probability using ONLY the market data provided — do NOT use any knowledge from your training.
 Respond with valid JSON only. No markdown. Schema: { "agent": "odds", "win_pct": <0-100 for ${state.team_a}>, "confidence": "low|medium|high", "key_edge": "<one specific market signal>", "reasoning": "<2-3 sentences citing the market-implied probability, BPI, and any line movement from the data>" }`;
-  const user = `Assess win probability using market data only.\n\n${state.odds_data}\n\nRules: Market-implied probability is your baseline. BPI is independent model. Line movement >3% = sharp money. If market and BPI agree within 5pp = high confidence. If they diverge >10pp = note the conflict.\nReturn win probability for ${state.team_a}.`;
+  const user = `Assess win probability using market and injury data.\n\n${state.odds_data}\n\nRules:\n- Market-implied probability is your baseline — it aggregates all public information.\n- BPI is an independent model accounting for travel, rest, site.\n- Line movement >3% = sharp money. <2% = noise.\n- IMPORTANT: Check the injury context section. If a key player is out and the market lines predate that news, the market may be stale — flag this explicitly.\n- If market and BPI agree within 5pp = high confidence. If they diverge >10pp = note the conflict and explain which signal to trust.\nReturn win probability for ${state.team_a}.`;
   try {
     const raw    = await groqCall(system, user, groqKey);
     const result = parseAgentJSON(raw, 'odds');
@@ -458,19 +478,38 @@ async function synthesisNode(state, config) {
     }),
   };
 
-  const synthSystem = `You are a senior NCAA tournament analyst writing a pre-game scouting report.
-You have access to tools — use them to verify specific claims from the agent reports or get roster detail.
-CRITICAL: Only cite players and stats from the data you fetch via tools or from the team data provided. Do NOT invent players or stats from your training memory.
-You MUST respond with valid JSON only. No markdown fences, no text outside the JSON.
-Schema: { "injury_note": "<string>", "decisive_factor": "<string>", "key_matchup": "<string>", "x_factors": "<string>", "risk": "<string>", "market_vs_model": "<string>", "bottom_line": "<string>" }`;
+  const synthSystem = `You are a senior NCAA tournament analyst. Write like The Athletic — specific, opinionated, deeply cited.
+You have tools — use them to verify claims or get more roster detail before writing.
+CRITICAL: Only cite players and stats from the data provided or tool results. Never invent stats from training memory.
+You MUST respond with valid JSON only. No markdown fences, no text outside the JSON object.
+Each field has a distinct job. Do NOT repeat content across fields. Write every field to its full required length.
+
+{
+  "injury_note": "<If ⚠ appears in the data: 3-4 sentences. Name the injured player, give full stat line (PPG/RPG/APG/FG%/MPG/PER), their role, the AdjEM penalty applied, the direct impact on THIS matchup — rotation depth, scoring burden shift, defensive holes. Empty string if no injuries.>",
+  "decisive_factor": "<5-7 sentences. The single biggest structural reason one team wins. Start with the injury-adjusted AdjEM gap — state it as points per 100 possessions. Note that Barthag is pre-injury and adjust accordingly. Compare AdjOE vs opponent AdjDE for offensive edge; AdjDE vs opponent AdjOE for defensive edge. Cite eFG%, Four Factors. Explain the causal chain from numbers to how the game is played. Name specific players driving those numbers from the roster.>",
+  "key_matchup": "<5-6 sentences. The player vs player battle that decides the game. Name BOTH players with complete stat lines — PPG/RPG/APG/FG%/3P%/height/weight/experience from the roster data. Explain the physical matchup. Explain the stylistic clash. Who has the edge in which specific game situations? Cite numbers to support every claim.>",
+  "x_factors": "<4-5 sentences. Three specific underweighted factors most previews miss. For each: name it, give the exact number, explain why it matters in this specific matchup. Consider: TOV% differential, adj_tempo mismatch, ORB% edge, bench depth, FTR, shooting splits against this defensive style.>",
+  "risk": "<4-5 sentences. The specific scenario where the projected winner loses. Name the player on the underdog who could blow it open — give their stats. Describe the exact game situation concretely: not 'if they go cold' but 'if [player A] (X TOV/game) turns it over under pressure and [player B] (Y PPG off bench) goes 4-for-6 from three in the second half'.>",
+  "market_vs_model": "<3-4 sentences. State the exact model probability, DraftKings implied probability, and ESPN BPI figure. If they diverge by 6+ points explain why — what the market is pricing in that the model misses. If no market data say so, then analyze what efficiency consensus implies about uncertainty and which team benefits from information asymmetry.>",
+  "bottom_line": "<3 sentences exactly. Who wins and the single decisive reason. Specific final score. The player who seals it and the exact play — a specific shot, stop, or rebound.>"
+}`;
 
   const synthPrompt = `Write a deep expert analysis of ${state.team_a} vs ${state.team_b}.
 
-TEAM DATA (use this — do not invent stats):
+EFFICIENCY & INJURY DATA:
 ${state.eff_data}
 
 ROSTER DATA:
 ${state.roster_data}
+
+FORM & MOMENTUM DATA:
+${state.form_data}
+
+MATCHUP DATA (H2H, common opponents, pace):
+${state.matchup_data}
+
+MARKET & ODDS DATA:
+${state.odds_data}
 
 AGENT REPORTS:
 ${agentSummary}
@@ -480,14 +519,15 @@ Weights: ${weightDesc} | Agent spread: ${spread.toFixed(0)}pp (${spread<10?'stro
 
 Use your tools if you need to verify a specific claim or get more roster detail.
 Then return the JSON analysis.
-RULES:
-- Every player name and stat you cite MUST come from the team data or roster data above, or from a tool call you make
-- Do NOT use players like Filipowski, Sanogo, Newton — check the actual roster data for current players
-- injury_note: only if ⚠ appears in the data, name the actual player and their stats
-- decisive_factor: cite exact AdjEM/Barthag numbers from the data
-- key_matchup: name actual players from the roster data with their real stat lines
-- bottom_line: specific score, name the player who seals it (must be in the roster)
-Return ONLY the JSON object. No backticks. No preamble.`;
+RULES — every one non-negotiable:
+1. Every player and stat MUST come from the data above or a tool call — no training memory
+2. Each field has a different job — do NOT copy sentences between fields
+3. decisive_factor: 5-7 sentences, start with injury-adjusted AdjEM gap, cite Barthag, AdjOE vs AdjDE
+4. key_matchup: MUST name both players with full stat lines from the roster data
+5. x_factors: 3 specific factors with exact numbers each
+6. risk: name the specific underdog player, describe the exact concrete scenario
+7. bottom_line: exactly 3 sentences, specific score, specific player, specific play
+Return ONLY the JSON object. No backticks. No preamble. Write every section to its full required length.`;
 
   try {
     const { text } = await generateText({
