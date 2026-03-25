@@ -583,12 +583,13 @@ function renderConfidence(conf, oddsRaw) {
   function coerceSectionVal(v) {
     if (v == null || v === '') return '';
     if (typeof v === 'object') {
-      // Object leaked through — try to extract decisive_factor, else discard
+      // Object leaked — try to extract decisive_factor, else discard
       return typeof v.decisive_factor === 'string' ? v.decisive_factor : '';
     }
-    const s = String(v);
-    // If the value looks like a raw JSON object, discard it
-    if (s.trim().startsWith('{') && s.trim().endsWith('}')) return '';
+    const s = String(v).trim();
+    // Detect JSON blob: starts with { followed by whitespace+"  (key pattern)
+    // Don't require closing } — truncated JSON still needs to be caught
+    if (s.startsWith('{') && /^\{[\s\n]*"/.test(s)) return '';
     return s;
   }
 

@@ -33,8 +33,9 @@ function sanitizeLLMOutput(text) {
   s = s.replace(/<think>[\s\S]*?<\/think>/gi, '');
   // Strip prompt injection patterns — lines that look like instructions to the model
   s = s.replace(/^(Note|Disclaimer|Reminder|Instructions?|System|Ignore previous|Return only|You must|Your (task|job|role)|RULES?|IMPORTANT)[:\s][^\n]*/gim, '');
-  // Strip raw JSON structure leakage — if a field value looks like a full JSON object, flatten it
-  s = s.replace(/^\{[\s\S]*\}$/m, '[analysis unavailable]');
+  // Strip raw JSON blob leakage — catches both complete and truncated JSON objects
+  // Pattern: starts with { then whitespace then " (key-value structure)
+  if (/^\s*\{[\s\n]*"/.test(s)) return '';
   // Strip backtick fences that snuck through
   s = s.replace(/```[\w]*\n?|```/g, '');
   // Collapse excess whitespace
