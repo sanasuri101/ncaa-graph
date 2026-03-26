@@ -218,6 +218,23 @@
         }
       ],
       "notes": "Ament soldiered through first weekend in visible discomfort. Not confirmed out but effectiveness is a major question mark heading into Sweet 16 vs Iowa State."
+    },
+    "41": {
+      "bracket_name": "UConn",
+      "adj_em_penalty": 2.5,
+      "players": [
+        {
+          "name": "Silas Demary Jr.",
+          "status": "Questionable - Grade 2 high ankle sprain (March 14 Big East final vs St. John's), played limited minutes in Round 2",
+          "impact": "10.9 PPG / 6.2 APG / 4.5 RPG | 29.1 MPG | 1.6 SPG | starting PG, primary ball handler and defender."
+        },
+        {
+          "name": "Jaylin Stewart",
+          "status": "Questionable - knee inflammation, missed Big East tourney and Rounds 1 and 2",
+          "impact": "4.5 PPG bench contributor. Limited availability."
+        }
+      ],
+      "notes": "Demary gutted through Grade 2 sprain in Round 2. Dan Hurley called it day-to-day. Not expected at 100% for Sweet 16 vs Michigan State. Stewart also questionable with knee inflammation."
     }
   }
 }
