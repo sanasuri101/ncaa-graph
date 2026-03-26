@@ -97,7 +97,26 @@ function getData() {
   try { injuryNews = JSON.parse(readFileSync(join(process.cwd(), 'data/injury_news.json'), 'utf8'))?.teams ?? {}; } catch {}
   let rosterStats = {};
   try { rosterStats = JSON.parse(readFileSync(join(process.cwd(), 'data/roster_stats.json'), 'utf8')).teams ?? {}; } catch {}
-  _cache = { graph, torvik, form, injuryMap, transPairs, nodeByName, edgesByNode, oddsData, injuryNews, rosterStats };
+  // Compute aliveTeamIds from all_games.json (same logic as data.js)
+  let aliveTeamIds = new Set(graph.nodes.map(n => String(n.id))); // default: all alive
+  try {
+    const allGames = JSON.parse(readFileSync(join(process.cwd(), 'data/all_games.json'), 'utf8'));
+    const bracketIds = new Set(graph.nodes.map(n => String(n.id)));
+    const winners = new Set(), losers = new Set();
+    for (const g of allGames) {
+      if (g.date < '2026-03-17') continue;
+      const t1 = String(g.team1_id), t2 = String(g.team2_id);
+      if (!bracketIds.has(t1) && !bracketIds.has(t2)) continue;
+      (g.team1_winner ? winners : losers).add(t1);
+      (g.team1_winner ? losers : winners).add(t2);
+    }
+    if (winners.size > 0) aliveTeamIds = new Set([...winners].filter(id => !losers.has(id)));
+  } catch {}
+  // Filter injuryMap to alive teams only
+  for (const id of Object.keys(injuryMap)) {
+    if (!aliveTeamIds.has(String(id))) delete injuryMap[id];
+  }
+  _cache = { graph, torvik, form, injuryMap, transPairs, nodeByName, edgesByNode, oddsData, injuryNews, rosterStats, aliveTeamIds };
   _cacheMtime = mtime;
   return _cache;
 }

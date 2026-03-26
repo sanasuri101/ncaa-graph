@@ -191,11 +191,18 @@ function buildSystemPrompt(
 
   let context = prefetchedContext || scopeContext;
 
-  // Injury injection: always appended — never replaces efficiency context
-  const isInjuryQuery =
-    /injur\w*|\bhurt\b|out for|is.*playing\b|will.*play|questionable|brok\w*|break\w*|fractur\w*|sprain\w*|tweak\w*|hobbl\w*|limp\w*|missed.*game|miss.*game|game.?time|any injuries|injury news|injury update|\babsent\b|\babsence\b|\bsidelined?\b/i.test(
-      userMsg,
-    );
+  // Injury injection: fires on injury keywords OR known injured player last names
+  const _injuryKeyword =
+    /injur\w*|\bhurt\b|\bis out\b|\bsitting out\b|out for|is.*playing\b|will.*play|questionable|brok\w*|break\w*|fractur\w*|sprain\w*|tweak\w*|hobbl\w*|limp\w*|missed.*game|miss.*game|game.?time|any injuries|injury news|injury update|\babsent\b|\babsence\b|\bsidelined?\b|\bwithout\b|\bsuspended\b|\barrested\b|doing better|how is.*doing|how is.*looking|status update|still playing|going to play|cleared to play|return.*timeline|when.*back|knee update|ankle update|foot update/i.test(userMsg);
+  const _injuredPlayerMentioned = (() => {
+    try {
+      const { injuryMap: _iMap } = getData();
+      const _lastNames = Object.values(_iMap).flatMap(inj => inj.players.map(p => p.name.split(' ').pop().toLowerCase()));
+      const _mLower = userMsg.toLowerCase();
+      return _lastNames.some(ln => ln.length > 2 && _mLower.includes(ln));
+    } catch { return false; }
+  })();
+  const isInjuryQuery = _injuryKeyword || _injuredPlayerMentioned;
   if (isInjuryQuery) {
     const injCtx = buildInjuryContext();
     context += (context ? "\n\n" : "") + injCtx;
