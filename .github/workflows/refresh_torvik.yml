@@ -4,7 +4,7 @@ on:
   schedule:
     - cron: '0 7 * * *'   # 7am UTC daily — 1hr after ESPN refresh finishes
   workflow_run:
-    workflows: ["Refresh ESPN Data"]
+    workflows: ["Refresh ESPN + Torvik Data"]
     types: [completed]
   workflow_dispatch:
 

@@ -243,7 +243,7 @@ def main():
     print(f'\nDone: {len(result)} teams, {total_players} players in {elapsed:.0f}s')
 
     payload = {
-        'generated_at': __import__('datetime').datetime.utcnow().isoformat() + 'Z',
+        'generated_at': _datetime_mod.datetime.now(_datetime_mod.timezone.utc).isoformat().replace('+00:00', 'Z'),
         'teams': result,
     }
 

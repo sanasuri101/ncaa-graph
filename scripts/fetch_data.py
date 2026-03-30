@@ -17,7 +17,7 @@ import subprocess
 import sys
 import time
 from collections import Counter
-from datetime import datetime, timezone
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
 # ── paths ────────────────────────────────────────────────────────────────────
@@ -243,15 +243,15 @@ def build_graph(inter_games: list) -> dict:
             "rematches":      rematches,
             "not_played_cnt": len(not_played),
             "season":         f"{season_year-1}-{str(season_year)[2:]}",
-            "generated_at":   __import__("datetime").datetime.utcnow().isoformat() + "Z",
+            "generated_at":   datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
             # Third Thursday of March = NCAA First Four start date
             # This lets api/ai.js and api/bracket.js use a data-driven date
             # instead of hardcoding "2026-03-17"
-            "tourney_start": (lambda yr: (lambda: [
+            "tourney_start": [
                 d.strftime("%Y-%m-%d")
-                for d in [__import__("datetime").date(yr, 3, 1) + __import__("datetime").timedelta(days=i) for i in range(31)]
+                for d in (date(season_year, 3, 1) + timedelta(days=i) for i in range(31))
                 if d.weekday() == 3
-            ]()[2])(season_year))(),
+            ][2],
         },
     }
 

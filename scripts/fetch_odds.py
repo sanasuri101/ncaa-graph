@@ -20,7 +20,7 @@ import json
 import sys
 import time
 from pathlib import Path
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from typing import Optional
 
 ROOT     = Path(__file__).resolve().parent.parent
@@ -92,7 +92,7 @@ def fetch_tournament_game_ids(teams: list) -> list[dict]:
             _thursdays += 1
         if _thursdays == 3:
             break
-        _d += __import__("datetime").timedelta(days=1)
+        _d += timedelta(days=1)
     TOURNEY_START = _d.strftime("%Y-%m-%d")
 
     team_ids = {t["espn_id"] for t in teams}
