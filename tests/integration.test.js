@@ -429,10 +429,18 @@ const intentCases = [
   ["Is Caleb Foster sidelined for the tournament?", "dynamic"], // new: sidelined phrasing
   ["Any injury news for Duke?", "dynamic"],
   ["Who steps up for Duke without Foster?", "dynamic"],
-  // Off-topic → general
+  // Vague but on-topic → dynamic (NOT general — LLM should always respond)
+  ["Who you got?", "dynamic"],
+  ["Give me your picks", "dynamic"],
+  ["What do you think?", "dynamic"],
+  ["Help me fill my bracket", "dynamic"],
+  // Off-topic: explicit other sports → general
   ["Who won the NBA Finals?", "general"],
   ["Super Bowl predictions", "general"],
   ["Who will win the Premier League?", "general"],
+  // Off-topic: non-sports → general
+  ["What's the weather today?", "general"],
+  ["Help me write a Python script", "general"],
 ];
 
 for (const [query, expectedType] of intentCases) {

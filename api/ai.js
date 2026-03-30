@@ -52,12 +52,9 @@ function sanitize(text) {
   if (!text) return "";
   return text
     .replace(/<think>[\s\S]*?<\/think>/gi, "")
+    .replace(/^(Disclaimer|Commentary|Reminder)[:\s].*/gim, "")
     .replace(
-      /^(Note|Explanation|Reasoning|Disclaimer|Commentary|Reminder)[:\s].*/gim,
-      "",
-    )
-    .replace(
-      /^(I (have|will|am|did)|The response|As instructed|Following the|Per the|Based on the instructions?)[^\n]*/gim,
+      /^(The response|As instructed|Following the|Per the|Based on the instructions?)[^\n]*/gim,
       "",
     )
     .replace(/\n{3,}/g, "\n\n")
@@ -193,14 +190,20 @@ function buildSystemPrompt(
 
   // Injury injection: fires on injury keywords OR known injured player last names
   const _injuryKeyword =
-    /injur\w*|\bhurt\b|\bis out\b|\bsitting out\b|out for|is.*playing\b|will.*play|questionable|brok\w*|break\w*|fractur\w*|sprain\w*|tweak\w*|hobbl\w*|limp\w*|missed.*game|miss.*game|game.?time|any injuries|injury news|injury update|\babsent\b|\babsence\b|\bsidelined?\b|\bwithout\b|\bsuspended\b|\barrested\b|doing better|how is.*doing|how is.*looking|status update|still playing|going to play|cleared to play|return.*timeline|when.*back|knee update|ankle update|foot update/i.test(userMsg);
+    /injur\w*|\bhurt\b|\bis out\b|\bsitting out\b|out for|is.*playing\b|will.*play|questionable|brok\w*|break\w*|fractur\w*|sprain\w*|tweak\w*|hobbl\w*|limp\w*|missed.*game|miss.*game|game.?time|any injuries|injury news|injury update|\babsent\b|\babsence\b|\bsidelined?\b|\bwithout\b|\bsuspended\b|\barrested\b|doing better|how is.*doing|how is.*looking|status update|still playing|going to play|cleared to play|return.*timeline|when.*back|knee update|ankle update|foot update/i.test(
+      userMsg,
+    );
   const _injuredPlayerMentioned = (() => {
     try {
       const { injuryMap: _iMap } = getData();
-      const _lastNames = Object.values(_iMap).flatMap(inj => inj.players.map(p => p.name.split(' ').pop().toLowerCase()));
+      const _lastNames = Object.values(_iMap).flatMap((inj) =>
+        inj.players.map((p) => p.name.split(" ").pop().toLowerCase()),
+      );
       const _mLower = userMsg.toLowerCase();
-      return _lastNames.some(ln => ln.length > 2 && _mLower.includes(ln));
-    } catch { return false; }
+      return _lastNames.some((ln) => ln.length > 2 && _mLower.includes(ln));
+    } catch {
+      return false;
+    }
   })();
   const isInjuryQuery = _injuryKeyword || _injuredPlayerMentioned;
   if (isInjuryQuery) {
@@ -391,15 +394,15 @@ export default async function handler(req, res) {
     const messages = [{ role: "system", content: system }, ...history];
 
     if (intent.type === "general") {
-      // Check full body.messages, not trimmed history, to avoid false negatives
+      // Promote to dynamic if there's conversation history or session context
       const hasHistory = body.messages.some(
         (m) => m.role === "assistant" && m.content?.length > 20,
       );
-      if (hasHistory) {
+      if (hasHistory || body.sessionContext) {
         intent.type = "dynamic";
       } else {
         writer.text(
-          `I'm focused on the ${new Date().getFullYear()} NCAA Tournament. Ask me about matchups, upset picks, team efficiency, Final Four predictions, or bracket strategy.`,
+          "I'd prefer to stick to basketball-related queries! Ask me about matchups, upset picks, team efficiency, Final Four predictions, or bracket strategy.",
         );
         writer.done();
         return;
