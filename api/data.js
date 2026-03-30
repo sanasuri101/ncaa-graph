@@ -723,14 +723,19 @@ export function classifyIntent(msg, graph) {
     }
   }
 
-  // If query contains a known injured player's last name → dynamic + inject injury context
+  // If query contains a known injured player's last name → injury_query (non-tool path)
+  // Injury data is already injected into the system prompt — tools are unnecessary.
   try {
     const { injuryMap: iMap } = getData();
+    const SUFFIXES = /^(jr\.?|sr\.?|ii|iii|iv|v)$/i;
     const injuredLastNames = Object.values(iMap).flatMap((inj) =>
-      inj.players.map((p) => p.name.split(" ").pop().toLowerCase()),
+      inj.players.map((p) => {
+        const parts = p.name.split(" ").filter((w) => !SUFFIXES.test(w));
+        return parts.length ? parts[parts.length - 1].toLowerCase() : "";
+      }),
     );
     if (injuredLastNames.some((ln) => ln.length > 2 && m.includes(ln))) {
-      return { type: "dynamic" };
+      return { type: "injury_query" };
     }
   } catch {}
 
