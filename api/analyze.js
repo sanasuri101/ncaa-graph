@@ -56,7 +56,7 @@ function sanitizeTeamName(name) {
 // ── Constants ─────────────────────────────────────────────────────────────────
 const MODEL = "llama-3.3-70b-versatile";
 const MAX_TOKENS = 1024;
-const MAX_TOKENS_SY = 6000; // synthesis: 7 sections × ~700 tokens depth
+const MAX_TOKENS_SY = 3000; // synthesis: 7 sections × ~350 tokens depth
 const MAX_STEPS_SYNTH = 3;
 const FETCH_TIMEOUT = 25000;
 
@@ -843,52 +843,49 @@ Respond with only the requested content — no JSON wrapper, no labels, no pream
     }
   }
 
-  // Run all sections — injury_note and market_vs_model are quick, run first
-  // decisive_factor, key_matchup, x_factors, risk run in parallel for speed
+  // Run all sections in two batches for speed
+  // IMPORTANT: Each section has strict sentence limits and must NOT repeat other sections
   const [injuryNote, marketVsModel] = await Promise.all([
     getSection(
       "injury_note",
-      `If ⚠ appears in the roster data: 3-4 sentences. Name the injured player(s), give their full stat line (PPG/RPG/APG/FG%/MPG/PER), describe their role, state the AdjEM penalty, and explain the direct impact on this specific matchup. If no injuries in the data, return exactly: (none)`,
-      400,
+      `2-3 sentences max. Name injured player(s), their stat line, the AdjEM penalty, and the direct impact on this matchup. If no injuries, return exactly: (none)`,
+      300,
     ),
     getSection(
       "market_vs_model",
-      `3-4 sentences. State the exact model probability (${weightedPct}%), the DraftKings implied probability, and the ESPN BPI figure. If they diverge by 6+ points explain why. If no market data, say so and explain what the efficiency consensus implies about true probability.`,
-      400,
+      `2-3 sentences max. State model probability (${weightedPct}%), DraftKings implied, and ESPN BPI. Note any divergence >6pp. Do NOT repeat AdjEM or injury info.`,
+      300,
     ),
   ]);
 
   const [decisiveFactor, keyMatchup, xFactors, risk] = await Promise.all([
     getSection(
       "decisive_factor",
-      `5-7 sentences. The single biggest structural reason one team wins. Start with the injury-adjusted AdjEM gap (in points per 100 possessions). State Barthag as the pre-injury baseline and explain why it overstates the injured team's chances. Compare AdjOE vs opponent AdjDE for offensive edge; AdjDE vs opponent AdjOE for defensive edge. Cite eFG% and Four Factors. Explain the causal chain from these numbers to how the game will actually be played. Name specific players from the roster driving those numbers.`,
-      900,
+      `3-4 sentences max. The single structural reason one team wins. State injury-adjusted AdjEM gap, compare AdjOE vs opponent AdjDE, and name the player driving the edge. Do NOT list Four Factors or repeat injury details covered elsewhere.`,
+      400,
     ),
     getSection(
       "key_matchup",
-      `5-6 sentences. The specific player vs player battle that decides the game. Name BOTH players with their complete stat lines from the ROSTER DATA — PPG/RPG/APG/FG%/3P%/height/weight/experience year. Explain the physical matchup. Explain the stylistic clash and who exploits what. State who has the edge and in which specific game situations. Every claim must be supported by a number from the roster.`,
-      900,
+      `3-4 sentences max. One player vs player battle that decides the game. Name both with PPG/RPG/FG%/3P% from the roster. Explain who has the edge and why. Do NOT repeat AdjEM gap or team-level stats.`,
+      400,
     ),
     getSection(
       "x_factors",
-      `4-5 sentences. Three specific underweighted factors most previews will miss. For each: name it precisely, give the exact number from the data, explain why it matters specifically in this matchup. Consider: TOV% differential, adj_tempo mismatch (faster team controls pace), ORB% edge for second chances, bench depth, FTR, specific shooting splits.`,
-      700,
+      `3 sentences max. Two specific underweighted factors most previews miss. For each: the exact number and why it matters in THIS matchup. Do NOT repeat anything from decisive_factor or key_matchup.`,
+      300,
     ),
     getSection(
       "risk",
-      `4-5 sentences. The specific scenario where the projected winner (${weightedPct >= 50 ? state.team_a : state.team_b}) loses. Name the player on the underdog team who could blow it open — give their stats from the roster. Describe the exact game situation concretely: not "if they go cold" but "if [player] (X TOV/game) turns it over and [player B] (Y PPG) goes 4-for-6 from three in the second half."`,
-      700,
+      `3 sentences max. How the projected winner (${weightedPct >= 50 ? state.team_a : state.team_b}) loses. Name the underdog player and the specific stat-based mechanism. Do NOT fabricate specific scores or play-by-play.`,
+      300,
     ),
   ]);
 
-  // Bottom line is a separate forced-format call — 3 sentences, no room to ramble
+  // Bottom line — concise verdict, no fabricated game events
   const bottomLine = await getSection(
     "bottom_line",
-    `Exactly 3 sentences. No more, no less.
-Sentence 1: Who wins and the single decisive structural reason (one clause).
-Sentence 2: The specific final score (e.g. "Michigan wins 82-71").
-Sentence 3: The player who seals it and the exact play — a specific shot, defensive stop, or rebound.`,
-    250,
+    `Exactly 2 sentences. Sentence 1: Who wins and the single decisive reason. Sentence 2: The key player advantage that makes the difference. Do NOT predict specific scores or fabricate play-by-play moments.`,
+    150,
   );
 
   const san = (s) => (s ? sanitizeLLMOutput(String(s)) : "");

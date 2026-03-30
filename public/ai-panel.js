@@ -612,6 +612,22 @@ function detectMatchupIntent(msg) {
   assigned.sort((a, b) => a.pos - b.pos || b.len - a.len);
 
   const found = assigned.map((x) => x.n);
+
+  // Handle 3-team conditional questions: "if X beats Y, can they beat Z?"
+  // The actual matchup being asked about is X vs Z, not X vs Y.
+  if (found.length >= 3) {
+    const conditional =
+      /\bif\b.*\b(beat|defeat|get past|knock off|upset|eliminate|win against)\b.*\b(can|could|will|would|do)\b.*\b(beat|defeat|handle|face|take on|win)\b/i;
+    if (conditional.test(msg)) {
+      // First team is the subject, last team is the one they're being asked about
+      return {
+        type: "matchup",
+        team_a: found[0].label,
+        team_b: found[2].label,
+      };
+    }
+  }
+
   if (found.length >= 2)
     return { type: "matchup", team_a: found[0].label, team_b: found[1].label };
   return null;
