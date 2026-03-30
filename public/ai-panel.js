@@ -365,6 +365,7 @@ async function sendChat() {
         matchup.team_a,
         matchup.team_b,
         _chatAbortCtrl.signal,
+        msg,
       );
 
       const agentSteps = (data.agent_results || []).map(
@@ -940,7 +941,7 @@ function exportAllCSV() {
 }
 
 // ── Multi-agent analyze call ──────────────────────────────────────────────────
-async function callAnalyze(teamA, teamB, signal) {
+async function callAnalyze(teamA, teamB, signal, userQuery) {
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), 55000);
   signal?.addEventListener("abort", () => ctrl.abort(), { once: true });
@@ -948,7 +949,11 @@ async function callAnalyze(teamA, teamB, signal) {
     const res = await fetch("/api/analyze", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ team_a: teamA, team_b: teamB }),
+      body: JSON.stringify({
+        team_a: teamA,
+        team_b: teamB,
+        ...(userQuery ? { user_query: userQuery } : {}),
+      }),
       signal: ctrl.signal,
     });
     clearTimeout(timer);
@@ -1475,6 +1480,7 @@ async function sendScoutChat() {
         matchup.team_a,
         matchup.team_b,
         _scoutAbortCtrl.signal,
+        msg,
       );
       _scoutMatchup = { team_a: matchup.team_a, team_b: matchup.team_b };
 
