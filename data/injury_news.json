@@ -1,7 +1,76 @@
 {
-  "generated_at": "2026-03-25T06:51:48.230318+00:00",
-  "flagged_teams": 9,
+  "generated_at": "2026-03-30T19:22:02.550322+00:00",
+  "flagged_teams": 13,
   "teams": {
+    "150": {
+      "bracket_name": "Duke",
+      "region": "East",
+      "seed": 1,
+      "articles": [
+        {
+          "headline": "Injured stars Foster, Demary set to face off for Duke, UConn",
+          "description": "Sunday's Elite Eight matchup between Duke and UConn features two injured point guards returning from injuries earlier than expected -- Duke's Caleb Foster and UConn's Silas Demary Jr.",
+          "published": "2026-03-29",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48333106/injured-stars-foster-demary-set-face-duke-uconn"
+        },
+        {
+          "headline": "Injured stars Foster, Demary set to face off for Duke, UConn",
+          "description": "Sunday's Elite Eight matchup between Duke and UConn features two injured point guards returning from injuries earlier than expected -- Duke's Caleb Foster and UConn's Silas Demary Jr.",
+          "published": "2026-03-29",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48333106/injured-stars-foster-demary-set-face-duke-uconn"
+        },
+        {
+          "headline": "Caleb Foster's 'incredible' return has Jon Scheyer, Duke raving",
+          "description": "Caleb Foster returned from a broken foot and rescued Duke's national title hopes, helping the top-seeded Blue Devils rally from a 10-point second-half deficit to beat St. John's 80-75.",
+          "published": "2026-03-28",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48326056/caleb-foster-takes-return-duke-survives-st-john-elite-8-berth"
+        },
+        {
+          "headline": "Caleb Foster's 'incredible' return has Jon Scheyer, Duke raving",
+          "description": "Caleb Foster returned from a broken foot and rescued Duke's national title hopes, helping the top-seeded Blue Devils rally from a 10-point second-half deficit to beat St. John's 80-75.",
+          "published": "2026-03-28",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48326056/caleb-foster-takes-return-duke-survives-st-john-elite-8-berth"
+        }
+      ]
+    },
+    "41": {
+      "bracket_name": "UConn",
+      "region": "East",
+      "seed": 2,
+      "articles": [
+        {
+          "headline": "Injured stars Foster, Demary set to face off for Duke, UConn",
+          "description": "Sunday's Elite Eight matchup between Duke and UConn features two injured point guards returning from injuries earlier than expected -- Duke's Caleb Foster and UConn's Silas Demary Jr.",
+          "published": "2026-03-29",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48333106/injured-stars-foster-demary-set-face-duke-uconn"
+        },
+        {
+          "headline": "Injured stars Foster, Demary set to face off for Duke, UConn",
+          "description": "Sunday's Elite Eight matchup between Duke and UConn features two injured point guards returning from injuries earlier than expected -- Duke's Caleb Foster and UConn's Silas Demary Jr.",
+          "published": "2026-03-29",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48333106/injured-stars-foster-demary-set-face-duke-uconn"
+        }
+      ]
+    },
+    "2599": {
+      "bracket_name": "St John's",
+      "region": "East",
+      "seed": 5,
+      "articles": [
+        {
+          "headline": "Caleb Foster's 'incredible' return has Jon Scheyer, Duke raving",
+          "description": "Caleb Foster returned from a broken foot and rescued Duke's national title hopes, helping the top-seeded Blue Devils rally from a 10-point second-half deficit to beat St. John's 80-75.",
+          "published": "2026-03-28",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48326056/caleb-foster-takes-return-duke-survives-st-john-elite-8-berth"
+        },
+        {
+          "headline": "Caleb Foster's 'incredible' return has Jon Scheyer, Duke raving",
+          "description": "Caleb Foster returned from a broken foot and rescued Duke's national title hopes, helping the top-seeded Blue Devils rally from a 10-point second-half deficit to beat St. John's 80-75.",
+          "published": "2026-03-28",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48326056/caleb-foster-takes-return-duke-survives-st-john-elite-8-berth"
+        }
+      ]
+    },
     "153": {
       "bracket_name": "North Carolina",
       "region": "South",
@@ -12,37 +81,25 @@
           "description": "Hubert Davis is out after five seasons in Chapel Hill. Here are names expected to be on the short list.",
           "published": "2026-03-25",
           "url": "https://www.espn.com/mens-college-basketball/story/_/id/48300317/north-carolina-coaching-candidates-recruits-retention-priorities-2026"
-        },
-        {
-          "headline": "Who's next at UNC? Potential candidates to replace Hubert Davis, their priorities",
-          "description": "Hubert Davis is out after five seasons in Chapel Hill. Here are names expected to be on the short list.",
-          "published": "2026-03-25",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48300317/north-carolina-coaching-candidates-recruits-retention-priorities-2026"
-        },
-        {
-          "headline": "Who's next at UNC? Potential candidates to replace Hubert Davis, their priorities",
-          "description": "Hubert Davis is out after five seasons in Chapel Hill. Here are names expected to be on the short list.",
-          "published": "2026-03-25",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48300317/north-carolina-coaching-candidates-recruits-retention-priorities-2026"
-        },
-        {
-          "headline": "Who's next at UNC? Potential candidates to replace Hubert Davis, their priorities",
-          "description": "Hubert Davis is out after five seasons in Chapel Hill. Here are names expected to be on the short list.",
-          "published": "2026-03-25",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48300317/north-carolina-coaching-candidates-recruits-retention-priorities-2026"
         }
       ]
     },
-    "150": {
-      "bracket_name": "Duke",
+    "2116": {
+      "bracket_name": "UCF",
       "region": "East",
-      "seed": 1,
+      "seed": 10,
       "articles": [
         {
-          "headline": "Duke 'hopeful' Patrick Ngongba II can return in 2nd round",
-          "description": "Duke center Patrick Ngongba II could return from a foot injury for the Blue Devils' second-round game vs. TCU, coach Jon Scheyer said.",
-          "published": "2026-03-20",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48260813/duke-hopeful-patrick-ngongba-ii-return-2nd-round"
+          "headline": "UCLA overcomes broken tooth and stubborn UCF 75-71 to advance in the NCAA Tournament",
+          "description": "\u2014 Mick Cronin raised a plastic cup to another NCAA Tournament victory for UCLA with an energy drink he brought with him to the podium.",
+          "published": "2026-03-21",
+          "url": "http://www.espn.com/ncb/recap?gameId=401856496"
+        },
+        {
+          "headline": "UCLA overcomes broken tooth and stubborn UCF 75-71 to advance in the NCAA Tournament",
+          "description": "\u2014 Mick Cronin raised a plastic cup to another NCAA Tournament victory for UCLA with an energy drink he brought with him to the podium.",
+          "published": "2026-03-21",
+          "url": "http://www.espn.com/ncb/recap?gameId=401856496"
         }
       ]
     },
@@ -65,22 +122,41 @@
         }
       ]
     },
-    "2116": {
-      "bracket_name": "UCF",
-      "region": "East",
-      "seed": 10,
+    "2294": {
+      "bracket_name": "Iowa",
+      "region": "South",
+      "seed": 9,
       "articles": [
         {
-          "headline": "UCLA overcomes broken tooth and stubborn UCF 75-71 to advance in the NCAA Tournament",
-          "description": "\u2014 Mick Cronin raised a plastic cup to another NCAA Tournament victory for UCLA with an energy drink he brought with him to the podium.",
-          "published": "2026-03-21",
-          "url": "http://www.espn.com/ncb/recap?gameId=401856496"
+          "headline": "Broken horn delays Iowa-Illinois Elite 8 game 11 minutes",
+          "description": "The Elite Eight matchup between Illinois and Iowa on Saturday was delayed 11 minutes by a broken buzzer at the Toyota Center.",
+          "published": "2026-03-29",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48333882/broken-horn-delays-iowa-illinois-elite-8-game-11-minutes"
         },
         {
-          "headline": "UCLA overcomes broken tooth and stubborn UCF 75-71 to advance in the NCAA Tournament",
-          "description": "\u2014 Mick Cronin raised a plastic cup to another NCAA Tournament victory for UCLA with an energy drink he brought with him to the podium.",
-          "published": "2026-03-21",
-          "url": "http://www.espn.com/ncb/recap?gameId=401856496"
+          "headline": "Broken horn delays Iowa-Illinois Elite 8 game 11 minutes",
+          "description": "The Elite Eight matchup between Illinois and Iowa on Saturday was delayed 11 minutes by a broken buzzer at the Toyota Center.",
+          "published": "2026-03-29",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48333882/broken-horn-delays-iowa-illinois-elite-8-game-11-minutes"
+        }
+      ]
+    },
+    "356": {
+      "bracket_name": "Illinois",
+      "region": "South",
+      "seed": 3,
+      "articles": [
+        {
+          "headline": "Broken horn delays Iowa-Illinois Elite 8 game 11 minutes",
+          "description": "The Elite Eight matchup between Illinois and Iowa on Saturday was delayed 11 minutes by a broken buzzer at the Toyota Center.",
+          "published": "2026-03-29",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48333882/broken-horn-delays-iowa-illinois-elite-8-game-11-minutes"
+        },
+        {
+          "headline": "Broken horn delays Iowa-Illinois Elite 8 game 11 minutes",
+          "description": "The Elite Eight matchup between Illinois and Iowa on Saturday was delayed 11 minutes by a broken buzzer at the Toyota Center.",
+          "published": "2026-03-29",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48333882/broken-horn-delays-iowa-illinois-elite-8-game-11-minutes"
         }
       ]
     },
@@ -110,6 +186,19 @@
         }
       ]
     },
+    "251": {
+      "bracket_name": "Texas",
+      "region": "West",
+      "seed": 11,
+      "articles": [
+        {
+          "headline": "Texas' Jordan Pope says he played with broken foot vs. Purdue",
+          "description": "Texas guard Jordan Pope revealed after the Longhorns' 79-77 Sweet 16 loss to Purdue that he played the game with a broken foot.",
+          "published": "2026-03-27",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48318302/texas-jordan-pope-played-broken-foot-loss-purdue"
+        }
+      ]
+    },
     "2567": {
       "bracket_name": "SMU",
       "region": "Midwest",
@@ -120,19 +209,6 @@
           "description": "SMU coach Andy Enfield said standout guard B.J. Edwards sat out Wednesday's loss to Miami (Ohio) in the First Four because he didn't feel \"game ready\" after the team announced last Friday that he woul",
           "published": "2026-03-19",
           "url": "https://www.espn.com/mens-college-basketball/story/_/id/48246208/smu-enfield-denies-misleading-ncaa-committee-edwards-injury"
-        }
-      ]
-    },
-    "66": {
-      "bracket_name": "Iowa State",
-      "region": "Midwest",
-      "seed": 2,
-      "articles": [
-        {
-          "headline": "Iowa State's Joshua Jefferson sprains ankle in win; X-rays negative",
-          "description": "Iowa State senior forward Joshua Jefferson suffered a sprained left ankle in Friday's 108-74 win over Tennessee State.",
-          "published": "2026-03-20",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48261200/iowa-state-joshua-jefferson-hurt-early-ncaa-tournament"
         }
       ]
     },

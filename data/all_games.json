@@ -540,6 +540,36 @@
     "venue": "Bon Secours Wellness Arena"
   },
   {
+    "id": "401856570",
+    "date": "2026-03-27",
+    "name": "St. John's Red Storm at Duke Blue Devils",
+    "team1_id": "150",
+    "team1_name": "Duke Blue Devils",
+    "team1_score": "80",
+    "team1_winner": true,
+    "team2_id": "2599",
+    "team2_name": "St. John's Red Storm",
+    "team2_score": "75",
+    "team2_winner": false,
+    "neutral": true,
+    "venue": "Capital One Arena"
+  },
+  {
+    "id": "401856577",
+    "date": "2026-03-29",
+    "name": "UConn Huskies at Duke Blue Devils",
+    "team1_id": "150",
+    "team1_name": "Duke Blue Devils",
+    "team1_score": "72",
+    "team1_winner": false,
+    "team2_id": "41",
+    "team2_name": "UConn Huskies",
+    "team2_score": "73",
+    "team2_winner": true,
+    "neutral": true,
+    "venue": "Capital One Arena"
+  },
+  {
     "id": "401820613",
     "date": "2025-11-04",
     "name": "Bryant Bulldogs at Siena Saints",
@@ -5055,6 +5085,21 @@
     "venue": "KeyBank Center"
   },
   {
+    "id": "401856571",
+    "date": "2026-03-28",
+    "name": "Michigan State Spartans at UConn Huskies",
+    "team1_id": "41",
+    "team1_name": "UConn Huskies",
+    "team1_score": "67",
+    "team1_winner": true,
+    "team2_id": "127",
+    "team2_name": "Michigan State Spartans",
+    "team2_score": "63",
+    "team2_winner": false,
+    "neutral": true,
+    "venue": "Capital One Arena"
+  },
+  {
     "id": "401824054",
     "date": "2025-11-04",
     "name": "North Dakota State Bison at Oregon State Beavers",
@@ -7903,6 +7948,36 @@
     "team2_winner": false,
     "neutral": true,
     "venue": "Viejas Arena"
+  },
+  {
+    "id": "401856569",
+    "date": "2026-03-27",
+    "name": "Arkansas Razorbacks at Arizona Wildcats",
+    "team1_id": "12",
+    "team1_name": "Arizona Wildcats",
+    "team1_score": "109",
+    "team1_winner": true,
+    "team2_id": "8",
+    "team2_name": "Arkansas Razorbacks",
+    "team2_score": "88",
+    "team2_winner": false,
+    "neutral": true,
+    "venue": "SAP Center at San Jose"
+  },
+  {
+    "id": "401856575",
+    "date": "2026-03-29",
+    "name": "Purdue Boilermakers at Arizona Wildcats",
+    "team1_id": "12",
+    "team1_name": "Arizona Wildcats",
+    "team1_score": "79",
+    "team1_winner": true,
+    "team2_id": "2509",
+    "team2_name": "Purdue Boilermakers",
+    "team2_score": "64",
+    "team2_winner": false,
+    "neutral": true,
+    "venue": "SAP Center at San Jose"
   },
   {
     "id": "401812350",
@@ -12120,6 +12195,21 @@
     "venue": "Moda Center"
   },
   {
+    "id": "401856568",
+    "date": "2026-03-26",
+    "name": "Texas Longhorns at Purdue Boilermakers",
+    "team1_id": "2509",
+    "team1_name": "Purdue Boilermakers",
+    "team1_score": "79",
+    "team1_winner": true,
+    "team2_id": "251",
+    "team2_name": "Texas Longhorns",
+    "team2_score": "77",
+    "team2_winner": false,
+    "neutral": true,
+    "venue": "SAP Center at San Jose"
+  },
+  {
     "id": "401817252",
     "date": "2025-11-04",
     "name": "North Carolina Central Eagles at NC State Wolfpack",
@@ -15673,6 +15763,36 @@
     "team2_winner": false,
     "neutral": true,
     "venue": "KeyBank Center"
+  },
+  {
+    "id": "401856572",
+    "date": "2026-03-27",
+    "name": "Alabama Crimson Tide at Michigan Wolverines",
+    "team1_id": "130",
+    "team1_name": "Michigan Wolverines",
+    "team1_score": "90",
+    "team1_winner": true,
+    "team2_id": "333",
+    "team2_name": "Alabama Crimson Tide",
+    "team2_score": "77",
+    "team2_winner": false,
+    "neutral": true,
+    "venue": "United Center"
+  },
+  {
+    "id": "401856576",
+    "date": "2026-03-29",
+    "name": "Tennessee Volunteers at Michigan Wolverines",
+    "team1_id": "130",
+    "team1_name": "Michigan Wolverines",
+    "team1_score": "95",
+    "team1_winner": true,
+    "team2_id": "2633",
+    "team2_name": "Tennessee Volunteers",
+    "team2_score": "62",
+    "team2_winner": false,
+    "neutral": true,
+    "venue": "United Center"
   },
   {
     "id": "401826052",
@@ -19648,6 +19768,21 @@
     "team2_winner": true,
     "neutral": true,
     "venue": "Xfinity Mobile Arena"
+  },
+  {
+    "id": "401856573",
+    "date": "2026-03-28",
+    "name": "Tennessee Volunteers at Iowa State Cyclones",
+    "team1_id": "66",
+    "team1_name": "Iowa State Cyclones",
+    "team1_score": "62",
+    "team1_winner": false,
+    "team2_id": "2633",
+    "team2_name": "Tennessee Volunteers",
+    "team2_score": "76",
+    "team2_winner": true,
+    "neutral": true,
+    "venue": "United Center"
   },
   {
     "id": "401829496",
@@ -25080,6 +25215,36 @@
     "venue": "United Center"
   },
   {
+    "id": "401856567",
+    "date": "2026-03-26",
+    "name": "Iowa Hawkeyes at Nebraska Cornhuskers",
+    "team1_id": "158",
+    "team1_name": "Nebraska Cornhuskers",
+    "team1_score": "71",
+    "team1_winner": false,
+    "team2_id": "2294",
+    "team2_name": "Iowa Hawkeyes",
+    "team2_score": "77",
+    "team2_winner": true,
+    "neutral": true,
+    "venue": "Toyota Center (Houston)"
+  },
+  {
+    "id": "401856574",
+    "date": "2026-03-28",
+    "name": "Iowa Hawkeyes at Illinois Fighting Illini",
+    "team1_id": "356",
+    "team1_name": "Illinois Fighting Illini",
+    "team1_score": "71",
+    "team1_winner": true,
+    "team2_id": "2294",
+    "team2_name": "Iowa Hawkeyes",
+    "team2_score": "59",
+    "team2_winner": false,
+    "neutral": true,
+    "venue": "Toyota Center (Houston)"
+  },
+  {
     "id": "401824946",
     "date": "2025-11-04",
     "name": "Lipscomb Bisons at Vanderbilt Commodores",
@@ -27675,6 +27840,21 @@
     "venue": "Bon Secours Wellness Arena"
   },
   {
+    "id": "401856566",
+    "date": "2026-03-27",
+    "name": "Illinois Fighting Illini at Houston Cougars",
+    "team1_id": "248",
+    "team1_name": "Houston Cougars",
+    "team1_score": "55",
+    "team1_winner": false,
+    "team2_id": "356",
+    "team2_name": "Illinois Fighting Illini",
+    "team2_score": "65",
+    "team2_winner": true,
+    "neutral": true,
+    "venue": "Toyota Center (Houston)"
+  },
+  {
     "id": "401812573",
     "date": "2025-11-08",
     "name": "Rowan Profs at Pennsylvania Quakers",
@@ -30070,6 +30250,21 @@
     "team2_id": "2547",
     "team2_name": "Seattle U Redhawks",
     "team2_score": "85",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "Neville Arena"
+  },
+  {
+    "id": "401858360",
+    "date": "2026-03-26",
+    "name": "Nevada Wolf Pack at Auburn Tigers",
+    "team1_id": "2",
+    "team1_name": "Auburn Tigers",
+    "team1_score": "75",
+    "team1_winner": true,
+    "team2_id": "2440",
+    "team2_name": "Nevada Wolf Pack",
+    "team2_score": "69",
     "team2_winner": false,
     "neutral": false,
     "venue": "Neville Arena"
