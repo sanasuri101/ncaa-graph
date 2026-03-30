@@ -52,12 +52,16 @@ export function getData() {
   let oddsData = { games: {}, futures: {} };
   try {
     oddsData = readJSON("espn_odds.json");
-  } catch {}
+  } catch (e) {
+    console.error("[data] espn_odds.json load failed:", e.message);
+  }
 
   let transPairs = {};
   try {
     transPairs = readJSON("transitive_analysis.json")?.pairs ?? {};
-  } catch {}
+  } catch (e) {
+    console.error("[data] transitive_analysis.json load failed:", e.message);
+  }
 
   let injuryMap = {};
   try {
@@ -70,7 +74,9 @@ export function getData() {
           notes: ov.notes ?? "",
         };
     }
-  } catch {}
+  } catch (e) {
+    console.error("[data] injury_overrides.json load failed:", e.message);
+  }
 
   const nodeByName = {};
   graph.nodes.forEach((n) => {
@@ -533,7 +539,7 @@ export function classifyIntent(msg, graph) {
       return re.test(normName(msg));
     }) ?? false;
   const hasOtherSport =
-    /\bnba\b|\bnfl\b|\bnhl\b|\bmlb\b|\bwnba\b|\bsoccer\b|\bfootball\b|\bsuper bowl\b|\bworld series\b|\bstanley cup\b/i.test(
+    /\bnba\b|\bnfl\b|\bnhl\b|\bmlb\b|\bwnba\b|\bsoccer\b|\bfootball\b|\bsuper bowl\b|\bworld series\b|\bstanley cup\b|\bpremier league\b|\bla liga\b|\bbundesliga\b|\bserie a\b|\bmls\b|\bchampions league\b|\bworld cup\b/i.test(
       m,
     );
   const hasBball = (hasNcaaSignal || hasTeamSignal) && !hasOtherSport;
@@ -720,14 +726,25 @@ export function classifyIntent(msg, graph) {
   // If query contains a known injured player's last name → dynamic + inject injury context
   try {
     const { injuryMap: iMap } = getData();
-    const injuredLastNames = Object.values(iMap)
-      .flatMap(inj => inj.players.map(p => p.name.split(' ').pop().toLowerCase()));
-    if (injuredLastNames.some(ln => ln.length > 2 && m.includes(ln))) {
-      return { type: 'dynamic' };
+    const injuredLastNames = Object.values(iMap).flatMap((inj) =>
+      inj.players.map((p) => p.name.split(" ").pop().toLowerCase()),
+    );
+    if (injuredLastNames.some((ln) => ln.length > 2 && m.includes(ln))) {
+      return { type: "dynamic" };
     }
   } catch {}
 
-  if (!hasBball) return { type: "general" };
+  // Only block queries that are explicitly about another sport or clearly non-sports.
+  // Ambiguous queries ("who you got?", "give me your picks") should go to the LLM.
+  if (hasOtherSport) return { type: "general" };
+
+  const isNonSports =
+    /\bweather\b|\brecipe\b|\bcooking\b|\bprogramming\b|\bcoding\b|\bpython\b|\bjavascript\b|\bpolitics\b|\bstock market\b|\bcrypto\b|\bbitcoin\b|\bmovie\b|\btv show\b|\bnetflix\b|\bwrite (a |me )?(script|code|program|essay|email)\b/i.test(
+      m,
+    );
+  if (isNonSports && !hasNcaaSignal && !hasTeamSignal)
+    return { type: "general" };
+
   return { type: "dynamic" };
 }
 

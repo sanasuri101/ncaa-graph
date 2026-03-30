@@ -18,11 +18,8 @@ function sanitize(text) {
   if (!text) return "";
   return text
     .replace(/<think>[\s\S]*?<\/think>/gi, "")
-    .replace(/^(Note|Explanation|Reasoning|Disclaimer|Reminder)[:\s].*/gim, "")
-    .replace(
-      /^(I (have|will|am|did)|The response|As instructed|Following the|Per the)[^\n]*/gim,
-      "",
-    )
+    .replace(/^(Disclaimer|Commentary|Reminder)[:\s].*/gim, "")
+    .replace(/^(The response|As instructed|Following the|Per the)[^\n]*/gim, "")
     .replace(/\n{3,}/g, "\n\n")
     .trim();
 }
@@ -1065,7 +1062,10 @@ async function callAI(
     }
 
     return {
-      text: sanitize(fullText) || "No response — try rephrasing.",
+      text:
+        sanitize(fullText) ||
+        fullText.trim() ||
+        "No response — try rephrasing.",
       thinking,
     };
   } catch (err) {
