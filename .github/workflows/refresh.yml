@@ -31,6 +31,9 @@ jobs:
       - name: Fetch ESPN odds, BPI predictions, and futures
         run: python scripts/fetch_odds.py
 
+      - name: Install Python dependencies
+        run: pip install requests 2>/dev/null || true
+
       - name: Fetch injury news flags
         run: python scripts/fetch_injuries.py
         continue-on-error: true
@@ -41,9 +44,6 @@ jobs:
 
       - name: Recompute transitive analysis
         run: python scripts/compute_transitive.py
-
-      - name: Install Python dependencies
-        run: pip install requests 2>/dev/null || true
 
       - name: Copy all data to public/data
         run: |
