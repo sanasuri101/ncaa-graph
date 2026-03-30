@@ -427,13 +427,14 @@ export default async function handler(req, res) {
     const groq = createGroq({ apiKey: groqKey });
     const tools = buildTools();
 
+    let toolResultMessages = [];
     const result = streamText({
       model: groq(MODEL),
       messages,
       maxTokens: MAX_TOKENS,
       tools,
       maxSteps: MAX_STEPS,
-      onStepFinish: ({ toolCalls }) => {
+      onStepFinish: ({ toolCalls, toolResults }) => {
         if (toolCalls) {
           for (const tc of toolCalls) {
             const label =
@@ -445,12 +446,50 @@ export default async function handler(req, res) {
             writer.tool(label);
           }
         }
+        // Capture tool results for retry if model produces no text
+        if (toolResults) {
+          for (const tr of toolResults) {
+            toolResultMessages.push({
+              toolName: tr.toolName,
+              result: tr.result,
+            });
+          }
+        }
       },
     });
 
+    let hasText = false;
     for await (const chunk of result.textStream) {
+      hasText = true;
       writer.text(chunk);
     }
+
+    // Llama 3.3 sometimes stops after tool calls without generating text.
+    // Retry without tools, injecting tool results into the prompt.
+    if (!hasText && toolResultMessages.length > 0) {
+      const toolContext = toolResultMessages
+        .map(
+          (tr) =>
+            `[${tr.toolName} result]:\n${typeof tr.result === "string" ? tr.result : JSON.stringify(tr.result)}`,
+        )
+        .join("\n\n");
+      const retryMessages = [
+        ...messages,
+        {
+          role: "user",
+          content: `Here is the data you requested:\n\n${toolContext}\n\nNow answer the original question using this data.`,
+        },
+      ];
+      const retry = streamText({
+        model: groq(MODEL),
+        messages: retryMessages,
+        maxTokens: MAX_TOKENS,
+      });
+      for await (const chunk of retry.textStream) {
+        writer.text(chunk);
+      }
+    }
+
     writer.context(buildSessionContext(body.messages, intent));
     writer.done();
   } catch (err) {
