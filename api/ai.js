@@ -196,8 +196,12 @@ function buildSystemPrompt(
   const _injuredPlayerMentioned = (() => {
     try {
       const { injuryMap: _iMap } = getData();
+      const _SUFFIXES = /^(jr\.?|sr\.?|ii|iii|iv|v)$/i;
       const _lastNames = Object.values(_iMap).flatMap((inj) =>
-        inj.players.map((p) => p.name.split(" ").pop().toLowerCase()),
+        inj.players.map((p) => {
+          const parts = p.name.split(" ").filter((w) => !_SUFFIXES.test(w));
+          return parts.length ? parts[parts.length - 1].toLowerCase() : "";
+        }),
       );
       const _mLower = userMsg.toLowerCase();
       return _lastNames.some((ln) => ln.length > 2 && _mLower.includes(ln));
@@ -261,6 +265,11 @@ function buildSystemPrompt(
     p += `TASK: Analyze potential future matchups among the top remaining teams.\n`;
     p += `- Look at efficiency matchups, pace mismatches, and how styles clash.\n`;
     p += `- Project who advances from each region and what the Final Four looks like.\n`;
+  } else if (intentType === "injury_query") {
+    p += `TASK: Answer the injury question directly using the injury data provided below.\n`;
+    p += `- Name the player, their current status, their stat line, and the team impact (AdjEM penalty).\n`;
+    p += `- If the player is questionable, state what is known about their timeline.\n`;
+    p += `- Be direct: is the player expected to play or not, and how much does it matter?\n`;
   } else {
     p += `Answer directly and specifically. Match the format to the question — if it's a comparison, compare; if it's a prediction, predict; if it's a list, list. No generic templates.\n`;
   }
@@ -416,8 +425,24 @@ export default async function handler(req, res) {
         messages,
         maxTokens: MAX_TOKENS,
       });
+      let knownHasText = false;
       for await (const chunk of result.textStream) {
+        knownHasText = true;
         writer.text(chunk);
+      }
+      // Fallback: if model returned empty, retry once
+      if (!knownHasText) {
+        console.error(
+          `[ai] empty response for intent=${intent.type}, retrying`,
+        );
+        const retry = streamText({
+          model: groq(MODEL),
+          messages,
+          maxTokens: MAX_TOKENS,
+        });
+        for await (const chunk of retry.textStream) {
+          writer.text(chunk);
+        }
       }
       writer.context(buildSessionContext(body.messages, intent));
       writer.done();
@@ -465,21 +490,28 @@ export default async function handler(req, res) {
     }
 
     // Llama 3.3 sometimes stops after tool calls without generating text.
-    // Retry without tools, injecting tool results into the prompt.
-    if (!hasText && toolResultMessages.length > 0) {
-      const toolContext = toolResultMessages
-        .map(
-          (tr) =>
-            `[${tr.toolName} result]:\n${typeof tr.result === "string" ? tr.result : JSON.stringify(tr.result)}`,
-        )
-        .join("\n\n");
-      const retryMessages = [
-        ...messages,
-        {
-          role: "user",
-          content: `Here is the data you requested:\n\n${toolContext}\n\nNow answer the original question using this data.`,
-        },
-      ];
+    // Retry without tools — either with captured tool results or just the system prompt context.
+    if (!hasText) {
+      console.error(
+        `[ai] empty dynamic response, toolResults=${toolResultMessages.length}, retrying without tools`,
+      );
+      const retryMessages =
+        toolResultMessages.length > 0
+          ? [
+              ...messages,
+              {
+                role: "user",
+                content: `Here is the data you requested:\n\n${toolResultMessages
+                  .map(
+                    (tr) =>
+                      `[${tr.toolName} result]:\n${typeof tr.result === "string" ? tr.result : JSON.stringify(tr.result)}`,
+                  )
+                  .join(
+                    "\n\n",
+                  )}\n\nNow answer the original question using this data.`,
+              },
+            ]
+          : messages; // No tool results — just retry with the same messages, no tools
       const retry = streamText({
         model: groq(MODEL),
         messages: retryMessages,

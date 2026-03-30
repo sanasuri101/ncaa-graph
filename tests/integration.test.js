@@ -420,13 +420,15 @@ const intentCases = [
   ["What's the moneyline on Duke?", "market_analysis"],
   ["Could Duke face Michigan in the Final Four?", "unplayed_matchups"],
   ["What if they haven't played yet?", "unplayed_matchups"],
-  // Injury-related → always dynamic (model needs chat history + injury context)
-  ["Is Joshua Jefferson playing?", "dynamic"],
-  ["Is Caleb Foster out?", "dynamic"],
-  ["Is Jefferson absent?", "dynamic"], // new: absence phrasing
-  ["How does Jefferson's absence affect Iowa State?", "dynamic"], // new: absence phrasing
-  ["Is Tyler Bilodeau sidelined?", "dynamic"], // new: sidelined phrasing
-  ["Is Caleb Foster sidelined for the tournament?", "dynamic"], // new: sidelined phrasing
+  // Injury player name (no team) → injury_query (non-tool path, data already in prompt)
+  ["Is Joshua Jefferson playing?", "injury_query"],
+  ["Is Caleb Foster out?", "injury_query"],
+  ["Is Jefferson absent?", "injury_query"],
+  ["Is Tyler Bilodeau sidelined?", "injury_query"],
+  ["Is Caleb Foster sidelined for the tournament?", "injury_query"],
+  ["Is Silas Demary Jr. still injured?", "injury_query"],
+  // Injury + team name → dynamic (follow-up pattern matches first)
+  ["How does Jefferson's absence affect Iowa State?", "dynamic"],
   ["Any injury news for Duke?", "dynamic"],
   ["Who steps up for Duke without Foster?", "dynamic"],
   // Vague but on-topic → dynamic (NOT general — LLM should always respond)
