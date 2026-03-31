@@ -52,6 +52,8 @@ function sanitize(text) {
   if (!text) return "";
   return text
     .replace(/<think>[\s\S]*?<\/think>/gi, "")
+    .replace(/<function\/[^>]*>[\s\S]*?<\/function>/gi, "")
+    .replace(/<\/?function[^>]*>/gi, "")
     .replace(/^(Disclaimer|Commentary|Reminder)[:\s].*/gim, "")
     .replace(
       /^(The response|As instructed|Following the|Per the|Based on the instructions?)[^\n]*/gim,
@@ -483,15 +485,20 @@ export default async function handler(req, res) {
       },
     });
 
-    let hasText = false;
+    let fullText = "";
     for await (const chunk of result.textStream) {
-      hasText = true;
+      fullText += chunk;
       writer.text(chunk);
     }
 
-    // Llama 3.3 sometimes stops after tool calls without generating text.
-    // Retry without tools — either with captured tool results or just the system prompt context.
-    if (!hasText) {
+    // Check if the model output is ONLY a raw function call (no real content)
+    const sanitizedText = sanitize(fullText);
+    const hasUsableText = sanitizedText.length > 0;
+
+    // Llama 3.3 sometimes stops after tool calls without generating text,
+    // or outputs raw function call syntax as text instead of using the tool mechanism.
+    // Retry without tools in either case.
+    if (!hasUsableText) {
       console.error(
         `[ai] empty dynamic response, toolResults=${toolResultMessages.length}, retrying without tools`,
       );

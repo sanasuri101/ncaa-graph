@@ -18,6 +18,8 @@ function sanitize(text) {
   if (!text) return "";
   return text
     .replace(/<think>[\s\S]*?<\/think>/gi, "")
+    .replace(/<function\/[^>]*>[\s\S]*?<\/function>/gi, "")
+    .replace(/<\/?function[^>]*>/gi, "")
     .replace(/^(Disclaimer|Commentary|Reminder)[:\s].*/gim, "")
     .replace(/^(The response|As instructed|Following the|Per the)[^\n]*/gim, "")
     .replace(/\n{3,}/g, "\n\n")
