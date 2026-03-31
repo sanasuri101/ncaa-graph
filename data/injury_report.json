@@ -1,20 +1,228 @@
 {
-  "generated_at": "2026-03-30T19:22:02.551026+00:00",
+  "generated_at": "2026-03-31T07:02:03.607976+00:00",
   "teams": {
-    "2633": {
-      "bracket_name": "Tennessee",
-      "region": "Midwest",
-      "seed": 6,
-      "adj_em_penalty": 1.5,
-      "players": [
+    "2305": {
+      "bracket_name": "Kansas",
+      "region": "East",
+      "seed": 4,
+      "adj_em_penalty": 0,
+      "players": [],
+      "notes": "",
+      "override_date": "",
+      "news_flags": [
         {
-          "name": "Nate Ament",
-          "status": "Questionable - leg injury (suffered Feb 28 vs Alabama), playing through pain in obvious discomfort",
-          "impact": "17.5 PPG / 6.6 RPG / 2.5 APG | 30.2 MPG | 40.5% FG | freshman phenom, NBA draft prospect."
+          "headline": "Bill Self says coaching future at Kansas to be determined",
+          "description": "Longtime Kansas coach Bill Self said after Sunday's season-ending loss to St. John's that he has not yet made a decision about his coaching future, later adding that any decision will be based solely ",
+          "published": "2026-03-23",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48283793/bill-self-says-coaching-future-kansas-determined"
         }
       ],
-      "notes": "Ament soldiered through first weekend in visible discomfort. Not confirmed out but effectiveness is a major question mark heading into Sweet 16 vs Iowa State.",
+      "has_override": false,
+      "has_news_flag": true
+    },
+    "41": {
+      "bracket_name": "UConn",
+      "region": "East",
+      "seed": 2,
+      "adj_em_penalty": 2.5,
+      "players": [
+        {
+          "name": "Silas Demary Jr.",
+          "status": "Questionable - Grade 2 high ankle sprain (March 14 Big East final vs St. John's), played limited minutes in Round 2",
+          "impact": "10.9 PPG / 6.2 APG / 4.5 RPG | 29.1 MPG | 1.6 SPG | starting PG, primary ball handler and defender."
+        },
+        {
+          "name": "Jaylin Stewart",
+          "status": "Questionable - knee inflammation, missed Big East tourney and Rounds 1 and 2",
+          "impact": "4.5 PPG bench contributor. Limited availability."
+        }
+      ],
+      "notes": "Demary gutted through Grade 2 sprain in Round 2. Dan Hurley called it day-to-day. Not expected at 100% for Sweet 16 vs Michigan State. Stewart also questionable with knee inflammation.",
       "override_date": "",
+      "news_flags": [
+        {
+          "headline": "Injured stars Foster, Demary set to face off for Duke, UConn",
+          "description": "Sunday's Elite Eight matchup between Duke and UConn features two injured point guards returning from injuries earlier than expected -- Duke's Caleb Foster and UConn's Silas Demary Jr.",
+          "published": "2026-03-29",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48333106/injured-stars-foster-demary-set-face-duke-uconn"
+        }
+      ],
+      "has_override": true,
+      "has_news_flag": true
+    },
+    "2599": {
+      "bracket_name": "St John's",
+      "region": "East",
+      "seed": 5,
+      "adj_em_penalty": 0,
+      "players": [],
+      "notes": "",
+      "override_date": "",
+      "news_flags": [
+        {
+          "headline": "Caleb Foster's 'incredible' return has Jon Scheyer, Duke raving",
+          "description": "Caleb Foster returned from a broken foot and rescued Duke's national title hopes, helping the top-seeded Blue Devils rally from a 10-point second-half deficit to beat St. John's 80-75.",
+          "published": "2026-03-28",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48326056/caleb-foster-takes-return-duke-survives-st-john-elite-8-berth"
+        },
+        {
+          "headline": "Caleb Foster's 'incredible' return has Jon Scheyer, Duke raving",
+          "description": "Caleb Foster returned from a broken foot and rescued Duke's national title hopes, helping the top-seeded Blue Devils rally from a 10-point second-half deficit to beat St. John's 80-75.",
+          "published": "2026-03-28",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48326056/caleb-foster-takes-return-duke-survives-st-john-elite-8-berth"
+        }
+      ],
+      "has_override": false,
+      "has_news_flag": true
+    },
+    "245": {
+      "bracket_name": "Texas A&M",
+      "region": "South",
+      "seed": 10,
+      "adj_em_penalty": 0,
+      "players": [],
+      "notes": "",
+      "override_date": "",
+      "news_flags": [
+        {
+          "headline": "Highlight: 11-seed Sooners continue SEC run by eliminating 6-seed Aggies",
+          "description": "With Nijel Pack leading the way with 20 points before leaving the game late with an injury, Oklahoma ousts Texas A&M, xx-xx, for its second win in as many days.",
+          "published": "2026-03-13",
+          "url": "https://www.espn.com/video/clip?id=48191653"
+        }
+      ],
+      "has_override": false,
+      "has_news_flag": true
+    },
+    "153": {
+      "bracket_name": "North Carolina",
+      "region": "South",
+      "seed": 6,
+      "adj_em_penalty": 6.0,
+      "players": [
+        {
+          "name": "Caleb Wilson",
+          "status": "Out for season - broken right thumb (surgery March 5)",
+          "impact": "Team's leading scorer (19.8 ppg) and rebounder (9.4 rpg). Top-5 NBA draft pick. Out since Feb 10 with left hand fracture, then broke right thumb dunking in practice March 5. UNC went 5-1 without him but faces tougher competition in tournament.",
+          "adj_em_impact": -6.0
+        }
+      ],
+      "notes": "UNC's go-to lineup without Wilson: Trimble/Dixon/Bogavac backcourt, Stevenson at 4, Veesaar at center. +22 net rating with that quintet in last 4 games but vs weaker ACC opponents.",
+      "override_date": "2026-03-15",
+      "news_flags": [
+        {
+          "headline": "Who's next at UNC? Potential candidates to replace Hubert Davis, their priorities",
+          "description": "Hubert Davis is out after five seasons in Chapel Hill. Here are names expected to be on the short list.",
+          "published": "2026-03-25",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48300317/north-carolina-coaching-candidates-recruits-retention-priorities-2026"
+        }
+      ],
+      "has_override": true,
+      "has_news_flag": true
+    },
+    "2116": {
+      "bracket_name": "UCF",
+      "region": "East",
+      "seed": 10,
+      "adj_em_penalty": 0,
+      "players": [],
+      "notes": "",
+      "override_date": "",
+      "news_flags": [
+        {
+          "headline": "UCLA overcomes broken tooth and stubborn UCF 75-71 to advance in the NCAA Tournament",
+          "description": "\u2014 Mick Cronin raised a plastic cup to another NCAA Tournament victory for UCLA with an energy drink he brought with him to the podium.",
+          "published": "2026-03-21",
+          "url": "http://www.espn.com/ncb/recap?gameId=401856496"
+        },
+        {
+          "headline": "UCLA overcomes broken tooth and stubborn UCF 75-71 to advance in the NCAA Tournament",
+          "description": "\u2014 Mick Cronin raised a plastic cup to another NCAA Tournament victory for UCLA with an energy drink he brought with him to the podium.",
+          "published": "2026-03-21",
+          "url": "http://www.espn.com/ncb/recap?gameId=401856496"
+        }
+      ],
+      "has_override": false,
+      "has_news_flag": true
+    },
+    "356": {
+      "bracket_name": "Illinois",
+      "region": "South",
+      "seed": 3,
+      "adj_em_penalty": 0,
+      "players": [],
+      "notes": "",
+      "override_date": "",
+      "news_flags": [
+        {
+          "headline": "Broken horn delays Iowa-Illinois Elite 8 game 11 minutes",
+          "description": "The Elite Eight matchup between Illinois and Iowa on Saturday was delayed 11 minutes by a broken buzzer at the Toyota Center.",
+          "published": "2026-03-29",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48333882/broken-horn-delays-iowa-illinois-elite-8-game-11-minutes"
+        },
+        {
+          "headline": "Broken horn delays Iowa-Illinois Elite 8 game 11 minutes",
+          "description": "The Elite Eight matchup between Illinois and Iowa on Saturday was delayed 11 minutes by a broken buzzer at the Toyota Center.",
+          "published": "2026-03-29",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48333882/broken-horn-delays-iowa-illinois-elite-8-game-11-minutes"
+        }
+      ],
+      "has_override": false,
+      "has_news_flag": true
+    },
+    "2567": {
+      "bracket_name": "SMU",
+      "region": "Midwest",
+      "seed": 11,
+      "adj_em_penalty": 0,
+      "players": [],
+      "notes": "",
+      "override_date": "",
+      "news_flags": [
+        {
+          "headline": "SMU's Enfield denies misleading NCAA committee on Edwards' injury",
+          "description": "SMU coach Andy Enfield said standout guard B.J. Edwards sat out Wednesday's loss to Miami (Ohio) in the First Four because he didn't feel \"game ready\" after the team announced last Friday that he woul",
+          "published": "2026-03-19",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48246208/smu-enfield-denies-misleading-ncaa-committee-edwards-injury"
+        }
+      ],
+      "has_override": false,
+      "has_news_flag": true
+    },
+    "96": {
+      "bracket_name": "Kentucky",
+      "region": "Midwest",
+      "seed": 7,
+      "adj_em_penalty": 0,
+      "players": [],
+      "notes": "",
+      "override_date": "",
+      "news_flags": [
+        {
+          "headline": "Manga keeps Kentucky's Jayden Quaintance grounded in March Madness",
+          "description": "The Kentucky forward has gotten into manga as a way to help time pass while he heals from injury.",
+          "published": "2026-03-22",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48273040/march-madness-2026-jayden-quaintance-kentucky-wildcats-manga"
+        }
+      ],
+      "has_override": false,
+      "has_news_flag": true
+    },
+    "2641": {
+      "bracket_name": "Texas Tech",
+      "region": "Midwest",
+      "seed": 5,
+      "adj_em_penalty": 5.5,
+      "players": [
+        {
+          "name": "JT Toppin",
+          "status": "Out for season - torn ACL",
+          "impact": "All-America forward. Season-ending injury. Major loss.",
+          "adj_em_impact": -5.5
+        }
+      ],
+      "notes": "Ceiling significantly lower without Toppin per ESPN.",
+      "override_date": "2026-03-09",
       "news_flags": [],
       "has_override": true,
       "has_news_flag": false
@@ -57,6 +265,99 @@
       "has_override": true,
       "has_news_flag": false
     },
+    "2633": {
+      "bracket_name": "Tennessee",
+      "region": "Midwest",
+      "seed": 6,
+      "adj_em_penalty": 1.5,
+      "players": [
+        {
+          "name": "Nate Ament",
+          "status": "Questionable - leg injury (suffered Feb 28 vs Alabama), playing through pain in obvious discomfort",
+          "impact": "17.5 PPG / 6.6 RPG / 2.5 APG | 30.2 MPG | 40.5% FG | freshman phenom, NBA draft prospect."
+        }
+      ],
+      "notes": "Ament soldiered through first weekend in visible discomfort. Not confirmed out but effectiveness is a major question mark heading into Sweet 16 vs Iowa State.",
+      "override_date": "",
+      "news_flags": [],
+      "has_override": true,
+      "has_news_flag": false
+    },
+    "333": {
+      "bracket_name": "Alabama",
+      "region": "Midwest",
+      "seed": 4,
+      "adj_em_penalty": 4.0,
+      "players": [
+        {
+          "name": "Aden Holloway",
+          "status": "Suspended - arrested March 16 on felony marijuana possession charge, removed from campus",
+          "impact": "16.8 PPG / 2.8 RPG / 3.8 APG | 28.4 MPG | 48.1% FG | 43.8% 3P | second-leading scorer."
+        }
+      ],
+      "notes": "Holloway arrested March 16, $5,000 bond, suspended by program. Coach Nate Oats confirmed team preparing without him. Will NOT play vs Michigan in Sweet 16. London Jemison expected to start.",
+      "override_date": "",
+      "news_flags": [],
+      "has_override": true,
+      "has_news_flag": false
+    },
+    "2250": {
+      "bracket_name": "Gonzaga",
+      "region": "West",
+      "seed": 3,
+      "adj_em_penalty": 1.5,
+      "players": [
+        {
+          "name": "Braden Huff",
+          "status": "Questionable - left knee injury (out since Jan 15, targeting NCAA tournament return)",
+          "impact": "Leading scorer (17.8 ppg, 66.2% FG) \u2014 out since Jan 15. Gonzaga went 8-1 without him. Torvik rating already reflects 2 months of absence. Penalty reflects uncertainty about his readiness/effectiveness if he returns.",
+          "adj_em_impact": -1.5
+        }
+      ],
+      "notes": "Graham Ike (19.9 ppg) has stepped up. Huff could return for Round 1 (Mar 19-20) but game-ready status unknown. If confirmed fully available, remove this override.",
+      "override_date": "2026-03-15",
+      "news_flags": [],
+      "has_override": true,
+      "has_news_flag": false
+    },
+    "222": {
+      "bracket_name": "Villanova",
+      "region": "West",
+      "seed": 8,
+      "adj_em_penalty": 3.5,
+      "players": [
+        {
+          "name": "Matt Hodge",
+          "status": "Out for season - torn ACL (March 3)",
+          "impact": "Starting forward. Season-ending ACL tear confirmed March 3.",
+          "adj_em_impact": -3.5
+        }
+      ],
+      "notes": "Hodge was a starting contributor. Villanova (24-8) must go deeper into bench.",
+      "override_date": "2026-03-15",
+      "news_flags": [],
+      "has_override": true,
+      "has_news_flag": false
+    },
+    "66": {
+      "bracket_name": "Iowa State",
+      "region": "Midwest",
+      "seed": 2,
+      "adj_em_penalty": 2.5,
+      "players": [
+        {
+          "name": "Joshua Jefferson",
+          "status": "Questionable - sprained left ankle (March 20 vs Tennessee State, X-rays negative)",
+          "impact": "Second-leading scorer (16.9 ppg, 7.6 rpg, 4.9 apg, 31.8 mpg). Key forward for rebounding and playmaking. X-rays negative is encouraging but ankle status must be monitored.",
+          "adj_em_impact": -2.5
+        }
+      ],
+      "notes": "Jefferson suffered ankle sprain early in 108-74 win. X-rays negative. Monitor availability for next round.",
+      "override_date": "2026-03-20",
+      "news_flags": [],
+      "has_override": true,
+      "has_news_flag": false
+    },
     "26": {
       "bracket_name": "UCLA",
       "region": "East",
@@ -84,249 +385,6 @@
           "description": "\u2014 Mick Cronin raised a plastic cup to another NCAA Tournament victory for UCLA with an energy drink he brought with him to the podium.",
           "published": "2026-03-21",
           "url": "http://www.espn.com/ncb/recap?gameId=401856496"
-        }
-      ],
-      "has_override": true,
-      "has_news_flag": true
-    },
-    "222": {
-      "bracket_name": "Villanova",
-      "region": "West",
-      "seed": 8,
-      "adj_em_penalty": 3.5,
-      "players": [
-        {
-          "name": "Matt Hodge",
-          "status": "Out for season - torn ACL (March 3)",
-          "impact": "Starting forward. Season-ending ACL tear confirmed March 3.",
-          "adj_em_impact": -3.5
-        }
-      ],
-      "notes": "Hodge was a starting contributor. Villanova (24-8) must go deeper into bench.",
-      "override_date": "2026-03-15",
-      "news_flags": [],
-      "has_override": true,
-      "has_news_flag": false
-    },
-    "333": {
-      "bracket_name": "Alabama",
-      "region": "Midwest",
-      "seed": 4,
-      "adj_em_penalty": 4.0,
-      "players": [
-        {
-          "name": "Aden Holloway",
-          "status": "Suspended - arrested March 16 on felony marijuana possession charge, removed from campus",
-          "impact": "16.8 PPG / 2.8 RPG / 3.8 APG | 28.4 MPG | 48.1% FG | 43.8% 3P | second-leading scorer."
-        }
-      ],
-      "notes": "Holloway arrested March 16, $5,000 bond, suspended by program. Coach Nate Oats confirmed team preparing without him. Will NOT play vs Michigan in Sweet 16. London Jemison expected to start.",
-      "override_date": "",
-      "news_flags": [],
-      "has_override": true,
-      "has_news_flag": false
-    },
-    "251": {
-      "bracket_name": "Texas",
-      "region": "West",
-      "seed": 11,
-      "adj_em_penalty": 0,
-      "players": [],
-      "notes": "",
-      "override_date": "",
-      "news_flags": [
-        {
-          "headline": "Texas' Jordan Pope says he played with broken foot vs. Purdue",
-          "description": "Texas guard Jordan Pope revealed after the Longhorns' 79-77 Sweet 16 loss to Purdue that he played the game with a broken foot.",
-          "published": "2026-03-27",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48318302/texas-jordan-pope-played-broken-foot-loss-purdue"
-        }
-      ],
-      "has_override": false,
-      "has_news_flag": true
-    },
-    "41": {
-      "bracket_name": "UConn",
-      "region": "East",
-      "seed": 2,
-      "adj_em_penalty": 2.5,
-      "players": [
-        {
-          "name": "Silas Demary Jr.",
-          "status": "Questionable - Grade 2 high ankle sprain (March 14 Big East final vs St. John's), played limited minutes in Round 2",
-          "impact": "10.9 PPG / 6.2 APG / 4.5 RPG | 29.1 MPG | 1.6 SPG | starting PG, primary ball handler and defender."
-        },
-        {
-          "name": "Jaylin Stewart",
-          "status": "Questionable - knee inflammation, missed Big East tourney and Rounds 1 and 2",
-          "impact": "4.5 PPG bench contributor. Limited availability."
-        }
-      ],
-      "notes": "Demary gutted through Grade 2 sprain in Round 2. Dan Hurley called it day-to-day. Not expected at 100% for Sweet 16 vs Michigan State. Stewart also questionable with knee inflammation.",
-      "override_date": "",
-      "news_flags": [
-        {
-          "headline": "Injured stars Foster, Demary set to face off for Duke, UConn",
-          "description": "Sunday's Elite Eight matchup between Duke and UConn features two injured point guards returning from injuries earlier than expected -- Duke's Caleb Foster and UConn's Silas Demary Jr.",
-          "published": "2026-03-29",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48333106/injured-stars-foster-demary-set-face-duke-uconn"
-        },
-        {
-          "headline": "Injured stars Foster, Demary set to face off for Duke, UConn",
-          "description": "Sunday's Elite Eight matchup between Duke and UConn features two injured point guards returning from injuries earlier than expected -- Duke's Caleb Foster and UConn's Silas Demary Jr.",
-          "published": "2026-03-29",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48333106/injured-stars-foster-demary-set-face-duke-uconn"
-        }
-      ],
-      "has_override": true,
-      "has_news_flag": true
-    },
-    "2641": {
-      "bracket_name": "Texas Tech",
-      "region": "Midwest",
-      "seed": 5,
-      "adj_em_penalty": 5.5,
-      "players": [
-        {
-          "name": "JT Toppin",
-          "status": "Out for season - torn ACL",
-          "impact": "All-America forward. Season-ending injury. Major loss.",
-          "adj_em_impact": -5.5
-        }
-      ],
-      "notes": "Ceiling significantly lower without Toppin per ESPN.",
-      "override_date": "2026-03-09",
-      "news_flags": [],
-      "has_override": true,
-      "has_news_flag": false
-    },
-    "2116": {
-      "bracket_name": "UCF",
-      "region": "East",
-      "seed": 10,
-      "adj_em_penalty": 0,
-      "players": [],
-      "notes": "",
-      "override_date": "",
-      "news_flags": [
-        {
-          "headline": "UCLA overcomes broken tooth and stubborn UCF 75-71 to advance in the NCAA Tournament",
-          "description": "\u2014 Mick Cronin raised a plastic cup to another NCAA Tournament victory for UCLA with an energy drink he brought with him to the podium.",
-          "published": "2026-03-21",
-          "url": "http://www.espn.com/ncb/recap?gameId=401856496"
-        },
-        {
-          "headline": "UCLA overcomes broken tooth and stubborn UCF 75-71 to advance in the NCAA Tournament",
-          "description": "\u2014 Mick Cronin raised a plastic cup to another NCAA Tournament victory for UCLA with an energy drink he brought with him to the podium.",
-          "published": "2026-03-21",
-          "url": "http://www.espn.com/ncb/recap?gameId=401856496"
-        }
-      ],
-      "has_override": false,
-      "has_news_flag": true
-    },
-    "2294": {
-      "bracket_name": "Iowa",
-      "region": "South",
-      "seed": 9,
-      "adj_em_penalty": 0,
-      "players": [],
-      "notes": "",
-      "override_date": "",
-      "news_flags": [
-        {
-          "headline": "Broken horn delays Iowa-Illinois Elite 8 game 11 minutes",
-          "description": "The Elite Eight matchup between Illinois and Iowa on Saturday was delayed 11 minutes by a broken buzzer at the Toyota Center.",
-          "published": "2026-03-29",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48333882/broken-horn-delays-iowa-illinois-elite-8-game-11-minutes"
-        },
-        {
-          "headline": "Broken horn delays Iowa-Illinois Elite 8 game 11 minutes",
-          "description": "The Elite Eight matchup between Illinois and Iowa on Saturday was delayed 11 minutes by a broken buzzer at the Toyota Center.",
-          "published": "2026-03-29",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48333882/broken-horn-delays-iowa-illinois-elite-8-game-11-minutes"
-        }
-      ],
-      "has_override": false,
-      "has_news_flag": true
-    },
-    "96": {
-      "bracket_name": "Kentucky",
-      "region": "Midwest",
-      "seed": 7,
-      "adj_em_penalty": 0,
-      "players": [],
-      "notes": "",
-      "override_date": "",
-      "news_flags": [
-        {
-          "headline": "Manga keeps Kentucky's Jayden Quaintance grounded in March Madness",
-          "description": "The Kentucky forward has gotten into manga as a way to help time pass while he heals from injury.",
-          "published": "2026-03-22",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48273040/march-madness-2026-jayden-quaintance-kentucky-wildcats-manga"
-        }
-      ],
-      "has_override": false,
-      "has_news_flag": true
-    },
-    "2509": {
-      "bracket_name": "Purdue",
-      "region": "West",
-      "seed": 2,
-      "adj_em_penalty": 2.0,
-      "players": [
-        {
-          "name": "C.J. Cox",
-          "status": "Questionable - hyperextended right knee (March 22 vs Miami, did not return)",
-          "impact": "8.3 PPG / 2.6 RPG / 24.4 MPG | 38.4% 3P | starts all 36 games. Primary perimeter defender and sharpshooter."
-        }
-      ],
-      "notes": "Cox suffered hyperextended right knee on fast break in 2nd half. Matt Painter confirmed diagnosis. Listed game-time decision for Sweet 16 vs Texas (March 26). 4 days to recover.",
-      "override_date": "",
-      "news_flags": [],
-      "has_override": true,
-      "has_news_flag": false
-    },
-    "245": {
-      "bracket_name": "Texas A&M",
-      "region": "South",
-      "seed": 10,
-      "adj_em_penalty": 0,
-      "players": [],
-      "notes": "",
-      "override_date": "",
-      "news_flags": [
-        {
-          "headline": "Highlight: 11-seed Sooners continue SEC run by eliminating 6-seed Aggies",
-          "description": "With Nijel Pack leading the way with 20 points before leaving the game late with an injury, Oklahoma ousts Texas A&M, xx-xx, for its second win in as many days.",
-          "published": "2026-03-13",
-          "url": "https://www.espn.com/video/clip?id=48191653"
-        }
-      ],
-      "has_override": false,
-      "has_news_flag": true
-    },
-    "153": {
-      "bracket_name": "North Carolina",
-      "region": "South",
-      "seed": 6,
-      "adj_em_penalty": 6.0,
-      "players": [
-        {
-          "name": "Caleb Wilson",
-          "status": "Out for season - broken right thumb (surgery March 5)",
-          "impact": "Team's leading scorer (19.8 ppg) and rebounder (9.4 rpg). Top-5 NBA draft pick. Out since Feb 10 with left hand fracture, then broke right thumb dunking in practice March 5. UNC went 5-1 without him but faces tougher competition in tournament.",
-          "adj_em_impact": -6.0
-        }
-      ],
-      "notes": "UNC's go-to lineup without Wilson: Trimble/Dixon/Bogavac backcourt, Stevenson at 4, Veesaar at center. +22 net rating with that quintet in last 4 games but vs weaker ACC opponents.",
-      "override_date": "2026-03-15",
-      "news_flags": [
-        {
-          "headline": "Who's next at UNC? Potential candidates to replace Hubert Davis, their priorities",
-          "description": "Hubert Davis is out after five seasons in Chapel Hill. Here are names expected to be on the short list.",
-          "published": "2026-03-25",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48300317/north-carolina-coaching-candidates-recruits-retention-priorities-2026"
         }
       ],
       "has_override": true,
@@ -395,34 +453,9 @@
       "has_override": true,
       "has_news_flag": false
     },
-    "356": {
-      "bracket_name": "Illinois",
-      "region": "South",
-      "seed": 3,
-      "adj_em_penalty": 0,
-      "players": [],
-      "notes": "",
-      "override_date": "",
-      "news_flags": [
-        {
-          "headline": "Broken horn delays Iowa-Illinois Elite 8 game 11 minutes",
-          "description": "The Elite Eight matchup between Illinois and Iowa on Saturday was delayed 11 minutes by a broken buzzer at the Toyota Center.",
-          "published": "2026-03-29",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48333882/broken-horn-delays-iowa-illinois-elite-8-game-11-minutes"
-        },
-        {
-          "headline": "Broken horn delays Iowa-Illinois Elite 8 game 11 minutes",
-          "description": "The Elite Eight matchup between Illinois and Iowa on Saturday was delayed 11 minutes by a broken buzzer at the Toyota Center.",
-          "published": "2026-03-29",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48333882/broken-horn-delays-iowa-illinois-elite-8-game-11-minutes"
-        }
-      ],
-      "has_override": false,
-      "has_news_flag": true
-    },
-    "2567": {
-      "bracket_name": "SMU",
-      "region": "Midwest",
+    "251": {
+      "bracket_name": "Texas",
+      "region": "West",
       "seed": 11,
       "adj_em_penalty": 0,
       "players": [],
@@ -430,96 +463,57 @@
       "override_date": "",
       "news_flags": [
         {
-          "headline": "SMU's Enfield denies misleading NCAA committee on Edwards' injury",
-          "description": "SMU coach Andy Enfield said standout guard B.J. Edwards sat out Wednesday's loss to Miami (Ohio) in the First Four because he didn't feel \"game ready\" after the team announced last Friday that he woul",
-          "published": "2026-03-19",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48246208/smu-enfield-denies-misleading-ncaa-committee-edwards-injury"
+          "headline": "Texas' Jordan Pope says he played with broken foot vs. Purdue",
+          "description": "Texas guard Jordan Pope revealed after the Longhorns' 79-77 Sweet 16 loss to Purdue that he played the game with a broken foot.",
+          "published": "2026-03-27",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48318302/texas-jordan-pope-played-broken-foot-loss-purdue"
         }
       ],
       "has_override": false,
       "has_news_flag": true
     },
-    "2250": {
-      "bracket_name": "Gonzaga",
-      "region": "West",
-      "seed": 3,
-      "adj_em_penalty": 1.5,
-      "players": [
-        {
-          "name": "Braden Huff",
-          "status": "Questionable - left knee injury (out since Jan 15, targeting NCAA tournament return)",
-          "impact": "Leading scorer (17.8 ppg, 66.2% FG) \u2014 out since Jan 15. Gonzaga went 8-1 without him. Torvik rating already reflects 2 months of absence. Penalty reflects uncertainty about his readiness/effectiveness if he returns.",
-          "adj_em_impact": -1.5
-        }
-      ],
-      "notes": "Graham Ike (19.9 ppg) has stepped up. Huff could return for Round 1 (Mar 19-20) but game-ready status unknown. If confirmed fully available, remove this override.",
-      "override_date": "2026-03-15",
-      "news_flags": [],
-      "has_override": true,
-      "has_news_flag": false
-    },
-    "2305": {
-      "bracket_name": "Kansas",
-      "region": "East",
-      "seed": 4,
+    "2294": {
+      "bracket_name": "Iowa",
+      "region": "South",
+      "seed": 9,
       "adj_em_penalty": 0,
       "players": [],
       "notes": "",
       "override_date": "",
       "news_flags": [
         {
-          "headline": "Bill Self says coaching future at Kansas to be determined",
-          "description": "Longtime Kansas coach Bill Self said after Sunday's season-ending loss to St. John's that he has not yet made a decision about his coaching future, later adding that any decision will be based solely ",
-          "published": "2026-03-23",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48283793/bill-self-says-coaching-future-kansas-determined"
-        }
-      ],
-      "has_override": false,
-      "has_news_flag": true
-    },
-    "66": {
-      "bracket_name": "Iowa State",
-      "region": "Midwest",
-      "seed": 2,
-      "adj_em_penalty": 2.5,
-      "players": [
-        {
-          "name": "Joshua Jefferson",
-          "status": "Questionable - sprained left ankle (March 20 vs Tennessee State, X-rays negative)",
-          "impact": "Second-leading scorer (16.9 ppg, 7.6 rpg, 4.9 apg, 31.8 mpg). Key forward for rebounding and playmaking. X-rays negative is encouraging but ankle status must be monitored.",
-          "adj_em_impact": -2.5
-        }
-      ],
-      "notes": "Jefferson suffered ankle sprain early in 108-74 win. X-rays negative. Monitor availability for next round.",
-      "override_date": "2026-03-20",
-      "news_flags": [],
-      "has_override": true,
-      "has_news_flag": false
-    },
-    "2599": {
-      "bracket_name": "St John's",
-      "region": "East",
-      "seed": 5,
-      "adj_em_penalty": 0,
-      "players": [],
-      "notes": "",
-      "override_date": "",
-      "news_flags": [
-        {
-          "headline": "Caleb Foster's 'incredible' return has Jon Scheyer, Duke raving",
-          "description": "Caleb Foster returned from a broken foot and rescued Duke's national title hopes, helping the top-seeded Blue Devils rally from a 10-point second-half deficit to beat St. John's 80-75.",
-          "published": "2026-03-28",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48326056/caleb-foster-takes-return-duke-survives-st-john-elite-8-berth"
+          "headline": "Broken horn delays Iowa-Illinois Elite 8 game 11 minutes",
+          "description": "The Elite Eight matchup between Illinois and Iowa on Saturday was delayed 11 minutes by a broken buzzer at the Toyota Center.",
+          "published": "2026-03-29",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48333882/broken-horn-delays-iowa-illinois-elite-8-game-11-minutes"
         },
         {
-          "headline": "Caleb Foster's 'incredible' return has Jon Scheyer, Duke raving",
-          "description": "Caleb Foster returned from a broken foot and rescued Duke's national title hopes, helping the top-seeded Blue Devils rally from a 10-point second-half deficit to beat St. John's 80-75.",
-          "published": "2026-03-28",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48326056/caleb-foster-takes-return-duke-survives-st-john-elite-8-berth"
+          "headline": "Broken horn delays Iowa-Illinois Elite 8 game 11 minutes",
+          "description": "The Elite Eight matchup between Illinois and Iowa on Saturday was delayed 11 minutes by a broken buzzer at the Toyota Center.",
+          "published": "2026-03-29",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48333882/broken-horn-delays-iowa-illinois-elite-8-game-11-minutes"
         }
       ],
       "has_override": false,
       "has_news_flag": true
+    },
+    "2509": {
+      "bracket_name": "Purdue",
+      "region": "West",
+      "seed": 2,
+      "adj_em_penalty": 2.0,
+      "players": [
+        {
+          "name": "C.J. Cox",
+          "status": "Questionable - hyperextended right knee (March 22 vs Miami, did not return)",
+          "impact": "8.3 PPG / 2.6 RPG / 24.4 MPG | 38.4% 3P | starts all 36 games. Primary perimeter defender and sharpshooter."
+        }
+      ],
+      "notes": "Cox suffered hyperextended right knee on fast break in 2nd half. Matt Painter confirmed diagnosis. Listed game-time decision for Sweet 16 vs Texas (March 26). 4 days to recover.",
+      "override_date": "",
+      "news_flags": [],
+      "has_override": true,
+      "has_news_flag": false
     }
   }
 }
