@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-31T18:52:52.609990+00:00",
+  "generated_at": "2026-04-01T07:08:14.417108+00:00",
   "games": {
     "401856478": {
       "game_id": "401856478",
@@ -2027,7 +2027,7 @@
       "odds": {
         "source": "core_odds",
         "provider": "Draft Kings",
-        "spread": 2.5,
+        "spread": 1.5,
         "over_under": 139.5,
         "over_odds": -108.0,
         "under_odds": -112.0,
