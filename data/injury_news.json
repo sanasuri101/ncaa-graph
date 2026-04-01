@@ -1,20 +1,7 @@
 {
-  "generated_at": "2026-04-01T07:08:52.806806+00:00",
+  "generated_at": "2026-04-01T18:52:44.505577+00:00",
   "flagged_teams": 13,
   "teams": {
-    "41": {
-      "bracket_name": "UConn",
-      "region": "East",
-      "seed": 2,
-      "articles": [
-        {
-          "headline": "Injured stars Foster, Demary set to face off for Duke, UConn",
-          "description": "Sunday's Elite Eight matchup between Duke and UConn features two injured point guards returning from injuries earlier than expected -- Duke's Caleb Foster and UConn's Silas Demary Jr.",
-          "published": "2026-03-29",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48333106/injured-stars-foster-demary-set-face-duke-uconn"
-        }
-      ]
-    },
     "150": {
       "bracket_name": "Duke",
       "region": "East",
@@ -31,6 +18,19 @@
           "description": "Caleb Foster returned from a broken foot and rescued Duke's national title hopes, helping the top-seeded Blue Devils rally from a 10-point second-half deficit to beat St. John's 80-75.",
           "published": "2026-03-28",
           "url": "https://www.espn.com/mens-college-basketball/story/_/id/48326056/caleb-foster-takes-return-duke-survives-st-john-elite-8-berth"
+        }
+      ]
+    },
+    "41": {
+      "bracket_name": "UConn",
+      "region": "East",
+      "seed": 2,
+      "articles": [
+        {
+          "headline": "Injured stars Foster, Demary set to face off for Duke, UConn",
+          "description": "Sunday's Elite Eight matchup between Duke and UConn features two injured point guards returning from injuries earlier than expected -- Duke's Caleb Foster and UConn's Silas Demary Jr.",
+          "published": "2026-03-29",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48333106/injured-stars-foster-demary-set-face-duke-uconn"
         }
       ]
     },
