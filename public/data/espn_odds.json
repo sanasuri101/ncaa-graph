@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-02T07:00:21.252381+00:00",
+  "generated_at": "2026-04-02T18:45:37.331192+00:00",
   "games": {
     "401856478": {
       "game_id": "401856478",
@@ -2029,8 +2029,8 @@
         "provider": "Draft Kings",
         "spread": 1.5,
         "over_under": 139.5,
-        "over_odds": -108.0,
-        "under_odds": -112.0,
+        "over_odds": -112.0,
+        "under_odds": -108.0,
         "home_moneyline": 110,
         "away_moneyline": -130,
         "home_implied_pct": 47.6,
@@ -2040,11 +2040,11 @@
         "line_movement": 3.0
       },
       "bpi": {
-        "home_bpi_win_pct": 41.0,
-        "away_bpi_win_pct": 59.0,
+        "home_bpi_win_pct": 41.1,
+        "away_bpi_win_pct": 58.9,
         "bpi_pred_margin": -2.3,
         "matchup_quality": 95.5,
-        "last_modified": "2026-04-01T08:04Z"
+        "last_modified": "2026-04-02T08:05Z"
       }
     },
     "401856599": {
@@ -2073,11 +2073,11 @@
         "line_movement": -5.7
       },
       "bpi": {
-        "home_bpi_win_pct": 48.1,
-        "away_bpi_win_pct": 51.9,
-        "bpi_pred_margin": -0.5,
+        "home_bpi_win_pct": 48.2,
+        "away_bpi_win_pct": 51.8,
+        "bpi_pred_margin": -0.4,
         "matchup_quality": 98.8,
-        "last_modified": "2026-04-01T08:04Z"
+        "last_modified": "2026-04-02T08:05Z"
       }
     }
   },
