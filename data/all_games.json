@@ -30045,6 +30045,21 @@
     "venue": "Bridgestone Arena"
   },
   {
+    "id": "401858379",
+    "date": "2026-04-02",
+    "name": "Oklahoma Sooners at Colorado Buffaloes",
+    "team1_id": "38",
+    "team1_name": "Colorado Buffaloes",
+    "team1_score": "86",
+    "team1_winner": false,
+    "team2_id": "201",
+    "team2_name": "Oklahoma Sooners",
+    "team2_score": "90",
+    "team2_winner": true,
+    "neutral": true,
+    "venue": "MGM Grand Garden Arena"
+  },
+  {
     "id": "401823474",
     "date": "2025-11-04",
     "name": "Bethune-Cookman Wildcats at Auburn Tigers",
