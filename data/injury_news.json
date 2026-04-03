@@ -1,36 +1,23 @@
 {
-  "generated_at": "2026-04-03T06:58:25.007405+00:00",
-  "flagged_teams": 12,
+  "generated_at": "2026-04-03T18:38:28.528120+00:00",
+  "flagged_teams": 11,
   "teams": {
-    "41": {
-      "bracket_name": "UConn",
+    "26": {
+      "bracket_name": "UCLA",
       "region": "East",
-      "seed": 2,
+      "seed": 7,
       "articles": [
         {
-          "headline": "Injured stars Foster, Demary set to face off for Duke, UConn",
-          "description": "Sunday's Elite Eight matchup between Duke and UConn features two injured point guards returning from injuries earlier than expected -- Duke's Caleb Foster and UConn's Silas Demary Jr.",
-          "published": "2026-03-29",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48333106/injured-stars-foster-demary-set-face-duke-uconn"
-        }
-      ]
-    },
-    "150": {
-      "bracket_name": "Duke",
-      "region": "East",
-      "seed": 1,
-      "articles": [
-        {
-          "headline": "Injured stars Foster, Demary set to face off for Duke, UConn",
-          "description": "Sunday's Elite Eight matchup between Duke and UConn features two injured point guards returning from injuries earlier than expected -- Duke's Caleb Foster and UConn's Silas Demary Jr.",
-          "published": "2026-03-29",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48333106/injured-stars-foster-demary-set-face-duke-uconn"
+          "headline": "UCLA overcomes broken tooth and stubborn UCF 75-71 to advance in the NCAA Tournament",
+          "description": "\u2014 Mick Cronin raised a plastic cup to another NCAA Tournament victory for UCLA with an energy drink he brought with him to the podium.",
+          "published": "2026-03-21",
+          "url": "http://www.espn.com/ncb/recap?gameId=401856496"
         },
         {
-          "headline": "Caleb Foster's 'incredible' return has Jon Scheyer, Duke raving",
-          "description": "Caleb Foster returned from a broken foot and rescued Duke's national title hopes, helping the top-seeded Blue Devils rally from a 10-point second-half deficit to beat St. John's 80-75.",
-          "published": "2026-03-28",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48326056/caleb-foster-takes-return-duke-survives-st-john-elite-8-berth"
+          "headline": "UCLA overcomes broken tooth and stubborn UCF 75-71 to advance in the NCAA Tournament",
+          "description": "\u2014 Mick Cronin raised a plastic cup to another NCAA Tournament victory for UCLA with an energy drink he brought with him to the podium.",
+          "published": "2026-03-21",
+          "url": "http://www.espn.com/ncb/recap?gameId=401856496"
         }
       ]
     },
@@ -53,29 +40,10 @@
         }
       ]
     },
-    "26": {
-      "bracket_name": "UCLA",
-      "region": "East",
-      "seed": 7,
-      "articles": [
-        {
-          "headline": "UCLA overcomes broken tooth and stubborn UCF 75-71 to advance in the NCAA Tournament",
-          "description": "\u2014 Mick Cronin raised a plastic cup to another NCAA Tournament victory for UCLA with an energy drink he brought with him to the podium.",
-          "published": "2026-03-21",
-          "url": "http://www.espn.com/ncb/recap?gameId=401856496"
-        },
-        {
-          "headline": "UCLA overcomes broken tooth and stubborn UCF 75-71 to advance in the NCAA Tournament",
-          "description": "\u2014 Mick Cronin raised a plastic cup to another NCAA Tournament victory for UCLA with an energy drink he brought with him to the podium.",
-          "published": "2026-03-21",
-          "url": "http://www.espn.com/ncb/recap?gameId=401856496"
-        }
-      ]
-    },
-    "356": {
-      "bracket_name": "Illinois",
+    "2294": {
+      "bracket_name": "Iowa",
       "region": "South",
-      "seed": 3,
+      "seed": 9,
       "articles": [
         {
           "headline": "Broken horn delays Iowa-Illinois Elite 8 game 11 minutes",
@@ -85,10 +53,10 @@
         }
       ]
     },
-    "2294": {
-      "bracket_name": "Iowa",
+    "356": {
+      "bracket_name": "Illinois",
       "region": "South",
-      "seed": 9,
+      "seed": 3,
       "articles": [
         {
           "headline": "Broken horn delays Iowa-Illinois Elite 8 game 11 minutes",
@@ -154,6 +122,19 @@
       "bracket_name": "St John's",
       "region": "East",
       "seed": 5,
+      "articles": [
+        {
+          "headline": "Caleb Foster's 'incredible' return has Jon Scheyer, Duke raving",
+          "description": "Caleb Foster returned from a broken foot and rescued Duke's national title hopes, helping the top-seeded Blue Devils rally from a 10-point second-half deficit to beat St. John's 80-75.",
+          "published": "2026-03-28",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48326056/caleb-foster-takes-return-duke-survives-st-john-elite-8-berth"
+        }
+      ]
+    },
+    "150": {
+      "bracket_name": "Duke",
+      "region": "East",
+      "seed": 1,
       "articles": [
         {
           "headline": "Caleb Foster's 'incredible' return has Jon Scheyer, Duke raving",

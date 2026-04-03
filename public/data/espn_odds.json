@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-03T06:57:40.519619+00:00",
+  "generated_at": "2026-04-03T18:37:58.807692+00:00",
   "games": {
     "401856478": {
       "game_id": "401856478",
@@ -2044,7 +2044,7 @@
         "away_bpi_win_pct": 58.9,
         "bpi_pred_margin": -2.3,
         "matchup_quality": 95.5,
-        "last_modified": "2026-04-02T08:05Z"
+        "last_modified": "2026-04-03T08:04Z"
       }
     },
     "401856599": {
@@ -2064,20 +2064,20 @@
         "over_under": 157.5,
         "over_odds": -110.0,
         "under_odds": -110.0,
-        "home_moneyline": 105,
-        "away_moneyline": -125,
-        "home_implied_pct": 48.8,
-        "away_implied_pct": 55.6,
+        "home_moneyline": 102,
+        "away_moneyline": -122,
+        "home_implied_pct": 49.5,
+        "away_implied_pct": 55.0,
         "open_home_ml": "-120",
         "open_away_ml": "+100",
-        "line_movement": -5.7
+        "line_movement": -5.0
       },
       "bpi": {
         "home_bpi_win_pct": 48.2,
         "away_bpi_win_pct": 51.8,
         "bpi_pred_margin": -0.4,
         "matchup_quality": 98.8,
-        "last_modified": "2026-04-02T08:05Z"
+        "last_modified": "2026-04-03T08:04Z"
       }
     }
   },
