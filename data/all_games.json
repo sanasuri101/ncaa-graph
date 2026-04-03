@@ -30285,6 +30285,21 @@
     "venue": "Neville Arena"
   },
   {
+    "id": "401858362",
+    "date": "2026-04-03",
+    "name": "Illinois State Redbirds at Auburn Tigers",
+    "team1_id": "2",
+    "team1_name": "Auburn Tigers",
+    "team1_score": "88",
+    "team1_winner": true,
+    "team2_id": "2287",
+    "team2_name": "Illinois State Redbirds",
+    "team2_score": "66",
+    "team2_winner": false,
+    "neutral": true,
+    "venue": "Hinkle Fieldhouse"
+  },
+  {
     "id": "401827172",
     "date": "2025-11-06",
     "name": "Alabama A&M Bulldogs at Indiana Hoosiers",
@@ -31020,6 +31035,21 @@
     "venue": "The Pit"
   },
   {
+    "id": "401858361",
+    "date": "2026-04-02",
+    "name": "Tulsa Golden Hurricane at New Mexico Lobos",
+    "team1_id": "167",
+    "team1_name": "New Mexico Lobos",
+    "team1_score": "69",
+    "team1_winner": false,
+    "team2_id": "202",
+    "team2_name": "Tulsa Golden Hurricane",
+    "team2_score": "74",
+    "team2_winner": true,
+    "neutral": true,
+    "venue": "Hinkle Fieldhouse"
+  },
+  {
     "id": "401823304",
     "date": "2025-11-05",
     "name": "Long Beach State Beach at San Diego State Aztecs",
@@ -31723,6 +31753,21 @@
     "team2_winner": true,
     "neutral": true,
     "venue": "Spectrum Center"
+  },
+  {
+    "id": "401858381",
+    "date": "2026-04-03",
+    "name": "Stanford Cardinal at West Virginia Mountaineers",
+    "team1_id": "277",
+    "team1_name": "West Virginia Mountaineers",
+    "team1_score": "82",
+    "team1_winner": true,
+    "team2_id": "24",
+    "team2_name": "Stanford Cardinal",
+    "team2_score": "77",
+    "team2_winner": false,
+    "neutral": true,
+    "venue": "MGM Grand Garden Arena"
   },
   {
     "id": "401819842",
