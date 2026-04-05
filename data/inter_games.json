@@ -2325,6 +2325,21 @@
     "venue": "Xfinity Mobile Arena"
   },
   {
+    "id": "401856598",
+    "date": "2026-04-04",
+    "name": "Illinois Fighting Illini at UConn Huskies",
+    "team1_id": "41",
+    "team1_name": "UConn Huskies",
+    "team1_score": "71",
+    "team1_winner": true,
+    "team2_id": "356",
+    "team2_name": "Illinois Fighting Illini",
+    "team2_score": "62",
+    "team2_winner": false,
+    "neutral": true,
+    "venue": "Lucas Oil Stadium"
+  },
+  {
     "id": "401824867",
     "date": "2025-11-03",
     "name": "Furman Paladins at High Point Panthers",
@@ -2608,6 +2623,21 @@
     "team2_winner": false,
     "neutral": true,
     "venue": "SAP Center at San Jose"
+  },
+  {
+    "id": "401856599",
+    "date": "2026-04-05",
+    "name": "Michigan Wolverines at Arizona Wildcats",
+    "team1_id": "12",
+    "team1_name": "Arizona Wildcats",
+    "team1_score": "73",
+    "team1_winner": false,
+    "team2_id": "130",
+    "team2_name": "Michigan Wolverines",
+    "team2_score": "91",
+    "team2_winner": true,
+    "neutral": true,
+    "venue": "Lucas Oil Stadium"
   },
   {
     "id": "401812356",
