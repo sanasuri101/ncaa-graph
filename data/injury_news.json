@@ -1,17 +1,48 @@
 {
-  "generated_at": "2026-04-05T06:54:32.180971+00:00",
-  "flagged_teams": 12,
+  "generated_at": "2026-04-05T18:33:54.114999+00:00",
+  "flagged_teams": 13,
   "teams": {
+    "150": {
+      "bracket_name": "Duke",
+      "region": "East",
+      "seed": 1,
+      "articles": [
+        {
+          "headline": "Duke star Cam Boozer says he suffered fractures around eye",
+          "description": "Duke's Cameron Boozer, a projected top-five pick in the 2026 NBA draft, said he suffered multiple fractures around one of his eyes during his team's loss to UConn in the Elite Eight.",
+          "published": "2026-04-05",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48404741/duke-star-cam-boozer-says-suffered-fractures-eye"
+        },
+        {
+          "headline": "Duke star Cam Boozer says he suffered fractures around eye",
+          "description": "Duke's Cameron Boozer, a projected top-five pick in the 2026 NBA draft, said he suffered multiple fractures around one of his eyes during his team's loss to UConn in the Elite Eight.",
+          "published": "2026-04-05",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48404741/duke-star-cam-boozer-says-suffered-fractures-eye"
+        },
+        {
+          "headline": "Duke star Cam Boozer says he suffered fractures around eye",
+          "description": "Duke's Cameron Boozer, a projected top-five pick in the 2026 NBA draft, said he suffered multiple fractures around one of his eyes during his team's loss to UConn in the Elite Eight.",
+          "published": "2026-04-05",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48404741/duke-star-cam-boozer-says-suffered-fractures-eye"
+        },
+        {
+          "headline": "Caleb Foster's 'incredible' return has Jon Scheyer, Duke raving",
+          "description": "Caleb Foster returned from a broken foot and rescued Duke's national title hopes, helping the top-seeded Blue Devils rally from a 10-point second-half deficit to beat St. John's 80-75.",
+          "published": "2026-03-28",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48326056/caleb-foster-takes-return-duke-survives-st-john-elite-8-berth"
+        }
+      ]
+    },
     "130": {
       "bracket_name": "Michigan",
       "region": "Midwest",
       "seed": 1,
       "articles": [
         {
-          "headline": "Lendeborg vows to play in NCAA final despite MCL, ankle sprains",
-          "description": "Michigan star Yaxel Lendeborg suffered a left MCL sprain and left ankle sprain in Saturday's win over Arizona, but team trainer Chris Williams told ESPN he is \"very confident\" the forward will play in",
+          "headline": "UConn's Solo Ball uncertain for NCAA tournament title game",
+          "description": "UConn guard Solo Ball has a foot injury and will not practice as the Huskies prepare to face Michigan in the men's NCAA championship game.",
           "published": "2026-04-05",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48401538/lendeborg-vows-play-ncaa-final-mcl-ankle-sprains"
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48403973/uconn-solo-ball-uncertain-ncaa-tournament-title-game"
         },
         {
           "headline": "Lendeborg vows to play in NCAA final despite MCL, ankle sprains",
@@ -20,29 +51,59 @@
           "url": "https://www.espn.com/mens-college-basketball/story/_/id/48401538/lendeborg-vows-play-ncaa-final-mcl-ankle-sprains"
         },
         {
+          "headline": "UConn's Solo Ball uncertain for NCAA tournament title game",
+          "description": "UConn guard Solo Ball has a foot injury and will not practice as the Huskies prepare to face Michigan in the men's NCAA championship game.",
+          "published": "2026-04-05",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48403973/uconn-solo-ball-uncertain-ncaa-tournament-title-game"
+        },
+        {
           "headline": "Lendeborg vows to play in NCAA final despite MCL, ankle sprains",
           "description": "Michigan star Yaxel Lendeborg suffered a left MCL sprain and left ankle sprain in Saturday's win over Arizona, but team trainer Chris Williams told ESPN he is \"very confident\" the forward will play in",
           "published": "2026-04-05",
           "url": "https://www.espn.com/mens-college-basketball/story/_/id/48401538/lendeborg-vows-play-ncaa-final-mcl-ankle-sprains"
+        },
+        {
+          "headline": "UConn's Solo Ball uncertain for NCAA tournament title game",
+          "description": "UConn guard Solo Ball has a foot injury and will not practice as the Huskies prepare to face Michigan in the men's NCAA championship game.",
+          "published": "2026-04-05",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48403973/uconn-solo-ball-uncertain-ncaa-tournament-title-game"
         }
       ]
     },
-    "26": {
-      "bracket_name": "UCLA",
+    "41": {
+      "bracket_name": "UConn",
       "region": "East",
-      "seed": 7,
+      "seed": 2,
       "articles": [
         {
-          "headline": "UCLA overcomes broken tooth and stubborn UCF 75-71 to advance in the NCAA Tournament",
-          "description": "\u2014 Mick Cronin raised a plastic cup to another NCAA Tournament victory for UCLA with an energy drink he brought with him to the podium.",
-          "published": "2026-03-21",
-          "url": "http://www.espn.com/ncb/recap?gameId=401856496"
+          "headline": "UConn's Solo Ball uncertain for NCAA tournament title game",
+          "description": "UConn guard Solo Ball has a foot injury and will not practice as the Huskies prepare to face Michigan in the men's NCAA championship game.",
+          "published": "2026-04-05",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48403973/uconn-solo-ball-uncertain-ncaa-tournament-title-game"
         },
         {
-          "headline": "UCLA overcomes broken tooth and stubborn UCF 75-71 to advance in the NCAA Tournament",
-          "description": "\u2014 Mick Cronin raised a plastic cup to another NCAA Tournament victory for UCLA with an energy drink he brought with him to the podium.",
-          "published": "2026-03-21",
-          "url": "http://www.espn.com/ncb/recap?gameId=401856496"
+          "headline": "UConn's Solo Ball uncertain for NCAA tournament title game",
+          "description": "UConn guard Solo Ball has a foot injury and will not practice as the Huskies prepare to face Michigan in the men's NCAA championship game.",
+          "published": "2026-04-05",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48403973/uconn-solo-ball-uncertain-ncaa-tournament-title-game"
+        },
+        {
+          "headline": "UConn's Solo Ball uncertain for NCAA tournament title game",
+          "description": "UConn guard Solo Ball has a foot injury and will not practice as the Huskies prepare to face Michigan in the men's NCAA championship game.",
+          "published": "2026-04-05",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48403973/uconn-solo-ball-uncertain-ncaa-tournament-title-game"
+        },
+        {
+          "headline": "UConn's Solo Ball uncertain for NCAA tournament title game",
+          "description": "UConn guard Solo Ball has a foot injury and will not practice as the Huskies prepare to face Michigan in the men's NCAA championship game.",
+          "published": "2026-04-05",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48403973/uconn-solo-ball-uncertain-ncaa-tournament-title-game"
+        },
+        {
+          "headline": "UConn's Solo Ball uncertain for NCAA tournament title game",
+          "description": "UConn guard Solo Ball has a foot injury and will not practice as the Huskies prepare to face Michigan in the men's NCAA championship game.",
+          "published": "2026-04-05",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48403973/uconn-solo-ball-uncertain-ncaa-tournament-title-game"
         }
       ]
     },
@@ -50,6 +111,25 @@
       "bracket_name": "UCF",
       "region": "East",
       "seed": 10,
+      "articles": [
+        {
+          "headline": "UCLA overcomes broken tooth and stubborn UCF 75-71 to advance in the NCAA Tournament",
+          "description": "\u2014 Mick Cronin raised a plastic cup to another NCAA Tournament victory for UCLA with an energy drink he brought with him to the podium.",
+          "published": "2026-03-21",
+          "url": "http://www.espn.com/ncb/recap?gameId=401856496"
+        },
+        {
+          "headline": "UCLA overcomes broken tooth and stubborn UCF 75-71 to advance in the NCAA Tournament",
+          "description": "\u2014 Mick Cronin raised a plastic cup to another NCAA Tournament victory for UCLA with an energy drink he brought with him to the podium.",
+          "published": "2026-03-21",
+          "url": "http://www.espn.com/ncb/recap?gameId=401856496"
+        }
+      ]
+    },
+    "26": {
+      "bracket_name": "UCLA",
+      "region": "East",
+      "seed": 7,
       "articles": [
         {
           "headline": "UCLA overcomes broken tooth and stubborn UCF 75-71 to advance in the NCAA Tournament",
@@ -140,19 +220,6 @@
           "description": "SMU coach Andy Enfield said standout guard B.J. Edwards sat out Wednesday's loss to Miami (Ohio) in the First Four because he didn't feel \"game ready\" after the team announced last Friday that he woul",
           "published": "2026-03-19",
           "url": "https://www.espn.com/mens-college-basketball/story/_/id/48246208/smu-enfield-denies-misleading-ncaa-committee-edwards-injury"
-        }
-      ]
-    },
-    "150": {
-      "bracket_name": "Duke",
-      "region": "East",
-      "seed": 1,
-      "articles": [
-        {
-          "headline": "Caleb Foster's 'incredible' return has Jon Scheyer, Duke raving",
-          "description": "Caleb Foster returned from a broken foot and rescued Duke's national title hopes, helping the top-seeded Blue Devils rally from a 10-point second-half deficit to beat St. John's 80-75.",
-          "published": "2026-03-28",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48326056/caleb-foster-takes-return-duke-survives-st-john-elite-8-berth"
         }
       ]
     },
