@@ -68,6 +68,7 @@ window.addEventListener('DOMContentLoaded', async () => {
     NOT_PLAYED  = data.not_played;
     BRACKET_MAP = data.bracket_map;
     META        = data.meta || {};
+    window._ALL_EDGES  = ALL_EDGES;
     // Keep live references updated for ai-panel.js sidebar sync
     window._ALL_EDGES  = ALL_EDGES;
     window._NOT_PLAYED = NOT_PLAYED;
@@ -1256,6 +1257,13 @@ document.querySelectorAll('.nav-btn[data-view]').forEach(btn => {
 
 // Expose for bracket.js and odds.js
 window.switchView = switchView;
+
+// Expose graph data + detail renderers for ai-panel.js matchup sidebar sync
+window.REGION_COLORS   = REGION_COLORS;
+window.REGION_NODE_BG  = REGION_NODE_BG;
+window.switchTab       = switchTab;
+window.renderTeamDetail  = renderTeamDetail;
+window.renderEdgeDetail  = renderEdgeDetail;
 
 // Expose graph data + detail renderers for ai-panel.js matchup sidebar sync
 window.ALL_EDGES       = () => ALL_EDGES;

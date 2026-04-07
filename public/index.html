@@ -109,9 +109,9 @@
     <div class="graph-toolbar">
       <div class="gtb-group">
         <span class="gtb-label">SHOW</span>
-        <button class="gtb-btn active" data-view="played" id="btn-played">Played <span class="count" id="cnt-played">—</span></button>
-        <button class="gtb-btn" data-view="notplayed" id="btn-notplayed">Never Met <span class="count" id="cnt-notplayed">—</span></button>
-        <button class="gtb-btn" data-view="both" id="btn-both">Both</button>
+        <button class="gtb-btn active" data-view="played" id="btn-played" onclick="setView('played')">Played <span class="count" id="cnt-played">—</span></button>
+        <button class="gtb-btn" data-view="notplayed" id="btn-notplayed" onclick="setView('notplayed')">Never Met <span class="count" id="cnt-notplayed">—</span></button>
+        <button class="gtb-btn" data-view="both" id="btn-both" onclick="setView('both')">Both</button>
       </div>
       <div class="gtb-sep"></div>
       <div class="gtb-group">
@@ -165,10 +165,10 @@
     <div class="graph-layout">
       <aside class="sidebar" id="sidebar">
         <div class="sidebar-tabs" id="sidebar-tabs">
-          <button class="stab active" data-tab="tab-overview">Overview</button>
-          <button class="stab" data-tab="tab-rankings">Rankings</button>
-          <button class="stab" data-tab="tab-detail">Detail</button>
-          <button class="stab" data-tab="tab-transitive">Paths</button>
+          <button class="stab active" data-tab="overview">Overview</button>
+          <button class="stab" data-tab="rankings">Rankings</button>
+          <button class="stab" data-tab="detail">Detail</button>
+          <button class="stab" data-tab="transitive">Paths</button>
         </div>
         <div class="tab-content active" id="tab-overview">
           <section>

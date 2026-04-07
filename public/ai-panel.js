@@ -123,6 +123,42 @@ function syncMatchupToSidebar(teamA, teamB) {
   }
 }
 
+// ── Sidebar detail sync ───────────────────────────────────────────────────────
+function syncMatchupToSidebar(teamA, teamB) {
+  if (!window.switchTab || !window.ALL_NODES) return;
+  const nodes = window.ALL_NODES;
+  const edges = window._ALL_EDGES || [];
+  const resolve = (name) => {
+    const n = name.toLowerCase();
+    return nodes.find(nd =>
+      nd.label?.toLowerCase() === n ||
+      nd.full_name?.toLowerCase().includes(n) ||
+      n.includes(nd.label?.toLowerCase())
+    );
+  };
+  const nodeA = resolve(teamA);
+  const nodeB = resolve(teamB);
+  if (!nodeA || !nodeB) return;
+  const edge = edges.find(e =>
+    (e.from === nodeA.id && e.to === nodeB.id) ||
+    (e.from === nodeB.id && e.to === nodeA.id)
+  );
+  const graphView = document.getElementById('view-graph');
+  if (!graphView || !graphView.classList.contains('active')) return;
+  const box = document.getElementById('detail-box');
+  if (!box) return;
+  window.switchTab('detail');
+  if (edge) {
+    window.renderEdgeDetail(edge, box);
+  } else {
+    const tmpA = document.createElement('div');
+    const tmpB = document.createElement('div');
+    window.renderTeamDetail(nodeA.id, tmpA);
+    window.renderTeamDetail(nodeB.id, tmpB);
+    box.innerHTML = '<div style="padding:8px 0 6px;font-size:.7rem;letter-spacing:.08em;color:var(--text-muted)">MATCHUP — NEVER PLAYED</div>' + tmpA.innerHTML + '<div style="border-top:1px solid var(--border);margin:10px 0"></div>' + tmpB.innerHTML;
+  }
+}
+
 // ── Panel open/close ──────────────────────────────────────────────────────────
 function toggleAIPanel() {
   const panel = document.getElementById("ai-panel");
