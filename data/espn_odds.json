@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-06T18:47:31.562840+00:00",
+  "generated_at": "2026-04-07T07:04:02.092781+00:00",
   "games": {
     "401856478": {
       "game_id": "401856478",
@@ -2088,15 +2088,15 @@
       "away_id": "41",
       "home_name": "Michigan Wolverines",
       "away_name": "UConn Huskies",
-      "completed": false,
+      "completed": true,
       "neutral": true,
       "odds": {
         "source": "core_odds",
         "provider": "Draft Kings",
         "spread": -6.5,
-        "over_under": 145.5,
-        "over_odds": -115.0,
-        "under_odds": -105.0,
+        "over_under": 146.5,
+        "over_odds": -112.0,
+        "under_odds": -108.0,
         "home_moneyline": -285,
         "away_moneyline": 230,
         "home_implied_pct": 74.0,
