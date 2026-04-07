@@ -73,6 +73,56 @@ function trimHistory(messages) {
   return out;
 }
 
+// ── Sidebar detail sync ───────────────────────────────────────────────────────
+// After a matchup analysis, update the graph sidebar Detail tab to show both teams.
+function syncMatchupToSidebar(teamA, teamB) {
+  if (!window.switchTab || !window.ALL_NODES) return;
+
+  const nodes = window.ALL_NODES;
+  const edges = window._ALL_EDGES || [];
+
+  const resolve = (name) => {
+    const n = name.toLowerCase();
+    return nodes.find(nd =>
+      nd.label?.toLowerCase() === n ||
+      nd.full_name?.toLowerCase().includes(n) ||
+      n.includes(nd.label?.toLowerCase())
+    );
+  };
+
+  const nodeA = resolve(teamA);
+  const nodeB = resolve(teamB);
+  if (!nodeA || !nodeB) return;
+
+  const edge = edges.find(e =>
+    (e.from === nodeA.id && e.to === nodeB.id) ||
+    (e.from === nodeB.id && e.to === nodeA.id)
+  );
+
+  const graphView = document.getElementById('view-graph');
+  const onGraphView = graphView && graphView.classList.contains('active');
+  if (!onGraphView) return;
+
+  const box = document.getElementById('detail-box');
+  if (!box) return;
+
+  window.switchTab('detail');
+
+  if (edge) {
+    window.renderEdgeDetail(edge, box);
+  } else {
+    const tmpBoxA = document.createElement('div');
+    const tmpBoxB = document.createElement('div');
+    window.renderTeamDetail(nodeA.id, tmpBoxA);
+    window.renderTeamDetail(nodeB.id, tmpBoxB);
+    box.innerHTML = `
+      <div class="d-matchup-label" style="padding:8px 0 6px;font-size:.7rem;letter-spacing:.08em;color:var(--text-muted)">MATCHUP — NEVER PLAYED</div>
+      ${tmpBoxA.innerHTML}
+      <div style="border-top:1px solid var(--border);margin:10px 0"></div>
+      ${tmpBoxB.innerHTML}`;
+  }
+}
+
 // ── Panel open/close ──────────────────────────────────────────────────────────
 function toggleAIPanel() {
   const panel = document.getElementById("ai-panel");
@@ -398,6 +448,9 @@ async function sendChat() {
       chatHistory.push({ role: "assistant", content: analysisContext });
       // confHtml already contains all structured sections — don't repeat reasoning below it
       thinkEl.innerHTML = `${thinkHtml}<div class="chat-bubble-ai-label">Scout · Multi-Agent</div>${confHtml}`;
+
+      // Sync sidebar Detail tab so both teams show up after a matchup query
+      syncMatchupToSidebar(matchup.team_a, matchup.team_b);
     } else {
       // Standard single-agent path — streaming
       if (window.posthog)
@@ -1554,6 +1607,9 @@ async function sendScoutChat() {
       });
       // confHtml already contains all structured sections — don't repeat reasoning below it
       aiEl.innerHTML = `<div class="chat-bubble-ai-label">Scout · Multi-Agent</div>${thinkHtml}${confHtml}`;
+
+      // Sync sidebar Detail tab so both teams show up after a matchup query
+      syncMatchupToSidebar(matchup.team_a, matchup.team_b);
     } else {
       // Standard chat path — streaming
       const historyForApi = _scoutHistory.slice(-12);
