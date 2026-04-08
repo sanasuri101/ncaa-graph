@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-04-07T18:55:25.186062+00:00",
-  "flagged_teams": 13,
+  "generated_at": "2026-04-08T07:06:47.990612+00:00",
+  "flagged_teams": 12,
   "teams": {
     "41": {
       "bracket_name": "UConn",
@@ -51,65 +51,10 @@
           "url": "https://www.espn.com/mens-college-basketball/story/_/id/48404741/duke-star-cam-boozer-says-suffered-fractures-eye"
         },
         {
-          "headline": "Duke star Cam Boozer says he suffered fractures around eye",
-          "description": "Duke's Cameron Boozer, a projected top-five pick in the 2026 NBA draft, said he suffered multiple fractures around one of his eyes during his team's loss to UConn in the Elite Eight.",
-          "published": "2026-04-05",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48404741/duke-star-cam-boozer-says-suffered-fractures-eye"
-        },
-        {
-          "headline": "Duke star Cam Boozer says he suffered fractures around eye",
-          "description": "Duke's Cameron Boozer, a projected top-five pick in the 2026 NBA draft, said he suffered multiple fractures around one of his eyes during his team's loss to UConn in the Elite Eight.",
-          "published": "2026-04-05",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48404741/duke-star-cam-boozer-says-suffered-fractures-eye"
-        },
-        {
-          "headline": "Duke star Cam Boozer says he suffered fractures around eye",
-          "description": "Duke's Cameron Boozer, a projected top-five pick in the 2026 NBA draft, said he suffered multiple fractures around one of his eyes during his team's loss to UConn in the Elite Eight.",
-          "published": "2026-04-05",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48404741/duke-star-cam-boozer-says-suffered-fractures-eye"
-        },
-        {
           "headline": "Caleb Foster's 'incredible' return has Jon Scheyer, Duke raving",
           "description": "Caleb Foster returned from a broken foot and rescued Duke's national title hopes, helping the top-seeded Blue Devils rally from a 10-point second-half deficit to beat St. John's 80-75.",
           "published": "2026-03-28",
           "url": "https://www.espn.com/mens-college-basketball/story/_/id/48326056/caleb-foster-takes-return-duke-survives-st-john-elite-8-berth"
-        }
-      ]
-    },
-    "130": {
-      "bracket_name": "Michigan",
-      "region": "Midwest",
-      "seed": 1,
-      "articles": [
-        {
-          "headline": "UConn's Solo Ball uncertain for NCAA tournament title game",
-          "description": "UConn guard Solo Ball has a foot injury and will not practice as the Huskies prepare to face Michigan in the men's NCAA championship game.",
-          "published": "2026-04-05",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48403973/uconn-solo-ball-uncertain-ncaa-tournament-title-game"
-        },
-        {
-          "headline": "UConn's Solo Ball uncertain for NCAA tournament title game",
-          "description": "UConn guard Solo Ball has a foot injury and will not practice as the Huskies prepare to face Michigan in the men's NCAA championship game.",
-          "published": "2026-04-05",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48403973/uconn-solo-ball-uncertain-ncaa-tournament-title-game"
-        },
-        {
-          "headline": "UConn's Solo Ball uncertain for NCAA tournament title game",
-          "description": "UConn guard Solo Ball has a foot injury and will not practice as the Huskies prepare to face Michigan in the men's NCAA championship game.",
-          "published": "2026-04-05",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48403973/uconn-solo-ball-uncertain-ncaa-tournament-title-game"
-        },
-        {
-          "headline": "UConn's Solo Ball uncertain for NCAA tournament title game",
-          "description": "UConn guard Solo Ball has a foot injury and will not practice as the Huskies prepare to face Michigan in the men's NCAA championship game.",
-          "published": "2026-04-05",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48403973/uconn-solo-ball-uncertain-ncaa-tournament-title-game"
-        },
-        {
-          "headline": "UConn's Solo Ball uncertain for NCAA tournament title game",
-          "description": "UConn guard Solo Ball has a foot injury and will not practice as the Huskies prepare to face Michigan in the men's NCAA championship game.",
-          "published": "2026-04-05",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48403973/uconn-solo-ball-uncertain-ncaa-tournament-title-game"
         }
       ]
     },
@@ -151,19 +96,6 @@
         }
       ]
     },
-    "356": {
-      "bracket_name": "Illinois",
-      "region": "South",
-      "seed": 3,
-      "articles": [
-        {
-          "headline": "Broken horn delays Iowa-Illinois Elite 8 game 11 minutes",
-          "description": "The Elite Eight matchup between Illinois and Iowa on Saturday was delayed 11 minutes by a broken buzzer at the Toyota Center.",
-          "published": "2026-03-29",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48333882/broken-horn-delays-iowa-illinois-elite-8-game-11-minutes"
-        }
-      ]
-    },
     "2294": {
       "bracket_name": "Iowa",
       "region": "South",
@@ -177,16 +109,16 @@
         }
       ]
     },
-    "2305": {
-      "bracket_name": "Kansas",
-      "region": "East",
-      "seed": 4,
+    "356": {
+      "bracket_name": "Illinois",
+      "region": "South",
+      "seed": 3,
       "articles": [
         {
-          "headline": "Bill Self says coaching future at Kansas to be determined",
-          "description": "Longtime Kansas coach Bill Self said after Sunday's season-ending loss to St. John's that he has not yet made a decision about his coaching future, later adding that any decision will be based solely ",
-          "published": "2026-03-23",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48283793/bill-self-says-coaching-future-kansas-determined"
+          "headline": "Broken horn delays Iowa-Illinois Elite 8 game 11 minutes",
+          "description": "The Elite Eight matchup between Illinois and Iowa on Saturday was delayed 11 minutes by a broken buzzer at the Toyota Center.",
+          "published": "2026-03-29",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48333882/broken-horn-delays-iowa-illinois-elite-8-game-11-minutes"
         }
       ]
     },
@@ -239,6 +171,19 @@
           "description": "Caleb Foster returned from a broken foot and rescued Duke's national title hopes, helping the top-seeded Blue Devils rally from a 10-point second-half deficit to beat St. John's 80-75.",
           "published": "2026-03-28",
           "url": "https://www.espn.com/mens-college-basketball/story/_/id/48326056/caleb-foster-takes-return-duke-survives-st-john-elite-8-berth"
+        }
+      ]
+    },
+    "130": {
+      "bracket_name": "Michigan",
+      "region": "Midwest",
+      "seed": 1,
+      "articles": [
+        {
+          "headline": "UConn's Solo Ball uncertain for NCAA tournament title game",
+          "description": "UConn guard Solo Ball has a foot injury and will not practice as the Huskies prepare to face Michigan in the men's NCAA championship game.",
+          "published": "2026-04-05",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48403973/uconn-solo-ball-uncertain-ncaa-tournament-title-game"
         }
       ]
     },
