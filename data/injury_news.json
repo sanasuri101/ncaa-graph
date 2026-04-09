@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-04-09T07:11:22.189342+00:00",
-  "flagged_teams": 11,
+  "generated_at": "2026-04-09T18:54:58.470914+00:00",
+  "flagged_teams": 10,
   "teams": {
     "150": {
       "bracket_name": "Duke",
@@ -21,10 +21,10 @@
         }
       ]
     },
-    "26": {
-      "bracket_name": "UCLA",
+    "2116": {
+      "bracket_name": "UCF",
       "region": "East",
-      "seed": 7,
+      "seed": 10,
       "articles": [
         {
           "headline": "UCLA overcomes broken tooth and stubborn UCF 75-71 to advance in the NCAA Tournament",
@@ -40,10 +40,10 @@
         }
       ]
     },
-    "2116": {
-      "bracket_name": "UCF",
+    "26": {
+      "bracket_name": "UCLA",
       "region": "East",
-      "seed": 10,
+      "seed": 7,
       "articles": [
         {
           "headline": "UCLA overcomes broken tooth and stubborn UCF 75-71 to advance in the NCAA Tournament",
@@ -134,19 +134,6 @@
           "description": "Caleb Foster returned from a broken foot and rescued Duke's national title hopes, helping the top-seeded Blue Devils rally from a 10-point second-half deficit to beat St. John's 80-75.",
           "published": "2026-03-28",
           "url": "https://www.espn.com/mens-college-basketball/story/_/id/48326056/caleb-foster-takes-return-duke-survives-st-john-elite-8-berth"
-        }
-      ]
-    },
-    "41": {
-      "bracket_name": "UConn",
-      "region": "East",
-      "seed": 2,
-      "articles": [
-        {
-          "headline": "Solo Ball available for UConn in NCAA title game vs. Michigan",
-          "description": "UConn guard Solo Ball, who is dealing with a foot injury, was not listed on the initial player availability report released Sunday.",
-          "published": "2026-04-06",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48408809/solo-ball-available-uconn-ncaa-title-game-vs-michigan"
         }
       ]
     },
