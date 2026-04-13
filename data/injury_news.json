@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-13T07:48:23.561821+00:00",
+  "generated_at": "2026-04-13T19:06:25.485899+00:00",
   "flagged_teams": 9,
   "teams": {
     "150": {
@@ -59,10 +59,10 @@
         }
       ]
     },
-    "356": {
-      "bracket_name": "Illinois",
+    "2294": {
+      "bracket_name": "Iowa",
       "region": "South",
-      "seed": 3,
+      "seed": 9,
       "articles": [
         {
           "headline": "Broken horn delays Iowa-Illinois Elite 8 game 11 minutes",
@@ -72,10 +72,10 @@
         }
       ]
     },
-    "2294": {
-      "bracket_name": "Iowa",
+    "356": {
+      "bracket_name": "Illinois",
       "region": "South",
-      "seed": 9,
+      "seed": 3,
       "articles": [
         {
           "headline": "Broken horn delays Iowa-Illinois Elite 8 game 11 minutes",
