@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-17T07:19:29.942487+00:00",
+  "generated_at": "2026-04-17T18:50:04.582829+00:00",
   "flagged_teams": 9,
   "teams": {
     "150": {
@@ -21,10 +21,10 @@
         }
       ]
     },
-    "26": {
-      "bracket_name": "UCLA",
+    "2116": {
+      "bracket_name": "UCF",
       "region": "East",
-      "seed": 7,
+      "seed": 10,
       "articles": [
         {
           "headline": "UCLA overcomes broken tooth and stubborn UCF 75-71 to advance in the NCAA Tournament",
@@ -40,10 +40,10 @@
         }
       ]
     },
-    "2116": {
-      "bracket_name": "UCF",
+    "26": {
+      "bracket_name": "UCLA",
       "region": "East",
-      "seed": 10,
+      "seed": 7,
       "articles": [
         {
           "headline": "UCLA overcomes broken tooth and stubborn UCF 75-71 to advance in the NCAA Tournament",
