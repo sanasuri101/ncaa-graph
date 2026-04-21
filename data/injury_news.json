@@ -1,23 +1,35 @@
 {
-  "generated_at": "2026-04-20T18:57:26.466760+00:00",
+  "generated_at": "2026-04-21T07:21:35.733608+00:00",
   "flagged_teams": 9,
   "teams": {
-    "150": {
-      "bracket_name": "Duke",
+    "41": {
+      "bracket_name": "UConn",
       "region": "East",
-      "seed": 1,
+      "seed": 2,
       "articles": [
         {
-          "headline": "Duke star Cam Boozer says he suffered fractures around eye",
-          "description": "Duke's Cameron Boozer, a projected top-five pick in the 2026 NBA draft, said he suffered multiple fractures around one of his eyes during his team's loss to UConn in the Elite Eight.",
-          "published": "2026-04-05",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48404741/duke-star-cam-boozer-says-suffered-fractures-eye"
+          "headline": "UConn's Solo Ball to have wrist surgery, miss all of 2026-27",
+          "description": "UConn guard Solo Ball will undergo wrist surgery and miss the entire 2026-27 season.",
+          "published": "2026-04-20",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48544576/uconn-solo-ball-wrist-surgery-miss-all-next-season"
         },
         {
-          "headline": "Caleb Foster's 'incredible' return has Jon Scheyer, Duke raving",
-          "description": "Caleb Foster returned from a broken foot and rescued Duke's national title hopes, helping the top-seeded Blue Devils rally from a 10-point second-half deficit to beat St. John's 80-75.",
-          "published": "2026-03-28",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48326056/caleb-foster-takes-return-duke-survives-st-john-elite-8-berth"
+          "headline": "UConn's Solo Ball to have wrist surgery, miss all of 2026-27",
+          "description": "UConn guard Solo Ball will undergo wrist surgery and miss the entire 2026-27 season.",
+          "published": "2026-04-20",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48544576/uconn-solo-ball-wrist-surgery-miss-all-next-season"
+        },
+        {
+          "headline": "UConn's Solo Ball to have wrist surgery, miss all of 2026-27",
+          "description": "UConn guard Solo Ball will undergo wrist surgery and miss the entire 2026-27 season.",
+          "published": "2026-04-20",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48544576/uconn-solo-ball-wrist-surgery-miss-all-next-season"
+        },
+        {
+          "headline": "UConn's Solo Ball to have wrist surgery, miss all of 2026-27",
+          "description": "UConn guard Solo Ball will undergo wrist surgery and miss the entire 2026-27 season.",
+          "published": "2026-04-20",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48544576/uconn-solo-ball-wrist-surgery-miss-all-next-season"
         }
       ]
     },
@@ -59,10 +71,10 @@
         }
       ]
     },
-    "356": {
-      "bracket_name": "Illinois",
+    "2294": {
+      "bracket_name": "Iowa",
       "region": "South",
-      "seed": 3,
+      "seed": 9,
       "articles": [
         {
           "headline": "Broken horn delays Iowa-Illinois Elite 8 game 11 minutes",
@@ -72,10 +84,10 @@
         }
       ]
     },
-    "2294": {
-      "bracket_name": "Iowa",
+    "356": {
+      "bracket_name": "Illinois",
       "region": "South",
-      "seed": 9,
+      "seed": 3,
       "articles": [
         {
           "headline": "Broken horn delays Iowa-Illinois Elite 8 game 11 minutes",
@@ -124,16 +136,16 @@
         }
       ]
     },
-    "96": {
-      "bracket_name": "Kentucky",
-      "region": "Midwest",
-      "seed": 7,
+    "150": {
+      "bracket_name": "Duke",
+      "region": "East",
+      "seed": 1,
       "articles": [
         {
-          "headline": "Manga keeps Kentucky's Jayden Quaintance grounded in March Madness",
-          "description": "The Kentucky forward has gotten into manga as a way to help time pass while he heals from injury.",
-          "published": "2026-03-22",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48273040/march-madness-2026-jayden-quaintance-kentucky-wildcats-manga"
+          "headline": "Caleb Foster's 'incredible' return has Jon Scheyer, Duke raving",
+          "description": "Caleb Foster returned from a broken foot and rescued Duke's national title hopes, helping the top-seeded Blue Devils rally from a 10-point second-half deficit to beat St. John's 80-75.",
+          "published": "2026-03-28",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48326056/caleb-foster-takes-return-duke-survives-st-john-elite-8-berth"
         }
       ]
     }
