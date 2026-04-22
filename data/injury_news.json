@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-22T07:20:15.995464+00:00",
+  "generated_at": "2026-04-22T19:04:16.638389+00:00",
   "flagged_teams": 9,
   "teams": {
     "41": {
@@ -10,19 +10,19 @@
         {
           "headline": "UConn's Solo Ball to have wrist surgery, miss all of 2026-27",
           "description": "UConn guard Solo Ball will undergo wrist surgery and miss the entire 2026-27 season.",
-          "published": "2026-04-20",
+          "published": "2026-04-22",
           "url": "https://www.espn.com/mens-college-basketball/story/_/id/48544576/uconn-solo-ball-wrist-surgery-miss-all-next-season"
         },
         {
           "headline": "UConn's Solo Ball to have wrist surgery, miss all of 2026-27",
           "description": "UConn guard Solo Ball will undergo wrist surgery and miss the entire 2026-27 season.",
-          "published": "2026-04-20",
+          "published": "2026-04-22",
           "url": "https://www.espn.com/mens-college-basketball/story/_/id/48544576/uconn-solo-ball-wrist-surgery-miss-all-next-season"
         },
         {
           "headline": "UConn's Solo Ball to have wrist surgery, miss all of 2026-27",
           "description": "UConn guard Solo Ball will undergo wrist surgery and miss the entire 2026-27 season.",
-          "published": "2026-04-20",
+          "published": "2026-04-22",
           "url": "https://www.espn.com/mens-college-basketball/story/_/id/48544576/uconn-solo-ball-wrist-surgery-miss-all-next-season"
         },
         {
@@ -33,10 +33,10 @@
         }
       ]
     },
-    "2116": {
-      "bracket_name": "UCF",
+    "26": {
+      "bracket_name": "UCLA",
       "region": "East",
-      "seed": 10,
+      "seed": 7,
       "articles": [
         {
           "headline": "UCLA overcomes broken tooth and stubborn UCF 75-71 to advance in the NCAA Tournament",
@@ -52,10 +52,10 @@
         }
       ]
     },
-    "26": {
-      "bracket_name": "UCLA",
+    "2116": {
+      "bracket_name": "UCF",
       "region": "East",
-      "seed": 7,
+      "seed": 10,
       "articles": [
         {
           "headline": "UCLA overcomes broken tooth and stubborn UCF 75-71 to advance in the NCAA Tournament",
