@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-22T19:04:16.638389+00:00",
+  "generated_at": "2026-04-23T07:22:22.471378+00:00",
   "flagged_teams": 9,
   "teams": {
     "41": {
@@ -28,7 +28,7 @@
         {
           "headline": "UConn's Solo Ball to have wrist surgery, miss all of 2026-27",
           "description": "UConn guard Solo Ball will undergo wrist surgery and miss the entire 2026-27 season.",
-          "published": "2026-04-20",
+          "published": "2026-04-22",
           "url": "https://www.espn.com/mens-college-basketball/story/_/id/48544576/uconn-solo-ball-wrist-surgery-miss-all-next-season"
         }
       ]
@@ -38,12 +38,6 @@
       "region": "East",
       "seed": 7,
       "articles": [
-        {
-          "headline": "UCLA overcomes broken tooth and stubborn UCF 75-71 to advance in the NCAA Tournament",
-          "description": "\u2014 Mick Cronin raised a plastic cup to another NCAA Tournament victory for UCLA with an energy drink he brought with him to the podium.",
-          "published": "2026-03-21",
-          "url": "http://www.espn.com/ncb/recap?gameId=401856496"
-        },
         {
           "headline": "UCLA overcomes broken tooth and stubborn UCF 75-71 to advance in the NCAA Tournament",
           "description": "\u2014 Mick Cronin raised a plastic cup to another NCAA Tournament victory for UCLA with an energy drink he brought with him to the podium.",
@@ -62,19 +56,13 @@
           "description": "\u2014 Mick Cronin raised a plastic cup to another NCAA Tournament victory for UCLA with an energy drink he brought with him to the podium.",
           "published": "2026-03-21",
           "url": "http://www.espn.com/ncb/recap?gameId=401856496"
-        },
-        {
-          "headline": "UCLA overcomes broken tooth and stubborn UCF 75-71 to advance in the NCAA Tournament",
-          "description": "\u2014 Mick Cronin raised a plastic cup to another NCAA Tournament victory for UCLA with an energy drink he brought with him to the podium.",
-          "published": "2026-03-21",
-          "url": "http://www.espn.com/ncb/recap?gameId=401856496"
         }
       ]
     },
-    "2294": {
-      "bracket_name": "Iowa",
+    "356": {
+      "bracket_name": "Illinois",
       "region": "South",
-      "seed": 9,
+      "seed": 3,
       "articles": [
         {
           "headline": "Broken horn delays Iowa-Illinois Elite 8 game 11 minutes",
@@ -84,10 +72,10 @@
         }
       ]
     },
-    "356": {
-      "bracket_name": "Illinois",
+    "2294": {
+      "bracket_name": "Iowa",
       "region": "South",
-      "seed": 3,
+      "seed": 9,
       "articles": [
         {
           "headline": "Broken horn delays Iowa-Illinois Elite 8 game 11 minutes",
@@ -123,10 +111,10 @@
         }
       ]
     },
-    "2599": {
-      "bracket_name": "St John's",
+    "150": {
+      "bracket_name": "Duke",
       "region": "East",
-      "seed": 5,
+      "seed": 1,
       "articles": [
         {
           "headline": "Caleb Foster's 'incredible' return has Jon Scheyer, Duke raving",
@@ -136,10 +124,10 @@
         }
       ]
     },
-    "150": {
-      "bracket_name": "Duke",
+    "2599": {
+      "bracket_name": "St John's",
       "region": "East",
-      "seed": 1,
+      "seed": 5,
       "articles": [
         {
           "headline": "Caleb Foster's 'incredible' return has Jon Scheyer, Duke raving",
