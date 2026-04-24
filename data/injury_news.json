@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-24T07:48:36.109950+00:00",
+  "generated_at": "2026-04-24T18:41:12.753779+00:00",
   "flagged_teams": 9,
   "teams": {
     "41": {
@@ -111,10 +111,10 @@
         }
       ]
     },
-    "2599": {
-      "bracket_name": "St John's",
+    "150": {
+      "bracket_name": "Duke",
       "region": "East",
-      "seed": 5,
+      "seed": 1,
       "articles": [
         {
           "headline": "Caleb Foster's 'incredible' return has Jon Scheyer, Duke raving",
@@ -124,10 +124,10 @@
         }
       ]
     },
-    "150": {
-      "bracket_name": "Duke",
+    "2599": {
+      "bracket_name": "St John's",
       "region": "East",
-      "seed": 1,
+      "seed": 5,
       "articles": [
         {
           "headline": "Caleb Foster's 'incredible' return has Jon Scheyer, Duke raving",
