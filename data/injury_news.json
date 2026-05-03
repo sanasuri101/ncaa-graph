@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-05-02T18:46:38.552370+00:00",
+  "generated_at": "2026-05-03T07:47:26.616583+00:00",
   "flagged_teams": 9,
   "teams": {
-    "2116": {
-      "bracket_name": "UCF",
+    "26": {
+      "bracket_name": "UCLA",
       "region": "East",
-      "seed": 10,
+      "seed": 7,
       "articles": [
         {
           "headline": "UCLA overcomes broken tooth and stubborn UCF 75-71 to advance in the NCAA Tournament",
@@ -15,10 +15,10 @@
         }
       ]
     },
-    "26": {
-      "bracket_name": "UCLA",
+    "2116": {
+      "bracket_name": "UCF",
       "region": "East",
-      "seed": 7,
+      "seed": 10,
       "articles": [
         {
           "headline": "UCLA overcomes broken tooth and stubborn UCF 75-71 to advance in the NCAA Tournament",
@@ -80,10 +80,10 @@
         }
       ]
     },
-    "150": {
-      "bracket_name": "Duke",
+    "2599": {
+      "bracket_name": "St John's",
       "region": "East",
-      "seed": 1,
+      "seed": 5,
       "articles": [
         {
           "headline": "Caleb Foster's 'incredible' return has Jon Scheyer, Duke raving",
@@ -93,10 +93,10 @@
         }
       ]
     },
-    "2599": {
-      "bracket_name": "St John's",
+    "150": {
+      "bracket_name": "Duke",
       "region": "East",
-      "seed": 5,
+      "seed": 1,
       "articles": [
         {
           "headline": "Caleb Foster's 'incredible' return has Jon Scheyer, Duke raving",
