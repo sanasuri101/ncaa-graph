@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-05-27T20:04:30.424957+00:00",
-  "flagged_teams": 9,
+  "generated_at": "2026-05-28T09:42:41.089184+00:00",
+  "flagged_teams": 7,
   "teams": {
     "26": {
       "bracket_name": "UCLA",
@@ -77,32 +77,6 @@
           "description": "SMU coach Andy Enfield said standout guard B.J. Edwards sat out Wednesday's loss to Miami (Ohio) in the First Four because he didn't feel \"game ready\" after the team announced last Friday that he woul",
           "published": "2026-03-19",
           "url": "https://www.espn.com/mens-college-basketball/story/_/id/48246208/smu-enfield-denies-misleading-ncaa-committee-edwards-injury"
-        }
-      ]
-    },
-    "150": {
-      "bracket_name": "Duke",
-      "region": "East",
-      "seed": 1,
-      "articles": [
-        {
-          "headline": "Caleb Foster's 'incredible' return has Jon Scheyer, Duke raving",
-          "description": "Caleb Foster returned from a broken foot and rescued Duke's national title hopes, helping the top-seeded Blue Devils rally from a 10-point second-half deficit to beat St. John's 80-75.",
-          "published": "2026-03-28",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48326056/caleb-foster-takes-return-duke-survives-st-john-elite-8-berth"
-        }
-      ]
-    },
-    "2599": {
-      "bracket_name": "St John's",
-      "region": "East",
-      "seed": 5,
-      "articles": [
-        {
-          "headline": "Caleb Foster's 'incredible' return has Jon Scheyer, Duke raving",
-          "description": "Caleb Foster returned from a broken foot and rescued Duke's national title hopes, helping the top-seeded Blue Devils rally from a 10-point second-half deficit to beat St. John's 80-75.",
-          "published": "2026-03-28",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48326056/caleb-foster-takes-return-duke-survives-st-john-elite-8-berth"
         }
       ]
     },
