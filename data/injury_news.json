@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-06-01T11:06:53.436211+00:00",
-  "flagged_teams": 7,
+  "generated_at": "2026-06-01T21:24:53.916365+00:00",
+  "flagged_teams": 6,
   "teams": {
     "26": {
       "bracket_name": "UCLA",
@@ -28,19 +28,6 @@
         }
       ]
     },
-    "356": {
-      "bracket_name": "Illinois",
-      "region": "South",
-      "seed": 3,
-      "articles": [
-        {
-          "headline": "Broken horn delays Iowa-Illinois Elite 8 game 11 minutes",
-          "description": "The Elite Eight matchup between Illinois and Iowa on Saturday was delayed 11 minutes by a broken buzzer at the Toyota Center.",
-          "published": "2026-03-29",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48333882/broken-horn-delays-iowa-illinois-elite-8-game-11-minutes"
-        }
-      ]
-    },
     "2294": {
       "bracket_name": "Iowa",
       "region": "South",
@@ -54,16 +41,16 @@
         }
       ]
     },
-    "251": {
-      "bracket_name": "Texas",
-      "region": "West",
-      "seed": 11,
+    "356": {
+      "bracket_name": "Illinois",
+      "region": "South",
+      "seed": 3,
       "articles": [
         {
-          "headline": "Texas' Jordan Pope says he played with broken foot vs. Purdue",
-          "description": "Texas guard Jordan Pope revealed after the Longhorns' 79-77 Sweet 16 loss to Purdue that he played the game with a broken foot.",
-          "published": "2026-03-27",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48318302/texas-jordan-pope-played-broken-foot-loss-purdue"
+          "headline": "Broken horn delays Iowa-Illinois Elite 8 game 11 minutes",
+          "description": "The Elite Eight matchup between Illinois and Iowa on Saturday was delayed 11 minutes by a broken buzzer at the Toyota Center.",
+          "published": "2026-03-29",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48333882/broken-horn-delays-iowa-illinois-elite-8-game-11-minutes"
         }
       ]
     },
