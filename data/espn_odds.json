@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-02T09:59:22.204520+00:00",
+  "generated_at": "2026-06-02T21:49:28.755757+00:00",
   "games": {
     "401856478": {
       "game_id": "401856478",
@@ -11,28 +11,8 @@
       "away_name": "Siena Saints",
       "completed": true,
       "neutral": true,
-      "odds": {
-        "source": "core_odds",
-        "provider": "DraftKings",
-        "spread": -28.5,
-        "over_under": 137.5,
-        "over_odds": -110.0,
-        "under_odds": -110.0,
-        "home_moneyline": -20000,
-        "away_moneyline": 3500,
-        "home_implied_pct": 99.5,
-        "away_implied_pct": 2.8,
-        "open_home_ml": "-20000",
-        "open_away_ml": "+3500",
-        "line_movement": 0.0
-      },
-      "bpi": {
-        "home_bpi_win_pct": 99.0,
-        "away_bpi_win_pct": 1.0,
-        "bpi_pred_margin": 28.9,
-        "matchup_quality": 56.3,
-        "last_modified": "2026-03-19T08:05Z"
-      }
+      "odds": null,
+      "bpi": null
     },
     "401856479": {
       "game_id": "401856479",
@@ -44,28 +24,8 @@
       "away_name": "TCU Horned Frogs",
       "completed": true,
       "neutral": true,
-      "odds": {
-        "source": "core_odds",
-        "provider": "DraftKings",
-        "spread": -2.5,
-        "over_under": 145.5,
-        "over_odds": -110.0,
-        "under_odds": -110.0,
-        "home_moneyline": -142,
-        "away_moneyline": 120,
-        "home_implied_pct": 58.7,
-        "away_implied_pct": 45.5,
-        "open_home_ml": "-218",
-        "open_away_ml": "+180",
-        "line_movement": -9.9
-      },
-      "bpi": {
-        "home_bpi_win_pct": 65.4,
-        "away_bpi_win_pct": 34.6,
-        "bpi_pred_margin": 4.0,
-        "matchup_quality": 81.5,
-        "last_modified": "2026-03-19T08:05Z"
-      }
+      "odds": null,
+      "bpi": null
     },
     "401856482": {
       "game_id": "401856482",
@@ -77,28 +37,8 @@
       "away_name": "South Florida Bulls",
       "completed": true,
       "neutral": true,
-      "odds": {
-        "source": "core_odds",
-        "provider": "DraftKings",
-        "spread": -3.5,
-        "over_under": 160.5,
-        "over_odds": -108.0,
-        "under_odds": -112.0,
-        "home_moneyline": -170,
-        "away_moneyline": 142,
-        "home_implied_pct": 63.0,
-        "away_implied_pct": 41.3,
-        "open_home_ml": "-345",
-        "open_away_ml": "+275",
-        "line_movement": -14.5
-      },
-      "bpi": {
-        "home_bpi_win_pct": 80.9,
-        "away_bpi_win_pct": 19.1,
-        "bpi_pred_margin": 9.0,
-        "matchup_quality": 81.5,
-        "last_modified": "2026-03-19T08:05Z"
-      }
+      "odds": null,
+      "bpi": null
     },
     "401856483": {
       "game_id": "401856483",
@@ -110,28 +50,8 @@
       "away_name": "North Dakota State Bison",
       "completed": true,
       "neutral": true,
-      "odds": {
-        "source": "core_odds",
-        "provider": "DraftKings",
-        "spread": -16.5,
-        "over_under": 144.5,
-        "over_odds": -105.0,
-        "under_odds": -115.0,
-        "home_moneyline": -1650,
-        "away_moneyline": 950,
-        "home_implied_pct": 94.3,
-        "away_implied_pct": 9.5,
-        "open_home_ml": "-1600",
-        "open_away_ml": "+900",
-        "line_movement": 0.2
-      },
-      "bpi": {
-        "home_bpi_win_pct": 94.2,
-        "away_bpi_win_pct": 5.8,
-        "bpi_pred_margin": 17.5,
-        "matchup_quality": 64.8,
-        "last_modified": "2026-03-19T08:05Z"
-      }
+      "odds": null,
+      "bpi": null
     },
     "401856480": {
       "game_id": "401856480",
@@ -144,7 +64,7 @@
       "completed": true,
       "neutral": true,
       "odds": {
-        "source": "core_odds",
+        "source": "pickcenter",
         "provider": "DraftKings",
         "spread": -10.5,
         "over_under": 161.5,
@@ -154,9 +74,9 @@
         "away_moneyline": 400,
         "home_implied_pct": 84.3,
         "away_implied_pct": 20.0,
-        "open_home_ml": "-1050",
-        "open_away_ml": "+675",
-        "line_movement": -7.0
+        "open_home_ml": null,
+        "open_away_ml": null,
+        "line_movement": null
       },
       "bpi": {
         "home_bpi_win_pct": 76.3,
