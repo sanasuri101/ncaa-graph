@@ -1,20 +1,7 @@
 {
-  "generated_at": "2026-06-04T09:42:36.887035+00:00",
+  "generated_at": "2026-06-04T19:57:48.239414+00:00",
   "flagged_teams": 6,
   "teams": {
-    "2116": {
-      "bracket_name": "UCF",
-      "region": "East",
-      "seed": 10,
-      "articles": [
-        {
-          "headline": "UCLA overcomes broken tooth and stubborn UCF 75-71 to advance in the NCAA Tournament",
-          "description": "\u2014 Mick Cronin raised a plastic cup to another NCAA Tournament victory for UCLA with an energy drink he brought with him to the podium.",
-          "published": "2026-03-21",
-          "url": "http://www.espn.com/ncb/recap?gameId=401856496"
-        }
-      ]
-    },
     "26": {
       "bracket_name": "UCLA",
       "region": "East",
@@ -28,10 +15,23 @@
         }
       ]
     },
-    "356": {
-      "bracket_name": "Illinois",
+    "2116": {
+      "bracket_name": "UCF",
+      "region": "East",
+      "seed": 10,
+      "articles": [
+        {
+          "headline": "UCLA overcomes broken tooth and stubborn UCF 75-71 to advance in the NCAA Tournament",
+          "description": "\u2014 Mick Cronin raised a plastic cup to another NCAA Tournament victory for UCLA with an energy drink he brought with him to the podium.",
+          "published": "2026-03-21",
+          "url": "http://www.espn.com/ncb/recap?gameId=401856496"
+        }
+      ]
+    },
+    "2294": {
+      "bracket_name": "Iowa",
       "region": "South",
-      "seed": 3,
+      "seed": 9,
       "articles": [
         {
           "headline": "Broken horn delays Iowa-Illinois Elite 8 game 11 minutes",
@@ -41,10 +41,10 @@
         }
       ]
     },
-    "2294": {
-      "bracket_name": "Iowa",
+    "356": {
+      "bracket_name": "Illinois",
       "region": "South",
-      "seed": 9,
+      "seed": 3,
       "articles": [
         {
           "headline": "Broken horn delays Iowa-Illinois Elite 8 game 11 minutes",
