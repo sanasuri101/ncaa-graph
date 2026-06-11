@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-06-11T10:02:18.357215+00:00",
-  "flagged_teams": 6,
+  "generated_at": "2026-06-11T20:13:50.241385+00:00",
+  "flagged_teams": 4,
   "teams": {
     "2116": {
       "bracket_name": "UCF",
@@ -25,32 +25,6 @@
           "description": "\u2014 Mick Cronin raised a plastic cup to another NCAA Tournament victory for UCLA with an energy drink he brought with him to the podium.",
           "published": "2026-03-21",
           "url": "http://www.espn.com/ncb/recap?gameId=401856496"
-        }
-      ]
-    },
-    "356": {
-      "bracket_name": "Illinois",
-      "region": "South",
-      "seed": 3,
-      "articles": [
-        {
-          "headline": "Broken horn delays Iowa-Illinois Elite 8 game 11 minutes",
-          "description": "The Elite Eight matchup between Illinois and Iowa on Saturday was delayed 11 minutes by a broken buzzer at the Toyota Center.",
-          "published": "2026-03-29",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48333882/broken-horn-delays-iowa-illinois-elite-8-game-11-minutes"
-        }
-      ]
-    },
-    "2294": {
-      "bracket_name": "Iowa",
-      "region": "South",
-      "seed": 9,
-      "articles": [
-        {
-          "headline": "Broken horn delays Iowa-Illinois Elite 8 game 11 minutes",
-          "description": "The Elite Eight matchup between Illinois and Iowa on Saturday was delayed 11 minutes by a broken buzzer at the Toyota Center.",
-          "published": "2026-03-29",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48333882/broken-horn-delays-iowa-illinois-elite-8-game-11-minutes"
         }
       ]
     },
