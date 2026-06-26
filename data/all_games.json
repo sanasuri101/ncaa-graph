@@ -11202,7 +11202,7 @@
     "team2_score": "89",
     "team2_winner": true,
     "neutral": false,
-    "venue": "Walter Pyramid"
+    "venue": "LBS Financial Credit Union Pyramid"
   },
   {
     "id": "401809097",
@@ -11760,21 +11760,6 @@
     "venue": "T-Mobile Center"
   },
   {
-    "id": "401856484",
-    "date": "2026-03-19",
-    "name": "Texas Longhorns at BYU Cougars",
-    "team1_id": "252",
-    "team1_name": "BYU Cougars",
-    "team1_score": "71",
-    "team1_winner": false,
-    "team2_id": "251",
-    "team2_name": "Texas Longhorns",
-    "team2_score": "79",
-    "team2_winner": true,
-    "neutral": true,
-    "venue": "Moda Center"
-  },
-  {
     "id": "401829412",
     "date": "2025-11-08",
     "name": "Lafayette Leopards at Texas Longhorns",
@@ -12223,6 +12208,21 @@
     "team2_winner": true,
     "neutral": true,
     "venue": "UD Arena"
+  },
+  {
+    "id": "401856484",
+    "date": "2026-03-19",
+    "name": "Texas Longhorns at BYU Cougars",
+    "team1_id": "252",
+    "team1_name": "BYU Cougars",
+    "team1_score": "71",
+    "team1_winner": false,
+    "team2_id": "251",
+    "team2_name": "Texas Longhorns",
+    "team2_score": "79",
+    "team2_winner": true,
+    "neutral": true,
+    "venue": "Moda Center"
   },
   {
     "id": "401856537",
@@ -21192,7 +21192,7 @@
     "team2_score": "68",
     "team2_winner": false,
     "neutral": false,
-    "venue": "Beeghly Center"
+    "venue": "Zidian Family Arena at Beeghly Center"
   },
   {
     "id": "401817510",
