@@ -4665,6 +4665,21 @@
     "venue": "United Center"
   },
   {
+    "id": "401856519",
+    "date": "2026-03-20",
+    "name": "Queens University Royals at Purdue Boilermakers",
+    "team1_id": "2509",
+    "team1_name": "Purdue Boilermakers",
+    "team1_score": "104",
+    "team1_winner": true,
+    "team2_id": "2511",
+    "team2_name": "Queens University Royals",
+    "team2_score": "71",
+    "team2_winner": false,
+    "neutral": true,
+    "venue": "Enterprise Center"
+  },
+  {
     "id": "401817492",
     "date": "2025-11-28",
     "name": "Queens University Royals at Virginia Cavaliers",
@@ -4693,21 +4708,6 @@
     "team2_winner": false,
     "neutral": false,
     "venue": "Neville Arena"
-  },
-  {
-    "id": "401856519",
-    "date": "2026-03-20",
-    "name": "Queens University Royals at Purdue Boilermakers",
-    "team1_id": "2509",
-    "team1_name": "Purdue Boilermakers",
-    "team1_score": "104",
-    "team1_winner": true,
-    "team2_id": "2511",
-    "team2_name": "Queens University Royals",
-    "team2_score": "71",
-    "team2_winner": false,
-    "neutral": true,
-    "venue": "Enterprise Center"
   },
   {
     "id": "401823764",
@@ -5250,6 +5250,36 @@
     "venue": "Benchmark International Arena"
   },
   {
+    "id": "401814498",
+    "date": "2026-01-03",
+    "name": "Akron Zips at Miami (OH) RedHawks",
+    "team1_id": "193",
+    "team1_name": "Miami (OH) RedHawks",
+    "team1_score": "76",
+    "team1_winner": true,
+    "team2_id": "2006",
+    "team2_name": "Akron Zips",
+    "team2_score": "73",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "Millett Hall"
+  },
+  {
+    "id": "401845848",
+    "date": "2026-02-07",
+    "name": "Akron Zips at Troy Trojans",
+    "team1_id": "2653",
+    "team1_name": "Troy Trojans",
+    "team1_score": "79",
+    "team1_winner": true,
+    "team2_id": "2006",
+    "team2_name": "Akron Zips",
+    "team2_score": "69",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "Trojan Arena"
+  },
+  {
     "id": "401811098",
     "date": "2025-11-20",
     "name": "Alabama Crimson Tide at Illinois Fighting Illini",
@@ -5698,21 +5728,6 @@
     "team2_winner": true,
     "neutral": false,
     "venue": "Nutter Center"
-  },
-  {
-    "id": "401814498",
-    "date": "2026-01-03",
-    "name": "Akron Zips at Miami (OH) RedHawks",
-    "team1_id": "193",
-    "team1_name": "Miami (OH) RedHawks",
-    "team1_score": "76",
-    "team1_winner": true,
-    "team2_id": "2006",
-    "team2_name": "Akron Zips",
-    "team2_score": "73",
-    "team2_winner": false,
-    "neutral": false,
-    "venue": "Millett Hall"
   },
   {
     "id": "401856436",
@@ -6703,21 +6718,6 @@
     "team2_winner": true,
     "neutral": false,
     "venue": "Viejas Arena"
-  },
-  {
-    "id": "401845848",
-    "date": "2026-02-07",
-    "name": "Akron Zips at Troy Trojans",
-    "team1_id": "2653",
-    "team1_name": "Troy Trojans",
-    "team1_score": "79",
-    "team1_winner": true,
-    "team2_id": "2006",
-    "team2_name": "Akron Zips",
-    "team2_score": "69",
-    "team2_winner": false,
-    "neutral": false,
-    "venue": "Trojan Arena"
   },
   {
     "id": "401820672",
