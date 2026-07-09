@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-09T09:28:20.589605+00:00",
+  "generated_at": "2026-07-09T19:27:20.319359+00:00",
   "flagged_teams": 5,
   "teams": {
     "2599": {
@@ -24,13 +24,19 @@
           "description": "Donnie Freeman, who transferred from Syracuse to St. John's, will miss the 2026-27 season after tearing his Achilles.",
           "published": "2026-07-01",
           "url": "https://www.espn.com/mens-college-basketball/story/_/id/49241773/st-john-loses-donnie-freeman-torn-achilles"
+        },
+        {
+          "headline": "St. John's loses Donnie Freeman to torn Achilles",
+          "description": "Donnie Freeman, who transferred from Syracuse to St. John's, will miss the 2026-27 season after tearing his Achilles.",
+          "published": "2026-07-01",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/49241773/st-john-loses-donnie-freeman-torn-achilles"
         }
       ]
     },
-    "2116": {
-      "bracket_name": "UCF",
+    "26": {
+      "bracket_name": "UCLA",
       "region": "East",
-      "seed": 10,
+      "seed": 7,
       "articles": [
         {
           "headline": "UCLA overcomes broken tooth and stubborn UCF 75-71 to advance in the NCAA Tournament",
@@ -40,10 +46,10 @@
         }
       ]
     },
-    "26": {
-      "bracket_name": "UCLA",
+    "2116": {
+      "bracket_name": "UCF",
       "region": "East",
-      "seed": 7,
+      "seed": 10,
       "articles": [
         {
           "headline": "UCLA overcomes broken tooth and stubborn UCF 75-71 to advance in the NCAA Tournament",
