@@ -1,38 +1,7 @@
 {
-  "generated_at": "2026-07-30T19:14:06.985601+00:00",
+  "generated_at": "2026-07-31T08:31:57.292604+00:00",
   "flagged_teams": 5,
   "teams": {
-    "2599": {
-      "bracket_name": "St John's",
-      "region": "East",
-      "seed": 5,
-      "articles": [
-        {
-          "headline": "St. John's loses Donnie Freeman to torn Achilles",
-          "description": "Donnie Freeman, who transferred from Syracuse to St. John's, will miss the 2026-27 season after tearing his Achilles.",
-          "published": "2026-07-01",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/49241773/st-john-loses-donnie-freeman-torn-achilles"
-        },
-        {
-          "headline": "St. John's loses Donnie Freeman to torn Achilles",
-          "description": "Donnie Freeman, who transferred from Syracuse to St. John's, will miss the 2026-27 season after tearing his Achilles.",
-          "published": "2026-07-01",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/49241773/st-john-loses-donnie-freeman-torn-achilles"
-        },
-        {
-          "headline": "St. John's loses Donnie Freeman to torn Achilles",
-          "description": "Donnie Freeman, who transferred from Syracuse to St. John's, will miss the 2026-27 season after tearing his Achilles.",
-          "published": "2026-07-01",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/49241773/st-john-loses-donnie-freeman-torn-achilles"
-        },
-        {
-          "headline": "St. John's loses Donnie Freeman to torn Achilles",
-          "description": "Donnie Freeman, who transferred from Syracuse to St. John's, will miss the 2026-27 season after tearing his Achilles.",
-          "published": "2026-07-01",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/49241773/st-john-loses-donnie-freeman-torn-achilles"
-        }
-      ]
-    },
     "26": {
       "bracket_name": "UCLA",
       "region": "East",
@@ -69,6 +38,19 @@
           "description": "SMU coach Andy Enfield said standout guard B.J. Edwards sat out Wednesday's loss to Miami (Ohio) in the First Four because he didn't feel \"game ready\" after the team announced last Friday that he woul",
           "published": "2026-03-19",
           "url": "https://www.espn.com/mens-college-basketball/story/_/id/48246208/smu-enfield-denies-misleading-ncaa-committee-edwards-injury"
+        }
+      ]
+    },
+    "2599": {
+      "bracket_name": "St John's",
+      "region": "East",
+      "seed": 5,
+      "articles": [
+        {
+          "headline": "St. John's loses Donnie Freeman to torn Achilles",
+          "description": "Donnie Freeman, who transferred from Syracuse to St. John's, will miss the 2026-27 season after tearing his Achilles.",
+          "published": "2026-07-01",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/49241773/st-john-loses-donnie-freeman-torn-achilles"
         }
       ]
     },
