@@ -1,6 +1,62 @@
 {
-  "generated_at": "2026-08-06T23:53:30.211527+00:00",
+  "generated_at": "2026-08-07T06:57:59.254491+00:00",
   "teams": {
+    "153": {
+      "bracket_name": "North Carolina",
+      "region": "South",
+      "seed": 6,
+      "adj_em_penalty": 6.0,
+      "players": [
+        {
+          "name": "Caleb Wilson",
+          "status": "Out for season - broken right thumb (surgery March 5)",
+          "impact": "Team's leading scorer (19.8 ppg) and rebounder (9.4 rpg). Top-5 NBA draft pick. Out since Feb 10 with left hand fracture, then broke right thumb dunking in practice March 5. UNC went 5-1 without him but faces tougher competition in tournament.",
+          "adj_em_impact": -6.0
+        }
+      ],
+      "notes": "UNC's go-to lineup without Wilson: Trimble/Dixon/Bogavac backcourt, Stevenson at 4, Veesaar at center. +22 net rating with that quintet in last 4 games but vs weaker ACC opponents.",
+      "override_date": "2026-03-15",
+      "news_flags": [],
+      "has_override": true,
+      "has_news_flag": false
+    },
+    "2567": {
+      "bracket_name": "SMU",
+      "region": "Midwest",
+      "seed": 11,
+      "adj_em_penalty": 0,
+      "players": [],
+      "notes": "",
+      "override_date": "",
+      "news_flags": [
+        {
+          "headline": "SMU's Enfield denies misleading NCAA committee on Edwards' injury",
+          "description": "SMU coach Andy Enfield said standout guard B.J. Edwards sat out Wednesday's loss to Miami (Ohio) in the First Four because he didn't feel \"game ready\" after the team announced last Friday that he woul",
+          "published": "2026-03-19",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48246208/smu-enfield-denies-misleading-ncaa-committee-edwards-injury"
+        }
+      ],
+      "has_override": false,
+      "has_news_flag": true
+    },
+    "2509": {
+      "bracket_name": "Purdue",
+      "region": "West",
+      "seed": 2,
+      "adj_em_penalty": 2.0,
+      "players": [
+        {
+          "name": "C.J. Cox",
+          "status": "Questionable - hyperextended right knee (March 22 vs Miami, did not return)",
+          "impact": "8.3 PPG / 2.6 RPG / 24.4 MPG | 38.4% 3P | starts all 36 games. Primary perimeter defender and sharpshooter."
+        }
+      ],
+      "notes": "Cox suffered hyperextended right knee on fast break in 2nd half. Matt Painter confirmed diagnosis. Listed game-time decision for Sweet 16 vs Texas (March 26). 4 days to recover.",
+      "override_date": "",
+      "news_flags": [],
+      "has_override": true,
+      "has_news_flag": false
+    },
     "130": {
       "bracket_name": "Michigan",
       "region": "Midwest",
@@ -38,25 +94,6 @@
       "has_override": true,
       "has_news_flag": false
     },
-    "222": {
-      "bracket_name": "Villanova",
-      "region": "West",
-      "seed": 8,
-      "adj_em_penalty": 3.5,
-      "players": [
-        {
-          "name": "Matt Hodge",
-          "status": "Out for season - torn ACL (March 3)",
-          "impact": "Starting forward. Season-ending ACL tear confirmed March 3.",
-          "adj_em_impact": -3.5
-        }
-      ],
-      "notes": "Hodge was a starting contributor. Villanova (24-8) must go deeper into bench.",
-      "override_date": "2026-03-15",
-      "news_flags": [],
-      "has_override": true,
-      "has_news_flag": false
-    },
     "41": {
       "bracket_name": "UConn",
       "region": "East",
@@ -87,200 +124,6 @@
       "has_override": true,
       "has_news_flag": true
     },
-    "228": {
-      "bracket_name": "Clemson",
-      "region": "South",
-      "seed": 8,
-      "adj_em_penalty": 3.0,
-      "players": [
-        {
-          "name": "Carter Welling",
-          "status": "Out for season - torn ACL (March 13)",
-          "impact": "Season-ending torn ACL confirmed day before Selection Sunday.",
-          "adj_em_impact": -3.0
-        }
-      ],
-      "notes": "Welling injury came March 13 \u2014 very recent, Torvik may not have fully adjusted.",
-      "override_date": "2026-03-15",
-      "news_flags": [],
-      "has_override": true,
-      "has_news_flag": false
-    },
-    "252": {
-      "bracket_name": "BYU",
-      "region": "West",
-      "seed": 6,
-      "adj_em_penalty": 4.5,
-      "players": [
-        {
-          "name": "Richie Saunders",
-          "status": "Out for season - torn ACL (Feb 14)",
-          "impact": "Star guard. Season-ending injury.",
-          "adj_em_impact": -4.5
-        }
-      ],
-      "notes": "BYU ceiling significantly lower without Saunders.",
-      "override_date": "2026-03-09",
-      "news_flags": [],
-      "has_override": true,
-      "has_news_flag": false
-    },
-    "150": {
-      "bracket_name": "Duke",
-      "region": "East",
-      "seed": 1,
-      "adj_em_penalty": 4.0,
-      "players": [
-        {
-          "name": "Caleb Foster",
-          "status": "Out - fractured right foot (surgery March 9)",
-          "impact": "Starting PG, 8.5 ppg, 40.4% 3PT, primary ball handler. Out until Final Four at earliest.",
-          "adj_em_impact": -3.2
-        },
-        {
-          "name": "Patrick Ngongba II",
-          "status": "Questionable - right foot soreness",
-          "impact": "Starting C, 10.7 ppg, 1.1 bpg, top rim protector. Expected back for NCAA opener.",
-          "adj_em_impact": -0.8
-        }
-      ],
-      "notes": "Duke operating with 7-man rotation. Cayden Boozer moves to starting PG.",
-      "override_date": "2026-03-15",
-      "news_flags": [],
-      "has_override": true,
-      "has_news_flag": false
-    },
-    "2599": {
-      "bracket_name": "St John's",
-      "region": "East",
-      "seed": 5,
-      "adj_em_penalty": 0,
-      "players": [],
-      "notes": "",
-      "override_date": "",
-      "news_flags": [
-        {
-          "headline": "St. John's loses Donnie Freeman to torn Achilles",
-          "description": "Donnie Freeman, who transferred from Syracuse to St. John's, will miss the 2026-27 season after tearing his Achilles.",
-          "published": "2026-07-01",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/49241773/st-john-loses-donnie-freeman-torn-achilles"
-        }
-      ],
-      "has_override": false,
-      "has_news_flag": true
-    },
-    "2116": {
-      "bracket_name": "UCF",
-      "region": "East",
-      "seed": 10,
-      "adj_em_penalty": 0,
-      "players": [],
-      "notes": "",
-      "override_date": "",
-      "news_flags": [
-        {
-          "headline": "UCLA overcomes broken tooth and stubborn UCF 75-71 to advance in the NCAA Tournament",
-          "description": "\u2014 Mick Cronin raised a plastic cup to another NCAA Tournament victory for UCLA with an energy drink he brought with him to the podium.",
-          "published": "2026-03-21",
-          "url": "http://www.espn.com/ncb/recap?gameId=401856496"
-        }
-      ],
-      "has_override": false,
-      "has_news_flag": true
-    },
-    "2567": {
-      "bracket_name": "SMU",
-      "region": "Midwest",
-      "seed": 11,
-      "adj_em_penalty": 0,
-      "players": [],
-      "notes": "",
-      "override_date": "",
-      "news_flags": [
-        {
-          "headline": "SMU's Enfield denies misleading NCAA committee on Edwards' injury",
-          "description": "SMU coach Andy Enfield said standout guard B.J. Edwards sat out Wednesday's loss to Miami (Ohio) in the First Four because he didn't feel \"game ready\" after the team announced last Friday that he woul",
-          "published": "2026-03-19",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48246208/smu-enfield-denies-misleading-ncaa-committee-edwards-injury"
-        }
-      ],
-      "has_override": false,
-      "has_news_flag": true
-    },
-    "2633": {
-      "bracket_name": "Tennessee",
-      "region": "Midwest",
-      "seed": 6,
-      "adj_em_penalty": 1.5,
-      "players": [
-        {
-          "name": "Nate Ament",
-          "status": "Questionable - leg injury (suffered Feb 28 vs Alabama), playing through pain in obvious discomfort",
-          "impact": "17.5 PPG / 6.6 RPG / 2.5 APG | 30.2 MPG | 40.5% FG | freshman phenom, NBA draft prospect."
-        }
-      ],
-      "notes": "Ament soldiered through first weekend in visible discomfort. Not confirmed out but effectiveness is a major question mark heading into Sweet 16 vs Iowa State.",
-      "override_date": "",
-      "news_flags": [],
-      "has_override": true,
-      "has_news_flag": false
-    },
-    "66": {
-      "bracket_name": "Iowa State",
-      "region": "Midwest",
-      "seed": 2,
-      "adj_em_penalty": 2.5,
-      "players": [
-        {
-          "name": "Joshua Jefferson",
-          "status": "Questionable - sprained left ankle (March 20 vs Tennessee State, X-rays negative)",
-          "impact": "Second-leading scorer (16.9 ppg, 7.6 rpg, 4.9 apg, 31.8 mpg). Key forward for rebounding and playmaking. X-rays negative is encouraging but ankle status must be monitored.",
-          "adj_em_impact": -2.5
-        }
-      ],
-      "notes": "Jefferson suffered ankle sprain early in 108-74 win. X-rays negative. Monitor availability for next round.",
-      "override_date": "2026-03-20",
-      "news_flags": [],
-      "has_override": true,
-      "has_news_flag": false
-    },
-    "2509": {
-      "bracket_name": "Purdue",
-      "region": "West",
-      "seed": 2,
-      "adj_em_penalty": 2.0,
-      "players": [
-        {
-          "name": "C.J. Cox",
-          "status": "Questionable - hyperextended right knee (March 22 vs Miami, did not return)",
-          "impact": "8.3 PPG / 2.6 RPG / 24.4 MPG | 38.4% 3P | starts all 36 games. Primary perimeter defender and sharpshooter."
-        }
-      ],
-      "notes": "Cox suffered hyperextended right knee on fast break in 2nd half. Matt Painter confirmed diagnosis. Listed game-time decision for Sweet 16 vs Texas (March 26). 4 days to recover.",
-      "override_date": "",
-      "news_flags": [],
-      "has_override": true,
-      "has_news_flag": false
-    },
-    "153": {
-      "bracket_name": "North Carolina",
-      "region": "South",
-      "seed": 6,
-      "adj_em_penalty": 6.0,
-      "players": [
-        {
-          "name": "Caleb Wilson",
-          "status": "Out for season - broken right thumb (surgery March 5)",
-          "impact": "Team's leading scorer (19.8 ppg) and rebounder (9.4 rpg). Top-5 NBA draft pick. Out since Feb 10 with left hand fracture, then broke right thumb dunking in practice March 5. UNC went 5-1 without him but faces tougher competition in tournament.",
-          "adj_em_impact": -6.0
-        }
-      ],
-      "notes": "UNC's go-to lineup without Wilson: Trimble/Dixon/Bogavac backcourt, Stevenson at 4, Veesaar at center. +22 net rating with that quintet in last 4 games but vs weaker ACC opponents.",
-      "override_date": "2026-03-15",
-      "news_flags": [],
-      "has_override": true,
-      "has_news_flag": false
-    },
     "26": {
       "bracket_name": "UCLA",
       "region": "East",
@@ -305,6 +148,100 @@
         }
       ],
       "has_override": true,
+      "has_news_flag": true
+    },
+    "228": {
+      "bracket_name": "Clemson",
+      "region": "South",
+      "seed": 8,
+      "adj_em_penalty": 3.0,
+      "players": [
+        {
+          "name": "Carter Welling",
+          "status": "Out for season - torn ACL (March 13)",
+          "impact": "Season-ending torn ACL confirmed day before Selection Sunday.",
+          "adj_em_impact": -3.0
+        }
+      ],
+      "notes": "Welling injury came March 13 \u2014 very recent, Torvik may not have fully adjusted.",
+      "override_date": "2026-03-15",
+      "news_flags": [],
+      "has_override": true,
+      "has_news_flag": false
+    },
+    "66": {
+      "bracket_name": "Iowa State",
+      "region": "Midwest",
+      "seed": 2,
+      "adj_em_penalty": 2.5,
+      "players": [
+        {
+          "name": "Joshua Jefferson",
+          "status": "Questionable - sprained left ankle (March 20 vs Tennessee State, X-rays negative)",
+          "impact": "Second-leading scorer (16.9 ppg, 7.6 rpg, 4.9 apg, 31.8 mpg). Key forward for rebounding and playmaking. X-rays negative is encouraging but ankle status must be monitored.",
+          "adj_em_impact": -2.5
+        }
+      ],
+      "notes": "Jefferson suffered ankle sprain early in 108-74 win. X-rays negative. Monitor availability for next round.",
+      "override_date": "2026-03-20",
+      "news_flags": [],
+      "has_override": true,
+      "has_news_flag": false
+    },
+    "2633": {
+      "bracket_name": "Tennessee",
+      "region": "Midwest",
+      "seed": 6,
+      "adj_em_penalty": 1.5,
+      "players": [
+        {
+          "name": "Nate Ament",
+          "status": "Questionable - leg injury (suffered Feb 28 vs Alabama), playing through pain in obvious discomfort",
+          "impact": "17.5 PPG / 6.6 RPG / 2.5 APG | 30.2 MPG | 40.5% FG | freshman phenom, NBA draft prospect."
+        }
+      ],
+      "notes": "Ament soldiered through first weekend in visible discomfort. Not confirmed out but effectiveness is a major question mark heading into Sweet 16 vs Iowa State.",
+      "override_date": "",
+      "news_flags": [],
+      "has_override": true,
+      "has_news_flag": false
+    },
+    "2116": {
+      "bracket_name": "UCF",
+      "region": "East",
+      "seed": 10,
+      "adj_em_penalty": 0,
+      "players": [],
+      "notes": "",
+      "override_date": "",
+      "news_flags": [
+        {
+          "headline": "UCLA overcomes broken tooth and stubborn UCF 75-71 to advance in the NCAA Tournament",
+          "description": "\u2014 Mick Cronin raised a plastic cup to another NCAA Tournament victory for UCLA with an energy drink he brought with him to the podium.",
+          "published": "2026-03-21",
+          "url": "http://www.espn.com/ncb/recap?gameId=401856496"
+        }
+      ],
+      "has_override": false,
+      "has_news_flag": true
+    },
+    "2599": {
+      "bracket_name": "St John's",
+      "region": "East",
+      "seed": 5,
+      "adj_em_penalty": 0,
+      "players": [],
+      "notes": "",
+      "override_date": "",
+      "news_flags": [
+        {
+          "headline": "St. John's loses Donnie Freeman to torn Achilles",
+          "description": "Donnie Freeman, who transferred from Syracuse to St. John's, will miss the 2026-27 season after tearing his Achilles.",
+          "published": "2026-07-01",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/49241773/st-john-loses-donnie-freeman-torn-achilles"
+        }
+      ],
+      "has_override": false,
       "has_news_flag": true
     },
     "2250": {
@@ -340,6 +277,69 @@
         }
       ],
       "notes": "Ceiling significantly lower without Toppin per ESPN.",
+      "override_date": "2026-03-09",
+      "news_flags": [],
+      "has_override": true,
+      "has_news_flag": false
+    },
+    "222": {
+      "bracket_name": "Villanova",
+      "region": "West",
+      "seed": 8,
+      "adj_em_penalty": 3.5,
+      "players": [
+        {
+          "name": "Matt Hodge",
+          "status": "Out for season - torn ACL (March 3)",
+          "impact": "Starting forward. Season-ending ACL tear confirmed March 3.",
+          "adj_em_impact": -3.5
+        }
+      ],
+      "notes": "Hodge was a starting contributor. Villanova (24-8) must go deeper into bench.",
+      "override_date": "2026-03-15",
+      "news_flags": [],
+      "has_override": true,
+      "has_news_flag": false
+    },
+    "150": {
+      "bracket_name": "Duke",
+      "region": "East",
+      "seed": 1,
+      "adj_em_penalty": 4.0,
+      "players": [
+        {
+          "name": "Caleb Foster",
+          "status": "Out - fractured right foot (surgery March 9)",
+          "impact": "Starting PG, 8.5 ppg, 40.4% 3PT, primary ball handler. Out until Final Four at earliest.",
+          "adj_em_impact": -3.2
+        },
+        {
+          "name": "Patrick Ngongba II",
+          "status": "Questionable - right foot soreness",
+          "impact": "Starting C, 10.7 ppg, 1.1 bpg, top rim protector. Expected back for NCAA opener.",
+          "adj_em_impact": -0.8
+        }
+      ],
+      "notes": "Duke operating with 7-man rotation. Cayden Boozer moves to starting PG.",
+      "override_date": "2026-03-15",
+      "news_flags": [],
+      "has_override": true,
+      "has_news_flag": false
+    },
+    "252": {
+      "bracket_name": "BYU",
+      "region": "West",
+      "seed": 6,
+      "adj_em_penalty": 4.5,
+      "players": [
+        {
+          "name": "Richie Saunders",
+          "status": "Out for season - torn ACL (Feb 14)",
+          "impact": "Star guard. Season-ending injury.",
+          "adj_em_impact": -4.5
+        }
+      ],
+      "notes": "BYU ceiling significantly lower without Saunders.",
       "override_date": "2026-03-09",
       "news_flags": [],
       "has_override": true,
