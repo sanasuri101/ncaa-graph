@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-09T06:35:59.911220+00:00",
+  "generated_at": "2026-08-09T18:28:19.763668+00:00",
   "games": {
     "401856478": {
       "game_id": "401856478",
@@ -13,7 +13,7 @@
       "neutral": true,
       "odds": {
         "source": "core_odds",
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": -28.5,
         "over_under": 137.5,
         "over_odds": -110.0,
@@ -46,7 +46,7 @@
       "neutral": true,
       "odds": {
         "source": "core_odds",
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": -2.5,
         "over_under": 145.5,
         "over_odds": -110.0,
@@ -79,7 +79,7 @@
       "neutral": true,
       "odds": {
         "source": "core_odds",
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": -3.5,
         "over_under": 160.5,
         "over_odds": -108.0,
@@ -112,7 +112,7 @@
       "neutral": true,
       "odds": {
         "source": "core_odds",
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": -16.5,
         "over_under": 144.5,
         "over_odds": -105.0,
@@ -145,7 +145,7 @@
       "neutral": true,
       "odds": {
         "source": "core_odds",
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": -10.5,
         "over_under": 161.5,
         "over_odds": -112.0,
@@ -178,7 +178,7 @@
       "neutral": true,
       "odds": {
         "source": "core_odds",
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": -14.5,
         "over_under": 158.5,
         "over_odds": -108.0,
@@ -211,7 +211,7 @@
       "neutral": true,
       "odds": {
         "source": "core_odds",
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": -2.5,
         "over_under": 156.5,
         "over_odds": -112.0,
@@ -244,7 +244,7 @@
       "neutral": true,
       "odds": {
         "source": "core_odds",
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": -30.5,
         "over_under": 151.5,
         "over_odds": -108.0,
@@ -277,7 +277,7 @@
       "neutral": true,
       "odds": {
         "source": "core_odds",
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": -6.5,
         "over_under": 162.5,
         "over_odds": -105.0,
@@ -310,7 +310,7 @@
       "neutral": true,
       "odds": {
         "source": "core_odds",
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": -12.5,
         "over_under": 148.5,
         "over_odds": -115.0,
@@ -343,7 +343,7 @@
       "neutral": true,
       "odds": {
         "source": "core_odds",
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": -13.5,
         "over_under": 139.5,
         "over_odds": -110.0,
@@ -376,7 +376,7 @@
       "neutral": true,
       "odds": {
         "source": "core_odds",
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": -2.5,
         "over_under": 150.5,
         "over_odds": -115.0,
@@ -409,7 +409,7 @@
       "neutral": true,
       "odds": {
         "source": "core_odds",
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": -2.5,
         "over_under": 149.5,
         "over_odds": -108.0,
@@ -442,7 +442,7 @@
       "neutral": true,
       "odds": {
         "source": "core_odds",
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": -10.5,
         "over_under": 133.5,
         "over_odds": -112.0,
@@ -475,7 +475,7 @@
       "neutral": true,
       "odds": {
         "source": "core_odds",
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": -5.5,
         "over_under": 151.5,
         "over_odds": -110.0,
@@ -508,7 +508,7 @@
       "neutral": true,
       "odds": {
         "source": "core_odds",
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": -30.5,
         "over_under": 147.5,
         "over_odds": -110.0,
@@ -541,7 +541,7 @@
       "neutral": true,
       "odds": {
         "source": "core_odds",
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": 1.5,
         "over_under": 146.5,
         "over_odds": -115.0,
@@ -574,7 +574,7 @@
       "neutral": true,
       "odds": {
         "source": "core_odds",
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": -20.5,
         "over_under": 152.5,
         "over_odds": -108.0,
@@ -607,7 +607,7 @@
       "neutral": true,
       "odds": {
         "source": "core_odds",
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": -25.5,
         "over_under": 159.5,
         "over_odds": -112.0,
@@ -640,7 +640,7 @@
       "neutral": true,
       "odds": {
         "source": "core_odds",
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": -1.5,
         "over_under": 167.5,
         "over_odds": -112.0,
@@ -673,7 +673,7 @@
       "neutral": true,
       "odds": {
         "source": "core_odds",
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": -6.5,
         "over_under": 154.5,
         "over_odds": -110.0,
@@ -706,7 +706,7 @@
       "neutral": true,
       "odds": {
         "source": "core_odds",
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": -11.5,
         "over_under": 158.5,
         "over_odds": -112.0,
@@ -739,7 +739,7 @@
       "neutral": true,
       "odds": {
         "source": "core_odds",
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": -12.5,
         "over_under": 148.5,
         "over_odds": -110.0,
@@ -772,7 +772,7 @@
       "neutral": true,
       "odds": {
         "source": "core_odds",
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": -17.5,
         "over_under": 146.5,
         "over_odds": -115.0,
@@ -805,7 +805,7 @@
       "neutral": true,
       "odds": {
         "source": "core_odds",
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": -3.5,
         "over_under": 157.5,
         "over_odds": -108.0,
@@ -838,7 +838,7 @@
       "neutral": true,
       "odds": {
         "source": "core_odds",
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": -24.5,
         "over_under": 147.5,
         "over_odds": -110.0,
@@ -871,7 +871,7 @@
       "neutral": true,
       "odds": {
         "source": "core_odds",
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": 1.5,
         "over_under": 130.5,
         "over_odds": -115.0,
@@ -904,7 +904,7 @@
       "neutral": true,
       "odds": {
         "source": "core_odds",
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": -25.5,
         "over_under": 150.5,
         "over_odds": -115.0,
@@ -937,7 +937,7 @@
       "neutral": true,
       "odds": {
         "source": "core_odds",
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": -24.5,
         "over_under": 137.5,
         "over_odds": -115.0,
@@ -970,7 +970,7 @@
       "neutral": true,
       "odds": {
         "source": "core_odds",
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": -12.5,
         "over_under": 140.5,
         "over_odds": -110.0,
@@ -1003,7 +1003,7 @@
       "neutral": true,
       "odds": {
         "source": "core_odds",
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": -14.5,
         "over_under": 142.5,
         "over_odds": -105.0,
@@ -1036,7 +1036,7 @@
       "neutral": true,
       "odds": {
         "source": "core_odds",
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": -5.5,
         "over_under": 151.5,
         "over_odds": -110.0,
@@ -1069,7 +1069,7 @@
       "neutral": true,
       "odds": {
         "source": "core_odds",
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": -20.5,
         "over_under": 133.5,
         "over_odds": -115.0,
@@ -1102,7 +1102,7 @@
       "neutral": true,
       "odds": {
         "source": "core_odds",
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": -5.5,
         "over_under": 146.5,
         "over_odds": -112.0,
@@ -1135,7 +1135,7 @@
       "neutral": true,
       "odds": {
         "source": "core_odds",
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": -1.5,
         "over_under": 144.5,
         "over_odds": -110.0,
@@ -1168,7 +1168,7 @@
       "neutral": true,
       "odds": {
         "source": "core_odds",
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": -12.5,
         "over_under": 161.5,
         "over_odds": -110.0,
@@ -1201,7 +1201,7 @@
       "neutral": true,
       "odds": {
         "source": "core_odds",
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": -35.5,
         "over_under": 154.5,
         "over_odds": -105.0,
@@ -1234,7 +1234,7 @@
       "neutral": true,
       "odds": {
         "source": "core_odds",
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": -10.5,
         "over_under": 142.5,
         "over_odds": -112.0,
@@ -1267,7 +1267,7 @@
       "neutral": true,
       "odds": {
         "source": "core_odds",
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": 3.5,
         "over_under": 144.5,
         "over_odds": -112.0,
@@ -1300,7 +1300,7 @@
       "neutral": true,
       "odds": {
         "source": "core_odds",
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": -12.5,
         "over_under": 171.5,
         "over_odds": -110.0,
@@ -1333,7 +1333,7 @@
       "neutral": true,
       "odds": {
         "source": "core_odds",
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": -8.5,
         "over_under": 146.5,
         "over_odds": -110.0,
@@ -1366,7 +1366,7 @@
       "neutral": true,
       "odds": {
         "source": "core_odds",
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": 1.5,
         "over_under": 137.5,
         "over_odds": -108.0,
@@ -1399,7 +1399,7 @@
       "neutral": true,
       "odds": {
         "source": "core_odds",
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": -5.5,
         "over_under": 146.5,
         "over_odds": -110.0,
@@ -1432,7 +1432,7 @@
       "neutral": true,
       "odds": {
         "source": "core_odds",
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": -10.5,
         "over_under": 145.5,
         "over_odds": -112.0,
@@ -1465,7 +1465,7 @@
       "neutral": true,
       "odds": {
         "source": "core_odds",
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": 1.5,
         "over_under": 146.5,
         "over_odds": -108.0,
@@ -1498,7 +1498,7 @@
       "neutral": true,
       "odds": {
         "source": "core_odds",
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": -12.5,
         "over_under": 151.5,
         "over_odds": -105.0,
@@ -1531,7 +1531,7 @@
       "neutral": true,
       "odds": {
         "source": "core_odds",
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": -5.5,
         "over_under": 135.5,
         "over_odds": -110.0,
@@ -1564,7 +1564,7 @@
       "neutral": true,
       "odds": {
         "source": "core_odds",
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": -11.5,
         "over_under": 153.5,
         "over_odds": -112.0,
@@ -1597,7 +1597,7 @@
       "neutral": true,
       "odds": {
         "source": "core_odds",
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": -1.5,
         "over_under": 164.5,
         "over_odds": -108.0,
@@ -1630,7 +1630,7 @@
       "neutral": true,
       "odds": {
         "source": "core_odds",
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": -8.5,
         "over_under": 146.5,
         "over_odds": -105.0,
@@ -1663,7 +1663,7 @@
       "neutral": true,
       "odds": {
         "source": "core_odds",
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": -1.5,
         "over_under": 131.5,
         "over_odds": -105.0,
@@ -1696,7 +1696,7 @@
       "neutral": true,
       "odds": {
         "source": "core_odds",
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": -6.5,
         "over_under": 140.5,
         "over_odds": -112.0,
@@ -1729,7 +1729,7 @@
       "neutral": true,
       "odds": {
         "source": "core_odds",
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": -8.5,
         "over_under": 166.5,
         "over_odds": -108.0,
@@ -1762,7 +1762,7 @@
       "neutral": true,
       "odds": {
         "source": "core_odds",
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": -9.5,
         "over_under": 172.5,
         "over_odds": -112.0,
@@ -1795,7 +1795,7 @@
       "neutral": true,
       "odds": {
         "source": "core_odds",
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": -2.5,
         "over_under": 141.5,
         "over_odds": -108.0,
@@ -1828,7 +1828,7 @@
       "neutral": true,
       "odds": {
         "source": "core_odds",
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": -2.5,
         "over_under": 136.5,
         "over_odds": -115.0,
@@ -1861,7 +1861,7 @@
       "neutral": true,
       "odds": {
         "source": "core_odds",
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": -2.5,
         "over_under": 139.5,
         "over_odds": -115.0,
@@ -1894,7 +1894,7 @@
       "neutral": true,
       "odds": {
         "source": "core_odds",
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": -6.5,
         "over_under": 138.5,
         "over_odds": -112.0,
@@ -1927,7 +1927,7 @@
       "neutral": true,
       "odds": {
         "source": "core_odds",
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": -4.5,
         "over_under": 135.5,
         "over_odds": -110.0,
@@ -1960,7 +1960,7 @@
       "neutral": true,
       "odds": {
         "source": "core_odds",
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": -5.5,
         "over_under": 152.5,
         "over_odds": -110.0,
@@ -1993,7 +1993,7 @@
       "neutral": true,
       "odds": {
         "source": "core_odds",
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": -8.5,
         "over_under": 146.5,
         "over_odds": -105.0,
@@ -2026,7 +2026,7 @@
       "neutral": true,
       "odds": {
         "source": "core_odds",
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": 1.5,
         "over_under": 139.5,
         "over_odds": -108.0,
@@ -2059,7 +2059,7 @@
       "neutral": true,
       "odds": {
         "source": "core_odds",
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": -1.5,
         "over_under": 157.5,
         "over_odds": -112.0,
@@ -2092,7 +2092,7 @@
       "neutral": true,
       "odds": {
         "source": "core_odds",
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": -6.5,
         "over_under": 146.5,
         "over_odds": -112.0,
@@ -2123,8 +2123,8 @@
           "implied_pct": 33.3
         },
         "championship": {
-          "moneyline": "+20000",
-          "implied_pct": 0.5
+          "moneyline": "+50000",
+          "implied_pct": 0.2
         }
       }
     },
@@ -2134,6 +2134,10 @@
         "ncaa(b)_-_atlantic_10_conference_winner_(reg._season)": {
           "moneyline": "+250",
           "implied_pct": 28.6
+        },
+        "championship": {
+          "moneyline": "+50000",
+          "implied_pct": 0.2
         }
       }
     },
@@ -2145,8 +2149,8 @@
           "implied_pct": 23.8
         },
         "championship": {
-          "moneyline": "+20000",
-          "implied_pct": 0.5
+          "moneyline": "+30000",
+          "implied_pct": 0.3
         }
       }
     },
@@ -2158,8 +2162,8 @@
           "implied_pct": 35.1
         },
         "championship": {
-          "moneyline": "+1400",
-          "implied_pct": 6.7
+          "moneyline": "+1800",
+          "implied_pct": 5.3
         }
       }
     },
@@ -2171,8 +2175,8 @@
           "implied_pct": 23.8
         },
         "championship": {
-          "moneyline": "+1600",
-          "implied_pct": 5.9
+          "moneyline": "+1500",
+          "implied_pct": 6.2
         }
       }
     },
@@ -2184,8 +2188,8 @@
           "implied_pct": 18.2
         },
         "championship": {
-          "moneyline": "+2500",
-          "implied_pct": 3.8
+          "moneyline": "+4000",
+          "implied_pct": 2.4
         }
       }
     },
@@ -2197,8 +2201,8 @@
           "implied_pct": 13.3
         },
         "championship": {
-          "moneyline": "+2500",
-          "implied_pct": 3.8
+          "moneyline": "+3000",
+          "implied_pct": 3.2
         }
       }
     },
@@ -2210,8 +2214,8 @@
           "implied_pct": 11.1
         },
         "championship": {
-          "moneyline": "+4000",
-          "implied_pct": 2.4
+          "moneyline": "+2200",
+          "implied_pct": 4.3
         }
       }
     },
@@ -2223,8 +2227,8 @@
           "implied_pct": 9.1
         },
         "championship": {
-          "moneyline": "+3000",
-          "implied_pct": 3.2
+          "moneyline": "+1600",
+          "implied_pct": 5.9
         }
       }
     },
@@ -2236,8 +2240,8 @@
           "implied_pct": 1.2
         },
         "championship": {
-          "moneyline": "+30000",
-          "implied_pct": 0.3
+          "moneyline": "+4000",
+          "implied_pct": 2.4
         }
       }
     },
@@ -2262,8 +2266,8 @@
           "implied_pct": 48.8
         },
         "championship": {
-          "moneyline": "+1100",
-          "implied_pct": 8.3
+          "moneyline": "+1000",
+          "implied_pct": 9.1
         }
       }
     },
@@ -2275,8 +2279,8 @@
           "implied_pct": 32.3
         },
         "championship": {
-          "moneyline": "+2000",
-          "implied_pct": 4.8
+          "moneyline": "+8000",
+          "implied_pct": 1.2
         }
       }
     },
@@ -2288,8 +2292,8 @@
           "implied_pct": 9.1
         },
         "championship": {
-          "moneyline": "+4000",
-          "implied_pct": 2.4
+          "moneyline": "+2500",
+          "implied_pct": 3.8
         }
       }
     },
@@ -2301,8 +2305,8 @@
           "implied_pct": 8.3
         },
         "championship": {
-          "moneyline": "+5000",
-          "implied_pct": 2.0
+          "moneyline": "+30000",
+          "implied_pct": 0.3
         }
       }
     },
@@ -2314,8 +2318,8 @@
           "implied_pct": 5.9
         },
         "championship": {
-          "moneyline": "+20000",
-          "implied_pct": 0.5
+          "moneyline": "+15000",
+          "implied_pct": 0.7
         }
       }
     },
@@ -2327,8 +2331,8 @@
           "implied_pct": 4.3
         },
         "championship": {
-          "moneyline": "+10000",
-          "implied_pct": 1.0
+          "moneyline": "+6000",
+          "implied_pct": 1.6
         }
       }
     },
@@ -2340,8 +2344,8 @@
           "implied_pct": 2.4
         },
         "championship": {
-          "moneyline": "+15000",
-          "implied_pct": 0.7
+          "moneyline": "+30000",
+          "implied_pct": 0.3
         }
       }
     },
@@ -2353,8 +2357,8 @@
           "implied_pct": 2.4
         },
         "championship": {
-          "moneyline": "+15000",
-          "implied_pct": 0.7
+          "moneyline": "+10000",
+          "implied_pct": 1.0
         }
       }
     },
@@ -2375,8 +2379,8 @@
           "implied_pct": 20.0
         },
         "championship": {
-          "moneyline": "+2500",
-          "implied_pct": 3.8
+          "moneyline": "+3500",
+          "implied_pct": 2.8
         }
       }
     },
@@ -2388,8 +2392,8 @@
           "implied_pct": 20.0
         },
         "championship": {
-          "moneyline": "+2200",
-          "implied_pct": 4.3
+          "moneyline": "+1400",
+          "implied_pct": 6.7
         }
       }
     },
@@ -2401,8 +2405,8 @@
           "implied_pct": 18.2
         },
         "championship": {
-          "moneyline": "+3000",
-          "implied_pct": 3.2
+          "moneyline": "+2200",
+          "implied_pct": 4.3
         }
       }
     },
@@ -2414,8 +2418,8 @@
           "implied_pct": 14.3
         },
         "championship": {
-          "moneyline": "+2500",
-          "implied_pct": 3.8
+          "moneyline": "+5000",
+          "implied_pct": 2.0
         }
       }
     },
@@ -2427,8 +2431,8 @@
           "implied_pct": 12.5
         },
         "championship": {
-          "moneyline": "+4000",
-          "implied_pct": 2.4
+          "moneyline": "+10000",
+          "implied_pct": 1.0
         }
       }
     },
@@ -2453,8 +2457,8 @@
           "implied_pct": 4.8
         },
         "championship": {
-          "moneyline": "+15000",
-          "implied_pct": 0.7
+          "moneyline": "+5000",
+          "implied_pct": 2.0
         }
       }
     },
@@ -2466,8 +2470,8 @@
           "implied_pct": 3.2
         },
         "championship": {
-          "moneyline": "+10000",
-          "implied_pct": 1.0
+          "moneyline": "+7500",
+          "implied_pct": 1.3
         }
       }
     },
@@ -2479,8 +2483,8 @@
           "implied_pct": 3.2
         },
         "championship": {
-          "moneyline": "+30000",
-          "implied_pct": 0.3
+          "moneyline": "+20000",
+          "implied_pct": 0.5
         }
       }
     },
@@ -2492,8 +2496,8 @@
           "implied_pct": 2.0
         },
         "championship": {
-          "moneyline": "+20000",
-          "implied_pct": 0.5
+          "moneyline": "+10000",
+          "implied_pct": 1.0
         }
       }
     },
@@ -2505,8 +2509,8 @@
           "implied_pct": 38.5
         },
         "championship": {
-          "moneyline": "+750",
-          "implied_pct": 11.8
+          "moneyline": "+1600",
+          "implied_pct": 5.9
         }
       }
     },
@@ -2518,8 +2522,8 @@
           "implied_pct": 33.3
         },
         "championship": {
-          "moneyline": "+1000",
-          "implied_pct": 9.1
+          "moneyline": "+3000",
+          "implied_pct": 3.2
         }
       }
     },
@@ -2531,8 +2535,8 @@
           "implied_pct": 9.1
         },
         "championship": {
-          "moneyline": "+2500",
-          "implied_pct": 3.8
+          "moneyline": "+1600",
+          "implied_pct": 5.9
         }
       }
     },
@@ -2544,8 +2548,8 @@
           "implied_pct": 8.3
         },
         "championship": {
-          "moneyline": "+8000",
-          "implied_pct": 1.2
+          "moneyline": "+5000",
+          "implied_pct": 2.0
         }
       }
     },
@@ -2557,8 +2561,8 @@
           "implied_pct": 7.1
         },
         "championship": {
-          "moneyline": "+3000",
-          "implied_pct": 3.2
+          "moneyline": "+1600",
+          "implied_pct": 5.9
         }
       }
     },
@@ -2583,8 +2587,8 @@
           "implied_pct": 3.8
         },
         "championship": {
-          "moneyline": "+10000",
-          "implied_pct": 1.0
+          "moneyline": "+6000",
+          "implied_pct": 1.6
         }
       }
     },
@@ -2609,8 +2613,8 @@
           "implied_pct": 1.3
         },
         "championship": {
-          "moneyline": "+20000",
-          "implied_pct": 0.5
+          "moneyline": "+12000",
+          "implied_pct": 0.8
         }
       }
     },
@@ -2622,8 +2626,8 @@
           "implied_pct": 56.5
         },
         "championship": {
-          "moneyline": "+1300",
-          "implied_pct": 7.1
+          "moneyline": "+2000",
+          "implied_pct": 4.8
         }
       }
     },
@@ -2635,8 +2639,8 @@
           "implied_pct": 36.4
         },
         "championship": {
-          "moneyline": "+2500",
-          "implied_pct": 3.8
+          "moneyline": "+3500",
+          "implied_pct": 2.8
         }
       }
     },
@@ -2648,8 +2652,8 @@
           "implied_pct": 7.7
         },
         "championship": {
-          "moneyline": "+15000",
-          "implied_pct": 0.7
+          "moneyline": "+6000",
+          "implied_pct": 1.6
         }
       }
     },
@@ -2661,8 +2665,8 @@
           "implied_pct": 78.9
         },
         "championship": {
-          "moneyline": "+1700",
-          "implied_pct": 5.6
+          "moneyline": "+4000",
+          "implied_pct": 2.4
         }
       }
     },
@@ -2674,8 +2678,8 @@
           "implied_pct": 21.1
         },
         "championship": {
-          "moneyline": "+25000",
-          "implied_pct": 0.4
+          "moneyline": "+100000",
+          "implied_pct": 0.1
         }
       }
     },
@@ -2687,8 +2691,8 @@
           "implied_pct": 5.9
         },
         "championship": {
-          "moneyline": "+50000",
-          "implied_pct": 0.2
+          "moneyline": "+100000",
+          "implied_pct": 0.1
         }
       }
     },
@@ -2707,6 +2711,24 @@
         "championship": {
           "moneyline": "+50000",
           "implied_pct": 0.2
+        }
+      }
+    },
+    "akron": {
+      "espn_id": "2006",
+      "markets": {
+        "championship": {
+          "moneyline": "+100000",
+          "implied_pct": 0.1
+        }
+      }
+    },
+    "miami oh": {
+      "espn_id": "193",
+      "markets": {
+        "championship": {
+          "moneyline": "+100000",
+          "implied_pct": 0.1
         }
       }
     }
