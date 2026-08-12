@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-12T07:05:02.603403+00:00",
+  "generated_at": "2026-08-12T18:52:29.429734+00:00",
   "games": {
     "401856478": {
       "game_id": "401856478",
@@ -2118,11 +2118,11 @@
     "utah state": {
       "espn_id": "328",
       "markets": {
-        "mountain_west_conference_winner": {
+        "ncaa(b)_-_mountain_west_conference_-_winner_(reg._season)": {
           "moneyline": "+200",
           "implied_pct": 33.3
         },
-        "championship": {
+        "ncaa(b)_-_winner": {
           "moneyline": "+50000",
           "implied_pct": 0.2
         }
@@ -2135,7 +2135,7 @@
           "moneyline": "+250",
           "implied_pct": 28.6
         },
-        "championship": {
+        "ncaa(b)_-_winner": {
           "moneyline": "+50000",
           "implied_pct": 0.2
         }
@@ -2148,7 +2148,7 @@
           "moneyline": "+320",
           "implied_pct": 23.8
         },
-        "championship": {
+        "ncaa(b)_-_winner": {
           "moneyline": "+30000",
           "implied_pct": 0.3
         }
@@ -2157,11 +2157,11 @@
     "houston": {
       "espn_id": "248",
       "markets": {
-        "big_12_conference_winner": {
+        "ncaa(b)_-_big_12_conference_-_winner_(reg._season)": {
           "moneyline": "+185",
           "implied_pct": 35.1
         },
-        "championship": {
+        "ncaa(b)_-_winner": {
           "moneyline": "+1800",
           "implied_pct": 5.3
         }
@@ -2170,11 +2170,11 @@
     "arizona": {
       "espn_id": "12",
       "markets": {
-        "big_12_conference_winner": {
+        "ncaa(b)_-_big_12_conference_-_winner_(reg._season)": {
           "moneyline": "+320",
           "implied_pct": 23.8
         },
-        "championship": {
+        "ncaa(b)_-_winner": {
           "moneyline": "+1500",
           "implied_pct": 6.2
         }
@@ -2183,11 +2183,11 @@
     "iowa state": {
       "espn_id": "66",
       "markets": {
-        "big_12_conference_winner": {
+        "ncaa(b)_-_big_12_conference_-_winner_(reg._season)": {
           "moneyline": "+450",
           "implied_pct": 18.2
         },
-        "championship": {
+        "ncaa(b)_-_winner": {
           "moneyline": "+4000",
           "implied_pct": 2.4
         }
@@ -2196,11 +2196,11 @@
     "byu": {
       "espn_id": "252",
       "markets": {
-        "big_12_conference_winner": {
+        "ncaa(b)_-_big_12_conference_-_winner_(reg._season)": {
           "moneyline": "+650",
           "implied_pct": 13.3
         },
-        "championship": {
+        "ncaa(b)_-_winner": {
           "moneyline": "+3000",
           "implied_pct": 3.2
         }
@@ -2209,11 +2209,11 @@
     "texas tech": {
       "espn_id": "2641",
       "markets": {
-        "big_12_conference_winner": {
+        "ncaa(b)_-_big_12_conference_-_winner_(reg._season)": {
           "moneyline": "+800",
           "implied_pct": 11.1
         },
-        "championship": {
+        "ncaa(b)_-_winner": {
           "moneyline": "+2200",
           "implied_pct": 4.3
         }
@@ -2222,11 +2222,11 @@
     "kansas": {
       "espn_id": "2305",
       "markets": {
-        "big_12_conference_winner": {
+        "ncaa(b)_-_big_12_conference_-_winner_(reg._season)": {
           "moneyline": "+1000",
           "implied_pct": 9.1
         },
-        "championship": {
+        "ncaa(b)_-_winner": {
           "moneyline": "+1600",
           "implied_pct": 5.9
         }
@@ -2235,11 +2235,11 @@
     "tcu": {
       "espn_id": "2628",
       "markets": {
-        "big_12_conference_winner": {
+        "ncaa(b)_-_big_12_conference_-_winner_(reg._season)": {
           "moneyline": "+8000",
           "implied_pct": 1.2
         },
-        "championship": {
+        "ncaa(b)_-_winner": {
           "moneyline": "+4000",
           "implied_pct": 2.4
         }
@@ -2248,11 +2248,11 @@
     "ucf": {
       "espn_id": "2116",
       "markets": {
-        "big_12_conference_winner": {
+        "ncaa(b)_-_big_12_conference_-_winner_(reg._season)": {
           "moneyline": "+20000",
           "implied_pct": 0.5
         },
-        "championship": {
+        "ncaa(b)_-_winner": {
           "moneyline": "+30000",
           "implied_pct": 0.3
         }
@@ -2261,11 +2261,11 @@
     "duke": {
       "espn_id": "150",
       "markets": {
-        "atlantic_coast_conference_winner": {
+        "ncaa(b)_-_atlantic_coast_conference_-_winner_(reg._season)": {
           "moneyline": "+105",
           "implied_pct": 48.8
         },
-        "championship": {
+        "ncaa(b)_-_winner": {
           "moneyline": "+1000",
           "implied_pct": 9.1
         }
@@ -2274,11 +2274,11 @@
     "louisville": {
       "espn_id": "97",
       "markets": {
-        "atlantic_coast_conference_winner": {
+        "ncaa(b)_-_atlantic_coast_conference_-_winner_(reg._season)": {
           "moneyline": "+210",
           "implied_pct": 32.3
         },
-        "championship": {
+        "ncaa(b)_-_winner": {
           "moneyline": "+8000",
           "implied_pct": 1.2
         }
@@ -2287,11 +2287,11 @@
     "north carolina": {
       "espn_id": "153",
       "markets": {
-        "atlantic_coast_conference_winner": {
+        "ncaa(b)_-_atlantic_coast_conference_-_winner_(reg._season)": {
           "moneyline": "+1000",
           "implied_pct": 9.1
         },
-        "championship": {
+        "ncaa(b)_-_winner": {
           "moneyline": "+2500",
           "implied_pct": 3.8
         }
@@ -2300,11 +2300,11 @@
     "nc state": {
       "espn_id": "152",
       "markets": {
-        "atlantic_coast_conference_winner": {
+        "ncaa(b)_-_atlantic_coast_conference_-_winner_(reg._season)": {
           "moneyline": "+1100",
           "implied_pct": 8.3
         },
-        "championship": {
+        "ncaa(b)_-_winner": {
           "moneyline": "+30000",
           "implied_pct": 0.3
         }
@@ -2313,11 +2313,11 @@
     "clemson": {
       "espn_id": "228",
       "markets": {
-        "atlantic_coast_conference_winner": {
+        "ncaa(b)_-_atlantic_coast_conference_-_winner_(reg._season)": {
           "moneyline": "+1600",
           "implied_pct": 5.9
         },
-        "championship": {
+        "ncaa(b)_-_winner": {
           "moneyline": "+15000",
           "implied_pct": 0.7
         }
@@ -2326,11 +2326,11 @@
     "virginia": {
       "espn_id": "258",
       "markets": {
-        "atlantic_coast_conference_winner": {
+        "ncaa(b)_-_atlantic_coast_conference_-_winner_(reg._season)": {
           "moneyline": "+2200",
           "implied_pct": 4.3
         },
-        "championship": {
+        "ncaa(b)_-_winner": {
           "moneyline": "+6000",
           "implied_pct": 1.6
         }
@@ -2339,11 +2339,11 @@
     "smu": {
       "espn_id": "2567",
       "markets": {
-        "atlantic_coast_conference_winner": {
+        "ncaa(b)_-_atlantic_coast_conference_-_winner_(reg._season)": {
           "moneyline": "+4000",
           "implied_pct": 2.4
         },
-        "championship": {
+        "ncaa(b)_-_winner": {
           "moneyline": "+30000",
           "implied_pct": 0.3
         }
@@ -2352,11 +2352,11 @@
     "miami": {
       "espn_id": "2390",
       "markets": {
-        "atlantic_coast_conference_winner": {
+        "ncaa(b)_-_atlantic_coast_conference_-_winner_(reg._season)": {
           "moneyline": "+4000",
           "implied_pct": 2.4
         },
-        "championship": {
+        "ncaa(b)_-_winner": {
           "moneyline": "+10000",
           "implied_pct": 1.0
         }
@@ -2365,7 +2365,7 @@
     "south florida": {
       "espn_id": "58",
       "markets": {
-        "american_athletic_conference_winner": {
+        "ncaa(b)_-_american_athletic_conference_-_winner_(reg._season)": {
           "moneyline": "+215",
           "implied_pct": 31.7
         }
@@ -2374,11 +2374,11 @@
     "kentucky": {
       "espn_id": "96",
       "markets": {
-        "southeastern_conference_winner": {
+        "ncaa(b)_-_southeastern_conference_-_winner_(reg._season)": {
           "moneyline": "+400",
           "implied_pct": 20.0
         },
-        "championship": {
+        "ncaa(b)_-_winner": {
           "moneyline": "+3500",
           "implied_pct": 2.8
         }
@@ -2387,11 +2387,11 @@
     "florida": {
       "espn_id": "57",
       "markets": {
-        "southeastern_conference_winner": {
+        "ncaa(b)_-_southeastern_conference_-_winner_(reg._season)": {
           "moneyline": "+400",
           "implied_pct": 20.0
         },
-        "championship": {
+        "ncaa(b)_-_winner": {
           "moneyline": "+1400",
           "implied_pct": 6.7
         }
@@ -2400,11 +2400,11 @@
     "alabama": {
       "espn_id": "333",
       "markets": {
-        "southeastern_conference_winner": {
+        "ncaa(b)_-_southeastern_conference_-_winner_(reg._season)": {
           "moneyline": "+450",
           "implied_pct": 18.2
         },
-        "championship": {
+        "ncaa(b)_-_winner": {
           "moneyline": "+2200",
           "implied_pct": 4.3
         }
@@ -2413,11 +2413,11 @@
     "tennessee": {
       "espn_id": "2633",
       "markets": {
-        "southeastern_conference_winner": {
+        "ncaa(b)_-_southeastern_conference_-_winner_(reg._season)": {
           "moneyline": "+600",
           "implied_pct": 14.3
         },
-        "championship": {
+        "ncaa(b)_-_winner": {
           "moneyline": "+5000",
           "implied_pct": 2.0
         }
@@ -2426,11 +2426,11 @@
     "vanderbilt": {
       "espn_id": "238",
       "markets": {
-        "southeastern_conference_winner": {
+        "ncaa(b)_-_southeastern_conference_-_winner_(reg._season)": {
           "moneyline": "+700",
           "implied_pct": 12.5
         },
-        "championship": {
+        "ncaa(b)_-_winner": {
           "moneyline": "+10000",
           "implied_pct": 1.0
         }
@@ -2439,11 +2439,11 @@
     "arkansas": {
       "espn_id": "8",
       "markets": {
-        "southeastern_conference_winner": {
+        "ncaa(b)_-_southeastern_conference_-_winner_(reg._season)": {
           "moneyline": "+1000",
           "implied_pct": 9.1
         },
-        "championship": {
+        "ncaa(b)_-_winner": {
           "moneyline": "+4000",
           "implied_pct": 2.4
         }
@@ -2452,11 +2452,11 @@
     "missouri": {
       "espn_id": "142",
       "markets": {
-        "southeastern_conference_winner": {
+        "ncaa(b)_-_southeastern_conference_-_winner_(reg._season)": {
           "moneyline": "+2000",
           "implied_pct": 4.8
         },
-        "championship": {
+        "ncaa(b)_-_winner": {
           "moneyline": "+5000",
           "implied_pct": 2.0
         }
@@ -2465,11 +2465,11 @@
     "texas": {
       "espn_id": "251",
       "markets": {
-        "southeastern_conference_winner": {
+        "ncaa(b)_-_southeastern_conference_-_winner_(reg._season)": {
           "moneyline": "+3000",
           "implied_pct": 3.2
         },
-        "championship": {
+        "ncaa(b)_-_winner": {
           "moneyline": "+7500",
           "implied_pct": 1.3
         }
@@ -2478,11 +2478,11 @@
     "georgia": {
       "espn_id": "61",
       "markets": {
-        "southeastern_conference_winner": {
+        "ncaa(b)_-_southeastern_conference_-_winner_(reg._season)": {
           "moneyline": "+3000",
           "implied_pct": 3.2
         },
-        "championship": {
+        "ncaa(b)_-_winner": {
           "moneyline": "+20000",
           "implied_pct": 0.5
         }
@@ -2491,11 +2491,11 @@
     "texas a&m": {
       "espn_id": "245",
       "markets": {
-        "southeastern_conference_winner": {
+        "ncaa(b)_-_southeastern_conference_-_winner_(reg._season)": {
           "moneyline": "+5000",
           "implied_pct": 2.0
         },
-        "championship": {
+        "ncaa(b)_-_winner": {
           "moneyline": "+10000",
           "implied_pct": 1.0
         }
@@ -2504,11 +2504,11 @@
     "michigan": {
       "espn_id": "130",
       "markets": {
-        "big_ten_conference_winner": {
+        "ncaa(b)_-_big_ten_conference_-_winner_(reg._season)": {
           "moneyline": "+160",
           "implied_pct": 38.5
         },
-        "championship": {
+        "ncaa(b)_-_winner": {
           "moneyline": "+1600",
           "implied_pct": 5.9
         }
@@ -2517,11 +2517,11 @@
     "purdue": {
       "espn_id": "2509",
       "markets": {
-        "big_ten_conference_winner": {
+        "ncaa(b)_-_big_ten_conference_-_winner_(reg._season)": {
           "moneyline": "+200",
           "implied_pct": 33.3
         },
-        "championship": {
+        "ncaa(b)_-_winner": {
           "moneyline": "+3000",
           "implied_pct": 3.2
         }
@@ -2530,11 +2530,11 @@
     "illinois": {
       "espn_id": "356",
       "markets": {
-        "big_ten_conference_winner": {
+        "ncaa(b)_-_big_ten_conference_-_winner_(reg._season)": {
           "moneyline": "+1000",
           "implied_pct": 9.1
         },
-        "championship": {
+        "ncaa(b)_-_winner": {
           "moneyline": "+1600",
           "implied_pct": 5.9
         }
@@ -2543,11 +2543,11 @@
     "ucla": {
       "espn_id": "26",
       "markets": {
-        "big_ten_conference_winner": {
+        "ncaa(b)_-_big_ten_conference_-_winner_(reg._season)": {
           "moneyline": "+1100",
           "implied_pct": 8.3
         },
-        "championship": {
+        "ncaa(b)_-_winner": {
           "moneyline": "+5000",
           "implied_pct": 2.0
         }
@@ -2556,11 +2556,11 @@
     "michigan st": {
       "espn_id": "127",
       "markets": {
-        "big_ten_conference_winner": {
+        "ncaa(b)_-_big_ten_conference_-_winner_(reg._season)": {
           "moneyline": "+1300",
           "implied_pct": 7.1
         },
-        "championship": {
+        "ncaa(b)_-_winner": {
           "moneyline": "+1600",
           "implied_pct": 5.9
         }
@@ -2569,11 +2569,11 @@
     "ohio state": {
       "espn_id": "194",
       "markets": {
-        "big_ten_conference_winner": {
+        "ncaa(b)_-_big_ten_conference_-_winner_(reg._season)": {
           "moneyline": "+2000",
           "implied_pct": 4.8
         },
-        "championship": {
+        "ncaa(b)_-_winner": {
           "moneyline": "+15000",
           "implied_pct": 0.7
         }
@@ -2582,11 +2582,11 @@
     "iowa": {
       "espn_id": "2294",
       "markets": {
-        "big_ten_conference_winner": {
+        "ncaa(b)_-_big_ten_conference_-_winner_(reg._season)": {
           "moneyline": "+2500",
           "implied_pct": 3.8
         },
-        "championship": {
+        "ncaa(b)_-_winner": {
           "moneyline": "+6000",
           "implied_pct": 1.6
         }
@@ -2595,11 +2595,11 @@
     "wisconsin": {
       "espn_id": "275",
       "markets": {
-        "big_ten_conference_winner": {
+        "ncaa(b)_-_big_ten_conference_-_winner_(reg._season)": {
           "moneyline": "+2500",
           "implied_pct": 3.8
         },
-        "championship": {
+        "ncaa(b)_-_winner": {
           "moneyline": "+8000",
           "implied_pct": 1.2
         }
@@ -2608,11 +2608,11 @@
     "nebraska": {
       "espn_id": "158",
       "markets": {
-        "big_ten_conference_winner": {
+        "ncaa(b)_-_big_ten_conference_-_winner_(reg._season)": {
           "moneyline": "+7500",
           "implied_pct": 1.3
         },
-        "championship": {
+        "ncaa(b)_-_winner": {
           "moneyline": "+12000",
           "implied_pct": 0.8
         }
@@ -2621,11 +2621,11 @@
     "uconn": {
       "espn_id": "41",
       "markets": {
-        "big_east_conference_winner": {
+        "ncaa(b)_-_big_east_conference_-_winner_(reg._season)": {
           "moneyline": "-130",
           "implied_pct": 56.5
         },
-        "championship": {
+        "ncaa(b)_-_winner": {
           "moneyline": "+2000",
           "implied_pct": 4.8
         }
@@ -2634,11 +2634,11 @@
     "st john's": {
       "espn_id": "2599",
       "markets": {
-        "big_east_conference_winner": {
+        "ncaa(b)_-_big_east_conference_-_winner_(reg._season)": {
           "moneyline": "+175",
           "implied_pct": 36.4
         },
-        "championship": {
+        "ncaa(b)_-_winner": {
           "moneyline": "+3500",
           "implied_pct": 2.8
         }
@@ -2647,11 +2647,11 @@
     "villanova": {
       "espn_id": "222",
       "markets": {
-        "big_east_conference_winner": {
+        "ncaa(b)_-_big_east_conference_-_winner_(reg._season)": {
           "moneyline": "+1200",
           "implied_pct": 7.7
         },
-        "championship": {
+        "ncaa(b)_-_winner": {
           "moneyline": "+6000",
           "implied_pct": 1.6
         }
@@ -2664,7 +2664,7 @@
           "moneyline": "-375",
           "implied_pct": 78.9
         },
-        "championship": {
+        "ncaa(b)_-_winner": {
           "moneyline": "+4000",
           "implied_pct": 2.4
         }
@@ -2677,7 +2677,7 @@
           "moneyline": "+375",
           "implied_pct": 21.1
         },
-        "championship": {
+        "ncaa(b)_-_winner": {
           "moneyline": "+100000",
           "implied_pct": 0.1
         }
@@ -2690,7 +2690,7 @@
           "moneyline": "+1600",
           "implied_pct": 5.9
         },
-        "championship": {
+        "ncaa(b)_-_winner": {
           "moneyline": "+100000",
           "implied_pct": 0.1
         }
@@ -2699,7 +2699,7 @@
     "mcneese": {
       "espn_id": "2377",
       "markets": {
-        "championship": {
+        "ncaa(b)_-_winner": {
           "moneyline": "+25000",
           "implied_pct": 0.4
         }
@@ -2708,7 +2708,7 @@
     "high point": {
       "espn_id": "2272",
       "markets": {
-        "championship": {
+        "ncaa(b)_-_winner": {
           "moneyline": "+50000",
           "implied_pct": 0.2
         }
@@ -2717,7 +2717,7 @@
     "akron": {
       "espn_id": "2006",
       "markets": {
-        "championship": {
+        "ncaa(b)_-_winner": {
           "moneyline": "+100000",
           "implied_pct": 0.1
         }
@@ -2726,7 +2726,7 @@
     "miami oh": {
       "espn_id": "193",
       "markets": {
-        "championship": {
+        "ncaa(b)_-_winner": {
           "moneyline": "+100000",
           "implied_pct": 0.1
         }
