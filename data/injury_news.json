@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-08-17T18:27:49.316666+00:00",
-  "flagged_teams": 5,
+  "generated_at": "2026-08-18T06:23:47.684146+00:00",
+  "flagged_teams": 4,
   "teams": {
     "2116": {
       "bracket_name": "UCF",
@@ -51,19 +51,6 @@
           "description": "Donnie Freeman, who transferred from Syracuse to St. John's, will miss the 2026-27 season after tearing his Achilles.",
           "published": "2026-07-01",
           "url": "https://www.espn.com/mens-college-basketball/story/_/id/49241773/st-john-loses-donnie-freeman-torn-achilles"
-        }
-      ]
-    },
-    "41": {
-      "bracket_name": "UConn",
-      "region": "East",
-      "seed": 2,
-      "articles": [
-        {
-          "headline": "UConn's Solo Ball to have wrist surgery, miss all of 2026-27",
-          "description": "UConn guard Solo Ball will undergo wrist surgery and miss the entire 2026-27 season.",
-          "published": "2026-04-22",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48544576/uconn-solo-ball-wrist-surgery-miss-all-next-season"
         }
       ]
     }
