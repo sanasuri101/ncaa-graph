@@ -1,11 +1,42 @@
 {
-  "generated_at": "2026-08-21T18:25:27.752051+00:00",
-  "flagged_teams": 4,
+  "generated_at": "2026-08-22T06:20:35.986530+00:00",
+  "flagged_teams": 5,
   "teams": {
-    "2116": {
-      "bracket_name": "UCF",
+    "66": {
+      "bracket_name": "Iowa State",
+      "region": "Midwest",
+      "seed": 2,
+      "articles": [
+        {
+          "headline": "Iowa State's Toure has surgery, expected back in January",
+          "description": "Iowa State's Killyan Toure had surgery on his right shoulder Friday and is expected to be ready to play basketball in January.",
+          "published": "2026-08-21",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/49683341/iowa-state-killyan-toure-successful-shoulder-surgery"
+        },
+        {
+          "headline": "Iowa State's Toure has surgery, expected back in January",
+          "description": "Iowa State's Killyan Toure had surgery on his right shoulder Friday and is expected to be ready to play basketball in January.",
+          "published": "2026-08-21",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/49683341/iowa-state-killyan-toure-successful-shoulder-surgery"
+        },
+        {
+          "headline": "Iowa State's Toure has surgery, expected back in January",
+          "description": "Iowa State's Killyan Toure had surgery on his right shoulder Friday and is expected to be ready to play basketball in January.",
+          "published": "2026-08-21",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/49683341/iowa-state-killyan-toure-successful-shoulder-surgery"
+        },
+        {
+          "headline": "Iowa State's Toure has surgery, expected back in January",
+          "description": "Iowa State's Killyan Toure had surgery on his right shoulder Friday and is expected to be ready to play basketball in January.",
+          "published": "2026-08-21",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/49683341/iowa-state-killyan-toure-successful-shoulder-surgery"
+        }
+      ]
+    },
+    "26": {
+      "bracket_name": "UCLA",
       "region": "East",
-      "seed": 10,
+      "seed": 7,
       "articles": [
         {
           "headline": "UCLA overcomes broken tooth and stubborn UCF 75-71 to advance in the NCAA Tournament",
@@ -15,10 +46,10 @@
         }
       ]
     },
-    "26": {
-      "bracket_name": "UCLA",
+    "2116": {
+      "bracket_name": "UCF",
       "region": "East",
-      "seed": 7,
+      "seed": 10,
       "articles": [
         {
           "headline": "UCLA overcomes broken tooth and stubborn UCF 75-71 to advance in the NCAA Tournament",
