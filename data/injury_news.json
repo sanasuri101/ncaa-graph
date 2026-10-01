@@ -1,38 +1,7 @@
 {
-  "generated_at": "2026-10-01T11:59:31.102986+00:00",
+  "generated_at": "2026-10-01T22:12:38.367927+00:00",
   "flagged_teams": 7,
   "teams": {
-    "2633": {
-      "bracket_name": "Tennessee",
-      "region": "Midwest",
-      "seed": 6,
-      "articles": [
-        {
-          "headline": "Tennessee's Ralph Scott to have knee surgery, out at least 6 months",
-          "description": "Tennessee freshman Ralph Scott is set to have surgery on his left knee and will miss at least six months, according to Vols coach Rick Barnes.",
-          "published": "2026-09-02",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/49807033/tennessee-ralph-scott-knee-surgery-least-6-months"
-        },
-        {
-          "headline": "Tennessee's Ralph Scott to have knee surgery, out at least 6 months",
-          "description": "Tennessee freshman Ralph Scott is set to have surgery on his left knee and will miss at least six months, according to Vols coach Rick Barnes.",
-          "published": "2026-09-02",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/49807033/tennessee-ralph-scott-knee-surgery-least-6-months"
-        },
-        {
-          "headline": "Tennessee's Ralph Scott to have knee surgery, out at least 6 months",
-          "description": "Tennessee freshman Ralph Scott is set to have surgery on his left knee and will miss at least six months, according to Vols coach Rick Barnes.",
-          "published": "2026-09-02",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/49807033/tennessee-ralph-scott-knee-surgery-least-6-months"
-        },
-        {
-          "headline": "Tennessee's Ralph Scott to have knee surgery, out at least 6 months",
-          "description": "Tennessee freshman Ralph Scott is set to have surgery on his left knee and will miss at least six months, according to Vols coach Rick Barnes.",
-          "published": "2026-09-02",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/49807033/tennessee-ralph-scott-knee-surgery-least-6-months"
-        }
-      ]
-    },
     "130": {
       "bracket_name": "Michigan",
       "region": "Midwest",
@@ -52,10 +21,10 @@
         }
       ]
     },
-    "2116": {
-      "bracket_name": "UCF",
+    "26": {
+      "bracket_name": "UCLA",
       "region": "East",
-      "seed": 10,
+      "seed": 7,
       "articles": [
         {
           "headline": "UCLA overcomes broken tooth and stubborn UCF 75-71 to advance in the NCAA Tournament",
@@ -65,10 +34,10 @@
         }
       ]
     },
-    "26": {
-      "bracket_name": "UCLA",
+    "2116": {
+      "bracket_name": "UCF",
       "region": "East",
-      "seed": 7,
+      "seed": 10,
       "articles": [
         {
           "headline": "UCLA overcomes broken tooth and stubborn UCF 75-71 to advance in the NCAA Tournament",
@@ -101,6 +70,19 @@
           "description": "Donnie Freeman, who transferred from Syracuse to St. John's, will miss the 2026-27 season after tearing his Achilles.",
           "published": "2026-07-01",
           "url": "https://www.espn.com/mens-college-basketball/story/_/id/49241773/st-john-loses-donnie-freeman-torn-achilles"
+        }
+      ]
+    },
+    "2633": {
+      "bracket_name": "Tennessee",
+      "region": "Midwest",
+      "seed": 6,
+      "articles": [
+        {
+          "headline": "Tennessee's Ralph Scott to have knee surgery, out at least 6 months",
+          "description": "Tennessee freshman Ralph Scott is set to have surgery on his left knee and will miss at least six months, according to Vols coach Rick Barnes.",
+          "published": "2026-09-02",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/49807033/tennessee-ralph-scott-knee-surgery-least-6-months"
         }
       ]
     },
