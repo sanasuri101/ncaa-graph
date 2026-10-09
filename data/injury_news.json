@@ -1,7 +1,38 @@
 {
-  "generated_at": "2026-10-08T22:42:55.919166+00:00",
-  "flagged_teams": 7,
+  "generated_at": "2026-10-09T12:14:01.958718+00:00",
+  "flagged_teams": 8,
   "teams": {
+    "333": {
+      "bracket_name": "Alabama",
+      "region": "Midwest",
+      "seed": 4,
+      "articles": [
+        {
+          "headline": "Alabama's Aden Holloway begins 5-game ban following arrest",
+          "description": "Alabama guard Aden Holloway will miss three exhibition games and two regular-season games during a five-game suspension following his arrest on a drug charge, coach Nate Oats said Thursday.",
+          "published": "2026-10-09",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50137284/alabama-aden-holloway-begins-5-game-ban-following-arrest"
+        },
+        {
+          "headline": "Alabama's Aden Holloway begins 5-game ban following arrest",
+          "description": "Alabama guard Aden Holloway will miss three exhibition games and two regular-season games during a five-game suspension following his arrest on a drug charge, coach Nate Oats said Thursday.",
+          "published": "2026-10-09",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50137284/alabama-aden-holloway-begins-5-game-ban-following-arrest"
+        },
+        {
+          "headline": "Alabama's Aden Holloway begins 5-game ban following arrest",
+          "description": "Alabama guard Aden Holloway will miss three exhibition games and two regular-season games during a five-game suspension following his arrest on a drug charge, coach Nate Oats said Thursday.",
+          "published": "2026-10-09",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50137284/alabama-aden-holloway-begins-5-game-ban-following-arrest"
+        },
+        {
+          "headline": "Alabama's Aden Holloway begins 5-game ban following arrest",
+          "description": "Alabama guard Aden Holloway will miss three exhibition games and two regular-season games during a five-game suspension following his arrest on a drug charge, coach Nate Oats said Thursday.",
+          "published": "2026-10-09",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50137284/alabama-aden-holloway-begins-5-game-ban-following-arrest"
+        }
+      ]
+    },
     "130": {
       "bracket_name": "Michigan",
       "region": "Midwest",
@@ -21,10 +52,10 @@
         }
       ]
     },
-    "26": {
-      "bracket_name": "UCLA",
+    "2116": {
+      "bracket_name": "UCF",
       "region": "East",
-      "seed": 7,
+      "seed": 10,
       "articles": [
         {
           "headline": "UCLA overcomes broken tooth and stubborn UCF 75-71 to advance in the NCAA Tournament",
@@ -34,10 +65,10 @@
         }
       ]
     },
-    "2116": {
-      "bracket_name": "UCF",
+    "26": {
+      "bracket_name": "UCLA",
       "region": "East",
-      "seed": 10,
+      "seed": 7,
       "articles": [
         {
           "headline": "UCLA overcomes broken tooth and stubborn UCF 75-71 to advance in the NCAA Tournament",
