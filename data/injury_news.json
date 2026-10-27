@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-10-27T11:11:49.493549+00:00",
-  "flagged_teams": 8,
+  "generated_at": "2026-10-27T21:39:28.231257+00:00",
+  "flagged_teams": 7,
   "teams": {
     "130": {
       "bracket_name": "Michigan",
@@ -57,19 +57,6 @@
           "description": "SMU coach Andy Enfield said standout guard B.J. Edwards sat out Wednesday's loss to Miami (Ohio) in the First Four because he didn't feel \"game ready\" after the team announced last Friday that he woul",
           "published": "2026-03-19",
           "url": "https://www.espn.com/mens-college-basketball/story/_/id/48246208/smu-enfield-denies-misleading-ncaa-committee-edwards-injury"
-        }
-      ]
-    },
-    "2599": {
-      "bracket_name": "St John's",
-      "region": "East",
-      "seed": 5,
-      "articles": [
-        {
-          "headline": "St. John's loses Donnie Freeman to torn Achilles",
-          "description": "Donnie Freeman, who transferred from Syracuse to St. John's, will miss the 2026-27 season after tearing his Achilles.",
-          "published": "2026-07-01",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/49241773/st-john-loses-donnie-freeman-torn-achilles"
         }
       ]
     },
