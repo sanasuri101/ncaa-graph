@@ -1,38 +1,7 @@
 {
-  "generated_at": "2026-10-26T22:09:24.836250+00:00",
+  "generated_at": "2026-10-27T11:11:49.493549+00:00",
   "flagged_teams": 8,
   "teams": {
-    "333": {
-      "bracket_name": "Alabama",
-      "region": "Midwest",
-      "seed": 4,
-      "articles": [
-        {
-          "headline": "Alabama's Aden Holloway begins 5-game ban following arrest",
-          "description": "Alabama guard Aden Holloway will miss three exhibition games and two regular-season games during a five-game suspension following his arrest on a drug charge, coach Nate Oats said Thursday.",
-          "published": "2026-10-09",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50137284/alabama-aden-holloway-begins-5-game-ban-following-arrest"
-        },
-        {
-          "headline": "Alabama's Aden Holloway begins 5-game ban following arrest",
-          "description": "Alabama guard Aden Holloway will miss three exhibition games and two regular-season games during a five-game suspension following his arrest on a drug charge, coach Nate Oats said Thursday.",
-          "published": "2026-10-09",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50137284/alabama-aden-holloway-begins-5-game-ban-following-arrest"
-        },
-        {
-          "headline": "Alabama's Aden Holloway begins 5-game ban following arrest",
-          "description": "Alabama guard Aden Holloway will miss three exhibition games and two regular-season games during a five-game suspension following his arrest on a drug charge, coach Nate Oats said Thursday.",
-          "published": "2026-10-09",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50137284/alabama-aden-holloway-begins-5-game-ban-following-arrest"
-        },
-        {
-          "headline": "Alabama's Aden Holloway begins 5-game ban following arrest",
-          "description": "Alabama guard Aden Holloway will miss three exhibition games and two regular-season games during a five-game suspension following his arrest on a drug charge, coach Nate Oats said Thursday.",
-          "published": "2026-10-09",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50137284/alabama-aden-holloway-begins-5-game-ban-following-arrest"
-        }
-      ]
-    },
     "130": {
       "bracket_name": "Michigan",
       "region": "Midwest",
@@ -52,10 +21,10 @@
         }
       ]
     },
-    "2116": {
-      "bracket_name": "UCF",
+    "26": {
+      "bracket_name": "UCLA",
       "region": "East",
-      "seed": 10,
+      "seed": 7,
       "articles": [
         {
           "headline": "UCLA overcomes broken tooth and stubborn UCF 75-71 to advance in the NCAA Tournament",
@@ -65,10 +34,10 @@
         }
       ]
     },
-    "26": {
-      "bracket_name": "UCLA",
+    "2116": {
+      "bracket_name": "UCF",
       "region": "East",
-      "seed": 7,
+      "seed": 10,
       "articles": [
         {
           "headline": "UCLA overcomes broken tooth and stubborn UCF 75-71 to advance in the NCAA Tournament",
@@ -114,6 +83,19 @@
           "description": "Tennessee freshman Ralph Scott is set to have surgery on his left knee and will miss at least six months, according to Vols coach Rick Barnes.",
           "published": "2026-09-02",
           "url": "https://www.espn.com/mens-college-basketball/story/_/id/49807033/tennessee-ralph-scott-knee-surgery-least-6-months"
+        }
+      ]
+    },
+    "333": {
+      "bracket_name": "Alabama",
+      "region": "Midwest",
+      "seed": 4,
+      "articles": [
+        {
+          "headline": "Alabama's Aden Holloway begins 5-game ban following arrest",
+          "description": "Alabama guard Aden Holloway will miss three exhibition games and two regular-season games during a five-game suspension following his arrest on a drug charge, coach Nate Oats said Thursday.",
+          "published": "2026-10-09",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50137284/alabama-aden-holloway-begins-5-game-ban-following-arrest"
         }
       ]
     },
