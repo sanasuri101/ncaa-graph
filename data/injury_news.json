@@ -1,24 +1,11 @@
 {
-  "generated_at": "2026-10-31T20:51:38.835363+00:00",
-  "flagged_teams": 7,
+  "generated_at": "2026-11-01T12:12:44.221202+00:00",
+  "flagged_teams": 6,
   "teams": {
-    "130": {
-      "bracket_name": "Michigan",
-      "region": "Midwest",
-      "seed": 1,
-      "articles": [
-        {
-          "headline": "Michigan 5-star freshman Brandon McCoy Jr. (knee) to miss season",
-          "description": "Michigan five-star freshman Brandon McCoy Jr. will miss the 2026-27 season with a right ACL injury, the school announced.",
-          "published": "2026-09-01",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/49795307/michigan-5-star-freshman-brandon-mccoy-jr-knee-miss-season"
-        }
-      ]
-    },
-    "2116": {
-      "bracket_name": "UCF",
+    "26": {
+      "bracket_name": "UCLA",
       "region": "East",
-      "seed": 10,
+      "seed": 7,
       "articles": [
         {
           "headline": "UCLA overcomes broken tooth and stubborn UCF 75-71 to advance in the NCAA Tournament",
@@ -28,10 +15,10 @@
         }
       ]
     },
-    "26": {
-      "bracket_name": "UCLA",
+    "2116": {
+      "bracket_name": "UCF",
       "region": "East",
-      "seed": 7,
+      "seed": 10,
       "articles": [
         {
           "headline": "UCLA overcomes broken tooth and stubborn UCF 75-71 to advance in the NCAA Tournament",
