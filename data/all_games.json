@@ -1,1 +1,17 @@
-[]
+[
+  {
+    "id": "401920982",
+    "date": "2026-11-01",
+    "name": "Notre Dame Fighting Irish at Villanova Wildcats",
+    "team1_id": "222",
+    "team1_name": "Villanova Wildcats",
+    "team1_score": "72",
+    "team1_winner": false,
+    "team2_id": "87",
+    "team2_name": "Notre Dame Fighting Irish",
+    "team2_score": "74",
+    "team2_winner": true,
+    "neutral": true,
+    "venue": "Palazzo dello Sport"
+  }
+]

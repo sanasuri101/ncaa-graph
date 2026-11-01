@@ -1,7 +1,38 @@
 {
-  "generated_at": "2026-11-01T12:12:44.221202+00:00",
-  "flagged_teams": 6,
+  "generated_at": "2026-11-01T21:34:04.457956+00:00",
+  "flagged_teams": 7,
   "teams": {
+    "356": {
+      "bracket_name": "Illinois",
+      "region": "South",
+      "seed": 3,
+      "articles": [
+        {
+          "headline": "Illinois' David Mirkovic undergoes emergency appendectomy",
+          "description": "David Mirkovic, who had offseason foot surgery that is expected to sideline him at the start of the season, underwent an emergency appendectomy Saturday night.",
+          "published": "2026-11-01",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50351006/illinois-david-mirkovic-emergency-appendectomy-setback"
+        },
+        {
+          "headline": "Illinois' David Mirkovic undergoes emergency appendectomy",
+          "description": "David Mirkovic, who had offseason foot surgery that is expected to sideline him at the start of the season, underwent an emergency appendectomy Saturday night.",
+          "published": "2026-11-01",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50351006/illinois-david-mirkovic-emergency-appendectomy-setback"
+        },
+        {
+          "headline": "Illinois' David Mirkovic undergoes emergency appendectomy",
+          "description": "David Mirkovic, who had offseason foot surgery that is expected to sideline him at the start of the season, underwent an emergency appendectomy Saturday night.",
+          "published": "2026-11-01",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50351006/illinois-david-mirkovic-emergency-appendectomy-setback"
+        },
+        {
+          "headline": "Illinois' David Mirkovic undergoes emergency appendectomy",
+          "description": "David Mirkovic, who had offseason foot surgery that is expected to sideline him at the start of the season, underwent an emergency appendectomy Saturday night.",
+          "published": "2026-11-01",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50351006/illinois-david-mirkovic-emergency-appendectomy-setback"
+        }
+      ]
+    },
     "26": {
       "bracket_name": "UCLA",
       "region": "East",
