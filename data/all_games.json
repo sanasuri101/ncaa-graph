@@ -13,5 +13,20 @@
     "team2_winner": true,
     "neutral": true,
     "venue": "Palazzo dello Sport"
+  },
+  {
+    "id": "401920409",
+    "date": "2026-11-02",
+    "name": "Liberty Flames at High Point Panthers",
+    "team1_id": "2272",
+    "team1_name": "High Point Panthers",
+    "team1_score": "72",
+    "team1_winner": true,
+    "team2_id": "2335",
+    "team2_name": "Liberty Flames",
+    "team2_score": "57",
+    "team2_winner": false,
+    "neutral": true,
+    "venue": "Rock Hill Sports & Event Center"
   }
 ]

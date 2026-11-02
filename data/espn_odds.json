@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-01T21:33:37.243385+00:00",
+  "generated_at": "2026-11-02T14:00:55.687739+00:00",
   "games": {
     "401856478": {
       "game_id": "401856478",
@@ -224,7 +224,13 @@
         "open_away_ml": "+136",
         "line_movement": -1.0
       },
-      "bpi": null
+      "bpi": {
+        "home_bpi_win_pct": 63.0,
+        "away_bpi_win_pct": 37.0,
+        "bpi_pred_margin": 3.3,
+        "matchup_quality": 85.7,
+        "last_modified": "2026-03-19T08:05Z"
+      }
     },
     "401856486": {
       "game_id": "401856486",
@@ -251,7 +257,13 @@
         "open_away_ml": "+5000",
         "line_movement": -0.4
       },
-      "bpi": null
+      "bpi": {
+        "home_bpi_win_pct": 98.9,
+        "away_bpi_win_pct": 1.1,
+        "bpi_pred_margin": 28.0,
+        "matchup_quality": 55.3,
+        "last_modified": "2026-03-19T08:05Z"
+      }
     },
     "401856436": {
       "game_id": "401856436",
@@ -278,7 +290,13 @@
         "open_away_ml": "+275",
         "line_movement": -1.9
       },
-      "bpi": null
+      "bpi": {
+        "home_bpi_win_pct": 74.5,
+        "away_bpi_win_pct": 25.5,
+        "bpi_pred_margin": 6.7,
+        "matchup_quality": 68.6,
+        "last_modified": "2026-03-18T08:04Z"
+      }
     },
     "401856488": {
       "game_id": "401856488",
@@ -305,7 +323,13 @@
         "open_away_ml": "+410",
         "line_movement": 2.9
       },
-      "bpi": null
+      "bpi": {
+        "home_bpi_win_pct": 81.2,
+        "away_bpi_win_pct": 18.8,
+        "bpi_pred_margin": 9.1,
+        "matchup_quality": 79.0,
+        "last_modified": "2026-03-19T08:05Z"
+      }
     },
     "401856489": {
       "game_id": "401856489",
@@ -332,7 +356,13 @@
         "open_away_ml": "+1000",
         "line_movement": -3.8
       },
-      "bpi": null
+      "bpi": {
+        "home_bpi_win_pct": 92.7,
+        "away_bpi_win_pct": 7.3,
+        "bpi_pred_margin": 15.9,
+        "matchup_quality": 64.1,
+        "last_modified": "2026-03-19T08:05Z"
+      }
     },
     "401856490": {
       "game_id": "401856490",
@@ -359,7 +389,13 @@
         "open_away_ml": "+110",
         "line_movement": 4.3
       },
-      "bpi": null
+      "bpi": {
+        "home_bpi_win_pct": 61.3,
+        "away_bpi_win_pct": 38.7,
+        "bpi_pred_margin": 2.9,
+        "matchup_quality": 82.0,
+        "last_modified": "2026-03-19T08:05Z"
+      }
     },
     "401856492": {
       "game_id": "401856492",
@@ -386,7 +422,13 @@
         "open_away_ml": "+150",
         "line_movement": -4.6
       },
-      "bpi": null
+      "bpi": {
+        "home_bpi_win_pct": 53.2,
+        "away_bpi_win_pct": 46.8,
+        "bpi_pred_margin": 0.8,
+        "matchup_quality": 86.6,
+        "last_modified": "2026-03-19T08:05Z"
+      }
     },
     "401856494": {
       "game_id": "401856494",
@@ -413,7 +455,13 @@
         "open_away_ml": "+275",
         "line_movement": 8.2
       },
-      "bpi": null
+      "bpi": {
+        "home_bpi_win_pct": 85.1,
+        "away_bpi_win_pct": 14.9,
+        "bpi_pred_margin": 10.9,
+        "matchup_quality": 73.7,
+        "last_modified": "2026-03-20T08:05Z"
+      }
     },
     "401856496": {
       "game_id": "401856496",
@@ -440,7 +488,13 @@
         "open_away_ml": "+225",
         "line_movement": -2.1
       },
-      "bpi": null
+      "bpi": {
+        "home_bpi_win_pct": 72.2,
+        "away_bpi_win_pct": 27.9,
+        "bpi_pred_margin": 5.9,
+        "matchup_quality": 78.7,
+        "last_modified": "2026-03-20T08:05Z"
+      }
     },
     "401856529": {
       "game_id": "401856529",
