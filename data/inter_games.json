@@ -1,1 +1,77 @@
-[]
+[
+  {
+    "id": "401916313",
+    "date": "2026-11-03",
+    "name": "Ohio State Buckeyes at BYU Cougars",
+    "team1_id": "252",
+    "team1_name": "BYU Cougars",
+    "team1_score": "94",
+    "team1_winner": true,
+    "team2_id": "194",
+    "team2_name": "Ohio State Buckeyes",
+    "team2_score": "83",
+    "team2_winner": false,
+    "neutral": true,
+    "venue": "Delta Center"
+  },
+  {
+    "id": "401909738",
+    "date": "2026-11-03",
+    "name": "Arizona Wildcats at UCLA Bruins",
+    "team1_id": "26",
+    "team1_name": "UCLA Bruins",
+    "team1_score": "84",
+    "team1_winner": true,
+    "team2_id": "12",
+    "team2_name": "Arizona Wildcats",
+    "team2_score": "75",
+    "team2_winner": false,
+    "neutral": true,
+    "venue": "T-Mobile Arena"
+  },
+  {
+    "id": "401921704",
+    "date": "2026-11-03",
+    "name": "Purdue Boilermakers at Gonzaga Bulldogs",
+    "team1_id": "2250",
+    "team1_name": "Gonzaga Bulldogs",
+    "team1_score": "78",
+    "team1_winner": true,
+    "team2_id": "2509",
+    "team2_name": "Purdue Boilermakers",
+    "team2_score": "72",
+    "team2_winner": false,
+    "neutral": true,
+    "venue": "T-Mobile Arena"
+  },
+  {
+    "id": "401906769",
+    "date": "2026-11-02",
+    "name": "Miami Hurricanes at Florida Gators",
+    "team1_id": "57",
+    "team1_name": "Florida Gators",
+    "team1_score": "77",
+    "team1_winner": true,
+    "team2_id": "2390",
+    "team2_name": "Miami Hurricanes",
+    "team2_score": "67",
+    "team2_winner": false,
+    "neutral": true,
+    "venue": "Benchmark International Arena"
+  },
+  {
+    "id": "401911248",
+    "date": "2026-11-03",
+    "name": "Lehigh Mountain Hawks at Saint Louis Billikens",
+    "team1_id": "139",
+    "team1_name": "Saint Louis Billikens",
+    "team1_score": "92",
+    "team1_winner": true,
+    "team2_id": "2329",
+    "team2_name": "Lehigh Mountain Hawks",
+    "team2_score": "67",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "Chaifetz Arena"
+  }
+]
