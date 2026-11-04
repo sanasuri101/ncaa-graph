@@ -75,6 +75,21 @@
     "venue": "Carnesecca Arena"
   },
   {
+    "id": "401927385",
+    "date": "2026-11-04",
+    "name": "Cornell (IA) Rams at Northern Iowa Panthers",
+    "team1_id": "2460",
+    "team1_name": "Northern Iowa Panthers",
+    "team1_score": "106",
+    "team1_winner": true,
+    "team2_id": "2155",
+    "team2_name": "Cornell (IA) Rams",
+    "team2_score": "70",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "McLeod Center"
+  },
+  {
     "id": "401909784",
     "date": "2026-11-03",
     "name": "Fordham Rams at Kansas Jayhawks",
@@ -285,6 +300,21 @@
     "venue": "Rock Hill Sports & Event Center"
   },
   {
+    "id": "401929372",
+    "date": "2026-11-04",
+    "name": "Arkansas-Pine Bluff Golden Lions at Arkansas Razorbacks",
+    "team1_id": "8",
+    "team1_name": "Arkansas Razorbacks",
+    "team1_score": "106",
+    "team1_winner": true,
+    "team2_id": "2029",
+    "team2_name": "Arkansas-Pine Bluff Golden Lions",
+    "team2_score": "61",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "Bud Walton Arena"
+  },
+  {
     "id": "401917506",
     "date": "2026-11-03",
     "name": "Seattle U Redhawks at Hawai'i Rainbow Warriors",
@@ -373,6 +403,21 @@
     "team2_winner": false,
     "neutral": true,
     "venue": "Benchmark International Arena"
+  },
+  {
+    "id": "401921165",
+    "date": "2026-11-04",
+    "name": "Cleveland State Vikings at Missouri Tigers",
+    "team1_id": "142",
+    "team1_name": "Missouri Tigers",
+    "team1_score": "111",
+    "team1_winner": true,
+    "team2_id": "325",
+    "team2_name": "Cleveland State Vikings",
+    "team2_score": "50",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "Mizzou Arena"
   },
   {
     "id": "401921423",
@@ -495,6 +540,21 @@
     "venue": "Cajundome"
   },
   {
+    "id": "401906757",
+    "date": "2026-11-04",
+    "name": "Sam Houston Bearkats at Alabama Crimson Tide",
+    "team1_id": "333",
+    "team1_name": "Alabama Crimson Tide",
+    "team1_score": "96",
+    "team1_winner": true,
+    "team2_id": "2534",
+    "team2_name": "Sam Houston Bearkats",
+    "team2_score": "74",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "Coleman Coliseum"
+  },
+  {
     "id": "401926830",
     "date": "2026-11-02",
     "name": "St. Joseph's Long Island Golden Eagles at Hofstra Pride",
@@ -508,6 +568,21 @@
     "team2_winner": false,
     "neutral": false,
     "venue": "David S. Mack Sports and Exhibition Complex"
+  },
+  {
+    "id": "401906848",
+    "date": "2026-11-03",
+    "name": "Wofford Terriers at Tennessee Volunteers",
+    "team1_id": "2633",
+    "team1_name": "Tennessee Volunteers",
+    "team1_score": "90",
+    "team1_winner": true,
+    "team2_id": "2747",
+    "team2_name": "Wofford Terriers",
+    "team2_score": "59",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "Food City Center"
   },
   {
     "id": "401911002",
@@ -540,6 +615,21 @@
     "venue": "Moody Coliseum (Dallas)"
   },
   {
+    "id": "401920422",
+    "date": "2026-11-04",
+    "name": "Drexel Dragons at Virginia Cavaliers",
+    "team1_id": "258",
+    "team1_name": "Virginia Cavaliers",
+    "team1_score": "89",
+    "team1_winner": true,
+    "team2_id": "2182",
+    "team2_name": "Drexel Dragons",
+    "team2_score": "60",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "John Paul Jones Arena"
+  },
+  {
     "id": "401911333",
     "date": "2026-11-03",
     "name": "Air Force Falcons at Wright State Raiders",
@@ -553,6 +643,21 @@
     "team2_winner": false,
     "neutral": false,
     "venue": "Nutter Center"
+  },
+  {
+    "id": "401921801",
+    "date": "2026-11-04",
+    "name": "Manhattan Jaspers at Kentucky Wildcats",
+    "team1_id": "96",
+    "team1_name": "Kentucky Wildcats",
+    "team1_score": "85",
+    "team1_winner": true,
+    "team2_id": "2363",
+    "team2_name": "Manhattan Jaspers",
+    "team2_score": "57",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "Rupp Arena"
   },
   {
     "id": "401917509",
@@ -628,6 +733,21 @@
     "team2_winner": false,
     "neutral": false,
     "venue": "Littlejohn Coliseum"
+  },
+  {
+    "id": "401920702",
+    "date": "2026-11-04",
+    "name": "Lipscomb Bisons at Iowa Hawkeyes",
+    "team1_id": "2294",
+    "team1_name": "Iowa Hawkeyes",
+    "team1_score": "76",
+    "team1_winner": true,
+    "team2_id": "288",
+    "team2_name": "Lipscomb Bisons",
+    "team2_score": "54",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "Carver-Hawkeye Arena"
   },
   {
     "id": "401921104",
@@ -750,6 +870,21 @@
     "venue": "University Credit Union Pavilion"
   },
   {
+    "id": "401920806",
+    "date": "2026-11-04",
+    "name": "Alabama State Hornets at Texas A&M Aggies",
+    "team1_id": "245",
+    "team1_name": "Texas A&M Aggies",
+    "team1_score": "97",
+    "team1_winner": true,
+    "team2_id": "2011",
+    "team2_name": "Alabama State Hornets",
+    "team2_score": "66",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "Reed Arena"
+  },
+  {
     "id": "401925811",
     "date": "2026-11-03",
     "name": "La Salle Explorers at Houston Cougars",
@@ -823,6 +958,21 @@
     "team2_winner": false,
     "neutral": false,
     "venue": "The Pit"
+  },
+  {
+    "id": "401920155",
+    "date": "2026-11-04",
+    "name": "Cal State Fullerton Titans at San Diego State Aztecs",
+    "team1_id": "21",
+    "team1_name": "San Diego State Aztecs",
+    "team1_score": "102",
+    "team1_winner": true,
+    "team2_id": "2239",
+    "team2_name": "Cal State Fullerton Titans",
+    "team2_score": "78",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "Viejas Arena"
   },
   {
     "id": "401920716",
