@@ -165,6 +165,21 @@
     "venue": "Scheels Center"
   },
   {
+    "id": "401917512",
+    "date": "2026-11-05",
+    "name": "North Dakota State Bison at Saint Mary's Gaels",
+    "team1_id": "2608",
+    "team1_name": "Saint Mary's Gaels",
+    "team1_score": "105",
+    "team1_winner": true,
+    "team2_id": "2449",
+    "team2_name": "North Dakota State Bison",
+    "team2_score": "64",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "University Credit Union Pavilion"
+  },
+  {
     "id": "401909738",
     "date": "2026-11-03",
     "name": "Arizona Wildcats at UCLA Bruins",
@@ -223,6 +238,21 @@
     "team2_winner": true,
     "neutral": true,
     "venue": "Sanford Pentagon"
+  },
+  {
+    "id": "401926111",
+    "date": "2026-11-05",
+    "name": "Bob Jones Bruins at Furman Paladins",
+    "team1_id": "231",
+    "team1_name": "Furman Paladins",
+    "team1_score": "121",
+    "team1_winner": true,
+    "team2_id": "3243",
+    "team2_name": "Bob Jones Bruins",
+    "team2_score": "52",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "Timmons Arena"
   },
   {
     "id": "401919803",
@@ -298,6 +328,21 @@
     "team2_winner": false,
     "neutral": true,
     "venue": "Rock Hill Sports & Event Center"
+  },
+  {
+    "id": "401920410",
+    "date": "2026-11-05",
+    "name": "Maryland Eastern Shore Hawks at High Point Panthers",
+    "team1_id": "2272",
+    "team1_name": "High Point Panthers",
+    "team1_score": "63",
+    "team1_winner": true,
+    "team2_id": "2379",
+    "team2_name": "Maryland Eastern Shore Hawks",
+    "team2_score": "49",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "Qubein Center"
   },
   {
     "id": "401929372",
@@ -433,6 +478,21 @@
     "team2_winner": false,
     "neutral": true,
     "venue": "Rock Hill Sports & Event Center"
+  },
+  {
+    "id": "401917514",
+    "date": "2026-11-05",
+    "name": "Queens University Royals at Loyola Marymount Lions",
+    "team1_id": "2351",
+    "team1_name": "Loyola Marymount Lions",
+    "team1_score": "95",
+    "team1_winner": false,
+    "team2_id": "2511",
+    "team2_name": "Queens University Royals",
+    "team2_score": "96",
+    "team2_winner": true,
+    "neutral": false,
+    "venue": "Gersten Pavilion"
   },
   {
     "id": "401925733",
@@ -670,6 +730,21 @@
     "team2_id": "119",
     "team2_name": "Towson Tigers",
     "team2_score": "70",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "Leavey Center"
+  },
+  {
+    "id": "401917513",
+    "date": "2026-11-05",
+    "name": "Milwaukee Panthers at Santa Clara Broncos",
+    "team1_id": "2541",
+    "team1_name": "Santa Clara Broncos",
+    "team1_score": "95",
+    "team1_winner": true,
+    "team2_id": "270",
+    "team2_name": "Milwaukee Panthers",
+    "team2_score": "72",
     "team2_winner": false,
     "neutral": false,
     "venue": "Leavey Center"
@@ -928,6 +1003,21 @@
     "team2_winner": true,
     "neutral": false,
     "venue": "Lloyd Noble Center"
+  },
+  {
+    "id": "401920798",
+    "date": "2026-11-05",
+    "name": "SE Louisiana Lions at Auburn Tigers",
+    "team1_id": "2",
+    "team1_name": "Auburn Tigers",
+    "team1_score": "92",
+    "team1_winner": true,
+    "team2_id": "2545",
+    "team2_name": "SE Louisiana Lions",
+    "team2_score": "59",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "Neville Arena"
   },
   {
     "id": "401916286",

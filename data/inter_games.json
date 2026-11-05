@@ -15,6 +15,21 @@
     "venue": "Delta Center"
   },
   {
+    "id": "401917512",
+    "date": "2026-11-05",
+    "name": "North Dakota State Bison at Saint Mary's Gaels",
+    "team1_id": "2608",
+    "team1_name": "Saint Mary's Gaels",
+    "team1_score": "105",
+    "team1_winner": true,
+    "team2_id": "2449",
+    "team2_name": "North Dakota State Bison",
+    "team2_score": "64",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "University Credit Union Pavilion"
+  },
+  {
     "id": "401909738",
     "date": "2026-11-03",
     "name": "Arizona Wildcats at UCLA Bruins",
