@@ -15,6 +15,21 @@
     "venue": "Cameron Indoor Stadium"
   },
   {
+    "id": "401909563",
+    "date": "2026-11-06",
+    "name": "Coastal Carolina Chanticleers at Duke Blue Devils",
+    "team1_id": "150",
+    "team1_name": "Duke Blue Devils",
+    "team1_score": "113",
+    "team1_winner": true,
+    "team2_id": "324",
+    "team2_name": "Coastal Carolina Chanticleers",
+    "team2_score": "52",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "Cameron Indoor Stadium"
+  },
+  {
     "id": "401923269",
     "date": "2026-11-03",
     "name": "Siena Saints at Bryant Bulldogs",
@@ -135,6 +150,21 @@
     "venue": "Yuengling Center"
   },
   {
+    "id": "401909501",
+    "date": "2026-11-06",
+    "name": "South Florida Bulls at DePaul Blue Demons",
+    "team1_id": "305",
+    "team1_name": "DePaul Blue Demons",
+    "team1_score": "82",
+    "team1_winner": true,
+    "team2_id": "58",
+    "team2_name": "South Florida Bulls",
+    "team2_score": "80",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "Wintrust Arena"
+  },
+  {
     "id": "401924856",
     "date": "2026-11-03",
     "name": "Quinnipiac Bobcats at Michigan State Spartans",
@@ -145,6 +175,21 @@
     "team2_id": "2514",
     "team2_name": "Quinnipiac Bobcats",
     "team2_score": "59",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "Breslin Center"
+  },
+  {
+    "id": "401925754",
+    "date": "2026-11-06",
+    "name": "Toledo Rockets at Michigan State Spartans",
+    "team1_id": "127",
+    "team1_name": "Michigan State Spartans",
+    "team1_score": "91",
+    "team1_winner": true,
+    "team2_id": "2649",
+    "team2_name": "Toledo Rockets",
+    "team2_score": "61",
     "team2_winner": false,
     "neutral": false,
     "venue": "Breslin Center"
@@ -255,6 +300,21 @@
     "venue": "Timmons Arena"
   },
   {
+    "id": "401909739",
+    "date": "2026-11-06",
+    "name": "Cal Poly Mustangs at Arizona Wildcats",
+    "team1_id": "12",
+    "team1_name": "Arizona Wildcats",
+    "team1_score": "104",
+    "team1_winner": true,
+    "team2_id": "13",
+    "team2_name": "Cal Poly Mustangs",
+    "team2_score": "84",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "McKale Center at ALKEME Arena"
+  },
+  {
     "id": "401919803",
     "date": "2026-11-03",
     "name": "Long Island University Sharks at Florida Atlantic Owls",
@@ -268,6 +328,21 @@
     "team2_winner": false,
     "neutral": false,
     "venue": "Abessinio Court at Eleanor R. Baldwin Arena"
+  },
+  {
+    "id": "401919804",
+    "date": "2026-11-05",
+    "name": "Long Island University Sharks at Seton Hall Pirates",
+    "team1_id": "2550",
+    "team1_name": "Seton Hall Pirates",
+    "team1_score": "67",
+    "team1_winner": true,
+    "team2_id": "112358",
+    "team2_name": "Long Island University Sharks",
+    "team2_score": "60",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "Walsh Gymnasium"
   },
   {
     "id": "401920982",
@@ -385,6 +460,21 @@
     "team2_id": "2130",
     "team2_name": "Chicago State Cougars",
     "team2_score": "59",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "Moody Center"
+  },
+  {
+    "id": "401906864",
+    "date": "2026-11-06",
+    "name": "Gardner-Webb Runnin' Bulldogs at Texas Longhorns",
+    "team1_id": "251",
+    "team1_name": "Texas Longhorns",
+    "team1_score": "98",
+    "team1_winner": true,
+    "team2_id": "2241",
+    "team2_name": "Gardner-Webb Runnin' Bulldogs",
+    "team2_score": "50",
     "team2_winner": false,
     "neutral": false,
     "venue": "Moody Center"
@@ -525,6 +615,21 @@
     "venue": "EagleBank Arena"
   },
   {
+    "id": "401921084",
+    "date": "2026-11-06",
+    "name": "UMBC Retrievers at Marist Red Foxes",
+    "team1_id": "2368",
+    "team1_name": "Marist Red Foxes",
+    "team1_score": "88",
+    "team1_winner": true,
+    "team2_id": "2378",
+    "team2_name": "UMBC Retrievers",
+    "team2_score": "80",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "McCann Arena"
+  },
+  {
     "id": "401924743",
     "date": "2026-11-03",
     "name": "Howard Bison at Yale Bulldogs",
@@ -538,6 +643,21 @@
     "team2_winner": false,
     "neutral": false,
     "venue": "John J. Lee Amphitheater"
+  },
+  {
+    "id": "401925684",
+    "date": "2026-11-06",
+    "name": "Howard Bison at Alcorn State Braves",
+    "team1_id": "2016",
+    "team1_name": "Alcorn State Braves",
+    "team1_score": "83",
+    "team1_winner": false,
+    "team2_id": "47",
+    "team2_name": "Howard Bison",
+    "team2_score": "94",
+    "team2_winner": true,
+    "neutral": false,
+    "venue": "Davey L. Whitney Complex"
   },
   {
     "id": "401906779",
@@ -580,6 +700,21 @@
     "team2_id": "2296",
     "team2_name": "Jackson State Tigers",
     "team2_score": "42",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "United Supermarkets Arena"
+  },
+  {
+    "id": "401921133",
+    "date": "2026-11-06",
+    "name": "Bethune-Cookman Wildcats at Texas Tech Red Raiders",
+    "team1_id": "2641",
+    "team1_name": "Texas Tech Red Raiders",
+    "team1_score": "76",
+    "team1_winner": true,
+    "team2_id": "2065",
+    "team2_name": "Bethune-Cookman Wildcats",
+    "team2_score": "58",
     "team2_winner": false,
     "neutral": false,
     "venue": "United Supermarkets Arena"
@@ -630,6 +765,21 @@
     "venue": "David S. Mack Sports and Exhibition Complex"
   },
   {
+    "id": "401924733",
+    "date": "2026-11-06",
+    "name": "Hofstra Pride at Princeton Tigers",
+    "team1_id": "163",
+    "team1_name": "Princeton Tigers",
+    "team1_score": "60",
+    "team1_winner": true,
+    "team2_id": "2275",
+    "team2_name": "Hofstra Pride",
+    "team2_score": "58",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "Jadwin Gymnasium"
+  },
+  {
     "id": "401906848",
     "date": "2026-11-03",
     "name": "Wofford Terriers at Tennessee Volunteers",
@@ -670,6 +820,21 @@
     "team2_id": "2582",
     "team2_name": "Southern Jaguars",
     "team2_score": "72",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "Moody Coliseum (Dallas)"
+  },
+  {
+    "id": "401918968",
+    "date": "2026-11-06",
+    "name": "VMI Keydets at SMU Mustangs",
+    "team1_id": "2567",
+    "team1_name": "SMU Mustangs",
+    "team1_score": "95",
+    "team1_winner": true,
+    "team2_id": "2678",
+    "team2_name": "VMI Keydets",
+    "team2_score": "70",
     "team2_winner": false,
     "neutral": false,
     "venue": "Moody Coliseum (Dallas)"
@@ -780,6 +945,36 @@
     "venue": "Sanford Pentagon"
   },
   {
+    "id": "401920765",
+    "date": "2026-11-06",
+    "name": "East West Phantoms at Tennessee State Tigers",
+    "team1_id": "2634",
+    "team1_name": "Tennessee State Tigers",
+    "team1_score": "127",
+    "team1_winner": true,
+    "team2_id": "3107",
+    "team2_name": "East West Phantoms",
+    "team2_score": "61",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "Gentry Center"
+  },
+  {
+    "id": "401906770",
+    "date": "2026-11-06",
+    "name": "Jacksonville Dolphins at Florida Gators",
+    "team1_id": "57",
+    "team1_name": "Florida Gators",
+    "team1_score": "88",
+    "team1_winner": true,
+    "team2_id": "294",
+    "team2_name": "Jacksonville Dolphins",
+    "team2_score": "57",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "Stephen C. O'Connell Center"
+  },
+  {
     "id": "401926077",
     "date": "2026-11-03",
     "name": "Paul Quinn Tigers at Prairie View A&M Panthers",
@@ -793,6 +988,36 @@
     "team2_winner": false,
     "neutral": false,
     "venue": "William J. Nicks Building"
+  },
+  {
+    "id": "401926078",
+    "date": "2026-11-06",
+    "name": "College of Biblical Studies Ambassadors at Prairie View A&M Panthers",
+    "team1_id": "2504",
+    "team1_name": "Prairie View A&M Panthers",
+    "team1_score": "103",
+    "team1_winner": true,
+    "team2_id": "128256",
+    "team2_name": "College of Biblical Studies Ambassadors",
+    "team2_score": "90",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "William J. Nicks Building"
+  },
+  {
+    "id": "401924718",
+    "date": "2026-11-06",
+    "name": "Cornell Big Red at Lehigh Mountain Hawks",
+    "team1_id": "2329",
+    "team1_name": "Lehigh Mountain Hawks",
+    "team1_score": "71",
+    "team1_winner": true,
+    "team2_id": "172",
+    "team2_name": "Cornell Big Red",
+    "team2_score": "64",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "Stabler Arena"
   },
   {
     "id": "401918073",
@@ -840,6 +1065,21 @@
     "venue": "Memorial Gymnasium (TN)"
   },
   {
+    "id": "401909726",
+    "date": "2026-11-05",
+    "name": "Wake Forest Demon Deacons at Vanderbilt Commodores",
+    "team1_id": "238",
+    "team1_name": "Vanderbilt Commodores",
+    "team1_score": "74",
+    "team1_winner": true,
+    "team2_id": "154",
+    "team2_name": "Wake Forest Demon Deacons",
+    "team2_score": "51",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "Memorial Gymnasium (TN)"
+  },
+  {
     "id": "401919014",
     "date": "2026-11-02",
     "name": "UAB Blazers at McNeese Cowboys",
@@ -853,6 +1093,21 @@
     "team2_winner": false,
     "neutral": true,
     "venue": "Rock Hill Sports & Event Center"
+  },
+  {
+    "id": "401925031",
+    "date": "2026-11-05",
+    "name": "McNeese Cowboys at North Texas Mean Green",
+    "team1_id": "249",
+    "team1_name": "North Texas Mean Green",
+    "team1_score": "77",
+    "team1_winner": true,
+    "team2_id": "2377",
+    "team2_name": "McNeese Cowboys",
+    "team2_score": "67",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "The Super Pit"
   },
   {
     "id": "401919780",
@@ -925,6 +1180,21 @@
     "team2_id": "161",
     "team2_name": "Fairleigh Dickinson Knights",
     "team2_score": "45",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "State Farm Center"
+  },
+  {
+    "id": "401913526",
+    "date": "2026-11-06",
+    "name": "Pennsylvania Quakers at Illinois Fighting Illini",
+    "team1_id": "356",
+    "team1_name": "Illinois Fighting Illini",
+    "team1_score": "112",
+    "team1_winner": true,
+    "team2_id": "219",
+    "team2_name": "Pennsylvania Quakers",
+    "team2_score": "70",
     "team2_winner": false,
     "neutral": false,
     "venue": "State Farm Center"
@@ -1035,6 +1305,21 @@
     "venue": "Simon Skjodt Assembly Hall"
   },
   {
+    "id": "401916287",
+    "date": "2026-11-05",
+    "name": "Bellarmine Knights at Indiana Hoosiers",
+    "team1_id": "84",
+    "team1_name": "Indiana Hoosiers",
+    "team1_score": "92",
+    "team1_winner": true,
+    "team2_id": "91",
+    "team2_name": "Bellarmine Knights",
+    "team2_score": "69",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "Simon Skjodt Assembly Hall"
+  },
+  {
     "id": "401924894",
     "date": "2026-11-03",
     "name": "Utah Tech Trailblazers at New Mexico Lobos",
@@ -1090,6 +1375,21 @@
     "team2_id": "44",
     "team2_name": "American University Eagles",
     "team2_score": "53",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "Fifth Third Arena"
+  },
+  {
+    "id": "401921747",
+    "date": "2026-11-06",
+    "name": "Green Bay Phoenix at Cincinnati Bearcats",
+    "team1_id": "2132",
+    "team1_name": "Cincinnati Bearcats",
+    "team1_score": "81",
+    "team1_winner": true,
+    "team2_id": "2739",
+    "team2_name": "Green Bay Phoenix",
+    "team2_score": "64",
     "team2_winner": false,
     "neutral": false,
     "venue": "Fifth Third Arena"

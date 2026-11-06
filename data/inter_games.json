@@ -45,6 +45,21 @@
     "venue": "T-Mobile Arena"
   },
   {
+    "id": "401919804",
+    "date": "2026-11-05",
+    "name": "Long Island University Sharks at Seton Hall Pirates",
+    "team1_id": "2550",
+    "team1_name": "Seton Hall Pirates",
+    "team1_score": "67",
+    "team1_winner": true,
+    "team2_id": "112358",
+    "team2_name": "Long Island University Sharks",
+    "team2_score": "60",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "Walsh Gymnasium"
+  },
+  {
     "id": "401921704",
     "date": "2026-11-03",
     "name": "Purdue Boilermakers at Gonzaga Bulldogs",
@@ -88,5 +103,20 @@
     "team2_winner": false,
     "neutral": false,
     "venue": "Chaifetz Arena"
+  },
+  {
+    "id": "401913526",
+    "date": "2026-11-06",
+    "name": "Pennsylvania Quakers at Illinois Fighting Illini",
+    "team1_id": "356",
+    "team1_name": "Illinois Fighting Illini",
+    "team1_score": "112",
+    "team1_winner": true,
+    "team2_id": "219",
+    "team2_name": "Pennsylvania Quakers",
+    "team2_score": "70",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "State Farm Center"
   }
 ]
