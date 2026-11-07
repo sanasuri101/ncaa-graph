@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-11-06T22:36:07.222362+00:00",
-  "flagged_teams": 7,
+  "generated_at": "2026-11-07T12:02:03.629765+00:00",
+  "flagged_teams": 5,
   "teams": {
     "2116": {
       "bracket_name": "UCF",
@@ -54,19 +54,6 @@
         }
       ]
     },
-    "333": {
-      "bracket_name": "Alabama",
-      "region": "Midwest",
-      "seed": 4,
-      "articles": [
-        {
-          "headline": "Alabama's Aden Holloway begins 5-game ban following arrest",
-          "description": "Alabama guard Aden Holloway will miss three exhibition games and two regular-season games during a five-game suspension following his arrest on a drug charge, coach Nate Oats said Thursday.",
-          "published": "2026-10-09",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50137284/alabama-aden-holloway-begins-5-game-ban-following-arrest"
-        }
-      ]
-    },
     "356": {
       "bracket_name": "Illinois",
       "region": "South",
@@ -77,19 +64,6 @@
           "description": "David Mirkovic, who had offseason foot surgery that is expected to sideline him at the start of the season, underwent an emergency appendectomy Saturday night.",
           "published": "2026-11-01",
           "url": "https://www.espn.com/mens-college-basketball/story/_/id/50351006/illinois-david-mirkovic-emergency-appendectomy-setback"
-        }
-      ]
-    },
-    "66": {
-      "bracket_name": "Iowa State",
-      "region": "Midwest",
-      "seed": 2,
-      "articles": [
-        {
-          "headline": "Iowa State's Toure has surgery, expected back in January",
-          "description": "Iowa State's Killyan Toure had surgery on his right shoulder Friday and is expected to be ready to play basketball in January.",
-          "published": "2026-08-26",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/49683341/iowa-state-killyan-toure-successful-shoulder-surgery"
         }
       ]
     }

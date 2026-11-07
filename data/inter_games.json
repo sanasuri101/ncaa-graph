@@ -45,6 +45,21 @@
     "venue": "T-Mobile Arena"
   },
   {
+    "id": "401920685",
+    "date": "2026-11-07",
+    "name": "UConn Huskies at Michigan Wolverines",
+    "team1_id": "130",
+    "team1_name": "Michigan Wolverines",
+    "team1_score": "77",
+    "team1_winner": false,
+    "team2_id": "41",
+    "team2_name": "UConn Huskies",
+    "team2_score": "85",
+    "team2_winner": true,
+    "neutral": true,
+    "venue": "TD Garden"
+  },
+  {
     "id": "401919804",
     "date": "2026-11-05",
     "name": "Long Island University Sharks at Seton Hall Pirates",
@@ -88,6 +103,21 @@
     "team2_winner": false,
     "neutral": true,
     "venue": "Benchmark International Arena"
+  },
+  {
+    "id": "401911249",
+    "date": "2026-11-07",
+    "name": "Saint Louis Billikens at Missouri Tigers",
+    "team1_id": "142",
+    "team1_name": "Missouri Tigers",
+    "team1_score": "84",
+    "team1_winner": false,
+    "team2_id": "139",
+    "team2_name": "Saint Louis Billikens",
+    "team2_score": "90",
+    "team2_winner": true,
+    "neutral": true,
+    "venue": "Enterprise Center"
   },
   {
     "id": "401911248",
