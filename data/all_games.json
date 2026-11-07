@@ -180,6 +180,21 @@
     "venue": "KFC Yum! Center"
   },
   {
+    "id": "401918948",
+    "date": "2026-11-07",
+    "name": "Morehead State Eagles at Louisville Cardinals",
+    "team1_id": "97",
+    "team1_name": "Louisville Cardinals",
+    "team1_score": "107",
+    "team1_winner": true,
+    "team2_id": "2413",
+    "team2_name": "Morehead State Eagles",
+    "team2_score": "57",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "KFC Yum! Center"
+  },
+  {
     "id": "401911374",
     "date": "2026-11-03",
     "name": "Charleston Southern Buccaneers at South Florida Bulls",
