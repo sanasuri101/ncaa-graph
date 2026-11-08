@@ -15,6 +15,21 @@
     "venue": "Delta Center"
   },
   {
+    "id": "401926112",
+    "date": "2026-11-07",
+    "name": "Northern Iowa Panthers at Furman Paladins",
+    "team1_id": "231",
+    "team1_name": "Furman Paladins",
+    "team1_score": "98",
+    "team1_winner": true,
+    "team2_id": "2460",
+    "team2_name": "Northern Iowa Panthers",
+    "team2_score": "83",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "Timmons Arena"
+  },
+  {
     "id": "401917512",
     "date": "2026-11-05",
     "name": "North Dakota State Bison at Saint Mary's Gaels",
