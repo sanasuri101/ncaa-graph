@@ -90,6 +90,21 @@
     "venue": "Walsh Gymnasium"
   },
   {
+    "id": "401920424",
+    "date": "2026-11-08",
+    "name": "Arkansas Razorbacks at Virginia Cavaliers",
+    "team1_id": "258",
+    "team1_name": "Virginia Cavaliers",
+    "team1_score": "91",
+    "team1_winner": true,
+    "team2_id": "8",
+    "team2_name": "Arkansas Razorbacks",
+    "team2_score": "72",
+    "team2_winner": false,
+    "neutral": true,
+    "venue": "Capital One Arena"
+  },
+  {
     "id": "401921704",
     "date": "2026-11-03",
     "name": "Purdue Boilermakers at Gonzaga Bulldogs",

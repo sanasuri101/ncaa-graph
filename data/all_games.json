@@ -45,6 +45,21 @@
     "venue": "Chace Athletic Center"
   },
   {
+    "id": "401924734",
+    "date": "2026-11-08",
+    "name": "Princeton Tigers at Siena Saints",
+    "team1_id": "2561",
+    "team1_name": "Siena Saints",
+    "team1_score": "82",
+    "team1_winner": true,
+    "team2_id": "163",
+    "team2_name": "Princeton Tigers",
+    "team2_score": "68",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "MVP Arena"
+  },
+  {
     "id": "401916313",
     "date": "2026-11-03",
     "name": "Ohio State Buckeyes at BYU Cougars",
@@ -118,6 +133,21 @@
     "team2_winner": false,
     "neutral": false,
     "venue": "Carnesecca Arena"
+  },
+  {
+    "id": "401924646",
+    "date": "2026-11-08",
+    "name": "Iona Gaels at St. John's Red Storm",
+    "team1_id": "2599",
+    "team1_name": "St. John's Red Storm",
+    "team1_score": "104",
+    "team1_winner": true,
+    "team2_id": "314",
+    "team2_name": "Iona Gaels",
+    "team2_score": "65",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "Madison Square Garden"
   },
   {
     "id": "401927385",
@@ -643,6 +673,21 @@
     "team2_winner": false,
     "neutral": false,
     "venue": "Bud Walton Arena"
+  },
+  {
+    "id": "401920424",
+    "date": "2026-11-08",
+    "name": "Arkansas Razorbacks at Virginia Cavaliers",
+    "team1_id": "258",
+    "team1_name": "Virginia Cavaliers",
+    "team1_score": "91",
+    "team1_winner": true,
+    "team2_id": "8",
+    "team2_name": "Arkansas Razorbacks",
+    "team2_score": "72",
+    "team2_winner": false,
+    "neutral": true,
+    "venue": "Capital One Arena"
   },
   {
     "id": "401917506",
@@ -1496,6 +1541,21 @@
     "team2_name": "Cornell Big Red",
     "team2_score": "64",
     "team2_winner": false,
+    "neutral": false,
+    "venue": "Stabler Arena"
+  },
+  {
+    "id": "401911306",
+    "date": "2026-11-08",
+    "name": "Brown Bears at Lehigh Mountain Hawks",
+    "team1_id": "2329",
+    "team1_name": "Lehigh Mountain Hawks",
+    "team1_score": "55",
+    "team1_winner": false,
+    "team2_id": "225",
+    "team2_name": "Brown Bears",
+    "team2_score": "65",
+    "team2_winner": true,
     "neutral": false,
     "venue": "Stabler Arena"
   },
