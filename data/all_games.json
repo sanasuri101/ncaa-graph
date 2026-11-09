@@ -345,6 +345,21 @@
     "venue": "The Sobrato Center"
   },
   {
+    "id": "401920134",
+    "date": "2026-11-08",
+    "name": "North Dakota State Bison at Cal State Bakersfield Roadrunners",
+    "team1_id": "2934",
+    "team1_name": "Cal State Bakersfield Roadrunners",
+    "team1_score": "91",
+    "team1_winner": true,
+    "team2_id": "2449",
+    "team2_name": "North Dakota State Bison",
+    "team2_score": "80",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "Icardo Center"
+  },
+  {
     "id": "401909738",
     "date": "2026-11-03",
     "name": "Arizona Wildcats at UCLA Bruins",
@@ -715,6 +730,21 @@
     "team2_id": "3246",
     "team2_name": "Bethesda Flames",
     "team2_score": "44",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "Stan Sheriff Center"
+  },
+  {
+    "id": "401929002",
+    "date": "2026-11-09",
+    "name": "UT Arlington Mavericks at Hawai'i Rainbow Warriors",
+    "team1_id": "62",
+    "team1_name": "Hawai'i Rainbow Warriors",
+    "team1_score": "71",
+    "team1_winner": true,
+    "team2_id": "250",
+    "team2_name": "UT Arlington Mavericks",
+    "team2_score": "62",
     "team2_winner": false,
     "neutral": false,
     "venue": "Stan Sheriff Center"
@@ -1845,6 +1875,21 @@
     "venue": "University Credit Union Pavilion"
   },
   {
+    "id": "401911453",
+    "date": "2026-11-08",
+    "name": "Saint Mary's Gaels at Nevada Wolf Pack",
+    "team1_id": "2440",
+    "team1_name": "Nevada Wolf Pack",
+    "team1_score": "96",
+    "team1_winner": true,
+    "team2_id": "2608",
+    "team2_name": "Saint Mary's Gaels",
+    "team2_score": "95",
+    "team2_winner": false,
+    "neutral": true,
+    "venue": "Tahoe Blue Event Center"
+  },
+  {
     "id": "401920806",
     "date": "2026-11-04",
     "name": "Alabama State Hornets at Texas A&M Aggies",
@@ -1890,6 +1935,21 @@
     "venue": "Fertitta Center"
   },
   {
+    "id": "401918053",
+    "date": "2026-11-09",
+    "name": "California Golden Bears at Houston Cougars",
+    "team1_id": "248",
+    "team1_name": "Houston Cougars",
+    "team1_score": "86",
+    "team1_winner": true,
+    "team2_id": "25",
+    "team2_name": "California Golden Bears",
+    "team2_score": "68",
+    "team2_winner": false,
+    "neutral": true,
+    "venue": "Tahoe Blue Event Center"
+  },
+  {
     "id": "401922260",
     "date": "2026-11-03",
     "name": "George Fox Bruins at Idaho Vandals",
@@ -1918,6 +1978,21 @@
     "team2_winner": false,
     "neutral": false,
     "venue": "Moby Arena"
+  },
+  {
+    "id": "401922262",
+    "date": "2026-11-08",
+    "name": "Lincoln (CA) Oaklanders at Idaho Vandals",
+    "team1_id": "70",
+    "team1_name": "Idaho Vandals",
+    "team1_score": "108",
+    "team1_winner": true,
+    "team2_id": "124946",
+    "team2_name": "Lincoln (CA) Oaklanders",
+    "team2_score": "69",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "ICCU Arena"
   },
   {
     "id": "401906801",
