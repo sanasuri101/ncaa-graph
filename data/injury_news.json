@@ -1,38 +1,7 @@
 {
-  "generated_at": "2026-11-10T01:02:06.086629+00:00",
-  "flagged_teams": 5,
+  "generated_at": "2026-11-10T13:55:21.656340+00:00",
+  "flagged_teams": 6,
   "teams": {
-    "2305": {
-      "bracket_name": "Kansas",
-      "region": "East",
-      "seed": 4,
-      "articles": [
-        {
-          "headline": "Kansas' Melvin Council Jr. suffers broken foot, might be out until January",
-          "description": "Kansas guard Melvin Council Jr. suffered a broken foot in practice Monday and could be out until the start of Big 12 conference play which begins in January.",
-          "published": "2026-11-09",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50435012/kansas-council-suffers-broken-foot-jan"
-        },
-        {
-          "headline": "Kansas' Melvin Council Jr. suffers broken foot, might be out until January",
-          "description": "Kansas guard Melvin Council Jr. suffered a broken foot in practice Monday and could be out until the start of Big 12 conference play which begins in January.",
-          "published": "2026-11-09",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50435012/kansas-council-suffers-broken-foot-jan"
-        },
-        {
-          "headline": "Kansas' Melvin Council Jr. suffers broken foot, might be out until January",
-          "description": "Kansas guard Melvin Council Jr. suffered a broken foot in practice Monday and could be out until the start of Big 12 conference play which begins in January.",
-          "published": "2026-11-09",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50435012/kansas-council-suffers-broken-foot-jan"
-        },
-        {
-          "headline": "Kansas' Melvin Council Jr. suffers broken foot, might be out until January",
-          "description": "Kansas guard Melvin Council Jr. suffered a broken foot in practice Monday and could be out until the start of Big 12 conference play which begins in January.",
-          "published": "2026-11-09",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50435012/kansas-council-suffers-broken-foot-jan"
-        }
-      ]
-    },
     "2116": {
       "bracket_name": "UCF",
       "region": "East",
@@ -59,6 +28,19 @@
         }
       ]
     },
+    "2305": {
+      "bracket_name": "Kansas",
+      "region": "East",
+      "seed": 4,
+      "articles": [
+        {
+          "headline": "Kansas' Melvin Council Jr. suffers broken foot, might be out until January",
+          "description": "Kansas guard Melvin Council Jr. suffered a broken foot in practice Monday and could be out until the start of Big 12 conference play which begins in January.",
+          "published": "2026-11-09",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50435012/kansas-council-suffers-broken-foot-jan"
+        }
+      ]
+    },
     "2567": {
       "bracket_name": "SMU",
       "region": "Midwest",
@@ -82,6 +64,25 @@
           "description": "David Mirkovic, who had offseason foot surgery that is expected to sideline him at the start of the season, underwent an emergency appendectomy Saturday night.",
           "published": "2026-11-01",
           "url": "https://www.espn.com/mens-college-basketball/story/_/id/50351006/illinois-david-mirkovic-emergency-appendectomy-setback"
+        }
+      ]
+    },
+    "41": {
+      "bracket_name": "UConn",
+      "region": "East",
+      "seed": 2,
+      "articles": [
+        {
+          "headline": "No. 4 UConn rolls past Wagner 83-41 but loses forward Nik Khamenia to injury",
+          "description": "\u2014 Silas Demary Jr. had 18 points and a career-high six steals to lead fourth-ranked UConn to a 83-41 win over Wagner on Monday night.",
+          "published": "2026-11-10",
+          "url": "http://www.espn.com/ncb/recap?gameId=401920686"
+        },
+        {
+          "headline": "Nik Khamenia leaves No. 4 UConn's game vs. Wagner with injury",
+          "description": "UConn starting forward Nik Khamenia exited Monday's game against Wagner with a lower-body injury.",
+          "published": "2026-11-10",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50438114/nik-khamenia-exits-no-4-uconn-game-vs-wagner-injury"
         }
       ]
     }

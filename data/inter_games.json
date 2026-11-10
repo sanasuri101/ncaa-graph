@@ -150,6 +150,21 @@
     "venue": "Enterprise Center"
   },
   {
+    "id": "401921180",
+    "date": "2026-11-09",
+    "name": "Howard Bison at Pennsylvania Quakers",
+    "team1_id": "219",
+    "team1_name": "Pennsylvania Quakers",
+    "team1_score": "78",
+    "team1_winner": true,
+    "team2_id": "47",
+    "team2_name": "Howard Bison",
+    "team2_score": "65",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "The Palestra"
+  },
+  {
     "id": "401911248",
     "date": "2026-11-03",
     "name": "Lehigh Mountain Hawks at Saint Louis Billikens",
