@@ -1050,6 +1050,21 @@
     "venue": "McCann Arena"
   },
   {
+    "id": "401921085",
+    "date": "2026-11-09",
+    "name": "McDaniel Green Terror at UMBC Retrievers",
+    "team1_id": "2378",
+    "team1_name": "UMBC Retrievers",
+    "team1_score": "91",
+    "team1_winner": true,
+    "team2_id": "14632",
+    "team2_name": "McDaniel Green Terror",
+    "team2_score": "61",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "Chesapeake Employers Insurance Arena"
+  },
+  {
     "id": "401924743",
     "date": "2026-11-03",
     "name": "Howard Bison at Yale Bulldogs",
