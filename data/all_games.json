@@ -360,6 +360,21 @@
     "venue": "Wintrust Arena"
   },
   {
+    "id": "401918992",
+    "date": "2026-11-11",
+    "name": "South Florida Bulls at Saint Joseph's Hawks",
+    "team1_id": "2603",
+    "team1_name": "Saint Joseph's Hawks",
+    "team1_score": "83",
+    "team1_winner": true,
+    "team2_id": "58",
+    "team2_name": "South Florida Bulls",
+    "team2_score": "80",
+    "team2_winner": false,
+    "neutral": true,
+    "venue": "Alumni Hall (Navy)"
+  },
+  {
     "id": "401924856",
     "date": "2026-11-03",
     "name": "Quinnipiac Bobcats at Michigan State Spartans",
@@ -2037,7 +2052,7 @@
     "team2_score": "57",
     "team2_winner": false,
     "neutral": false,
-    "venue": "Stephen C. O'Connell Center"
+    "venue": "Thomas Hill Arena"
   },
   {
     "id": "401906771",
