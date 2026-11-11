@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-11-10T22:42:36.572799+00:00",
-  "flagged_teams": 6,
+  "generated_at": "2026-11-11T13:06:40.863721+00:00",
+  "flagged_teams": 5,
   "teams": {
-    "2116": {
-      "bracket_name": "UCF",
+    "26": {
+      "bracket_name": "UCLA",
       "region": "East",
-      "seed": 10,
+      "seed": 7,
       "articles": [
         {
           "headline": "UCLA overcomes broken tooth and stubborn UCF 75-71 to advance in the NCAA Tournament",
@@ -15,10 +15,10 @@
         }
       ]
     },
-    "26": {
-      "bracket_name": "UCLA",
+    "2116": {
+      "bracket_name": "UCF",
       "region": "East",
-      "seed": 7,
+      "seed": 10,
       "articles": [
         {
           "headline": "UCLA overcomes broken tooth and stubborn UCF 75-71 to advance in the NCAA Tournament",
@@ -38,19 +38,6 @@
           "description": "Kansas guard Melvin Council Jr. suffered a broken foot in practice Monday and could be out until the start of Big 12 conference play which begins in January.",
           "published": "2026-11-09",
           "url": "https://www.espn.com/mens-college-basketball/story/_/id/50435012/kansas-council-suffers-broken-foot-jan"
-        }
-      ]
-    },
-    "2567": {
-      "bracket_name": "SMU",
-      "region": "Midwest",
-      "seed": 11,
-      "articles": [
-        {
-          "headline": "SMU's Enfield denies misleading NCAA committee on Edwards' injury",
-          "description": "SMU coach Andy Enfield said standout guard B.J. Edwards sat out Wednesday's loss to Miami (Ohio) in the First Four because he didn't feel \"game ready\" after the team announced last Friday that he woul",
-          "published": "2026-03-19",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/48246208/smu-enfield-denies-misleading-ncaa-committee-edwards-injury"
         }
       ]
     },
