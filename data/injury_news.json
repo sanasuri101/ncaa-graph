@@ -1,11 +1,48 @@
 {
-  "generated_at": "2026-11-12T14:08:49.691660+00:00",
+  "generated_at": "2026-11-12T23:01:53.180250+00:00",
   "flagged_teams": 5,
   "teams": {
-    "26": {
-      "bracket_name": "UCLA",
+    "41": {
+      "bracket_name": "UConn",
       "region": "East",
-      "seed": 7,
+      "seed": 2,
+      "articles": [
+        {
+          "headline": "UConn's Nik Khamenia to have foot surgery, be rechecked in 6-8 weeks",
+          "description": "UConn coach Dan Hurley said Thursday that starting forward Nik Khamenia will have surgery on his left foot and be reevaluated in six to eight weeks.",
+          "published": "2026-11-12",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50464962/uconn-nik-khamenia-foot-surgery"
+        },
+        {
+          "headline": "UConn's Nik Khamenia to have foot surgery, be rechecked in 6-8 weeks",
+          "description": "UConn coach Dan Hurley said Thursday that starting forward Nik Khamenia will have surgery on his left foot and be reevaluated in six to eight weeks.",
+          "published": "2026-11-12",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50464962/uconn-nik-khamenia-foot-surgery"
+        },
+        {
+          "headline": "UConn's Nik Khamenia to have foot surgery, be rechecked in 6-8 weeks",
+          "description": "UConn coach Dan Hurley said Thursday that starting forward Nik Khamenia will have surgery on his left foot and be reevaluated in six to eight weeks.",
+          "published": "2026-11-12",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50464962/uconn-nik-khamenia-foot-surgery"
+        },
+        {
+          "headline": "No. 4 UConn rolls past Wagner 83-41 but loses forward Nik Khamenia to injury",
+          "description": "\u2014 Silas Demary Jr. had 18 points and a career-high six steals to lead fourth-ranked UConn to a 83-41 win over Wagner on Monday night.",
+          "published": "2026-11-10",
+          "url": "http://www.espn.com/ncb/recap?gameId=401920686"
+        },
+        {
+          "headline": "Nik Khamenia leaves No. 4 UConn's game vs. Wagner with injury",
+          "description": "UConn starting forward Nik Khamenia exited Monday's game against Wagner with a lower-body injury.",
+          "published": "2026-11-10",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50438114/nik-khamenia-exits-no-4-uconn-game-vs-wagner-injury"
+        }
+      ]
+    },
+    "2116": {
+      "bracket_name": "UCF",
+      "region": "East",
+      "seed": 10,
       "articles": [
         {
           "headline": "UCLA overcomes broken tooth and stubborn UCF 75-71 to advance in the NCAA Tournament",
@@ -15,10 +52,10 @@
         }
       ]
     },
-    "2116": {
-      "bracket_name": "UCF",
+    "26": {
+      "bracket_name": "UCLA",
       "region": "East",
-      "seed": 10,
+      "seed": 7,
       "articles": [
         {
           "headline": "UCLA overcomes broken tooth and stubborn UCF 75-71 to advance in the NCAA Tournament",
@@ -51,25 +88,6 @@
           "description": "David Mirkovic, who had offseason foot surgery that is expected to sideline him at the start of the season, underwent an emergency appendectomy Saturday night.",
           "published": "2026-11-01",
           "url": "https://www.espn.com/mens-college-basketball/story/_/id/50351006/illinois-david-mirkovic-emergency-appendectomy-setback"
-        }
-      ]
-    },
-    "41": {
-      "bracket_name": "UConn",
-      "region": "East",
-      "seed": 2,
-      "articles": [
-        {
-          "headline": "No. 4 UConn rolls past Wagner 83-41 but loses forward Nik Khamenia to injury",
-          "description": "\u2014 Silas Demary Jr. had 18 points and a career-high six steals to lead fourth-ranked UConn to a 83-41 win over Wagner on Monday night.",
-          "published": "2026-11-10",
-          "url": "http://www.espn.com/ncb/recap?gameId=401920686"
-        },
-        {
-          "headline": "Nik Khamenia leaves No. 4 UConn's game vs. Wagner with injury",
-          "description": "UConn starting forward Nik Khamenia exited Monday's game against Wagner with a lower-body injury.",
-          "published": "2026-11-10",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50438114/nik-khamenia-exits-no-4-uconn-game-vs-wagner-injury"
         }
       ]
     }
