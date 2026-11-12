@@ -210,6 +210,21 @@
     "venue": "Madison Square Garden"
   },
   {
+    "id": "401920680",
+    "date": "2026-11-12",
+    "name": "Colgate Raiders at St. John's Red Storm",
+    "team1_id": "2599",
+    "team1_name": "St. John's Red Storm",
+    "team1_score": "90",
+    "team1_winner": true,
+    "team2_id": "2142",
+    "team2_name": "Colgate Raiders",
+    "team2_score": "59",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "Carnesecca Arena"
+  },
+  {
     "id": "401927385",
     "date": "2026-11-04",
     "name": "Cornell (IA) Rams at Northern Iowa Panthers",
@@ -495,6 +510,21 @@
     "venue": "Pauley Pavilion"
   },
   {
+    "id": "401930177",
+    "date": "2026-11-12",
+    "name": "Arkansas-Pine Bluff Golden Lions at UCLA Bruins",
+    "team1_id": "26",
+    "team1_name": "UCLA Bruins",
+    "team1_score": "106",
+    "team1_winner": true,
+    "team2_id": "2029",
+    "team2_name": "Arkansas-Pine Bluff Golden Lions",
+    "team2_score": "37",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "Pauley Pavilion"
+  },
+  {
     "id": "401921753",
     "date": "2026-11-03",
     "name": "Florida Gulf Coast Eagles at UCF Knights",
@@ -613,6 +643,21 @@
     "team2_winner": false,
     "neutral": false,
     "venue": "Timmons Arena"
+  },
+  {
+    "id": "401921286",
+    "date": "2026-11-12",
+    "name": "Furman Paladins at Holy Cross Crusaders",
+    "team1_id": "107",
+    "team1_name": "Holy Cross Crusaders",
+    "team1_score": "67",
+    "team1_winner": false,
+    "team2_id": "231",
+    "team2_name": "Furman Paladins",
+    "team2_score": "80",
+    "team2_winner": true,
+    "neutral": false,
+    "venue": "Hart Center Arena"
   },
   {
     "id": "401909739",
@@ -913,6 +958,21 @@
     "team2_winner": false,
     "neutral": true,
     "venue": "Capital One Arena"
+  },
+  {
+    "id": "401928824",
+    "date": "2026-11-12",
+    "name": "Robert Morris Colonials at Arkansas Razorbacks",
+    "team1_id": "8",
+    "team1_name": "Arkansas Razorbacks",
+    "team1_score": "76",
+    "team1_winner": true,
+    "team2_id": "2523",
+    "team2_name": "Robert Morris Colonials",
+    "team2_score": "53",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "Bud Walton Arena"
   },
   {
     "id": "401917506",
@@ -1345,6 +1405,21 @@
     "team2_id": "2473",
     "team2_name": "Oakland Golden Grizzlies",
     "team2_score": "68",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "Crisler Center"
+  },
+  {
+    "id": "401909524",
+    "date": "2026-11-12",
+    "name": "Marquette Golden Eagles at Michigan Wolverines",
+    "team1_id": "130",
+    "team1_name": "Michigan Wolverines",
+    "team1_score": "84",
+    "team1_winner": true,
+    "team2_id": "269",
+    "team2_name": "Marquette Golden Eagles",
+    "team2_score": "70",
     "team2_winner": false,
     "neutral": false,
     "venue": "Crisler Center"
@@ -1950,6 +2025,21 @@
     "venue": "Leavey Center"
   },
   {
+    "id": "401917522",
+    "date": "2026-11-12",
+    "name": "Santa Clara Broncos at North Texas Mean Green",
+    "team1_id": "249",
+    "team1_name": "North Texas Mean Green",
+    "team1_score": "71",
+    "team1_winner": false,
+    "team2_id": "2541",
+    "team2_name": "Santa Clara Broncos",
+    "team2_score": "76",
+    "team2_winner": true,
+    "neutral": false,
+    "venue": "The Super Pit"
+  },
+  {
     "id": "401909771",
     "date": "2026-11-03",
     "name": "Memphis Tigers at Iowa State Cyclones",
@@ -2355,6 +2445,21 @@
     "venue": "Mohegan Sun Arena"
   },
   {
+    "id": "401926062",
+    "date": "2026-11-12",
+    "name": "Lindenwood Lions at Nebraska Cornhuskers",
+    "team1_id": "158",
+    "team1_name": "Nebraska Cornhuskers",
+    "team1_score": "94",
+    "team1_winner": true,
+    "team2_id": "2815",
+    "team2_name": "Lindenwood Lions",
+    "team2_score": "60",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "Pinnacle Bank Arena"
+  },
+  {
     "id": "401911001",
     "date": "2026-11-03",
     "name": "Massachusetts Minutemen at Troy Trojans",
@@ -2475,6 +2580,21 @@
     "venue": "FedExForum"
   },
   {
+    "id": "401920202",
+    "date": "2026-11-12",
+    "name": "NJIT Highlanders at VCU Rams",
+    "team1_id": "2670",
+    "team1_name": "VCU Rams",
+    "team1_score": "87",
+    "team1_winner": true,
+    "team2_id": "2885",
+    "team2_name": "NJIT Highlanders",
+    "team2_score": "49",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "Siegel Center"
+  },
+  {
     "id": "401913525",
     "date": "2026-11-03",
     "name": "Fairleigh Dickinson Knights at Illinois Fighting Illini",
@@ -2503,6 +2623,21 @@
     "team2_winner": false,
     "neutral": false,
     "venue": "State Farm Center"
+  },
+  {
+    "id": "401921181",
+    "date": "2026-11-11",
+    "name": "Pennsylvania Quakers at Navy Midshipmen",
+    "team1_id": "2426",
+    "team1_name": "Navy Midshipmen",
+    "team1_score": "81",
+    "team1_winner": true,
+    "team2_id": "219",
+    "team2_name": "Pennsylvania Quakers",
+    "team2_score": "76",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "Alumni Hall (Navy)"
   },
   {
     "id": "401917507",
@@ -2608,6 +2743,21 @@
     "team2_winner": false,
     "neutral": true,
     "venue": "Tahoe Blue Event Center"
+  },
+  {
+    "id": "401925702",
+    "date": "2026-11-12",
+    "name": "Jacksonville State Gamecocks at Houston Cougars",
+    "team1_id": "248",
+    "team1_name": "Houston Cougars",
+    "team1_score": "92",
+    "team1_winner": true,
+    "team2_id": "55",
+    "team2_name": "Jacksonville State Gamecocks",
+    "team2_score": "46",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "Fertitta Center"
   },
   {
     "id": "401922260",
@@ -2848,6 +2998,21 @@
     "team2_winner": true,
     "neutral": true,
     "venue": "Pechanga Arena"
+  },
+  {
+    "id": "401925717",
+    "date": "2026-11-11",
+    "name": "Bethune-Cookman Wildcats at San Diego State Aztecs",
+    "team1_id": "21",
+    "team1_name": "San Diego State Aztecs",
+    "team1_score": "88",
+    "team1_winner": true,
+    "team2_id": "2065",
+    "team2_name": "Bethune-Cookman Wildcats",
+    "team2_score": "75",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "Viejas Arena"
   },
   {
     "id": "401920716",
