@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-13T13:32:57.478902+00:00",
+  "generated_at": "2026-11-13T23:04:22.286079+00:00",
   "games": {},
   "futures": {
     "new mexico": {
@@ -703,9 +703,22 @@
           "moneyline": "+25000",
           "implied_pct": 0.4
         },
+        "ncaa(b)_-_west_coast_conference_-_winner_(reg.season)": {
+          "moneyline": "+152",
+          "implied_pct": 39.7
+        },
         "championship": {
           "moneyline": "+100000",
           "implied_pct": 0.1
+        }
+      }
+    },
+    "south florida": {
+      "espn_id": "58",
+      "markets": {
+        "american_athletic_conference_winner": {
+          "moneyline": "+540",
+          "implied_pct": 15.6
         }
       }
     },
