@@ -13,7 +13,8 @@
   }
 
   document.getElementById('field-meta').textContent =
-    `${board.season_str} season · ${board.games_counted.toLocaleString()} games through ${board.date}`;
+    `${board.season_str} season · ${board.games_counted.toLocaleString()} games through ${board.date}` +
+    ` · field picked ${Math.round((1 - board.resume_share) * 100)}% on rating, ${Math.round(board.resume_share * 100)}% on résumé (WAB)`;
 
   const STATUS = { auto: 'Auto bid', 'at-large': 'At-large', bubble: 'First out', out: '' };
   const move = (t) => {
@@ -26,7 +27,7 @@
     <table class="fl-table">
       <thead><tr>
         <th>#</th><th></th><th class="fl-left">Team</th><th class="fl-left">Conference</th>
-        <th>Record</th><th>Rating</th><th>Seed</th><th class="fl-left">Projection</th>
+        <th>Record</th><th>Rating</th><th title="Wins above bubble: wins minus what a bubble team would expect against the same schedule">WAB</th><th>Seed</th><th class="fl-left">Projection</th>
       </tr></thead>
       <tbody>${board.teams.map((t) => `
         <tr class="fl-${t.status}"${t.seed ? ` onclick="switchView('graph');setTimeout(()=>focusTeam('${t.espn_id}'),80)"` : ''}>
@@ -36,6 +37,7 @@
           <td class="fl-left fl-dim">${t.conf}</td>
           <td class="fl-num">${t.record}</td>
           <td class="fl-num">${t.rating > 0 ? '+' : ''}${t.rating.toFixed(1)}</td>
+          <td class="fl-num">${t.wab > 0 ? '+' : ''}${t.wab.toFixed(1)}</td>
           <td class="fl-num">${t.seed ?? ''}</td>
           <td class="fl-left">${t.region ? `<span class="rpill ${t.region.toLowerCase()}">${t.region}</span> ` : ''}<span class="fl-dim">${STATUS[t.status]}</span></td>
         </tr>`).join('')}
