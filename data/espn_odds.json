@@ -1,24 +1,7 @@
 {
-  "generated_at": "2026-11-13T03:34:29.078796+00:00",
+  "generated_at": "2026-11-13T03:43:23.144243+00:00",
   "games": {},
   "futures": {
-    "grand canyon": {
-      "espn_id": "2253",
-      "markets": {
-        "mountain_west_conference_winner": {
-          "moneyline": "+125",
-          "implied_pct": 44.4
-        },
-        "ncaa(b)_-_to_make_the_final_4": {
-          "moneyline": "+13000",
-          "implied_pct": 0.8
-        },
-        "championship": {
-          "moneyline": "+40000",
-          "implied_pct": 0.2
-        }
-      }
-    },
     "new mexico": {
       "espn_id": "167",
       "markets": {
@@ -215,6 +198,23 @@
         }
       }
     },
+    "tennessee": {
+      "espn_id": "2633",
+      "markets": {
+        "ncaa(b)_-_to_make_the_final_4": {
+          "moneyline": "+700",
+          "implied_pct": 12.5
+        },
+        "southeastern_conference_winner": {
+          "moneyline": "+1275",
+          "implied_pct": 7.3
+        },
+        "championship": {
+          "moneyline": "+3200",
+          "implied_pct": 3.0
+        }
+      }
+    },
     "virginia": {
       "espn_id": "258",
       "markets": {
@@ -245,6 +245,23 @@
         },
         "championship": {
           "moneyline": "+4300",
+          "implied_pct": 2.3
+        }
+      }
+    },
+    "miami": {
+      "espn_id": "2390",
+      "markets": {
+        "ncaa(b)_-_to_make_the_final_4": {
+          "moneyline": "+900",
+          "implied_pct": 10.0
+        },
+        "atlantic_coast_conference_winner": {
+          "moneyline": "+950",
+          "implied_pct": 9.5
+        },
+        "championship": {
+          "moneyline": "+4200",
           "implied_pct": 2.3
         }
       }
@@ -297,6 +314,40 @@
         "championship": {
           "moneyline": "+4100",
           "implied_pct": 2.4
+        }
+      }
+    },
+    "alabama": {
+      "espn_id": "333",
+      "markets": {
+        "ncaa(b)_-_to_make_the_final_4": {
+          "moneyline": "+1400",
+          "implied_pct": 6.7
+        },
+        "southeastern_conference_winner": {
+          "moneyline": "+1000",
+          "implied_pct": 9.1
+        },
+        "championship": {
+          "moneyline": "+5400",
+          "implied_pct": 1.8
+        }
+      }
+    },
+    "north carolina": {
+      "espn_id": "153",
+      "markets": {
+        "ncaa(b)_-_to_make_the_final_4": {
+          "moneyline": "+1700",
+          "implied_pct": 5.6
+        },
+        "atlantic_coast_conference_winner": {
+          "moneyline": "+4400",
+          "implied_pct": 2.2
+        },
+        "championship": {
+          "moneyline": "+7000",
+          "implied_pct": 1.4
         }
       }
     },
@@ -470,6 +521,23 @@
         }
       }
     },
+    "oklahoma st": {
+      "espn_id": "197",
+      "markets": {
+        "ncaa(b)_-_to_make_the_final_4": {
+          "moneyline": "+7400",
+          "implied_pct": 1.3
+        },
+        "big_12_conference_winner": {
+          "moneyline": "+3000",
+          "implied_pct": 3.2
+        },
+        "championship": {
+          "moneyline": "+25000",
+          "implied_pct": 0.4
+        }
+      }
+    },
     "ole miss": {
       "espn_id": "145",
       "markets": {
@@ -497,23 +565,6 @@
         "championship": {
           "moneyline": "+25000",
           "implied_pct": 0.4
-        }
-      }
-    },
-    "arizona st": {
-      "espn_id": "9",
-      "markets": {
-        "ncaa(b)_-_to_make_the_final_4": {
-          "moneyline": "+8000",
-          "implied_pct": 1.2
-        },
-        "big_12_conference_winner": {
-          "moneyline": "+40000",
-          "implied_pct": 0.2
-        },
-        "championship": {
-          "moneyline": "+30000",
-          "implied_pct": 0.3
         }
       }
     },
@@ -551,19 +602,6 @@
         }
       }
     },
-    "san diego st": {
-      "espn_id": "21",
-      "markets": {
-        "ncaa(b)_-_to_make_the_final_4": {
-          "moneyline": "+10000",
-          "implied_pct": 1.0
-        },
-        "championship": {
-          "moneyline": "+30000",
-          "implied_pct": 0.3
-        }
-      }
-    },
     "high point": {
       "espn_id": "2272",
       "markets": {
@@ -586,19 +624,6 @@
         },
         "southeastern_conference_winner": {
           "moneyline": "+13500",
-          "implied_pct": 0.7
-        },
-        "championship": {
-          "moneyline": "+50000",
-          "implied_pct": 0.2
-        }
-      }
-    },
-    "utah state": {
-      "espn_id": "328",
-      "markets": {
-        "ncaa(b)_-_to_make_the_final_4": {
-          "moneyline": "+15000",
           "implied_pct": 0.7
         },
         "championship": {

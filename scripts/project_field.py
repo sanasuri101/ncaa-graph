@@ -9,7 +9,10 @@ D1 teams, and projects the 64-team field:
   - seeds:      1-16 by rating, placed into regions on an S-curve
 
 Rating = average capped scoring margin adjusted for opponent strength and home
-court (an SRS), from this season's games only.
+court (an SRS), from this season's games only. Each team is pulled toward its
+conference's average, so a team is judged partly by how its league does against
+everyone else — that is what separates a 3-0 mid-major from a 3-0 power team
+before schedules overlap. The pull is worth two games and fades as games pile up.
 
 Writes: data/bracket_config.json   (consumed by every other script)
         data/leaderboard.json, public/data/leaderboard.json
@@ -39,7 +42,7 @@ BOARD_SIZE   = 100
 REGIONS      = ["East", "West", "South", "Midwest"]
 HOME_COURT   = 3.5    # points
 MARGIN_CAP   = 25     # blowouts beyond this add no information
-SHRINK_GAMES = 1      # one phantom game vs an average team: steadies tiny samples
+CONF_GAMES   = 2      # pull toward conference average, worth this many games
 
 _today = date.today()
 SEASON = _today.year + 1 if _today.month >= 10 else _today.year
@@ -106,13 +109,21 @@ def rate(games: list, teams: dict) -> tuple[dict, dict]:
         record[winner][0] += 1
         record[loser][1] += 1
 
+    members = defaultdict(list)
+    for tid, t in teams.items():
+        members[t["conf"]].append(tid)
+
     ratings = {tid: 0.0 for tid in teams}
-    for _ in range(200):
-        ratings = {
-            tid: sum(m + ratings[opp] for opp, m in results[tid])
-                 / (len(results[tid]) + SHRINK_GAMES)
+    for _ in range(400):
+        conf_avg = {c: sum(ratings[t] for t in ts) / len(ts) for c, ts in members.items()}
+        new = {
+            tid: (sum(m + ratings[opp] for opp, m in results[tid])
+                  + CONF_GAMES * conf_avg[teams[tid]["conf"]])
+                 / (len(results[tid]) + CONF_GAMES)
             for tid in teams
         }
+        mean = sum(new.values()) / len(new)   # keep the D1 average at zero
+        ratings = {tid: 0.5 * ratings[tid] + 0.5 * (r - mean) for tid, r in new.items()}
     return ratings, record
 
 
