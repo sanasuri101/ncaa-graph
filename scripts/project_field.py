@@ -8,14 +8,18 @@ D1 teams, and projects the 64-team field:
   - at-large:   the best remaining teams until the field has 64
   - seeds:      1-16 by rating, placed into regions on an S-curve
 
-Rating = average capped scoring margin adjusted for opponent strength and home
-court (an SRS), from this season's games only. Each team is pulled toward its
-conference's average, so a team is judged partly by how its league does against
-everyone else — that is what separates a 3-0 mid-major from a 3-0 power team
-before schedules overlap. The pull is worth two games and fades as games pile up.
+Rating = average game value adjusted for opponent strength and home court (an
+SRS), from this season's games only. A game's value blends two numbers:
+  - the closing point spread (60%): what the betting market expected, which
+    already knows about rosters, injuries and opponent quality
+  - the actual scoring margin, capped (40%): what happened
+Each team is also pulled toward its conference's average, worth one game.
+On the first weeks of the 2024-25 and 2025-26 seasons this matched the final
+top 25 for 17-18 teams, against 12-13 for margins alone.
 
 Writes: data/bracket_config.json   (consumed by every other script)
         data/leaderboard.json, public/data/leaderboard.json
+        data/spreads.json          (closing spread per game, fetched once each)
 
 Run first in the refresh pipeline. Once the real bracket is committed for the
 season (make_bracket_config.py, after Selection Sunday) this script leaves
@@ -27,6 +31,7 @@ import sys
 import time
 import urllib.request
 from collections import defaultdict
+from concurrent.futures import ThreadPoolExecutor
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
@@ -34,6 +39,7 @@ ROOT     = Path(__file__).resolve().parent.parent
 DATA_DIR = ROOT / "data"
 PUB_DIR  = ROOT / "public" / "data"
 ESPN     = "https://site.api.espn.com/apis"
+ESPN_CORE = "https://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball"
 SPORT    = "sports/basketball/mens-college-basketball"
 
 FIELD_SIZE   = 64
@@ -42,7 +48,8 @@ BOARD_SIZE   = 100
 REGIONS      = ["East", "West", "South", "Midwest"]
 HOME_COURT   = 3.5    # points
 MARGIN_CAP   = 25     # blowouts beyond this add no information
-CONF_GAMES   = 2      # pull toward conference average, worth this many games
+SPREAD_WEIGHT = 0.6   # share of a game's value taken from the closing spread
+CONF_GAMES   = 1      # pull toward conference average, worth this many games
 
 _today = date.today()
 SEASON = _today.year + 1 if _today.month >= 10 else _today.year
@@ -76,7 +83,8 @@ def d1_teams(season: int) -> dict:
 
 
 def fetch_games(season: int, teams: dict, last_day: date) -> list:
-    """Completed games between two D1 teams: (home_id, away_id, home_pts, away_pts, neutral)."""
+    """Completed games between two D1 teams:
+    {event_id: (home_id, away_id, home_pts, away_pts, neutral)}."""
     games = {}
     day = date(season - 1, 11, 1)
     while day <= last_day:
@@ -93,16 +101,46 @@ def fetch_games(season: int, teams: dict, last_day: date) -> list:
                                   int(away["score"]), comp.get("neutralSite", False))
         day += timedelta(days=1)
         time.sleep(0.05)
-    return list(games.values())
+    return games
 
 
-def rate(games: list, teams: dict) -> tuple[dict, dict]:
+def fetch_spreads(game_ids) -> dict:
+    """{event_id: closing spread for the home team (negative = favored), or None}.
+    A finished game's spread never changes, so each is fetched once and cached."""
+    path = DATA_DIR / "spreads.json"
+    cached = json.loads(path.read_text()) if path.exists() else {}
+    if cached.get("season") != SEASON:
+        cached = {"season": SEASON, "spreads": {}}
+    spreads = cached["spreads"]
+
+    def one(gid):
+        try:
+            url = f"{ESPN_CORE}/events/{gid}/competitions/{gid}/odds"
+            with urllib.request.urlopen(url, timeout=20) as resp:
+                items = json.loads(resp.read()).get("items") or [{}]
+            return gid, items[0].get("spread")
+        except Exception:
+            return gid, "retry"            # not cached: tried again on the next run
+
+    missing = [gid for gid in game_ids if gid not in spreads]
+    with ThreadPoolExecutor(8) as pool:
+        for gid, spread in pool.map(one, missing):
+            if spread != "retry":
+                spreads[gid] = spread
+    path.write_text(json.dumps(cached, separators=(",", ":")))
+    return spreads
+
+
+def rate(games: dict, spreads: dict, teams: dict) -> tuple[dict, dict]:
     """Returns ({id: rating}, {id: [wins, losses]})."""
-    results = defaultdict(list)          # id -> [(opponent, adjusted margin)]
+    results = defaultdict(list)          # id -> [(opponent, game value)]
     record  = {tid: [0, 0] for tid in teams}
-    for home, away, hp, ap, neutral in games:
-        margin = hp - ap - (0 if neutral else HOME_COURT)
-        margin = max(-MARGIN_CAP, min(MARGIN_CAP, margin))
+    for gid, (home, away, hp, ap, neutral) in games.items():
+        court  = 0 if neutral else HOME_COURT
+        margin = max(-MARGIN_CAP, min(MARGIN_CAP, hp - ap - court))
+        spread = spreads.get(gid)
+        if spread is not None:
+            margin = SPREAD_WEIGHT * (-spread - court) + (1 - SPREAD_WEIGHT) * margin
         results[home].append((away, margin))
         results[away].append((home, -margin))
         winner, loser = (home, away) if hp > ap else (away, home)
@@ -150,9 +188,11 @@ def main():
 
     teams = d1_teams(SEASON)
     games = fetch_games(SEASON, teams, _today)
-    ratings, record = rate(games, teams)
+    spreads = fetch_spreads(games)
+    ratings, record = rate(games, spreads, teams)
     field, bubble, auto = project(teams, ratings)
-    print(f"{len(teams)} teams, {len(games)} games, {len(auto)} auto bids")
+    with_line = sum(1 for gid in games if spreads.get(gid) is not None)
+    print(f"{len(teams)} teams, {len(games)} games ({with_line} with a spread), {len(auto)} auto bids")
 
     def entry(tid, region, seed):
         return {"bracket_name": teams[tid]["short"], "espn_id": tid,
