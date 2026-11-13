@@ -1,12 +1,18 @@
 {
-  "generated_at": "2026-11-12T23:01:53.180250+00:00",
-  "flagged_teams": 5,
+  "generated_at": "2026-11-13T03:24:54.784268+00:00",
+  "flagged_teams": 3,
   "teams": {
     "41": {
       "bracket_name": "UConn",
-      "region": "East",
-      "seed": 2,
+      "region": "West",
+      "seed": 3,
       "articles": [
+        {
+          "headline": "UConn's Nik Khamenia to have foot surgery, be rechecked in 6-8 weeks",
+          "description": "UConn coach Dan Hurley said Thursday that starting forward Nik Khamenia will have surgery on his left foot and be reevaluated in six to eight weeks.",
+          "published": "2026-11-12",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50464962/uconn-nik-khamenia-foot-surgery"
+        },
         {
           "headline": "UConn's Nik Khamenia to have foot surgery, be rechecked in 6-8 weeks",
           "description": "UConn coach Dan Hurley said Thursday that starting forward Nik Khamenia will have surgery on his left foot and be reevaluated in six to eight weeks.",
@@ -30,45 +36,13 @@
           "description": "\u2014 Silas Demary Jr. had 18 points and a career-high six steals to lead fourth-ranked UConn to a 83-41 win over Wagner on Monday night.",
           "published": "2026-11-10",
           "url": "http://www.espn.com/ncb/recap?gameId=401920686"
-        },
-        {
-          "headline": "Nik Khamenia leaves No. 4 UConn's game vs. Wagner with injury",
-          "description": "UConn starting forward Nik Khamenia exited Monday's game against Wagner with a lower-body injury.",
-          "published": "2026-11-10",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50438114/nik-khamenia-exits-no-4-uconn-game-vs-wagner-injury"
-        }
-      ]
-    },
-    "2116": {
-      "bracket_name": "UCF",
-      "region": "East",
-      "seed": 10,
-      "articles": [
-        {
-          "headline": "UCLA overcomes broken tooth and stubborn UCF 75-71 to advance in the NCAA Tournament",
-          "description": "\u2014 Mick Cronin raised a plastic cup to another NCAA Tournament victory for UCLA with an energy drink he brought with him to the podium.",
-          "published": "2026-03-21",
-          "url": "http://www.espn.com/ncb/recap?gameId=401856496"
-        }
-      ]
-    },
-    "26": {
-      "bracket_name": "UCLA",
-      "region": "East",
-      "seed": 7,
-      "articles": [
-        {
-          "headline": "UCLA overcomes broken tooth and stubborn UCF 75-71 to advance in the NCAA Tournament",
-          "description": "\u2014 Mick Cronin raised a plastic cup to another NCAA Tournament victory for UCLA with an energy drink he brought with him to the podium.",
-          "published": "2026-03-21",
-          "url": "http://www.espn.com/ncb/recap?gameId=401856496"
         }
       ]
     },
     "2305": {
       "bracket_name": "Kansas",
-      "region": "East",
-      "seed": 4,
+      "region": "Midwest",
+      "seed": 1,
       "articles": [
         {
           "headline": "Kansas' Melvin Council Jr. suffers broken foot, might be out until January",
@@ -80,8 +54,8 @@
     },
     "356": {
       "bracket_name": "Illinois",
-      "region": "South",
-      "seed": 3,
+      "region": "East",
+      "seed": 2,
       "articles": [
         {
           "headline": "Illinois' David Mirkovic undergoes emergency appendectomy",

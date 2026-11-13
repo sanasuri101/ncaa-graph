@@ -332,7 +332,7 @@ function logitEM(tvA, tvB) {
 // Projects each team's expected score using cross-efficiency (AdjOE vs opponent AdjDE)
 // then applies normal approximation to Skellam distribution (score difference model)
 function skellamWinProb(tvA, tvB) {
-  const poss = ((tvA.adj_tempo + tvB.adj_tempo) / 2) * 80; // possessions per game
+  const poss = (tvA.adj_tempo + tvB.adj_tempo) / 2; // possessions per game
   const expA = (tvA.adj_oe / 100) * (tvB.adj_de / 100) * poss;
   const expB = (tvB.adj_oe / 100) * (tvA.adj_de / 100) * poss;
   const mu = expA - expB;
@@ -404,7 +404,7 @@ function transitiveAdj(idA, idB, pairs) {
 
 // ── Layer IV: WAB quality-wins adjustment ─────────────────────────────────────
 // Wins Above Bubble captures schedule-adjusted quality.
-// Bracket field WAB range ~62-73 (diff ~11). Divisor 270 → max ±4% at diff=10.8.
+// Divisor 270 → max ±4% at a WAB difference of 10.8.
 function wabAdj(tvA, tvB) {
   return Math.max(
     -0.04,

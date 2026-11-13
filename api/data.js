@@ -264,11 +264,11 @@ export function fmtTeam(node, torvik, form, injuryMap, teamOdds) {
 
   const pace =
     tv.adj_tempo != null
-      ? (tv.adj_tempo >= 0.7
+      ? (tv.adj_tempo >= 70
           ? "Fast"
-          : tv.adj_tempo >= 0.4
+          : tv.adj_tempo >= 66
             ? "Moderate"
-            : "Slow") + ` (${tv.adj_tempo.toFixed(2)})`
+            : "Slow") + ` (${tv.adj_tempo.toFixed(1)} poss/40)`
       : "?";
   const tf = form?.teams?.[node.id];
   const recent =

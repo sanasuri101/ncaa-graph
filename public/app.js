@@ -719,7 +719,7 @@ function showEmptyState(show) {
       el.innerHTML = isMobile ? `
         <div class="ges-icon">⬡</div>
         <div class="ges-title">NCAA Bracket</div>
-        <div class="ges-sub">Head-to-head results for all 68 teams.</div>
+        <div class="ges-sub">Head-to-head results for the projected field.</div>
         <div class="ges-btns">
           <button class="ges-btn" onclick="addAllToCustom()">Show all teams</button>
         </div>` : `
@@ -727,7 +727,7 @@ function showEmptyState(show) {
         <div class="ges-title">Build your graph</div>
         <div class="ges-sub">Search for teams above, or start with a quick-add:</div>
         <div class="ges-btns">
-          <button class="ges-btn" onclick="addAllToCustom()">All 68 teams</button>
+          <button class="ges-btn" onclick="addAllToCustom()">All teams</button>
           <button class="ges-btn" onclick="addRegionToCustom('East');"    style="border-color:#4a7fb5;color:#4a7fb5">East</button>
           <button class="ges-btn" onclick="addRegionToCustom('West');"    style="border-color:#3a8c6e;color:#3a8c6e">West</button>
           <button class="ges-btn" onclick="addRegionToCustom('South');"   style="border-color:#b89030;color:#b89030">South</button>

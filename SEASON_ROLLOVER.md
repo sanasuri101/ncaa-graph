@@ -1,6 +1,20 @@
 # Season Rollover Checklist
 
-Run these steps after Selection Sunday each year (~third Sunday of March).
+## Before Selection Sunday (automatic)
+
+From November on, `scripts/project_field.py` runs first in the daily refresh. It rates every
+D1 team from ESPN scores, projects the 64-team field, and rewrites `data/bracket_config.json`
+(marked `"_projected": true`) and `data/leaderboard.json`. Everything else — graph, bracket
+simulation, AI Scout — reads that config, so the whole app follows the projection.
+
+When the season year changes it rebuilds `data/prior_ratings.json` from the previous season by
+itself. Nothing to do by hand.
+
+## After Selection Sunday
+
+Run these steps after Selection Sunday each year (~third Sunday of March). Step 1 replaces the
+projected config with the real bracket; once it has no `_projected` flag, `project_field.py`
+stops touching it.
 
 ## One-time setup (takes ~15 minutes)
 

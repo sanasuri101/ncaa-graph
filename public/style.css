@@ -5103,7 +5103,7 @@ section { margin-bottom: 20px; }
    RANKINGS VIEW
    ══════════════════════════════════════════════════════════════════════════════ */
 
-#view-rankings { overflow-y: auto; }
+#view-rankings, #view-field { overflow-y: auto; }
 
 .rankings-page {
   padding: 20px 24px;
@@ -5496,3 +5496,30 @@ section { margin-bottom: 20px; }
 }
 @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
 
+
+/* ── Projected field leaderboard ─────────────────────────────────────────── */
+.fl-table { width: 100%; border-collapse: collapse; font-size: .86rem; }
+.fl-table th {
+  position: sticky; top: 0; background: var(--bg);
+  font-size: .7rem; font-weight: 600; text-transform: uppercase; letter-spacing: .05em;
+  color: var(--text-mute); padding: 6px 10px; text-align: right;
+  border-bottom: 1px solid var(--border2);
+}
+.fl-table td { padding: 6px 10px; text-align: right; border-bottom: 1px solid var(--border); }
+.fl-table .fl-left { text-align: left; }
+.fl-num  { font-family: var(--font-mono); white-space: nowrap; }
+.fl-team { font-weight: 600; }
+.fl-dim  { color: var(--text-dim); }
+.fl-up   { color: var(--west); }
+.fl-down { color: var(--midwest); }
+.fl-flat { color: var(--text-mute); }
+.fl-auto, .fl-at-large { cursor: pointer; }
+.fl-auto:hover, .fl-at-large:hover { background: var(--accent-dim); }
+.fl-bubble td { background: var(--surface2); }
+.fl-out td { color: var(--text-mute); }
+.fl-out .fl-team { font-weight: 400; }
+@media (max-width: 700px) {
+  .fl-table th:nth-child(4), .fl-table td:nth-child(4) { display: none; }
+  .fl-table th, .fl-table td { padding: 6px 5px; }
+  .fl-table td:last-child .fl-dim { display: none; }
+}

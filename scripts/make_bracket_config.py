@@ -35,7 +35,7 @@ DATA_DIR = ROOT / "data"
 DATA_DIR.mkdir(exist_ok=True)
 
 import re as _re
-_REGION_RE = _re.compile(r'\\b(East|West|South|Midwest)\\s+Region\\b', _re.IGNORECASE)
+_REGION_RE = _re.compile(r'\b(East|West|South|Midwest)\s+Region\b', _re.IGNORECASE)
 
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
@@ -187,6 +187,8 @@ config_path = DATA_DIR / "bracket_config.json"
 if config_path.exists():
     try:
         existing_config = json.loads(config_path.read_text())
+        if existing_config.get("_projected"):
+            existing_config = {}  # daily projection — its regions and bubble are not the real bracket
         print(f"\n  Existing bracket_config.json found (season {existing_config.get('_season')})")
         print("  Preserving region assignments and bubble teams from existing config...")
     except Exception:

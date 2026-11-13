@@ -270,7 +270,7 @@ function renderTransitiveResult(teamA, teamB, sigA, sigB, bothBeat, bothLost, ne
   const noDataHTML = nSignals === 0
     ? `<div class="trans-no-data">
         <div class="trans-no-data-icon">∅</div>
-        <div>No common opponents found in the 2025-26 season data for this pair.
+        <div>No common opponents found in this season's data for this pair.
         These two teams likely played in separate scheduling universes with no shared opponents this year.</div>
        </div>` : '';
 
@@ -308,7 +308,7 @@ function renderTransitiveResult(teamA, teamB, sigA, sigB, bothBeat, bothLost, ne
     ${bothLost.map(s => commonRow(s, teamA, teamB, flipped)).join('')}` : ''}
 
     <div class="trans-footnote">
-      ${nSignals} signal${nSignals !== 1 ? 's' : ''} found · precomputed from 2025-26 regular season results
+      ${nSignals} signal${nSignals !== 1 ? 's' : ''} found · precomputed from this season's results
     </div>
   `;
 

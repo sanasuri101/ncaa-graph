@@ -16,7 +16,7 @@
  */
 
 import { createGroq } from "@ai-sdk/groq";
-import { streamText, tool } from "ai";
+import { streamText, tool, stepCountIs } from "ai";
 import { z } from "zod";
 
 import {
@@ -80,7 +80,7 @@ function buildTools() {
     get_team_stats: tool({
       description:
         "Get efficiency stats, form, roster and injury info for one or more teams.",
-      parameters: z.object({
+      inputSchema: z.object({
         team_names: z
           .array(z.string())
           .describe('Team names e.g. ["Duke", "Michigan"]'),
@@ -90,7 +90,7 @@ function buildTools() {
     get_matchup: tool({
       description:
         "Get head-to-head history, common opponents and transitive evidence between two teams.",
-      parameters: z.object({
+      inputSchema: z.object({
         team_a: z.string().describe("First team name"),
         team_b: z.string().describe("Second team name"),
       }),
@@ -99,7 +99,7 @@ function buildTools() {
     get_standings: tool({
       description:
         'Get ranked list of alive teams. Use for "Final Four favorites", "best teams", "top efficiency" questions.',
-      parameters: z.object({
+      inputSchema: z.object({
         sort_by: z
           .enum(["adj_em", "barthag", "rank", "wins_vs_field", "seed"])
           .describe(
@@ -225,8 +225,21 @@ function buildSystemPrompt(
     timeZone: "America/New_York",
   });
 
-  let p = `You are AI Scout, an expert NCAA basketball analyst. ${season} March Madness ${round}. ${aliveCount} teams remain. Today is ${todayStr}.\n`;
-  p += `Only reference teams still alive. No eliminated teams.\n\n`;
+  let p;
+  if (!aliveTeamIds?.size) {
+    // Regular season: no tournament games yet, the field is a daily projection
+    const firstOut = graph.nodes
+      .filter((n) => n.region === "bubble")
+      .map((n) => n.label)
+      .join(", ");
+    p = `You are AI Scout, an expert NCAA basketball analyst. It is the ${graph?.meta?.season ?? season} regular season. Today is ${todayStr}. The NCAA tournament has not started and no bracket has been announced.\n`;
+    p += `The teams in your data are a PROJECTED 64-team field, recomputed daily from game results. Seeds and regions are projections, not the official bracket — say so when you cite them.\n`;
+    if (firstOut) p += `First teams out of the projected field: ${firstOut}.\n`;
+    p += `\n`;
+  } else {
+    p = `You are AI Scout, an expert NCAA basketball analyst. ${season} March Madness ${round}. ${aliveCount} teams remain. Today is ${todayStr}.\n`;
+    p += `Only reference teams still alive. No eliminated teams.\n\n`;
+  }
 
   if (
     intentType === "matchup" ||
@@ -425,7 +438,7 @@ export default async function handler(req, res) {
       const result = streamText({
         model: groq(MODEL),
         messages,
-        maxTokens: MAX_TOKENS,
+        maxOutputTokens: MAX_TOKENS,
       });
       let knownHasText = false;
       for await (const chunk of result.textStream) {
@@ -440,7 +453,7 @@ export default async function handler(req, res) {
         const retry = streamText({
           model: groq(MODEL),
           messages,
-          maxTokens: MAX_TOKENS,
+          maxOutputTokens: MAX_TOKENS,
         });
         for await (const chunk of retry.textStream) {
           writer.text(chunk);
@@ -458,18 +471,18 @@ export default async function handler(req, res) {
     const result = streamText({
       model: groq(MODEL),
       messages,
-      maxTokens: MAX_TOKENS,
+      maxOutputTokens: MAX_TOKENS,
       tools,
-      maxSteps: MAX_STEPS,
+      stopWhen: stepCountIs(MAX_STEPS),
       onStepFinish: ({ toolCalls, toolResults }) => {
         if (toolCalls) {
           for (const tc of toolCalls) {
             const label =
               tc.toolName === "get_team_stats"
-                ? `Looking up ${(tc.args?.team_names ?? []).join(", ")}`
+                ? `Looking up ${(tc.input?.team_names ?? []).join(", ")}`
                 : tc.toolName === "get_matchup"
-                  ? `Analysing ${tc.args?.team_a} vs ${tc.args?.team_b}`
-                  : `Checking standings${tc.args?.region && tc.args.region !== "all" ? " — " + tc.args.region : ""}`;
+                  ? `Analysing ${tc.input?.team_a} vs ${tc.input?.team_b}`
+                  : `Checking standings${tc.input?.region && tc.input.region !== "all" ? " — " + tc.input.region : ""}`;
             writer.tool(label);
           }
         }
@@ -478,7 +491,7 @@ export default async function handler(req, res) {
           for (const tr of toolResults) {
             toolResultMessages.push({
               toolName: tr.toolName,
-              result: tr.result,
+              result: tr.output,
             });
           }
         }
@@ -522,7 +535,7 @@ export default async function handler(req, res) {
       const retry = streamText({
         model: groq(MODEL),
         messages: retryMessages,
-        maxTokens: MAX_TOKENS,
+        maxOutputTokens: MAX_TOKENS,
       });
       for await (const chunk of retry.textStream) {
         writer.text(chunk);

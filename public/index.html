@@ -29,6 +29,10 @@
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="6" height="4" rx="1"/><rect x="16" y="3" width="6" height="4" rx="1"/><rect x="9" y="10" width="6" height="4" rx="1"/><line x1="8" y1="5" x2="9" y2="5"/><line x1="15" y1="5" x2="16" y2="5"/><line x1="12" y1="10" x2="12" y2="7"/></svg>
       Bracket
     </button>
+    <button class="nav-btn" data-view="field">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 01-10 0V4zM17 5h3v2a3 3 0 01-3 3M7 5H4v2a3 3 0 003 3"/></svg>
+      Field
+    </button>
     <button class="nav-btn" data-view="odds">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
       Odds
@@ -149,7 +153,7 @@
         <span class="gtb-label">CUSTOM</span>
         <input type="text" id="custom-team-input" placeholder="Add teams…" autocomplete="off" spellcheck="false"/>
         <div id="custom-dropdown"></div>
-        <button class="gtb-btn" onclick="addAllToCustom()">+ All 68</button>
+        <button class="gtb-btn" onclick="addAllToCustom()">+ All teams</button>
         <button class="gtb-btn" id="custom-clear-btn" onclick="clearCustom()" style="display:none">✕ Clear</button>
       </div>
       <div class="gtb-sep"></div>
@@ -229,6 +233,19 @@
           <div class="loading-text">Loading NCAA bracket data…</div>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- FIELD VIEW — projected tournament field, refreshed daily -->
+  <div class="view" id="view-field">
+    <div class="rankings-page">
+      <div class="rankings-col-title">Projected Field of 64</div>
+      <div class="seed-div-hint" style="font-size:.78rem;margin-bottom:12px">
+        <span id="field-meta"></span> · Rating = points better than an average team, from scoring margin
+        adjusted for opponents and home court. Each conference's top team gets an auto bid; the best
+        of the rest fill the field. Click a team in the field to see it on the graph.
+      </div>
+      <div id="field-table"><div class="odds-loading">Loading projection…</div></div>
     </div>
   </div>
 
@@ -350,7 +367,7 @@
     <div class="scatter-header">
       <div class="scatter-title">
         <span class="scatter-title-main">Efficiency Scatter</span>
-        <span class="scatter-title-sub">AdjOE vs AdjDE · 2025-26 · 64 bracket teams</span>
+        <span class="scatter-title-sub">AdjOE vs AdjDE · projected field</span>
       </div>
       <div class="scatter-controls">
         <select id="scatter-highlight" onchange="renderScatter()">
@@ -399,7 +416,7 @@
       <select id="stats-team-select"><option value="">Select a team…</option></select>
       <button class="ai-action-btn" id="stats-fetch-btn" onclick="fetchTeamStats()" title="Refresh">↻</button>
     </div>
-    <div id="stats-output" class="ai-output"><div class="ai-placeholder">Select a team to load their 2025-26 stats.</div></div>
+    <div id="stats-output" class="ai-output"><div class="ai-placeholder">Select a team to load their season stats.</div></div>
   </div>
   <div class="ai-mode-content" id="panel-chat">
     <div class="chat-area" id="chat-messages">
@@ -442,5 +459,6 @@
 <script src="bracket.js"></script>
 <script src="ai-panel.js"></script>
 <script src="odds.js"></script>
+<script src="leaderboard.js"></script>
 </body>
 </html>

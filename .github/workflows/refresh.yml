@@ -22,6 +22,9 @@ jobs:
         with:
           python-version: '3.12'
 
+      - name: Project the tournament field (leaderboard + bracket_config)
+        run: python scripts/project_field.py
+
       - name: Fetch ESPN game data
         run: python scripts/fetch_data.py
 

@@ -164,7 +164,7 @@ function getData() {
     const winners = new Set(),
       losers = new Set();
     for (const g of allGames) {
-      if (g.date < "2026-03-17") continue;
+      if (g.date < (graph.meta?.tourney_start ?? "9999")) continue;
       const t1 = String(g.team1_id),
         t2 = String(g.team2_id);
       if (!bracketIds.has(t1) && !bracketIds.has(t2)) continue;

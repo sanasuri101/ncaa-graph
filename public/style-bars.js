@@ -47,9 +47,9 @@ async function renderStyleBars(nodeW, nodeL, containerId) {
     },
     {
       label: 'Pace', sub: 'adj_tempo',
-      valW: tvW.adj_tempo ?? 0.5, valL: tvL.adj_tempo ?? 0.5,
-      min: 0, max: 1, better: 'neutral',
-      fmt: v => v >= 0.8 ? 'Fast' : v >= 0.6 ? 'Mod.' : 'Slow',
+      valW: tvW.adj_tempo ?? 68, valL: tvL.adj_tempo ?? 68,
+      min: 60, max: 76, better: 'neutral',
+      fmt: v => v >= 70 ? 'Fast' : v >= 66 ? 'Mod.' : 'Slow',
     },
     {
       label: 'Luck', sub: 'Torvik luck',
@@ -106,11 +106,11 @@ async function renderStyleBars(nodeW, nodeL, containerId) {
       </div>`;
   });
 
-  const paceDiff   = Math.abs((tvW.adj_tempo??0.5) - (tvL.adj_tempo??0.5));
+  const paceDiff   = Math.abs((tvW.adj_tempo??68) - (tvL.adj_tempo??68));
   const adjEmDiff  = Math.abs(tvW.adj_em - tvL.adj_em);
   let callouts = [];
-  if (paceDiff > 0.2) {
-    const faster = (tvW.adj_tempo??0.5) > (tvL.adj_tempo??0.5) ? nodeW.label : nodeL.label;
+  if (paceDiff > 4) {
+    const faster = (tvW.adj_tempo??68) > (tvL.adj_tempo??68) ? nodeW.label : nodeL.label;
     const slower = faster === nodeW.label ? nodeL.label : nodeW.label;
     callouts.push(`<div class="sb2-callout"><span class="sb2-ci">⚡</span><span>Pace mismatch — ${faster} plays fast, ${slower} prefers slower. Tempo will matter.</span></div>`);
   }
@@ -123,7 +123,7 @@ async function renderStyleBars(nodeW, nodeL, containerId) {
     <div class="sb2-wrap">
       <div class="sb2-header">
         <span class="sb2-title">Style Comparison</span>
-        <span class="sb2-source">Torvik 2025-26</span>
+        <span class="sb2-source">Torvik</span>
       </div>
       <div class="sb2-body">${rows.join('')}</div>
       ${callouts.length ? `<div class="sb2-callouts">${callouts.join('')}</div>` : ''}

@@ -48,7 +48,7 @@ TORVIK_NAME_MAP = {
     "Stephen F. Austin":   "SFA",
     "Mississippi":          "Ole Miss",
     "McNeese St.":          "McNeese",
-    "Bethune Cookman":      "Bethune-Cookman",
+    "Bethune Cookman":      "Bethune",
     "Penn St.":             "Penn State",
     "Oklahoma St.":         "Oklahoma State",
     "St. John's":           "St John's",
@@ -59,7 +59,32 @@ TORVIK_NAME_MAP = {
     "Prairie View A&M":     "Prairie View",
     "Cal Baptist":          "CA Baptist",
     "Hawaii":               "Hawai'i",
+    "Albany":               "UAlbany",
+    "Appalachian St.":      "App State",
+    "Arkansas Pine Bluff":  "AR-Pine Bluff",
+    "Gardner Webb":         "Gardner-Webb",
+    "Grambling St.":        "Grambling",
+    "Illinois Chicago":     "UIC",
+    "Louisiana Monroe":     "UL Monroe",
+    "Nebraska Omaha":       "Omaha",
+    "New Orleans":          "LSU N Orleans",
+    "Nicholls St.":         "Nicholls",
+    "Sam Houston St.":      "Sam Houston",
+    "San Jose St.":         "San José St",
+    "Seattle":              "Seattle U",
+    "Southeastern Louisiana": "SE Louisiana",
+    "Tennessee Martin":     "UT Martin",
+    "Texas A&M Corpus Chris": "Texas A&M-CC",
+    "UMKC":                 "Kansas City",
+    "USC Upstate":          "SC Upstate",
 }
+
+
+def _norm(name: str) -> str:
+    """'Boise State' / 'Boise St.' -> 'boise st' so ESPN and Torvik names line up."""
+    import re
+    name = name.lower().replace("state", "st").replace("&", "and")
+    return re.sub(r"[^a-z0-9 ]", "", name).strip()
 
 # Torvik JSON field positions
 FIELDS = [
@@ -67,15 +92,15 @@ FIELDS = [
     "adj_oe", "adj_oe_rank", "adj_de", "adj_de_rank",
     "barthag", "barthag_rank",
     "wins", "losses", "conf_wins", "conf_losses", "conf_record",
-    "home_win_pct", "away_win_pct", "neutral_win_pct",
+    "sos", "away_win_pct", "neutral_win_pct",
     "f_home_win_pct", "f_away_win_pct", "f_neutral_win_pct",
     "f_adj_oe", "f_adj_de",
     "adj_oe_raw", "adj_de_raw", "adj_oe_raw2", "adj_de_raw2",
     "proj_oe", "proj_de", "proj_oe2", "proj_de2",
     "proj_barthag", "proj_rank",
     "luck", "sos_raw", "sos_opp", "sos_nconf", "sos_rank",
-    "exp", "exp_rank", "adj_tempo", "avg_poss",
-    "seed", "ncaa_seed", "wab",
+    "con_de", "col39", "conf_win_pct",
+    "wab", "wab_rank", "fun_rank", "adj_tempo",
 ]
 
 
@@ -229,6 +254,7 @@ def merge(bracket: list, torvik: dict, splits: dict) -> dict:
     """
     # Build reverse map: bracket_name -> torvik_name
     name_to_torvik = {v: k for k, v in TORVIK_NAME_MAP.items()}
+    by_norm = {_norm(name): name for name in torvik}
 
     result   = {}
     matched  = 0
@@ -238,8 +264,11 @@ def merge(bracket: list, torvik: dict, splits: dict) -> dict:
         espn_id = team["espn_id"]
         bname   = team["bracket_name"]
 
-        # Try direct match, then mapped name
-        torvik_name = name_to_torvik.get(bname, bname)
+        # Mapped name first, then a normalized match on the short or full school name
+        torvik_name = (name_to_torvik.get(bname)
+                       or by_norm.get(_norm(bname))
+                       or by_norm.get(_norm(team.get("location", "")))
+                       or bname)
         stats = torvik.get(torvik_name)
 
         if stats is None:
@@ -271,7 +300,7 @@ def merge(bracket: list, torvik: dict, splits: dict) -> dict:
                     "luck":          round(float(stats["luck"]), 3),
                     "wab":           round(float(stats["wab"]), 1),
                     "proj_barthag":  round(float(stats["proj_barthag"]), 4),
-                    "sos_rank":      stats["sos_rank"],
+                    "sos_rank":      round(float(stats["sos"]), 3),  # SOS rating (higher = harder), not a rank
                     "conf":          stats["conf"],
                     "two_p":         splits.get(torvik_name, {}).get("two_p"),
                     "three_p":       splits.get(torvik_name, {}).get("three_p"),
@@ -281,11 +310,6 @@ def merge(bracket: list, torvik: dict, splits: dict) -> dict:
                     "orb_rate":      splits.get(torvik_name, {}).get("orb_rate"),
                     "ftr":           splits.get(torvik_name, {}).get("ftr"),
                     "three_pa_rate": splits.get(torvik_name, {}).get("three_pa_rate"),
-                    "efg_d":         round(float(stats["f_adj_de"]), 4) if stats.get("f_adj_de") else None,
-                    "recent_win_pct": round(float(stats["exp"]), 3) if stats.get("exp") else None,
-                    "recent_margin":  round(float(stats["avg_poss"]), 1) if stats.get("avg_poss") else None,
-                    "quad1_record":   stats.get("conf_record"),
-                    "net_rank":       int(stats["ncaa_seed"]) if stats.get("ncaa_seed") else None,
                 },
             }
 
@@ -299,6 +323,8 @@ def merge(bracket: list, torvik: dict, splits: dict) -> dict:
 def main():
     print(f"Fetching Torvik T-Rank stats for {YEAR}...")
     torvik  = fetch_torvik()
+    if not torvik:
+        return  # keep the existing file rather than overwrite it with empty stats
     splits  = fetch_shooting_splits()
     bracket = load_bracket()
     merged  = merge(bracket, torvik, splits)

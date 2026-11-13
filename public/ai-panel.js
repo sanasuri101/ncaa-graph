@@ -299,7 +299,7 @@ async function fetchTeamStats() {
         <div class="stat-cell torvik-cell"><div class="sv" style="color:var(--midwest)">${tv.adj_de}</div><div class="sl">AdjDE</div></div>
         <div class="stat-cell torvik-cell"><div class="sv">${(tv.barthag * 100).toFixed(1)}%</div><div class="sl">Barthag</div></div>
         <div class="stat-cell torvik-cell"><div class="sv">${tv.wab > 0 ? "+" : ""}${parseFloat(tv.wab).toFixed(1)}</div><div class="sl">WAB</div></div>
-        <div class="stat-cell torvik-cell"><div class="sv">${tv.adj_tempo != null ? (tv.adj_tempo >= 0.8 ? "Fast" : tv.adj_tempo >= 0.6 ? "Mod." : "Slow") + " (" + tv.adj_tempo.toFixed(2) + ")" : "—"}</div><div class="sl">Pace</div></div>
+        <div class="stat-cell torvik-cell"><div class="sv">${tv.adj_tempo != null ? (tv.adj_tempo >= 70 ? "Fast" : tv.adj_tempo >= 66 ? "Mod." : "Slow") + " (" + tv.adj_tempo.toFixed(1) + ")" : "—"}</div><div class="sl">Pace</div></div>
         <div class="stat-cell torvik-cell"><div class="sv">${tv.luck > 0 ? "+" : ""}${parseFloat(tv.luck).toFixed(3)}</div><div class="sl">Luck</div></div>
         <div class="stat-cell torvik-cell"><div class="sv">${tv.two_p != null ? tv.two_p + "%" : "—"}</div><div class="sl">2P%</div></div>
         <div class="stat-cell torvik-cell"><div class="sv">${tv.three_p != null ? tv.three_p + "%" : "—"}</div><div class="sl">3P%</div></div>
@@ -330,7 +330,7 @@ async function fetchTeamStats() {
         ${tBlock}
       </div>
       <div style="font-size:.62rem;color:var(--text-mute);margin-top:4px;line-height:1.5">
-        ESPN: 2025-26 season totals${tv ? ` · Torvik updated ${tData?.generated_at?.slice(0, 10) ?? "recently"}` : ""}
+        ESPN: season totals${tv ? ` · Torvik updated ${tData?.generated_at?.slice(0, 10) ?? "recently"}` : ""}
       </div>
     `;
   } catch (err) {
@@ -1305,7 +1305,7 @@ async function fetchStatsPageTeam(teamId) {
         <div class="stat-cell torvik-cell"><div class="sv" style="color:var(--midwest)">${tv.adj_de}</div><div class="sl">AdjDE</div></div>
         <div class="stat-cell torvik-cell"><div class="sv">${(tv.barthag * 100).toFixed(1)}%</div><div class="sl">Barthag</div></div>
         <div class="stat-cell torvik-cell"><div class="sv">${tv.wab > 0 ? "+" : ""}${parseFloat(tv.wab).toFixed(1)}</div><div class="sl">WAB</div></div>
-        <div class="stat-cell torvik-cell"><div class="sv">${tv.adj_tempo != null ? (tv.adj_tempo >= 0.8 ? "Fast" : tv.adj_tempo >= 0.6 ? "Mod." : "Slow") + " (" + tv.adj_tempo.toFixed(2) + ")" : "—"}</div><div class="sl">Pace</div></div>
+        <div class="stat-cell torvik-cell"><div class="sv">${tv.adj_tempo != null ? (tv.adj_tempo >= 70 ? "Fast" : tv.adj_tempo >= 66 ? "Mod." : "Slow") + " (" + tv.adj_tempo.toFixed(1) + ")" : "—"}</div><div class="sl">Pace</div></div>
         <div class="stat-cell torvik-cell"><div class="sv">${tv.luck > 0 ? "+" : ""}${parseFloat(tv.luck).toFixed(3)}</div><div class="sl">Luck</div></div>
         <div class="stat-cell torvik-cell"><div class="sv">${tv.two_p != null ? tv.two_p + "%" : "—"}</div><div class="sl">2P%</div></div>
         <div class="stat-cell torvik-cell"><div class="sv">${tv.three_p != null ? tv.three_p + "%" : "—"}</div><div class="sl">3P%</div></div>
@@ -1336,7 +1336,7 @@ async function fetchStatsPageTeam(teamId) {
         ${tBlock}
       </div>
       <div style="font-size:.62rem;color:var(--text-mute);margin-top:8px">
-        ESPN: 2025-26 season · Torvik: ${tData?.generated_at?.slice(0, 10) ?? "recent"}
+        ESPN: season · Torvik: ${tData?.generated_at?.slice(0, 10) ?? "recent"}
       </div>`;
   } catch (err) {
     clearTimeout(timer);
@@ -1444,7 +1444,7 @@ async function buildTeamStatsHTML(teamId) {
         <div class="stat-cell torvik-cell"><div class="sv" style="color:var(--midwest)">${tv.adj_de}</div><div class="sl">AdjDE</div></div>
         <div class="stat-cell torvik-cell"><div class="sv">${(tv.barthag * 100).toFixed(1)}%</div><div class="sl">Barthag</div></div>
         <div class="stat-cell torvik-cell"><div class="sv">${tv.wab > 0 ? "+" : ""}${parseFloat(tv.wab).toFixed(1)}</div><div class="sl">WAB</div></div>
-        <div class="stat-cell torvik-cell"><div class="sv">${tv.adj_tempo != null ? (tv.adj_tempo >= 0.8 ? "Fast" : tv.adj_tempo >= 0.6 ? "Mod." : "Slow") + " (" + tv.adj_tempo.toFixed(2) + ")" : "—"}</div><div class="sl">Pace</div></div>
+        <div class="stat-cell torvik-cell"><div class="sv">${tv.adj_tempo != null ? (tv.adj_tempo >= 70 ? "Fast" : tv.adj_tempo >= 66 ? "Mod." : "Slow") + " (" + tv.adj_tempo.toFixed(1) + ")" : "—"}</div><div class="sl">Pace</div></div>
         <div class="stat-cell torvik-cell"><div class="sv">${tv.luck > 0 ? "+" : ""}${parseFloat(tv.luck).toFixed(3)}</div><div class="sl">Luck</div></div>
         <div class="stat-cell torvik-cell"><div class="sv">${tv.two_p != null ? tv.two_p + "%" : "—"}</div><div class="sl">2P%</div></div>
         <div class="stat-cell torvik-cell"><div class="sv">${tv.three_p != null ? tv.three_p + "%" : "—"}</div><div class="sl">3P%</div></div>
@@ -1475,7 +1475,7 @@ async function buildTeamStatsHTML(teamId) {
         ${tBlock}
       </div>
       <div style="font-size:.62rem;color:var(--text-mute);margin-top:4px;line-height:1.5">
-        ESPN: 2025-26 season · Torvik: ${tData?.generated_at?.slice(0, 10) ?? "recent"}
+        ESPN: season · Torvik: ${tData?.generated_at?.slice(0, 10) ?? "recent"}
       </div>`;
   } catch (err) {
     clearTimeout(timer);
