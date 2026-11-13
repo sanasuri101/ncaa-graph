@@ -213,16 +213,21 @@ export const ALIASES = {
 };
 
 export function normName(s) {
-  return s
-    .toLowerCase()
-    .trim()
-    .replace(/'s\b/g, "")
-    .replace(/\bst\.\s*/g, "saint ")
-    .replace(/\bst\s+/g, "saint ")
-    .replace(/\bft\.?\s+/g, "fort ")
-    .replace(/[.'`]/g, "")
-    .replace(/\s+/g, " ")
-    .trim();
+  return (
+    s
+      .toLowerCase()
+      .trim()
+      .replace(/'s\b/g, "")
+      // "St" means Saint only before a saint's name; in "Arizona St looked good" it means State
+      .replace(
+        /\bst\.?\s*(?=(johns?|marys?|louis|peters?|josephs?|francis|bonaventure|thomas)\b)/g,
+        "saint ",
+      )
+      .replace(/\bft\.?\s+/g, "fort ")
+      .replace(/[.'`]/g, "")
+      .replace(/\s+/g, " ")
+      .trim()
+  );
 }
 
 export function resolveTeam(name, nodeByName) {
@@ -362,12 +367,17 @@ export function implGetTeamStats(teamNames) {
   const fieldIds = new Set(Object.values(nodeByName).map((n) => String(n.id)));
   return teamNames
     .map((name) => {
-      // An exact leaderboard name outside the field wins over a fuzzy field match
-      // ("Arizona St" must not resolve to Arizona). The leaderboard rates the top of D1.
-      const query = normName(ALIASES[name.toLowerCase().trim()] ?? name);
-      const rated = Object.values(board).find(
-        (b) => normName(b.name) === query,
-      );
+      // A leaderboard team outside the field wins over a fuzzy field match
+      // ("Arizona State Sun Devils" must not resolve to Arizona). Longest name first.
+      const query = normName(
+        ALIASES[name.toLowerCase().trim()] ?? name,
+      ).replace(/\bstate\b/g, "st");
+      const rated = Object.values(board)
+        .filter((b) => {
+          const n = normName(b.name);
+          return query === n || query.startsWith(n + " ");
+        })
+        .sort((x, y) => y.name.length - x.name.length)[0];
       if (rated && !fieldIds.has(String(rated.espn_id)))
         return `${rated.name} (${rated.conf}) — not in the projected field\n  ${ratingLine(rated)}`;
       const node = resolveTeam(name, nodeByName);
@@ -655,6 +665,20 @@ export function classifyIntent(msg, graph) {
     const mAbbrev = mNorm
       .replace(/\bmichigan state\b/g, "michigan st")
       .replace(/\b(\w+) state\b/g, "$1 st");
+
+    // A rated team outside the field ("Arizona St") must not be read as a field
+    // team with a similar name ("Arizona"). Let the model look it up with tools.
+    const fieldIds = new Set(graph.nodes.map((n) => String(n.id)));
+    const namesOutsider = Object.values(getData().board).some((t) => {
+      if (fieldIds.has(String(t.espn_id))) return false;
+      const re = new RegExp(
+        "\\b" +
+          normName(t.name).replace(/[.*+?^${}()|[\]\\]/g, "\\$&") +
+          "\\b(?! st\\b)",
+      );
+      return re.test(mNorm) || re.test(mAbbrev);
+    });
+    if (namesOutsider) return { type: "dynamic" };
 
     const found = graph.nodes.filter((n) => {
       const lbl = normName(n.label);

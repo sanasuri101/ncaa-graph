@@ -65,7 +65,8 @@ function sanitize(text) {
 }
 
 // ── Constants ──────────────────────────────────────────────────────────────────
-const MODEL = "llama-3.3-70b-versatile";
+// Groq retires models (llama-3.3-70b-versatile is gone); set GROQ_MODEL to switch without a code change
+const MODEL = process.env.GROQ_MODEL || "openai/gpt-oss-120b";
 const MAX_TOKENS = 4096;
 const MAX_STEPS = 3;
 
@@ -390,6 +391,24 @@ export default async function handler(req, res) {
 
   const writer = makeWriter(res);
 
+  // A failed model call ends its stream empty and reports only through onError.
+  // Remember it, so an empty answer becomes a visible error instead of a blank reply.
+  let wroteText = false;
+  let streamError = null;
+  const onError = ({ error }) => {
+    streamError = error;
+  };
+  const writeText = writer.text;
+  writer.text = (t) => {
+    wroteText = true;
+    writeText(t);
+  };
+  const done = writer.done;
+  writer.done = () =>
+    !wroteText && streamError
+      ? writer.error(`The AI service returned an error: ${streamError.message}`)
+      : done();
+
   try {
     const userMsg = body.userMsg || "";
     const { graph, torvik, form, injuryMap } = getData();
@@ -446,6 +465,7 @@ export default async function handler(req, res) {
       const groq = createGroq({ apiKey: groqKey });
       const result = streamText({
         model: groq(MODEL),
+        onError,
         messages,
         maxOutputTokens: MAX_TOKENS,
       });
@@ -461,6 +481,7 @@ export default async function handler(req, res) {
         );
         const retry = streamText({
           model: groq(MODEL),
+          onError,
           messages,
           maxOutputTokens: MAX_TOKENS,
         });
@@ -479,6 +500,7 @@ export default async function handler(req, res) {
     let toolResultMessages = [];
     const result = streamText({
       model: groq(MODEL),
+      onError,
       messages,
       maxOutputTokens: MAX_TOKENS,
       tools,
@@ -543,6 +565,7 @@ export default async function handler(req, res) {
           : messages; // No tool results — just retry with the same messages, no tools
       const retry = streamText({
         model: groq(MODEL),
+        onError,
         messages: retryMessages,
         maxOutputTokens: MAX_TOKENS,
       });

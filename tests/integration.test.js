@@ -506,6 +506,23 @@ assert(
   outsiderOutput,
 );
 
+// 12b3. Similar names: an out-of-field team must not be read as a field team,
+// and "St" mid-sentence means State, not Saint
+const outsiderIntent = classifyIntent(
+  `How has ${outsider.name} looked compared with Duke so far?`,
+  graph,
+);
+assert(
+  outsiderIntent.type === "dynamic",
+  `question naming out-of-field ${outsider.name} goes to the lookup path (got ${outsiderIntent.type})`,
+);
+const stIntent = classifyIntent("Can Michigan St beat Duke this year?", graph);
+assert(
+  stIntent.type === "matchup" &&
+    [stIntent.team_a, stIntent.team_b].includes("Michigan St"),
+  `"Michigan St" mid-sentence resolves to Michigan St (got ${stIntent.team_a} / ${stIntent.team_b})`,
+);
+
 // 12c. A field team is not marked eliminated
 const isOutput = implGetTeamStats(["Iowa State"]);
 assert(

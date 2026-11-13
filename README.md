@@ -90,7 +90,8 @@ python scripts/compute_transitive.py
 ## Deployment
 
 The bracket simulator and AI Scout are serverless functions under `api/`, so the full app runs
-on Vercel. Set `GROQ_KEY` in the Vercel project for the assistant. The GitHub Pages workflow
+on Vercel. Set `GROQ_KEY` in the Vercel project for the assistant. The model defaults to
+`openai/gpt-oss-120b`; set `GROQ_MODEL` to change it when Groq retires a model. The GitHub Pages workflow
 publishes `public/` only; on Pages the Field, Graph and Stats views work but the bracket
 simulator and assistant do not.
 

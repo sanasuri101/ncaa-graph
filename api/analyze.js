@@ -55,7 +55,8 @@ function sanitizeTeamName(name) {
 }
 
 // ── Constants ─────────────────────────────────────────────────────────────────
-const MODEL = "llama-3.3-70b-versatile";
+// Groq retires models (llama-3.3-70b-versatile is gone); set GROQ_MODEL to switch without a code change
+const MODEL = process.env.GROQ_MODEL || "openai/gpt-oss-120b";
 const MAX_TOKENS = 1024;
 const MAX_TOKENS_SY = 3000; // synthesis: 7 sections × ~350 tokens depth
 const MAX_STEPS_SYNTH = 3;
