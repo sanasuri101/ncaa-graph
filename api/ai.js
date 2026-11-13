@@ -18,6 +18,7 @@
 import { createGroq } from "@ai-sdk/groq";
 import { streamText, tool, stepCountIs } from "ai";
 import { z } from "zod";
+import { guard } from "./_guard.js";
 
 import {
   getData,
@@ -68,11 +69,8 @@ const MODEL = "llama-3.3-70b-versatile";
 const MAX_TOKENS = 4096;
 const MAX_STEPS = 3;
 
-const CORS = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type",
-};
+// Same-origin only (see _guard.js): no cross-origin access is granted
+const CORS = {};
 
 // ── SDK Tool definitions ───────────────────────────────────────────────────────
 function buildTools() {
@@ -347,6 +345,7 @@ export default async function handler(req, res) {
     res.end(JSON.stringify({ error: { message: "Method not allowed" } }));
     return;
   }
+  if (!guard(req, res)) return;
 
   let body;
   try {
@@ -362,6 +361,15 @@ export default async function handler(req, res) {
   } catch {
     res.writeHead(400, { "Content-Type": "application/json" });
     res.end(JSON.stringify({ error: { message: "Invalid JSON" } }));
+    return;
+  }
+
+  if (
+    body?.messages?.length > 40 ||
+    String(body?.userMsg ?? "").length > 4000
+  ) {
+    res.writeHead(400, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({ error: { message: "Request too large" } }));
     return;
   }
 

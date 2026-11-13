@@ -24,6 +24,7 @@ import { Annotation, StateGraph, END, START, Send } from "@langchain/langgraph";
 import { generateText, tool } from "ai";
 import { createGroq } from "@ai-sdk/groq";
 import { z } from "zod";
+import { guard } from "./_guard.js";
 
 // ── Sanitizer ─────────────────────────────────────────────────────────────────
 function sanitizeLLMOutput(text) {
@@ -60,11 +61,8 @@ const MAX_TOKENS_SY = 3000; // synthesis: 7 sections × ~350 tokens depth
 const MAX_STEPS_SYNTH = 3;
 const FETCH_TIMEOUT = 25000;
 
-const CORS = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type",
-};
+// Same-origin only (see _guard.js): no cross-origin access is granted
+const CORS = {};
 
 // ── Data loading ──────────────────────────────────────────────────────────────
 let _cache = null,
@@ -972,6 +970,7 @@ export default async function handler(req, res) {
     res.end(JSON.stringify({ error: "Method not allowed" }));
     return;
   }
+  if (!guard(req, res)) return;
   let body;
   try {
     const raw = await new Promise((resolve, reject) => {

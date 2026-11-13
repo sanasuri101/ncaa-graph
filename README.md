@@ -100,6 +100,8 @@ simulator and assistant do not.
   job cannot update `torvik_stats.json`. Run `python scripts/fetch_torvik.py` from another
   machine and commit the result. The leaderboard, field, graph and bracket picks do not depend
   on it; the assistant's efficiency and shooting stats do.
-- **The AI endpoints are open.** `/api/ai` and `/api/analyze` accept requests from any origin
-  with no rate limit, and each call spends the Groq key.
+- **AI endpoint protection is best-effort.** `/api/ai` and `/api/analyze` only accept requests
+  from the app's own origin and limit each IP to 12 a minute (`api/_guard.js`). The counter is
+  per server instance, so a determined flood needs a shared store or a spending cap on the
+  Groq key.
 - **ESPN's API is unofficial.** No key is needed, but it is not a supported interface.

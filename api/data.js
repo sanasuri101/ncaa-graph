@@ -327,7 +327,7 @@ export function fmtTeam(node, torvik, form, injuryMap, teamOdds) {
 
   const advanced = [
     tv.proj_barthag
-      ? `Proj Barthag: ${(tv.proj_barthag * 100).toFixed(1)}%`
+      ? `Barthag vs quality opponents: ${(tv.proj_barthag * 100).toFixed(1)}%`
       : "",
     tv.three_pa_rate ? `3PA rate: ${tv.three_pa_rate}%` : "",
   ]
@@ -339,7 +339,7 @@ export function fmtTeam(node, torvik, form, injuryMap, teamOdds) {
     `Record: ${tv.record} | Bracket: ${node.wins_vs_field}W-${node.losses_vs_field}L`,
     rating,
     `T-Rank #${tv.rank} | AdjEM: ${tv.adj_em > 0 ? "+" : ""}${tv.adj_em} | AdjOE: ${tv.adj_oe} | AdjDE: ${tv.adj_de}`,
-    `Barthag: ${(tv.barthag * 100).toFixed(1)}% | Proj Barthag: ${tv.proj_barthag ? (tv.proj_barthag * 100).toFixed(1) + "%" : "?"} | WAB: ${parseFloat(tv.wab).toFixed(1)} | Pace: ${pace}`,
+    `Barthag: ${(tv.barthag * 100).toFixed(1)}% | Barthag vs quality opponents: ${tv.proj_barthag ? (tv.proj_barthag * 100).toFixed(1) + "%" : "?"} | WAB: ${parseFloat(tv.wab).toFixed(1)} | Pace: ${pace}`,
     `Four Factors (off): ${ff4off}`,
     ff4def ? `Four Factors (def): ${ff4def}` : "",
     `Shooting: 2P% ${tv.two_p ?? "?"} | 3P% ${tv.three_p ?? "?"} | FT% ${tv.ft_pct ?? "?"} | 3PA rate: ${tv.three_pa_rate ?? "?"}%`,

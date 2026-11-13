@@ -1078,7 +1078,11 @@ async function callAI(
 
     if (!res.ok) {
       const errData = await res.json().catch(() => ({}));
-      throw new Error(errData?.error?.message ?? `API error ${res.status}`);
+      throw new Error(
+        res.status === 404 || res.status === 405
+          ? "AI Scout needs the full app — this static copy has no server behind it."
+          : (errData?.error?.message ?? `API error ${res.status}`),
+      );
     }
 
     // Check if response is SSE stream (new) or JSON (fallback)

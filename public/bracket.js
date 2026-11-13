@@ -72,6 +72,8 @@ async function generateBracket() {
       signal:  ctrl.signal,
     });
     clearTimeout(timer);
+    // A static host (GitHub Pages) has no /api: say so instead of a bare error code
+    if (res.status === 404 || res.status === 405) throw new Error('The bracket simulator needs the full app — this static copy has no server behind it.');
     if (!res.ok) throw new Error(`Server error ${res.status}`);
     _bracketData = await res.json();
     stage.innerHTML = renderBracket(_bracketData);

@@ -590,46 +590,32 @@ function winProb(
   }
 
   let prob;
-  if (model === "barthag") {
-    // Pure efficiency — Torvik barthag ratio
-    prob = barthagPrb;
-  } else if (model === "seed") {
-    // Pure historical seed win rates
-    prob = seedProb;
-  } else if (model === "upset") {
-    // Upset model: seed-gap weighted base + mild compression + signal adjustments
-    // Large seed gaps (1v16, 2v15): historical rates dominate — prevents statistically
-    //   impossible runs like 15-seeds reaching Sweet 16
-    // Small seed gaps (5v12, 6v11): efficiency dominates — these ARE close games
-    // Result: ~3-5 upsets from seeds 12+, ~6-8 total upsets per R1
-    const seedGap = Math.abs(seedB - seedA);
-    const histWeight = Math.min(0.9, 0.5 + seedGap * 0.04); // scales 50%→90% with seed gap
-    const base = (1 - histWeight) * barthagPrb + histWeight * seedProb;
+  // Upset model: seed-gap weighted base + mild compression + signal adjustments
+  // Large seed gaps (1v16, 2v15): historical rates dominate — prevents statistically
+  //   impossible runs like 15-seeds reaching Sweet 16
+  // Small seed gaps (5v12, 6v11): efficiency dominates — these ARE close games
+  // Result: ~3-5 upsets from seeds 12+, ~6-8 total upsets per R1
+  const seedGap = Math.abs(seedB - seedA);
+  const histWeight = Math.min(0.9, 0.5 + seedGap * 0.04); // scales 50%→90% with seed gap
+  const base = (1 - histWeight) * barthagPrb + histWeight * seedProb;
 
-    // Signal adjustments: form, luck, WAB
-    const dA = decayWinRate(teamA.id, form, torvik, oppBarthag);
-    const dB = decayWinRate(teamB.id, form, torvik, oppBarthag);
-    const dP = dA / (dA + dB);
-    const formAdj = (dP - 0.5) * 0.08;
-    const lAdj = luckAdj(tvA, tvB);
-    const wAdj = wabAdj(tvA, tvB);
-    const allAdj = Math.max(-0.06, Math.min(0.06, formAdj + lAdj + wAdj));
-    const adjusted = base + allAdj;
+  // Signal adjustments: form, luck, WAB
+  const dA = decayWinRate(teamA.id, form, torvik, oppBarthag);
+  const dB = decayWinRate(teamB.id, form, torvik, oppBarthag);
+  const dP = dA / (dA + dB);
+  const formAdj = (dP - 0.5) * 0.08;
+  const lAdj = luckAdj(tvA, tvB);
+  const wAdj = wabAdj(tvA, tvB);
+  const allAdj = Math.max(-0.06, Math.min(0.06, formAdj + lAdj + wAdj));
+  const adjusted = base + allAdj;
 
-    // Only compress games that are not already dominant favorites (base < 0.85)
-    // Dominant matchups (1v16 after weighting) stay near historical chalk
-    if (adjusted >= 0.85) {
-      prob = adjusted; // don't compress — too dominant
-    } else {
-      const compression = round <= 1 ? 0.2 : round <= 2 ? 0.14 : 0.08;
-      prob = 0.5 + (adjusted - 0.5) * (1 - compression);
-    }
+  // Only compress games that are not already dominant favorites (base < 0.85)
+  // Dominant matchups (1v16 after weighting) stay near historical chalk
+  if (adjusted >= 0.85) {
+    prob = adjusted; // don't compress — too dominant
   } else {
-    // blended: 40% Barthag + 60% historical seed rates
-    // Seed rates are historically calibrated — barthag adds efficiency signal
-    // This weights early-round chalk correctly while letting efficiency matter in later rounds
-    const seedWeight = round <= 1 ? 0.6 : round <= 2 ? 0.45 : 0.25;
-    prob = (1 - seedWeight) * barthagPrb + seedWeight * seedProb;
+    const compression = round <= 1 ? 0.2 : round <= 2 ? 0.14 : 0.08;
+    prob = 0.5 + (adjusted - 0.5) * (1 - compression);
   }
 
   return Math.max(0.01, Math.min(0.99, prob));
