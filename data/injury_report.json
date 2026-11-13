@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-11-13T03:24:54.785164+00:00",
+  "generated_at": "2026-11-13T03:34:59.298082+00:00",
   "teams": {
     "2305": {
       "bracket_name": "Kansas",
-      "region": "Midwest",
+      "region": "West",
       "seed": 1,
       "adj_em_penalty": 0,
       "players": [],
@@ -20,41 +20,10 @@
       "has_override": false,
       "has_news_flag": true
     },
-    "41": {
-      "bracket_name": "UConn",
-      "region": "West",
-      "seed": 3,
-      "adj_em_penalty": 0,
-      "players": [],
-      "notes": "",
-      "override_date": "",
-      "news_flags": [
-        {
-          "headline": "UConn's Nik Khamenia to have foot surgery, be rechecked in 6-8 weeks",
-          "description": "UConn coach Dan Hurley said Thursday that starting forward Nik Khamenia will have surgery on his left foot and be reevaluated in six to eight weeks.",
-          "published": "2026-11-12",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50464962/uconn-nik-khamenia-foot-surgery"
-        },
-        {
-          "headline": "UConn's Nik Khamenia to have foot surgery, be rechecked in 6-8 weeks",
-          "description": "UConn coach Dan Hurley said Thursday that starting forward Nik Khamenia will have surgery on his left foot and be reevaluated in six to eight weeks.",
-          "published": "2026-11-12",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50464962/uconn-nik-khamenia-foot-surgery"
-        },
-        {
-          "headline": "UConn's Nik Khamenia to have foot surgery, be rechecked in 6-8 weeks",
-          "description": "UConn coach Dan Hurley said Thursday that starting forward Nik Khamenia will have surgery on his left foot and be reevaluated in six to eight weeks.",
-          "published": "2026-11-12",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50464962/uconn-nik-khamenia-foot-surgery"
-        }
-      ],
-      "has_override": false,
-      "has_news_flag": true
-    },
     "356": {
       "bracket_name": "Illinois",
       "region": "East",
-      "seed": 2,
+      "seed": 5,
       "adj_em_penalty": 0,
       "players": [],
       "notes": "",
@@ -65,6 +34,37 @@
           "description": "David Mirkovic, who had offseason foot surgery that is expected to sideline him at the start of the season, underwent an emergency appendectomy Saturday night.",
           "published": "2026-11-01",
           "url": "https://www.espn.com/mens-college-basketball/story/_/id/50351006/illinois-david-mirkovic-emergency-appendectomy-setback"
+        }
+      ],
+      "has_override": false,
+      "has_news_flag": true
+    },
+    "41": {
+      "bracket_name": "UConn",
+      "region": "Midwest",
+      "seed": 8,
+      "adj_em_penalty": 0,
+      "players": [],
+      "notes": "",
+      "override_date": "",
+      "news_flags": [
+        {
+          "headline": "UConn's Nik Khamenia to have foot surgery, be rechecked in 6-8 weeks",
+          "description": "UConn coach Dan Hurley said Thursday that starting forward Nik Khamenia will have surgery on his left foot and be reevaluated in six to eight weeks.",
+          "published": "2026-11-12",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50464962/uconn-nik-khamenia-foot-surgery"
+        },
+        {
+          "headline": "UConn's Nik Khamenia to have foot surgery, be rechecked in 6-8 weeks",
+          "description": "UConn coach Dan Hurley said Thursday that starting forward Nik Khamenia will have surgery on his left foot and be reevaluated in six to eight weeks.",
+          "published": "2026-11-12",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50464962/uconn-nik-khamenia-foot-surgery"
+        },
+        {
+          "headline": "UConn's Nik Khamenia to have foot surgery, be rechecked in 6-8 weeks",
+          "description": "UConn coach Dan Hurley said Thursday that starting forward Nik Khamenia will have surgery on his left foot and be reevaluated in six to eight weeks.",
+          "published": "2026-11-12",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50464962/uconn-nik-khamenia-foot-surgery"
         }
       ],
       "has_override": false,

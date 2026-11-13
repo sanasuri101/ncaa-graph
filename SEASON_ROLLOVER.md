@@ -7,8 +7,8 @@ D1 team from ESPN scores, projects the 64-team field, and rewrites `data/bracket
 (marked `"_projected": true`) and `data/leaderboard.json`. Everything else — graph, bracket
 simulation, AI Scout — reads that config, so the whole app follows the projection.
 
-When the season year changes it rebuilds `data/prior_ratings.json` from the previous season by
-itself. Nothing to do by hand.
+Ratings use the current season's games only, so nothing carries over between seasons and there
+is nothing to do by hand.
 
 ## After Selection Sunday
 

@@ -9,11 +9,10 @@ D1 teams, and projects the 64-team field:
   - seeds:      1-16 by rating, placed into regions on an S-curve
 
 Rating = average capped scoring margin adjusted for opponent strength and home
-court (an SRS), pulled toward last season's final rating early in the year.
+court (an SRS), from this season's games only.
 
 Writes: data/bracket_config.json   (consumed by every other script)
         data/leaderboard.json, public/data/leaderboard.json
-        data/prior_ratings.json    (last season's ratings, rebuilt once a year)
 
 Run first in the refresh pipeline. Once the real bracket is committed for the
 season (make_bracket_config.py, after Selection Sunday) this script leaves
@@ -40,8 +39,7 @@ BOARD_SIZE   = 100
 REGIONS      = ["East", "West", "South", "Midwest"]
 HOME_COURT   = 3.5    # points
 MARGIN_CAP   = 25     # blowouts beyond this add no information
-PRIOR_GAMES  = 5      # last season counts as this many games
-PRIOR_REGRESS = 0.75  # last season's rating shrinks toward average
+SHRINK_GAMES = 1      # one phantom game vs an average team: steadies tiny samples
 
 _today = date.today()
 SEASON = _today.year + 1 if _today.month >= 10 else _today.year
@@ -95,7 +93,7 @@ def fetch_games(season: int, teams: dict, last_day: date) -> list:
     return list(games.values())
 
 
-def rate(games: list, teams: dict, prior: dict) -> tuple[dict, dict]:
+def rate(games: list, teams: dict) -> tuple[dict, dict]:
     """Returns ({id: rating}, {id: [wins, losses]})."""
     results = defaultdict(list)          # id -> [(opponent, adjusted margin)]
     record  = {tid: [0, 0] for tid in teams}
@@ -108,31 +106,14 @@ def rate(games: list, teams: dict, prior: dict) -> tuple[dict, dict]:
         record[winner][0] += 1
         record[loser][1] += 1
 
-    ratings = {tid: prior.get(tid, 0.0) for tid in teams}
+    ratings = {tid: 0.0 for tid in teams}
     for _ in range(200):
         ratings = {
-            tid: (sum(m + ratings[opp] for opp, m in results[tid])
-                  + PRIOR_GAMES * prior.get(tid, 0.0))
-                 / (len(results[tid]) + PRIOR_GAMES)
+            tid: sum(m + ratings[opp] for opp, m in results[tid])
+                 / (len(results[tid]) + SHRINK_GAMES)
             for tid in teams
         }
     return ratings, record
-
-
-def load_prior() -> dict:
-    """Last season's final ratings, regressed. Rebuilt when the season rolls over."""
-    path = DATA_DIR / "prior_ratings.json"
-    if path.exists():
-        saved = json.loads(path.read_text())
-        if saved["season"] == SEASON - 1:
-            return saved["ratings"]
-    print(f"Building prior from the {SEASON - 1} season (once a year)...")
-    teams = d1_teams(SEASON - 1)
-    games = fetch_games(SEASON - 1, teams, date(SEASON - 1, 4, 15))
-    ratings, _ = rate(games, teams, {})
-    ratings = {tid: round(r * PRIOR_REGRESS, 2) for tid, r in ratings.items()}
-    path.write_text(json.dumps({"season": SEASON - 1, "ratings": ratings}, separators=(",", ":")))
-    return ratings
 
 
 def project(teams: dict, ratings: dict) -> tuple[list, list, set]:
@@ -157,9 +138,8 @@ def main():
         return
 
     teams = d1_teams(SEASON)
-    prior = load_prior()
     games = fetch_games(SEASON, teams, _today)
-    ratings, record = rate(games, teams, prior)
+    ratings, record = rate(games, teams)
     field, bubble, auto = project(teams, ratings)
     print(f"{len(teams)} teams, {len(games)} games, {len(auto)} auto bids")
 
