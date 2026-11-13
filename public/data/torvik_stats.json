@@ -1,7 +1,7 @@
 {
   "season": 2027,
   "source": "ESPN box scores, computed by scripts/team_stats.py",
-  "generated_at": "2026-11-13T05:31:56.030283+00:00",
+  "generated_at": "2026-11-13T13:32:25.829583+00:00",
   "teams": {
     "57": {
       "espn_id": "57",
