@@ -171,7 +171,7 @@ def fetch_shooting_splits() -> dict:
             continue
         # box offsets: team_a=4, team_b=19
         # [offset+0]=FGM [+1]=FGA [+2]=3PM [+3]=3PA [+4]=FTM [+5]=FTA
-        # [+6]=OREB [+7]=DREB [+8]=REB [+9]=AST [+10]=TO [+11]=STL [+12]=BLK [+13]=PF [+14]=PTS
+        # [+6]=OREB [+7]=DREB [+8]=REB [+9]=AST [+10]=STL [+11]=BLK [+12]=TO [+13]=PF [+14]=PTS
         for (team_name, offset, opp_offset) in [(box[2], 4, 19), (box[3], 19, 4)]:
             if not team_name:
                 continue
@@ -185,7 +185,7 @@ def fetch_shooting_splits() -> dict:
                 a[5]  += box[offset+5]     # fta
                 a[6]  += box[offset+6]     # oreb
                 a[7]  += box[offset+7]     # dreb
-                a[8]  += box[offset+10]    # tov (TO is at +10)
+                a[8]  += box[offset+12]    # tov (TO is at +12; +10 is steals)
                 a[9]  += box[opp_offset+6] # opp oreb (for dreb% calc)
                 a[10] += box[opp_offset+7] # opp dreb
                 a[11] += box[opp_offset+1] # opp fga
