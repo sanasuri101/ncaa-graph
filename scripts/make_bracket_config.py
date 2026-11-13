@@ -220,6 +220,8 @@ config = {
     "_season":       season_year,
     "_season_str":   season_str,
     "_last_updated": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
+    # Which regions meet in the Final Four — changes every year, check the official bracket
+    "_final_four":   [["East", "South"], ["Midwest", "West"]],
     "bracket":       bracket_teams,
     "bubble":        existing_config.get("bubble", []),
 }

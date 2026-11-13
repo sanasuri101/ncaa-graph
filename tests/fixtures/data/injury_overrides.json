@@ -1,0 +1,1 @@
+{"_comment":"Manual injury overrides for bracket model. Edit this file when key players are injured.","_instructions":["adj_em_penalty: subtract this many points from a team's AdjEM (positive = weaker)","players: list of affected players for display purposes","source: where you got this info","updated: date last verified"],"overrides":{}}

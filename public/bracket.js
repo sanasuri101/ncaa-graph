@@ -23,13 +23,8 @@ let _bracketModel = 'evidence';
 const MODEL_META = {
   evidence: {
     label: 'Evidence Model',
-    desc:  'Torvik efficiency + form + Four Factors + injuries + transitive chains.',
+    desc:  'Daily rating from this season\'s results and closing point spreads.',
     color: 'var(--west)',
-  },
-  market: {
-    label: 'Market Consensus',
-    desc:  'Evidence model anchored to live DraftKings lines and ESPN BPI. Most current.',
-    color: 'var(--south)',
   },
   upset: {
     label: 'Upset Heavy',
@@ -102,13 +97,12 @@ function renderBracket(data) {
       <span class="br-champ-meta">${data.champion.region} · #${data.champion.seed} · ${meta.label}</span>
     </div>`;
 
-  // Left half: East (top) + South (bottom) — expands rightward toward center
-  const eastHTML  = renderHalfRegion(data.regions['East'],  'left',  'East');
-  const southHTML = renderHalfRegion(data.regions['South'], 'left',  'South');
-
-  // Right half: Midwest (top) + West (bottom) — expands leftward toward center
-  const midwestHTML = renderHalfRegion(data.regions['Midwest'], 'right', 'Midwest');
-  const westHTML    = renderHalfRegion(data.regions['West'],    'right', 'West');
+  // Each half holds the two regions whose winners meet in the Final Four
+  const [[l1, l2], [r1, r2]] = data.finalFourPairs;
+  const eastHTML  = renderHalfRegion(data.regions[l1], 'left', l1);
+  const southHTML = renderHalfRegion(data.regions[l2], 'left', l2);
+  const midwestHTML = renderHalfRegion(data.regions[r1], 'right', r1);
+  const westHTML    = renderHalfRegion(data.regions[r2], 'right', r2);
 
   // Center column: Final Four + Championship
   const centerHTML = renderCenter(data);
@@ -120,7 +114,7 @@ function renderBracket(data) {
       <div class="br-edge-legend">
         First round: <span class="br-edge">+4.2</span> = points the better-rated team is ahead ·
         <span class="br-edge-flip-key">highlighted</span> = rating favours the lower seed.
-        Seeds 5–12 are picked by rating, not seed.
+        Picks follow the rating, not the seed.
       </div>
       <div class="bracket-body">
         <div class="bracket-left">
@@ -175,8 +169,8 @@ function renderCenter(data) {
   const ff   = data.finalFour;
   const ch   = data.championship;
 
-  const ff1HTML = finalFourSlot(ff.game1, 'East/South');
-  const ff2HTML = finalFourSlot(ff.game2, 'Midwest/West');
+  const ff1HTML = finalFourSlot(ff.game1, data.finalFourPairs[0].join('/'));
+  const ff2HTML = finalFourSlot(ff.game2, data.finalFourPairs[1].join('/'));
   const chHTML  = champSlot(ch);
 
   return `

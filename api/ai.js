@@ -235,6 +235,7 @@ function buildSystemPrompt(
     p = `You are AI Scout, an expert NCAA basketball analyst. It is the ${graph?.meta?.season ?? season} regular season. Today is ${todayStr}. The NCAA tournament has not started and no bracket has been announced.\n`;
     p += `The teams in your data are a PROJECTED 64-team field, recomputed daily from game results. Seeds and regions are projections, not the official bracket — say so when you cite them.\n`;
     if (firstOut) p += `First teams out of the projected field: ${firstOut}.\n`;
+    p += `Teams outside the field: get_team_stats still returns record, rating and national rank for the top 100.\n`;
     p += `\n`;
   } else {
     p = `You are AI Scout, an expert NCAA basketball analyst. ${season} March Madness ${round}. ${aliveCount} teams remain. Today is ${todayStr}.\n`;

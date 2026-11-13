@@ -24,6 +24,11 @@ python scripts/make_bracket_config.py
 # Review data/bracket_config.json — confirm 68 teams, regions, seeds
 ```
 
+### 1b. Set the Final Four pairing
+In `data/bracket_config.json`, set `"_final_four"` to the two pairs of regions whose winners meet,
+e.g. `[["East", "West"], ["South", "Midwest"]]`. It changes every year; the script writes last
+year's default.
+
 ### 2. Clear injury overrides
 ```bash
 echo '{"overrides":{}}' > data/injury_overrides.json

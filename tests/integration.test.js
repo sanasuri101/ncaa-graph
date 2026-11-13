@@ -27,7 +27,10 @@ import { join, dirname } from "path";
 import { fileURLToPath } from "url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const ROOT = join(__dirname, "..");
+// Tests run against a frozen snapshot of the data files, not the live ones: the
+// projected field changes daily, and these checks name specific teams.
+const ROOT = join(__dirname, "fixtures");
+process.chdir(ROOT); // api/data.js reads relative to the working directory
 
 // ── Test harness ───────────────────────────────────────────────────────────────
 let passed = 0,
@@ -315,7 +318,7 @@ for (const id of Object.keys(overrides)) {
 // ── 9. Name normalization ─────────────────────────────────────────────────────
 // Import and test normName
 section(9, "Name normalization");
-const { normName } = await import(join(ROOT, "api/data.js"));
+const { normName } = await import(join(__dirname, "..", "api/data.js"));
 const normCases = [
   ["Duke's basketball", "duke basketball"], // possessive 's stripped entirely
   ["St. John's", "saint john"], // st. → saint, possessive 's stripped
@@ -331,7 +334,7 @@ for (const [input, expected] of normCases)
 
 // ── 10. Team resolution ───────────────────────────────────────────────────────
 section(10, "Team resolution — aliases, possessives, nicknames");
-const { resolveTeam, getData } = await import(join(ROOT, "api/data.js"));
+const { resolveTeam, getData } = await import(join(__dirname, "..", "api/data.js"));
 const { nodeByName } = getData();
 
 const aliasCases = [
@@ -380,7 +383,7 @@ assert(notFound === null, "non-bracket team resolves to null");
 
 // ── 11. Intent routing ────────────────────────────────────────────────────────
 section(11, "Intent routing — correct data path for each query type");
-const { classifyIntent } = await import(join(ROOT, "api/data.js"));
+const { classifyIntent } = await import(join(__dirname, "..", "api/data.js"));
 const { graph: g } = getData();
 
 const intentCases = [
@@ -449,7 +452,7 @@ assert(
 // ── 12. Tool output grounding — stats must come from files ───────────────────
 section(12, "Tool output grounding — key stats sourced from data files");
 const { implGetTeamStats, implGetMatchup, implGetStandings } = await import(
-  join(ROOT, "api/data.js")
+  join(__dirname, "..", "api/data.js")
 );
 
 // 12a. Duke stats match torvik_stats.json
@@ -485,6 +488,22 @@ assertIf(
   injTeamOutput.includes(injOverride?.players?.[0]?.name) &&
     injTeamOutput.toLowerCase().includes("injur"),
   "injury override player appears in team stats output",
+);
+
+// 12b2. Daily rating appears for field teams, and teams outside the field are still answerable
+assert(
+  dukeOutput.includes("Rating:") && dukeOutput.includes("Wins above bubble"),
+  "Duke output includes the daily rating line",
+);
+const outsider = Object.values(getData().board).find(
+  (t) => !graph.bracket_map[t.espn_id],
+);
+const outsiderOutput = implGetTeamStats([outsider.name]);
+assert(
+  outsiderOutput.includes("not in the projected field") &&
+    outsiderOutput.includes(`#${outsider.rank} in D1`),
+  `team outside the field (${outsider.name}) returns rating and rank`,
+  outsiderOutput,
 );
 
 // 12c. A field team is not marked eliminated
@@ -567,7 +586,7 @@ if (oddsGames.length > 0) {
 
 // ── 13. Injury context pipeline ──────────────────────────────────────────────
 section(13, "Injury context pipeline — correctness and cache immutability");
-const { buildInjuryContext } = await import(join(ROOT, "api/data.js"));
+const { buildInjuryContext } = await import(join(__dirname, "..", "api/data.js"));
 
 const injCtx = buildInjuryContext();
 
@@ -646,7 +665,7 @@ assert(
 
 // 13f. isInjuryQuery appends, never replaces — check both contexts are in final prompt
 const { buildSystemPrompt: _bsp } = await import(
-  join(ROOT, "api/data.js")
+  join(__dirname, "..", "api/data.js")
 ).catch(() => ({ buildSystemPrompt: null }));
 // buildSystemPrompt is not exported — test via preFetch context logic instead
 
@@ -697,7 +716,7 @@ section(
   15,
   "preFetch context coverage — each intent type produces usable data",
 );
-const { preFetch } = await import(join(ROOT, "api/data.js"));
+const { preFetch } = await import(join(__dirname, "..", "api/data.js"));
 
 // matchup: context must contain AdjEM for both teams
 {

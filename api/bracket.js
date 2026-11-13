@@ -2,21 +2,26 @@
  * api/bracket.js — bracket simulation endpoint
  *
  * POST /api/bracket
- * Body: { model: 'barthag' | 'upset' | 'seed' | 'blended' | 'evidence' }
+ * Body: { model: 'evidence' | 'upset' }
  *
  * Returns: {
  *   model: string,
  *   regions: { East, West, South, Midwest },  // each: rounds[0..3] of matchups
- *   finalFour: { matchups, winners },
- *   championship: { matchup, winner },
- *   champion: string
+ *   finalFour: { game1, game2 },
+ *   championship: { teamA, teamB, winner, prob },
+ *   champion: team
  * }
  *
  * Win probability models:
- *   barthag  — pure Torvik Barthag (power rating)
- *   upset    — Barthag but compresses toward 50% for early rounds (upsets more likely)
- *   seed     — seed-based only, ignores efficiency metrics
- *   blended  — 70% Barthag + 30% seed-implied probability
+ *   evidence — the daily rating (data/leaderboard.json): P(win) from the rating
+ *              edge in points. Falls back to the Torvik-based blend for a team
+ *              with no rating.
+ *   upset    — seed history + Barthag, compressed toward 50%, picked at random
+ *              in proportion to the probability. Run it several times.
+ *
+ * Tests on 2011-2026 tournaments found that style matchups, three-point
+ * "giant killer" profiles, experience and momentum do not predict results
+ * beyond the rating, so the simulator carries no adjustment for them.
  */
 
 import { readFileSync, statSync } from "fs";
@@ -460,48 +465,6 @@ function luckAdj(tvA, tvB) {
   return Math.max(-0.04, Math.min(0.04, -diff * 0.15));
 }
 
-// ── Four Factors mismatch score ──────────────────────────────────────────────
-// Identifies "Giant Killer" profiles: double-digit seeds that can math their way
-// past higher seeds via style mismatches.
-// Returns an adjustment in range [-0.06, +0.06] for team A
-function fourFactorsAdj(tvA, tvB) {
-  if (!tvA || !tvB) return 0;
-  let adj = 0;
-
-  // 1. eFG% edge — most important of Four Factors (~40% weight)
-  const efgA = tvA.efg ?? 50,
-    efgB = tvB.efg ?? 50;
-  adj += ((efgA - efgB) / 100) * 0.15;
-
-  // 2. TOV% edge — lower TOV rate is better (~25% weight)
-  const tovA = tvA.tov_rate ?? 18,
-    tovB = tvB.tov_rate ?? 18;
-  adj += ((tovB - tovA) / 100) * 0.1; // positive when A turns it over less
-
-  // 3. ORB% edge (~20% weight)
-  const orbA = tvA.orb_rate ?? 30,
-    orbB = tvB.orb_rate ?? 30;
-  adj += ((orbA - orbB) / 100) * 0.08;
-
-  // 4. FTR edge (~15% weight) — but high FTR = vulnerable to referee variability
-  // In upsets: teams that DON'T rely on FTs are more consistent
-  const ftrA = tvA.ftr ?? 35,
-    ftrB = tvB.ftr ?? 35;
-  adj += ((ftrA - ftrB) / 100) * 0.05;
-
-  // 5. 3PA rate mismatch — "Giant Killer" profile
-  // A team shooting lots of 3s (high variance) vs interior-reliant team = upset potential
-  const tpaA = tvA.three_pa_rate ?? 35,
-    tpaB = tvB.three_pa_rate ?? 35;
-  const threePctA = tvA.three_p ?? 33,
-    threePctB = tvB.three_p ?? 33;
-  // Bonus for lower seed with high 3PA rate AND good 3P% — classic upset profile
-  if (tpaA > 45 && threePctA > 36) adj += 0.02; // A is a 3P-reliant team
-  if (tpaB > 45 && threePctB > 36) adj -= 0.02; // B is a 3P-reliant team
-
-  return Math.max(-0.06, Math.min(0.06, adj));
-}
-
 // ── Evidence model: combined Layers I + II + IV ───────────────────────────────
 // Weights: 35% Barthag · 25% Logit(AdjEM) · 20% Skellam · 20% decay form
 // Plus additive adjustments: transitive chains + WAB (capped ±12%)
@@ -560,11 +523,7 @@ function evidenceWinProb(
   // 20% backward Barthag · 15% projected Barthag · 25% Logit(AdjEM) · 20% Skellam · 20% quality-decay form
   // proj_barthag forward signal captures roster/injury changes Torvik has already modelled
   const base = 0.2 * bP + 0.15 * pB + 0.25 * lP + 0.2 * sP + 0.2 * dP;
-  const ffAdj = fourFactorsAdj(tvA, tvB);
-  const evidAdj = Math.max(
-    -0.12,
-    Math.min(0.12, transAdj + wAdj + lAdj + ffAdj),
-  );
+  const evidAdj = Math.max(-0.12, Math.min(0.12, transAdj + wAdj + lAdj));
   const compress = round <= 1 ? 0.1 : round <= 2 ? 0.06 : 0.02;
   const prob = 0.5 + (base - 0.5) * (1 - compress) + evidAdj;
 
@@ -582,6 +541,7 @@ function winProb(
   trans,
   injuryMap,
   oppBarthag,
+  ratings,
 ) {
   const rawTvA = torvik.teams?.[teamA.id]?.torvik;
   const rawTvB = torvik.teams?.[teamB.id]?.torvik;
@@ -614,6 +574,9 @@ function winProb(
   const seedProb = seedWinProb(seedA, seedB);
 
   if (model === "evidence") {
+    const edge = ratingEdge(teamA, teamB, ratings);
+    if (edge != null)
+      return Math.max(0.01, Math.min(0.99, normCdf(edge / GAME_SD)));
     return evidenceWinProb(
       teamA,
       teamB,
@@ -643,18 +606,14 @@ function winProb(
     const histWeight = Math.min(0.9, 0.5 + seedGap * 0.04); // scales 50%→90% with seed gap
     const base = (1 - histWeight) * barthagPrb + histWeight * seedProb;
 
-    // Signal adjustments: form, Four Factors, luck, WAB
+    // Signal adjustments: form, luck, WAB
     const dA = decayWinRate(teamA.id, form, torvik, oppBarthag);
     const dB = decayWinRate(teamB.id, form, torvik, oppBarthag);
     const dP = dA / (dA + dB);
     const formAdj = (dP - 0.5) * 0.08;
-    const ffAdj = fourFactorsAdj(tvA, tvB);
     const lAdj = luckAdj(tvA, tvB);
     const wAdj = wabAdj(tvA, tvB);
-    const allAdj = Math.max(
-      -0.06,
-      Math.min(0.06, formAdj + ffAdj + lAdj + wAdj),
-    );
+    const allAdj = Math.max(-0.06, Math.min(0.06, formAdj + lAdj + wAdj));
     const adjusted = base + allAdj;
 
     // Only compress games that are not already dominant favorites (base < 0.85)
@@ -796,6 +755,7 @@ function simulateRegion(
               trans,
               injuryMap,
               oppBarthag,
+              ratings,
             );
       winner = pickWinner(teamA, teamB, prob, model);
       prob = Math.max(winner === teamA ? prob : 1 - prob, 0.01);
@@ -838,6 +798,7 @@ function simulateRegion(
           trans,
           injuryMap,
           oppBarthag,
+          ratings,
         );
         winner = pickWinner(teamA, teamB, prob, model);
         prob = Math.max(winner === teamA ? prob : 1 - prob, 0.01);
@@ -894,13 +855,23 @@ function simulateBracket(
     );
   });
 
-  // Final Four: East vs South (left half), Midwest vs West (right half)
-  // Left half of bracket: East (top-left) + South (bottom-left) -> their winners meet
-  // Right half of bracket: Midwest (top-right) + West (bottom-right) -> their winners meet
-  const ff1A = regionResults["East"].winner;
-  const ff1B = regionResults["South"].winner;
-  const ff2A = regionResults["Midwest"].winner;
-  const ff2B = regionResults["West"].winner;
+  // Final Four: which regions meet changes every year. Set "_final_four" in
+  // data/bracket_config.json once the real bracket is out; the first pair is
+  // drawn on the left half of the bracket, the second on the right.
+  let pairs = [
+    ["East", "South"],
+    ["Midwest", "West"],
+  ];
+  try {
+    const cfg = JSON.parse(
+      readFileSync(join(process.cwd(), "data", "bracket_config.json"), "utf8"),
+    );
+    if (cfg._final_four) pairs = cfg._final_four;
+  } catch {}
+  const ff1A = regionResults[pairs[0][0]].winner;
+  const ff1B = regionResults[pairs[0][1]].winner;
+  const ff2A = regionResults[pairs[1][0]].winner;
+  const ff2B = regionResults[pairs[1][1]].winner;
 
   const ff1Prob = winProb(
     ff1A,
@@ -912,6 +883,7 @@ function simulateBracket(
     trans,
     injuryMap,
     oppBarthag,
+    ratings,
   );
   const ff2Prob = winProb(
     ff2A,
@@ -923,6 +895,7 @@ function simulateBracket(
     trans,
     injuryMap,
     oppBarthag,
+    ratings,
   );
   const ff1Win = pickWinner(ff1A, ff1B, ff1Prob, model);
   const ff2Win = pickWinner(ff2A, ff2B, ff2Prob, model);
@@ -937,12 +910,14 @@ function simulateBracket(
     trans,
     injuryMap,
     oppBarthag,
+    ratings,
   );
   const champion = pickWinner(ff1Win, ff2Win, finalProb, model);
 
   return {
     model,
     regions: regionResults,
+    finalFourPairs: pairs,
     finalFour: {
       game1: {
         teamA: ff1A,
@@ -998,7 +973,7 @@ export default async function handler(req, res) {
     return;
   }
 
-  const model = ["evidence", "upset", "market"].includes(body.model)
+  const model = ["evidence", "upset"].includes(body.model)
     ? body.model
     : "evidence";
 

@@ -28,6 +28,7 @@ function getCacheMtime() {
     "public/data/torvik_stats.json",
     "public/data/recent_form.json",
     "public/data/espn_odds.json",
+    "public/data/leaderboard.json",
     "data/all_games.json",
     "data/injury_overrides.json",
   ];
@@ -147,10 +148,17 @@ export function getData() {
     }
   }
 
+  // Daily ESPN-based ratings for the top of D1, including teams outside the field
+  const board = {};
+  try {
+    for (const t of readJSON("leaderboard.json").teams) board[t.espn_id] = t;
+  } catch {}
+
   _cache = {
     graph,
     torvik,
     form,
+    board,
     transPairs,
     injuryMap,
     nodeByName,
@@ -227,7 +235,7 @@ export function resolveTeam(name, nodeByName) {
   if (norm[query]) return norm[query];
   // Suffixes that indicate a distinct team name, not just a modifier
   const STATE_DISAMBIGUATORS =
-    /^(state|tech|a&m|university|college|christian|pacific|western|eastern|northern|southern|central|international|national|polytechnic)\b/;
+    /^(state|st|tech|a&m|university|college|christian|pacific|western|eastern|northern|southern|central|international|national|polytechnic)\b/;
 
   const hits = Object.keys(norm)
     .filter((k) => {
@@ -253,14 +261,28 @@ export function resolveTeam(name, nodeByName) {
 }
 
 // ── Format team block ──────────────────────────────────────────────────────────
+// Our own daily rating: available for every field team even when Torvik is not
+function ratingLine(t) {
+  if (!t) return "";
+  const sign = (v) => (v > 0 ? "+" : "") + v;
+  return `Rating: ${sign(t.rating)} pts vs an average team (#${t.rank} in D1) | Wins above bubble: ${sign(t.wab)} | Record: ${t.record}`;
+}
+
 export function fmtTeam(node, torvik, form, injuryMap, teamOdds) {
-  const { aliveTeamIds } = getData();
+  const { aliveTeamIds, board } = getData();
+  const rating = ratingLine(board?.[node.id]);
   if (aliveTeamIds?.size && !aliveTeamIds.has(String(node.id)))
     return `${node.full_name} — ELIMINATED (no longer in ${new Date().getFullYear()} NCAA Tournament)`;
 
   const tv = torvik?.teams?.[node.id]?.torvik;
   const seed = node.seed != null ? `#${node.seed}` : "?";
-  if (!tv) return `${node.full_name} (${node.region} ${seed}) | no Torvik data`;
+  if (!tv)
+    return [
+      `${node.full_name} (${node.region} ${seed}) | no Torvik data`,
+      rating,
+    ]
+      .filter(Boolean)
+      .join("\n  ");
 
   const pace =
     tv.adj_tempo != null
@@ -315,6 +337,7 @@ export function fmtTeam(node, torvik, form, injuryMap, teamOdds) {
   return [
     `${node.full_name} (${node.region} ${seed}, ${tv.conf ?? "?"})`,
     `Record: ${tv.record} | Bracket: ${node.wins_vs_field}W-${node.losses_vs_field}L`,
+    rating,
     `T-Rank #${tv.rank} | AdjEM: ${tv.adj_em > 0 ? "+" : ""}${tv.adj_em} | AdjOE: ${tv.adj_oe} | AdjDE: ${tv.adj_de}`,
     `Barthag: ${(tv.barthag * 100).toFixed(1)}% | Proj Barthag: ${tv.proj_barthag ? (tv.proj_barthag * 100).toFixed(1) + "%" : "?"} | WAB: ${parseFloat(tv.wab).toFixed(1)} | Pace: ${pace}`,
     `Four Factors (off): ${ff4off}`,
@@ -333,11 +356,20 @@ export function fmtTeam(node, torvik, form, injuryMap, teamOdds) {
 
 // ── Tool implementations ───────────────────────────────────────────────────────
 export function implGetTeamStats(teamNames) {
-  const { torvik, form, injuryMap, nodeByName, teamOdds, aliveTeamIds } =
+  const { torvik, form, injuryMap, nodeByName, teamOdds, aliveTeamIds, board } =
     getData();
   if (!teamNames?.length) return "No team names provided.";
+  const fieldIds = new Set(Object.values(nodeByName).map((n) => String(n.id)));
   return teamNames
     .map((name) => {
+      // An exact leaderboard name outside the field wins over a fuzzy field match
+      // ("Arizona St" must not resolve to Arizona). The leaderboard rates the top of D1.
+      const query = normName(ALIASES[name.toLowerCase().trim()] ?? name);
+      const rated = Object.values(board).find(
+        (b) => normName(b.name) === query,
+      );
+      if (rated && !fieldIds.has(String(rated.espn_id)))
+        return `${rated.name} (${rated.conf}) — not in the projected field\n  ${ratingLine(rated)}`;
       const node = resolveTeam(name, nodeByName);
       if (!node) return `"${name}": not found — check spelling`;
       if (aliveTeamIds?.size && !aliveTeamIds.has(String(node.id)))

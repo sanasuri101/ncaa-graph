@@ -4,7 +4,8 @@
     "adj_em_penalty: subtract this many points from a team's AdjEM (positive = weaker)",
     "players: list of affected players for display purposes",
     "source: where you got this info",
-    "updated: date last verified"
+    "updated: date last verified",
+    "Size guide: across 9,530 games in 2025 and 2026, a regular (10+ minutes a game) missing cost about 0.7-0.9 points on average. Keep penalties near 1 point per starter unless the player is a clear star."
   ],
   "overrides": {}
 }

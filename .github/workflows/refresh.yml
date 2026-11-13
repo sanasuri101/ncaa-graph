@@ -28,6 +28,8 @@ jobs:
       - name: Fetch ESPN game data
         run: python scripts/fetch_data.py
 
+      # Torvik answers GitHub's runners with 403, so this normally keeps the existing file.
+      # Run scripts/fetch_torvik.py from another machine and commit to refresh these stats.
       - name: Fetch Torvik stats
         run: python scripts/fetch_torvik.py
 
@@ -70,4 +72,5 @@ jobs:
           git add data/ public/data/
           git diff --staged --quiet && echo "No changes to commit." && exit 0
           git commit -m "chore: refresh ESPN + Torvik + injury data $(date -u +'%Y-%m-%d')"
+          git pull --rebase origin main
           git push origin HEAD:main
