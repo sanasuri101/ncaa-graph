@@ -269,7 +269,7 @@ function fmtRoster(players) {
 function fmtTeamEfficiency(node, torvik, injuryMap) {
   const tv = torvik?.teams?.[node.id]?.torvik;
   const inj = injuryMap?.[node.id];
-  if (!tv) return `${node.full_name}: no Torvik data`;
+  if (!tv) return `${node.full_name}: no efficiency data`;
 
   // Show injury-adjusted AdjEM as the primary number — agents must not re-add the penalty
   const rawEM = tv.adj_em;
@@ -281,7 +281,7 @@ function fmtTeamEfficiency(node, torvik, injuryMap) {
 
   return [
     `${node.full_name} (${node.region} #${node.seed}, ${tv.conf}) — Record: ${tv.record}`,
-    `T-Rank #${tv.rank} | AdjEM: ${emStr}${emNote} | AdjOE: ${tv.adj_oe} | AdjDE: ${tv.adj_de}`,
+    `Rank #${tv.rank} | AdjEM: ${emStr}${emNote} | AdjOE: ${tv.adj_oe} | AdjDE: ${tv.adj_de}`,
     `Barthag: ${(tv.barthag * 100).toFixed(1)}% (pre-injury baseline) | WAB: ${parseFloat(tv.wab).toFixed(1)} | SOS: ${tv.sos_rank?.toFixed(2) ?? "?"}`,
     `Shooting: eFG% ${tv.efg} | 2P% ${tv.two_p} | 3P% ${tv.three_p} | FT% ${tv.ft_pct}`,
     `Four Factors: TOV% ${tv.tov_rate} | ORB% ${tv.orb_rate} | FTR ${tv.ftr} | Opp eFG% ${tv.opp_efg ?? "?"}`,

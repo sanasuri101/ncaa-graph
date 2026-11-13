@@ -239,7 +239,7 @@ async function fetchTeamStats() {
   const node = ALL_NODES.find((n) => n.id === teamId);
 
   btn.disabled = true;
-  output.innerHTML = loadingHTML("Fetching ESPN + Torvik stats...");
+  output.innerHTML = loadingHTML("Fetching team stats...");
 
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), 10000);
@@ -306,7 +306,7 @@ async function fetchTeamStats() {
         <div class="stat-cell torvik-cell"><div class="sv">${tv.ft_pct != null ? tv.ft_pct + "%" : "—"}</div><div class="sl">FT%</div></div>
         <div class="stat-cell torvik-cell"><div class="sv">${tv.efg != null ? tv.efg + "%" : "—"}</div><div class="sl">eFG%</div></div>
       </div>`
-      : `<div class="torvik-missing">Torvik data unavailable for this team</div>`;
+      : `<div class="torvik-missing">Efficiency stats unavailable for this team</div>`;
 
     output.innerHTML = `
       <div class="stats-card">
@@ -330,7 +330,7 @@ async function fetchTeamStats() {
         ${tBlock}
       </div>
       <div style="font-size:.62rem;color:var(--text-mute);margin-top:4px;line-height:1.5">
-        ESPN: season totals${tv ? ` · Torvik updated ${tData?.generated_at?.slice(0, 10) ?? "recently"}` : ""}
+        ESPN: season totals${tv ? ` · stats updated ${tData?.generated_at?.slice(0, 10) ?? "recently"}` : ""}
       </div>
     `;
   } catch (err) {
@@ -1249,7 +1249,7 @@ async function fetchStatsPageTeam(teamId) {
     return;
   }
 
-  output.innerHTML = loadingHTML("Fetching ESPN + Torvik stats…");
+  output.innerHTML = loadingHTML("Fetching team stats…");
 
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), 10000);
@@ -1316,7 +1316,7 @@ async function fetchStatsPageTeam(teamId) {
         <div class="stat-cell torvik-cell"><div class="sv">${tv.ft_pct != null ? tv.ft_pct + "%" : "—"}</div><div class="sl">FT%</div></div>
         <div class="stat-cell torvik-cell"><div class="sv">${tv.efg != null ? tv.efg + "%" : "—"}</div><div class="sl">eFG%</div></div>
       </div>`
-      : '<div class="torvik-missing">Torvik data unavailable</div>';
+      : '<div class="torvik-missing">Efficiency stats unavailable</div>';
 
     output.innerHTML = `
       <div class="stats-card">
@@ -1340,7 +1340,7 @@ async function fetchStatsPageTeam(teamId) {
         ${tBlock}
       </div>
       <div style="font-size:.62rem;color:var(--text-mute);margin-top:8px">
-        ESPN: season · Torvik: ${tData?.generated_at?.slice(0, 10) ?? "recent"}
+        ESPN: season · stats updated ${tData?.generated_at?.slice(0, 10) ?? "recent"}
       </div>`;
   } catch (err) {
     clearTimeout(timer);
@@ -1455,7 +1455,7 @@ async function buildTeamStatsHTML(teamId) {
         <div class="stat-cell torvik-cell"><div class="sv">${tv.ft_pct != null ? tv.ft_pct + "%" : "—"}</div><div class="sl">FT%</div></div>
         <div class="stat-cell torvik-cell"><div class="sv">${tv.efg != null ? tv.efg + "%" : "—"}</div><div class="sl">eFG%</div></div>
       </div>`
-      : `<div class="torvik-missing">Torvik data unavailable</div>`;
+      : `<div class="torvik-missing">Efficiency stats unavailable</div>`;
 
     return `
       <div class="stats-card">
@@ -1479,7 +1479,7 @@ async function buildTeamStatsHTML(teamId) {
         ${tBlock}
       </div>
       <div style="font-size:.62rem;color:var(--text-mute);margin-top:4px;line-height:1.5">
-        ESPN: season · Torvik: ${tData?.generated_at?.slice(0, 10) ?? "recent"}
+        ESPN: season · stats updated ${tData?.generated_at?.slice(0, 10) ?? "recent"}
       </div>`;
   } catch (err) {
     clearTimeout(timer);

@@ -283,7 +283,7 @@ export function fmtTeam(node, torvik, form, injuryMap, teamOdds) {
   const seed = node.seed != null ? `#${node.seed}` : "?";
   if (!tv)
     return [
-      `${node.full_name} (${node.region} ${seed}) | no Torvik data`,
+      `${node.full_name} (${node.region} ${seed}) | no efficiency data`,
       rating,
     ]
       .filter(Boolean)
@@ -317,12 +317,16 @@ export function fmtTeam(node, torvik, form, injuryMap, teamOdds) {
 
   const ff4off = `eFG%: ${tv.efg ?? "?"} | TOV%: ${tv.tov_rate ?? "?"} | ORB%: ${tv.orb_rate ?? "?"} | FTR: ${tv.ftr ?? "?"}`;
   const ff4def =
-    tv.efg_d != null ? `Opp eFG%: ${(tv.efg_d * 100).toFixed(1)}` : "";
+    tv.efg_d != null
+      ? `Opp eFG%: ${(tv.efg_d * 100).toFixed(1)} | Opp TOV%: ${tv.tov_rate_d ?? "?"} | Opp ORB%: ${tv.orb_rate_d ?? "?"} | Opp FTR: ${tv.ftr_d ?? "?"} | Opp 3P%: ${tv.three_p_d ?? "?"}`
+      : "";
 
   const resume = [
     tv.quad1_record ? `Quad1: ${tv.quad1_record}` : "",
     tv.net_rank ? `NET: #${tv.net_rank}` : "",
-    tv.sos_rank ? `SOS: ${tv.sos_rank.toFixed(2)}` : "",
+    tv.sos_rank != null
+      ? `Schedule strength (avg opponent rating, pts): ${tv.sos_rank > 0 ? "+" : ""}${tv.sos_rank.toFixed(2)}`
+      : "",
     tv.luck != null
       ? `Luck: ${tv.luck > 0 ? "+" : ""}${parseFloat(tv.luck).toFixed(3)}`
       : "",
@@ -343,8 +347,8 @@ export function fmtTeam(node, torvik, form, injuryMap, teamOdds) {
     `${node.full_name} (${node.region} ${seed}, ${tv.conf ?? "?"})`,
     `Record: ${tv.record} | Bracket: ${node.wins_vs_field}W-${node.losses_vs_field}L`,
     rating,
-    `T-Rank #${tv.rank} | AdjEM: ${tv.adj_em > 0 ? "+" : ""}${tv.adj_em} | AdjOE: ${tv.adj_oe} | AdjDE: ${tv.adj_de}`,
-    `Barthag: ${(tv.barthag * 100).toFixed(1)}% | Barthag vs quality opponents: ${tv.proj_barthag ? (tv.proj_barthag * 100).toFixed(1) + "%" : "?"} | WAB: ${parseFloat(tv.wab).toFixed(1)} | Pace: ${pace}`,
+    `Rank #${tv.rank} | AdjEM: ${tv.adj_em > 0 ? "+" : ""}${tv.adj_em} | AdjOE: ${tv.adj_oe} | AdjDE: ${tv.adj_de}`,
+    `Barthag: ${(tv.barthag * 100).toFixed(1)}% | WAB: ${parseFloat(tv.wab).toFixed(1)} | Pace: ${pace}`,
     `Four Factors (off): ${ff4off}`,
     ff4def ? `Four Factors (def): ${ff4def}` : "",
     `Shooting: 2P% ${tv.two_p ?? "?"} | 3P% ${tv.three_p ?? "?"} | FT% ${tv.ft_pct ?? "?"} | 3PA rate: ${tv.three_pa_rate ?? "?"}%`,
@@ -406,8 +410,30 @@ export function implGetMatchup(teamA, teamB) {
   if (!nodeA) return `Team not found: "${teamA}"`;
   if (!nodeB) return `Team not found: "${teamB}"`;
 
+  // The headline number: rating edge in points and the win probability it implies
+  // (a game's margin varies about 11 points around its expected value)
+  const { board } = getData();
+  const rA = board?.[nodeA.id]?.rating;
+  const rB = board?.[nodeB.id]?.rating;
+  let edgeLine = "";
+  if (rA != null && rB != null) {
+    const edge = rA - rB;
+    const z = Math.abs(edge) / 11;
+    const t = 1 / (1 + 0.2316419 * z);
+    const tail =
+      (Math.exp((-z * z) / 2) / Math.sqrt(2 * Math.PI)) *
+      t *
+      (0.31938153 +
+        t *
+          (-0.356563782 +
+            t * (1.781477937 + t * (-1.821255978 + t * 1.330274429))));
+    const fav = edge >= 0 ? nodeA : nodeB;
+    edgeLine = `RATING EDGE: ${fav.label} by ${Math.abs(edge).toFixed(1)} pts on a neutral court → ${fav.label} wins about ${Math.round((1 - tail) * 100)}%`;
+  }
+
   const lines = [
     `=== ${nodeA.full_name} vs ${nodeB.full_name} ===`,
+    edgeLine,
     fmtTeam(nodeA, torvik, form, injuryMap, teamOdds),
     "",
     fmtTeam(nodeB, torvik, form, injuryMap, teamOdds),
@@ -553,7 +579,7 @@ export function implGetStandings(sortBy, region, limit) {
       const formStr = tf ? ` | ${tf.last10} L10 ${tf.streak}` : "";
       const tvStr = t.tv
         ? `AdjEM ${t.tv.adj_em > 0 ? "+" : ""}${t.tv.adj_em} | AdjOE ${t.tv.adj_oe} | AdjDE ${t.tv.adj_de} | Barthag ${(t.tv.barthag * 100).toFixed(1)}%`
-        : "no Torvik";
+        : "no efficiency data";
       const odds = teamOdds?.[t.node.id];
       const oddsStr = odds
         ? ` | ML ${odds.ml ?? "?"} (${odds.implied ?? "?"}% implied)`

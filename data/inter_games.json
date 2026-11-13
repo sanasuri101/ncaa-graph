@@ -150,21 +150,6 @@
     "venue": "Marriott Center"
   },
   {
-    "id": "401921133",
-    "date": "2026-11-06",
-    "name": "Bethune-Cookman Wildcats at Texas Tech Red Raiders",
-    "team1_id": "2641",
-    "team1_name": "Texas Tech Red Raiders",
-    "team1_score": "76",
-    "team1_winner": true,
-    "team2_id": "2065",
-    "team2_name": "Bethune-Cookman Wildcats",
-    "team2_score": "58",
-    "team2_winner": false,
-    "neutral": false,
-    "venue": "United Supermarkets Arena"
-  },
-  {
     "id": "401909532",
     "date": "2026-11-08",
     "name": "Providence Friars at Nebraska Cornhuskers",
@@ -178,6 +163,21 @@
     "team2_winner": false,
     "neutral": true,
     "venue": "Mohegan Sun Arena"
+  },
+  {
+    "id": "401921133",
+    "date": "2026-11-06",
+    "name": "Bethune-Cookman Wildcats at Texas Tech Red Raiders",
+    "team1_id": "2641",
+    "team1_name": "Texas Tech Red Raiders",
+    "team1_score": "76",
+    "team1_winner": true,
+    "team2_id": "2065",
+    "team2_name": "Bethune-Cookman Wildcats",
+    "team2_score": "58",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "United Supermarkets Arena"
   },
   {
     "id": "401909752",

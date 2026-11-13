@@ -523,7 +523,7 @@ async function populateSeedDivergence() {
         <span class="rank-name">${t.node.label}</span>
         <span class="div-badge" style="color:${color}">${arrow}${diff}</span>
       </div>
-      <div class="div-meta">T-Rank #${t.trank} · AdjEM ${t.adj_em > 0 ? '+' : ''}${t.adj_em}</div>`;
+      <div class="div-meta">Rank #${t.trank} · AdjEM ${t.adj_em > 0 ? '+' : ''}${t.adj_em}</div>`;
   };
 
   const uEl = document.getElementById('rank-underseeded');

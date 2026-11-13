@@ -134,18 +134,18 @@
       "seed": 4
     },
     {
-      "bracket_name": "Texas Tech",
-      "espn_id": "2641",
-      "displayName": "Texas Tech Red Raiders",
-      "location": "Texas Tech",
-      "region": "East",
-      "seed": 5
-    },
-    {
       "bracket_name": "Nebraska",
       "espn_id": "158",
       "displayName": "Nebraska Cornhuskers",
       "location": "Nebraska",
+      "region": "East",
+      "seed": 5
+    },
+    {
+      "bracket_name": "Texas Tech",
+      "espn_id": "2641",
+      "displayName": "Texas Tech Red Raiders",
+      "location": "Texas Tech",
       "region": "West",
       "seed": 5
     },

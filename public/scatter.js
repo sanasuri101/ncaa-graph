@@ -89,7 +89,7 @@ function renderScatter() {
     ctx.fillStyle = '#5a7a96';
     ctx.font = '13px DM Sans, sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('Torvik data unavailable — check back after the daily refresh.', W / 2, H / 2);
+    ctx.fillText('Efficiency stats unavailable — check back after the daily refresh.', W / 2, H / 2);
     return;
   }
 
@@ -354,7 +354,7 @@ function showScatterTooltip(p, e, canvasRect, tooltip) {
   const tv = p.tv;
   tooltip.innerHTML = `
     <div class="stt-name">${p.node.full_name}</div>
-    <div class="stt-meta">${p.node.region} · Seed #${p.node.seed} · T-Rank #${tv.rank}</div>
+    <div class="stt-meta">${p.node.region} · Seed #${p.node.seed} · Rank #${tv.rank}</div>
     <div class="stt-grid">
       <div class="stt-cell"><div class="stt-val" style="color:#34d399">${tv.adj_oe}</div><div class="stt-lbl">AdjOE</div></div>
       <div class="stt-cell"><div class="stt-val" style="color:#f87171">${tv.adj_de}</div><div class="stt-lbl">AdjDE</div></div>

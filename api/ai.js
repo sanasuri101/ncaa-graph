@@ -247,12 +247,13 @@ function buildSystemPrompt(
     intentType === "multi_team"
   ) {
     p += `TASK: Deep matchup or team analysis.\n`;
-    p += `- Lead with the AdjEM gap (1pt = 1pt per 100 possessions). State whether it is decisive (>10), meaningful (5-10), or a toss-up (<5).\n`;
-    p += `- Barthag = neutral court win probability — state it explicitly.\n`;
+    p += `- For a matchup, lead with the RATING EDGE line: the edge in points and the win probability it gives. That is the prediction; do not invent another probability.\n`;
+    p += `- Call the edge decisive (10+ pts), meaningful (5-10) or a toss-up (under 5). The lower-rated team still wins about 1 in 3 when the edge is 5 and about 1 in 6 when it is 10.\n`;
+    p += `- Barthag is a team's chance of beating an average Division I team, not its chance in this game.\n`;
     p += `- Compare AdjOE vs opponent AdjDE for offensive edge; AdjDE vs opponent AdjOE for defensive edge.\n`;
     p += `- Cite recent form, streaks, any injuries with their exact AdjEM penalty applied.\n`;
     p += `- If market odds diverge from Barthag by more than 8 points, explain the gap.\n`;
-    p += `- Close with: who wins, exact win probability, and the single stat that decides it.\n`;
+    p += `- Close with: who wins and the win probability from the rating edge. Stats can describe how each team plays, but tests on 2011-2026 tournaments found style matchups do not change who wins beyond the rating — do not claim they do.\n`;
   } else if (intentType === "top_teams_all") {
     p += `TASK: Identify the Final Four and championship favorites. Write this as analytical prose, not a numbered stat list.\n`;
     p += `- For the top 4 contenders: state their path through the bracket, their dominant strength, and their one beatable weakness.\n`;
@@ -260,11 +261,12 @@ function buildSystemPrompt(
     p += `- Name a dark horse or two that the bracket field is underestimating.\n`;
     p += `- Be direct: pick your Final Four and state your championship pick with a specific reason.\n`;
   } else if (intentType === "sleeper_all_regions") {
-    p += `TASK: Find the best upset picks in the remaining bracket. Do not apply the same efficiency template to each game — tell the story of how each upset happens.\n`;
-    p += `- For each upset pick: name the specific matchup, then explain the mechanism — what does the underdog do well that the favorite is vulnerable to?\n`;
-    p += `- Look for: pace mismatches, defensive strengths vs offensive styles, injuries to the favorite, recent momentum shifts, market lines that overvalue seeds.\n`;
-    p += `- Rank from most to least likely. Give each pick a realistic probability range.\n`;
-    p += `- Do not just list AdjEM gaps — connect the numbers to how the game will actually be played.\n`;
+    p += `TASK: Find the best upset picks.\n`;
+    p += `- The one signal that has held up (2011-2026 tournaments) is mis-seeding: a lower seed whose rating is close to, or better than, the higher seed's. When the better seed's rating edge was under 3 points the lower seed won about half the time; at 9+ points, about 1 in 14.\n`;
+    p += `- So rank picks by how small the rating gap is relative to the seed gap, and say that gap in points.\n`;
+    p += `- Three-point reliance, pace, experience, momentum and a hot finish did NOT predict upsets in those tests. You may describe how a game could unfold, but do not present any of them as the reason to pick an upset.\n`;
+    p += `- When upsets happen it is usually the favorite shooting far below its own norm, which cannot be seen in advance. Say so rather than inventing certainty.\n`;
+    p += `- Give each pick a realistic probability.\n`;
   } else if (intentType === "market_analysis") {
     p += `TASK: Identify market mispricing among remaining bracket games.\n`;
     p += `- Only reference teams listed in the DATA section. Do not invent or reference eliminated teams.\n`;

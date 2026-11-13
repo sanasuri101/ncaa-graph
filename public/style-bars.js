@@ -52,7 +52,7 @@ async function renderStyleBars(nodeW, nodeL, containerId) {
       fmt: v => v >= 70 ? 'Fast' : v >= 66 ? 'Mod.' : 'Slow',
     },
     {
-      label: 'Luck', sub: 'Torvik luck',
+      label: 'Luck', sub: 'close-game luck',
       valW: tvW.luck ?? 0, valL: tvL.luck ?? 0,
       min: Math.min(...allTeams.map(t => t.luck ?? 0)),
       max: Math.max(...allTeams.map(t => t.luck ?? 0)),
@@ -123,7 +123,7 @@ async function renderStyleBars(nodeW, nodeL, containerId) {
     <div class="sb2-wrap">
       <div class="sb2-header">
         <span class="sb2-title">Style Comparison</span>
-        <span class="sb2-source">Torvik</span>
+        <span class="sb2-source">ESPN box scores</span>
       </div>
       <div class="sb2-body">${rows.join('')}</div>
       ${callouts.length ? `<div class="sb2-callouts">${callouts.join('')}</div>` : ''}

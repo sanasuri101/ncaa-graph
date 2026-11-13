@@ -26,8 +26,14 @@ teams, a bracket simulator and an AI assistant, built on ESPN's public data.
    share is zero until early January and grows to 60% by Selection Sunday.
 3. **Seeds and regions.** Seeds 1–16 by selection score, placed on an S-curve.
 
-It writes `data/bracket_config.json` (marked `"_projected": true`), `data/leaderboard.json` and
-`data/spreads.json`. Every other script reads `bracket_config.json`, so the whole app follows
+4. **Team stats.** From each game's ESPN box score: possessions, offensive and defensive
+   efficiency, the four factors on both ends, shooting splits, tempo and close-game luck. The
+   overall efficiency margin is set to the rating above, so the box scores decide only how a
+   team's strength splits between offense and defense.
+
+It writes `data/bracket_config.json` (marked `"_projected": true`), `data/leaderboard.json`,
+`data/spreads.json`, `data/boxscores.json` and `data/torvik_stats.json` (the file keeps its old
+name; its `source` field says the numbers are computed here). Every other script reads `bracket_config.json`, so the whole app follows
 the projection. After Selection Sunday the real bracket replaces it; see `SEASON_ROLLOVER.md`.
 
 ### Evidence behind the choices
@@ -55,7 +61,7 @@ Measured on past seasons, with models scored on years they had not seen:
 ├── scripts/                # Python data pipeline (standard library only)
 │   ├── project_field.py    #   rating, projected field, leaderboard
 │   ├── fetch_data.py       #   games between field teams → graph
-│   ├── fetch_torvik.py     #   Torvik efficiency stats (see note below)
+│   ├── team_stats.py       #   efficiency and shooting stats from box scores (used by project_field)
 │   ├── fetch_odds.py, fetch_injuries.py, fetch_rosters.py, compute_transitive.py
 │   └── make_bracket_config.py   # real bracket, after Selection Sunday
 ├── data/                   # Source data files
@@ -97,10 +103,6 @@ simulator and assistant do not.
 
 ## Known limits
 
-- **Torvik stats go stale.** barttorvik.com answers GitHub's servers with 403, so the refresh
-  job cannot update `torvik_stats.json`. Run `python scripts/fetch_torvik.py` from another
-  machine and commit the result. The leaderboard, field, graph and bracket picks do not depend
-  on it; the assistant's efficiency and shooting stats do.
 - **AI endpoint protection is best-effort.** `/api/ai` and `/api/analyze` only accept requests
   from the app's own origin and limit each IP to 12 a minute (`api/_guard.js`). The counter is
   per server instance, so a determined flood needs a shared store or a spending cap on the

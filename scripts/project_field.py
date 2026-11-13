@@ -27,6 +27,7 @@ top 25 for 17-18 teams, against 12-13 for margins alone.
 Writes: data/bracket_config.json   (consumed by every other script)
         data/leaderboard.json, public/data/leaderboard.json
         data/spreads.json          (closing spread per game, fetched once each)
+        data/torvik_stats.json     (efficiency and shooting stats, via team_stats.py)
 
 Run first in the refresh pipeline. Once the real bracket is committed for the
 season (make_bracket_config.py, after Selection Sunday) this script leaves
@@ -43,6 +44,8 @@ from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
+
+import team_stats
 
 ROOT     = Path(__file__).resolve().parent.parent
 DATA_DIR = ROOT / "data"
@@ -235,7 +238,8 @@ def main():
     if real_bracket:
         print(f"Real {SEASON} bracket is committed — ratings updated, field left alone.")
         bracket = config["bracket"]
-        bubble  = [t["espn_id"] for t in config.get("bubble", [])]
+        bubble_entries = config.get("bubble", [])
+        bubble  = [t["espn_id"] for t in bubble_entries]
         auto    = set()
     else:
         field, bubble, auto = project(teams, ratings, score)
@@ -250,6 +254,7 @@ def main():
             line, slot = divmod(i, 4)
             region = REGIONS[slot] if line % 2 == 0 else REGIONS[3 - slot]   # S-curve
             bracket.append(entry(tid, region, line + 1))
+        bubble_entries = [entry(tid, "bubble", None) for tid in bubble]
 
         config_path.write_text(json.dumps({
             "_comment": "Projected field, rewritten daily by scripts/project_field.py. "
@@ -260,8 +265,18 @@ def main():
             "_projected": True,
             "_last_updated": f"{_today}",
             "bracket": bracket,
-            "bubble": [entry(tid, "bubble", None) for tid in bubble],
+            "bubble": bubble_entries,
         }, indent=2))
+
+    # Efficiency and shooting stats for the field, from box scores
+    boxes = team_stats.fetch_box_scores(games, SEASON)
+    schedule = defaultdict(list)
+    for home, away, *_ in games.values():
+        schedule[home].append(away)
+        schedule[away].append(home)
+    team_stats.write(bracket + bubble_entries, team_stats.compute(games, boxes, teams, ratings),
+                     teams, ratings, record, wab, schedule, SEASON)
+    print(f"Box scores: {sum(1 for gid in games if gid in boxes)} of {len(games)} games")
 
     # Leaderboard — keep yesterday's rank so the app can show movement
     board_path = DATA_DIR / "leaderboard.json"

@@ -48,7 +48,7 @@ verify `data/graph_data.json` meta contains the correct `tourney_start` date.
 
 ## What updates automatically (no action needed)
 - `fetch_data.py` — season year computed from current date
-- `fetch_torvik.py` — YEAR computed from current date  
+- `project_field.py` / `team_stats.py` — season year computed from current date  
 - `fetch_odds.py` — season year computed from current date
 - `fetch_rosters.py` — season year computed from current date
 - `api/ai.js` — "Today is..." now dynamic (America/New_York)
@@ -58,7 +58,7 @@ verify `data/graph_data.json` meta contains the correct `tourney_start` date.
 ## Daily refresh (GitHub Actions — no action needed)
 Runs at 6am UTC and 6pm UTC:
 - ESPN game results → alive team set updated automatically
-- Torvik efficiency stats → AdjEM, four factors, Barthag current
+- Team stats from ESPN box scores → AdjEM, four factors, Barthag current
 - ESPN odds + BPI → moneylines, spreads current  
 - Injury news → ESPN headlines current
 - Roster stats → player PPG/RPG current

@@ -17,7 +17,7 @@ After running:
   - Adjust any bracket_name values you want to shorten for display
   - Add bubble teams manually (the ~8-10 teams that just missed the field)
   - Commit the file
-  - Run: python scripts/fetch_data.py && python scripts/fetch_torvik.py
+  - Run: python scripts/project_field.py && python scripts/fetch_data.py
 
 The file persists across sessions — only update it when a team's seed or
 region changes (rare mid-tournament), or at the start of a new season.
@@ -258,8 +258,8 @@ else:
 
 print(f"""
 3. After filling in regions, run:
+   python scripts/project_field.py
    python scripts/fetch_data.py
-   python scripts/fetch_torvik.py
    python scripts/compute_transitive.py
    cp data/transitive_analysis.json public/data/transitive_analysis.json
    git add data/bracket_config.json data/ public/data/
