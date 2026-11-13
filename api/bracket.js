@@ -41,6 +41,7 @@ function getCacheMtime() {
     "public/data/torvik_stats.json",
     "public/data/recent_form.json",
     "data/injury_overrides.json",
+    "public/data/leaderboard.json",
   ];
   let latest = 0;
   for (const f of files) {
@@ -136,7 +137,28 @@ function getData() {
 
   const actualResults = buildActualResults(graph);
 
-  _cache = { graph, torvik, form, trans, injuryMap, oppBarthag, actualResults };
+  // Daily ESPN-based ratings (points better than an average team), by ESPN id
+  const ratings = {};
+  try {
+    const board = JSON.parse(
+      readFileSync(
+        join(process.cwd(), "public", "data", "leaderboard.json"),
+        "utf8",
+      ),
+    );
+    for (const t of board.teams) ratings[t.espn_id] = t.rating;
+  } catch {}
+
+  _cache = {
+    graph,
+    torvik,
+    form,
+    trans,
+    injuryMap,
+    oppBarthag,
+    actualResults,
+    ratings,
+  };
   _cacheMtime = mtime;
   return _cache;
 }
@@ -338,8 +360,11 @@ function skellamWinProb(tvA, tvB) {
   const mu = expA - expB;
   const sigma = Math.sqrt(expA + expB); // Skellam variance = sum of Poisson rates
   if (sigma === 0) return 0.5; // degenerate case: identical teams
-  const z = mu / sigma;
-  // Normal CDF via Abramowitz & Stegun rational approximation
+  return normCdf(mu / sigma);
+}
+
+// Normal CDF via Abramowitz & Stegun rational approximation
+function normCdf(z) {
   const t = 1 / (1 + 0.2316419 * Math.abs(z));
   const poly =
     t *
@@ -350,6 +375,19 @@ function skellamWinProb(tvA, tvB) {
   const phi = Math.exp((-z * z) / 2) / Math.sqrt(2 * Math.PI);
   const cdf = 1 - phi * poly;
   return z >= 0 ? cdf : 1 - cdf;
+}
+
+// ── Rating edge ───────────────────────────────────────────────────────────────
+// Points team A is better than team B on a neutral court, from the daily
+// ratings. In 215 first-round games between seeds 5-12 (2011-2026) the seed
+// picked the winner 55% of the time and the rating 60%; when the two
+// disagreed the lower seed won 58%. So those matchups are picked by rating.
+const GAME_SD = 11; // spread of a game's margin around its expected value
+const RATING_PICKED_SEEDS = new Set([5, 6, 7, 8]); // 5v12, 6v11, 7v10, 8v9
+function ratingEdge(teamA, teamB, ratings) {
+  const a = ratings?.[teamA.id];
+  const b = ratings?.[teamB.id];
+  return a == null || b == null ? null : Math.round((a - b) * 10) / 10;
 }
 
 // ── Layer IV: Exponential time-decay win rate (opponent-quality weighted) ─────
@@ -674,6 +712,7 @@ function simulateRegion(
   injuryMap,
   oppBarthag,
   actualResults,
+  ratings,
 ) {
   // Collect seeded teams, resolve play-in games first
   const bySlot = {}; // slot = seed (1-16 after play-ins resolved)
@@ -737,23 +776,27 @@ function simulateRegion(
     const teamA = bySlot[sA];
     const teamB = bySlot[sB];
     const actual = lookupActual(teamA, teamB, actualResults);
+    const edge = ratingEdge(teamA, teamB, ratings); // teamA is the better seed
     let winner, prob, isPrediction;
     if (actual) {
       winner = actual.winnerId === String(teamA.id) ? teamA : teamB;
       prob = 1;
       isPrediction = false;
     } else {
-      prob = winProb(
-        teamA,
-        teamB,
-        torvik,
-        model,
-        0,
-        form,
-        trans,
-        injuryMap,
-        oppBarthag,
-      );
+      prob =
+        edge != null && RATING_PICKED_SEEDS.has(sA)
+          ? normCdf(edge / GAME_SD)
+          : winProb(
+              teamA,
+              teamB,
+              torvik,
+              model,
+              0,
+              form,
+              trans,
+              injuryMap,
+              oppBarthag,
+            );
       winner = pickWinner(teamA, teamB, prob, model);
       prob = Math.max(winner === teamA ? prob : 1 - prob, 0.01);
       isPrediction = true;
@@ -765,6 +808,7 @@ function simulateRegion(
       prob,
       isPrediction,
       actual: actual ?? null,
+      ratingEdge: edge, // points the better seed is ahead; negative = lower seed is better rated
     });
     survivors.push(winner);
   }
@@ -826,6 +870,7 @@ function simulateBracket(
   injuryMap,
   oppBarthag,
   actualResults,
+  ratings,
 ) {
   const REGIONS = ["East", "West", "South", "Midwest"];
   const nodesByRegion = {};
@@ -845,6 +890,7 @@ function simulateBracket(
       injuryMap,
       oppBarthag,
       actualResults,
+      ratings,
     );
   });
 
@@ -957,8 +1003,16 @@ export default async function handler(req, res) {
     : "evidence";
 
   try {
-    const { graph, torvik, form, trans, injuryMap, oppBarthag, actualResults } =
-      getData();
+    const {
+      graph,
+      torvik,
+      form,
+      trans,
+      injuryMap,
+      oppBarthag,
+      actualResults,
+      ratings,
+    } = getData();
     const result = simulateBracket(
       model,
       graph,
@@ -968,6 +1022,7 @@ export default async function handler(req, res) {
       injuryMap,
       oppBarthag,
       actualResults,
+      ratings,
     );
     res.writeHead(200, { "Content-Type": "application/json", ...CORS });
     res.end(JSON.stringify(result));

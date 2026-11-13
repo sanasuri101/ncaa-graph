@@ -30,7 +30,8 @@ Writes: data/bracket_config.json   (consumed by every other script)
 
 Run first in the refresh pipeline. Once the real bracket is committed for the
 season (make_bracket_config.py, after Selection Sunday) this script leaves
-bracket_config.json alone.
+bracket_config.json alone but keeps the ratings in leaderboard.json current,
+since the bracket view reads them.
 """
 
 import json
@@ -219,9 +220,7 @@ def project(teams: dict, ratings: dict, score: dict) -> tuple[list, list, set]:
 def main():
     config_path = DATA_DIR / "bracket_config.json"
     config = json.loads(config_path.read_text()) if config_path.exists() else {}
-    if config.get("_season") == SEASON and not config.get("_projected"):
-        print(f"Real {SEASON} bracket is committed — projection skipped.")
-        return
+    real_bracket = config.get("_season") == SEASON and not config.get("_projected")
 
     teams = d1_teams(SEASON)
     games = fetch_games(SEASON, teams, _today)
@@ -229,33 +228,40 @@ def main():
     ratings, record = rate(games, spreads, teams)
     wab = wins_above_bubble(games, ratings)
     score, resume_share = selection_score(ratings, wab)
-    field, bubble, auto = project(teams, ratings, score)
     with_line = sum(1 for gid in games if spreads.get(gid) is not None)
-    print(f"{len(teams)} teams, {len(games)} games ({with_line} with a spread), {len(auto)} auto bids")
-
-    def entry(tid, region, seed):
-        return {"bracket_name": teams[tid]["short"], "espn_id": tid,
-                "displayName": teams[tid]["name"], "location": teams[tid]["location"],
-                "region": region, "seed": seed}
-
-    bracket = []
-    for i, tid in enumerate(field):
-        line, slot = divmod(i, 4)
-        region = REGIONS[slot] if line % 2 == 0 else REGIONS[3 - slot]   # S-curve
-        bracket.append(entry(tid, region, line + 1))
-
+    print(f"{len(teams)} teams, {len(games)} games ({with_line} with a spread)")
     season_str = f"{SEASON - 1}-{str(SEASON)[2:]}"
-    config_path.write_text(json.dumps({
-        "_comment": "Projected field, rewritten daily by scripts/project_field.py. "
-                    "After Selection Sunday run scripts/make_bracket_config.py to replace it "
-                    "with the real bracket.",
-        "_season": SEASON,
-        "_season_str": season_str,
-        "_projected": True,
-        "_last_updated": f"{_today}",
-        "bracket": bracket,
-        "bubble": [entry(tid, "bubble", None) for tid in bubble],
-    }, indent=2))
+
+    if real_bracket:
+        print(f"Real {SEASON} bracket is committed — ratings updated, field left alone.")
+        bracket = config["bracket"]
+        bubble  = [t["espn_id"] for t in config.get("bubble", [])]
+        auto    = set()
+    else:
+        field, bubble, auto = project(teams, ratings, score)
+
+        def entry(tid, region, seed):
+            return {"bracket_name": teams[tid]["short"], "espn_id": tid,
+                    "displayName": teams[tid]["name"], "location": teams[tid]["location"],
+                    "region": region, "seed": seed}
+
+        bracket = []
+        for i, tid in enumerate(field):
+            line, slot = divmod(i, 4)
+            region = REGIONS[slot] if line % 2 == 0 else REGIONS[3 - slot]   # S-curve
+            bracket.append(entry(tid, region, line + 1))
+
+        config_path.write_text(json.dumps({
+            "_comment": "Projected field, rewritten daily by scripts/project_field.py. "
+                        "After Selection Sunday run scripts/make_bracket_config.py to replace it "
+                        "with the real bracket.",
+            "_season": SEASON,
+            "_season_str": season_str,
+            "_projected": True,
+            "_last_updated": f"{_today}",
+            "bracket": bracket,
+            "bubble": [entry(tid, "bubble", None) for tid in bubble],
+        }, indent=2))
 
     # Leaderboard — keep yesterday's rank so the app can show movement
     board_path = DATA_DIR / "leaderboard.json"
@@ -269,14 +275,14 @@ def main():
     placed = {t["espn_id"]: t for t in bracket}
     ranked = sorted(teams, key=lambda tid: -ratings[tid])
     # Top of the rankings, plus auto-bid teams ranked below the cut
-    shown = ranked[:BOARD_SIZE] + [tid for tid in ranked[BOARD_SIZE:] if tid in placed or tid in bubble]
+    shown = [tid for tid in ranked if ranked.index(tid) < BOARD_SIZE or tid in placed or tid in bubble]
     board = [{
         "rank": ranked.index(tid) + 1, "prev_rank": prev_rank.get(tid),
         "espn_id": tid, "name": teams[tid]["short"], "conf": teams[tid]["conf"],
         "record": "{}-{}".format(*record[tid]), "rating": round(ratings[tid], 1),
         "wab": round(wab[tid], 1),
         "status": ("auto" if tid in auto else "at-large" if tid in placed
-                   else "bubble" if tid in bubble else "out"),
+                   else "bubble" if tid in bubble else "out"),   # after Selection Sunday every field team reads "at-large"
         "seed": placed.get(tid, {}).get("seed"), "region": placed.get(tid, {}).get("region"),
     } for tid in shown]
 

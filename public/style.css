@@ -5523,3 +5523,27 @@ section { margin-bottom: 20px; }
   .fl-table th, .fl-table td { padding: 6px 5px; }
   .fl-table td:last-child .fl-dim { display: none; }
 }
+
+/* ── Rating edge on first-round games ────────────────────────────────────── */
+.br-edge {
+  font-family: var(--font-mono);
+  font-size: .58rem;
+  color: var(--text-mute);
+  margin-left: 4px;
+  flex-shrink: 0;
+}
+.br-slot-flip { border-color: var(--accent); background: var(--accent-dim); }
+.br-slot-flip .br-edge { color: var(--accent); font-weight: 600; }
+.br-edge-legend {
+  text-align: center;
+  font-size: .72rem;
+  color: var(--text-dim);
+  margin: 4px 0 10px;
+}
+.br-edge-flip-key {
+  border: 1px solid var(--accent);
+  background: var(--accent-dim);
+  color: var(--accent);
+  border-radius: 3px;
+  padding: 0 4px;
+}

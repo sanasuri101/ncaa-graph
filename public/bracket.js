@@ -117,6 +117,11 @@ function renderBracket(data) {
     <div class="ncaa-bracket">
       ${playInHTML}
       ${champBanner}
+      <div class="br-edge-legend">
+        First round: <span class="br-edge">+4.2</span> = points the better-rated team is ahead ·
+        <span class="br-edge-flip-key">highlighted</span> = rating favours the lower seed.
+        Seeds 5–12 are picked by rating, not seed.
+      </div>
       <div class="bracket-body">
         <div class="bracket-left">
           <div class="bracket-half-region">${eastHTML}</div>
@@ -194,10 +199,19 @@ function gameSlot(game, regionName) {
   const isActual = game.isPrediction === false;
   const cls     = isActual ? 'br-slot-actual' : 'br-slot-pred';
   const badge   = isActual ? '<span class="br-actual-badge">FINAL</span>' : '';
-  return `<div class="br-slot ${cls}" data-prob="${game.prob}" data-actual="${isActual}">
+  // First-round games carry a rating edge: points the better seed (teamA) is ahead.
+  // Negative means the lower seed is the better-rated team — the upset worth picking.
+  const edge    = game.ratingEdge;
+  const flip    = edge != null && edge < 0;
+  const better  = edge == null ? null : flip ? game.teamB : game.teamA;
+  const edgeTag = t => t === better ? `<span class="br-edge">+${Math.abs(edge).toFixed(1)}</span>` : '';
+  const note    = edge == null ? '' : flip
+    ? `Rating favours the lower seed: ${better.label} by ${Math.abs(edge).toFixed(1)} pts`
+    : `Rating edge: ${better.label} by ${edge.toFixed(1)} pts`;
+  return `<div class="br-slot ${cls} ${flip ? 'br-slot-flip' : ''}" data-prob="${game.prob}" data-actual="${isActual}" data-note="${note}">
     ${badge}
-    ${teamLine(game.teamA, game.winner, game.prob, rc, isActual, game.actual)}
-    ${teamLine(game.teamB, game.winner, game.prob, rc, isActual, game.actual)}
+    ${teamLine(game.teamA, game.winner, game.prob, rc, isActual, game.actual, edgeTag(game.teamA))}
+    ${teamLine(game.teamB, game.winner, game.prob, rc, isActual, game.actual, edgeTag(game.teamB))}
   </div>`;
 }
 
@@ -227,7 +241,7 @@ function champSlot(game) {
   </div>`;
 }
 
-function teamLine(team, winner, prob, rc, isActual, actual) {
+function teamLine(team, winner, prob, rc, isActual, actual, edgeTag = '') {
   if (!team) return '<div class="br-team-line br-tbd"><span class="br-seed-num"></span><span class="br-team-nm">TBD</span></div>';
   const isWinner = winner && team.id === winner.id;
   const isTBD    = team.id?.startsWith('tbd-');
@@ -245,7 +259,7 @@ function teamLine(team, winner, prob, rc, isActual, actual) {
   const elimCls = isActual && !isWinner ? 'br-eliminated' : '';
   return `<div class="br-team-line ${isWinner ? 'br-winner-line' : 'br-loser-line'} ${elimCls} ${isTBD ? 'br-tbd' : ''}"
     style="${isWinner ? `border-left:2px solid ${rc}` : ''}">
-    ${seedNum}<span class="br-team-nm">${team.label}</span>${trailer}
+    ${seedNum}<span class="br-team-nm">${team.label}</span>${edgeTag}${trailer}
   </div>`;
 }
 
@@ -279,9 +293,10 @@ function bindTooltips() {
     const wScore   = el.querySelector('.br-winner-line .br-score')?.textContent?.trim();
     const lScore   = el.querySelector('.br-loser-line .br-score')?.textContent?.trim();
     if (!winner) return;
-    el.title = isActual && wScore
+    el.title = (isActual && wScore
       ? `FINAL: ${winner} ${wScore} · ${loser} ${lScore}`
-      : `Predicted: ${winner} wins ${(parseFloat(el.dataset.prob)*100).toFixed(0)}%`;
+      : `Predicted: ${winner} wins ${(parseFloat(el.dataset.prob)*100).toFixed(0)}%`)
+      + (el.dataset.note ? ` · ${el.dataset.note}` : '');
   });
 }
 
