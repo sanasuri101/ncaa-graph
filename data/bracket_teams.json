@@ -64,18 +64,18 @@
     "seed": 2
   },
   {
-    "bracket_name": "Arizona",
-    "espn_id": "12",
-    "displayName": "Arizona Wildcats",
-    "location": "Arizona",
-    "region": "East",
-    "seed": 3
-  },
-  {
     "bracket_name": "Virginia",
     "espn_id": "258",
     "displayName": "Virginia Cavaliers",
     "location": "Virginia",
+    "region": "East",
+    "seed": 3
+  },
+  {
+    "bracket_name": "Arizona",
+    "espn_id": "12",
+    "displayName": "Arizona Wildcats",
+    "location": "Arizona",
     "region": "West",
     "seed": 3
   },
@@ -152,18 +152,18 @@
     "seed": 5
   },
   {
-    "bracket_name": "Nebraska",
-    "espn_id": "158",
-    "displayName": "Nebraska Cornhuskers",
-    "location": "Nebraska",
-    "region": "Midwest",
-    "seed": 5
-  },
-  {
     "bracket_name": "Louisville",
     "espn_id": "97",
     "displayName": "Louisville Cardinals",
     "location": "Louisville",
+    "region": "Midwest",
+    "seed": 5
+  },
+  {
+    "bracket_name": "Nebraska",
+    "espn_id": "158",
+    "displayName": "Nebraska Cornhuskers",
+    "location": "Nebraska",
     "region": "Midwest",
     "seed": 6
   },
@@ -192,18 +192,18 @@
     "seed": 6
   },
   {
-    "bracket_name": "Indiana",
-    "espn_id": "84",
-    "displayName": "Indiana Hoosiers",
-    "location": "Indiana",
-    "region": "East",
-    "seed": 7
-  },
-  {
     "bracket_name": "Gonzaga",
     "espn_id": "2250",
     "displayName": "Gonzaga Bulldogs",
     "location": "Gonzaga",
+    "region": "East",
+    "seed": 7
+  },
+  {
+    "bracket_name": "Indiana",
+    "espn_id": "84",
+    "displayName": "Indiana Hoosiers",
+    "location": "Indiana",
     "region": "West",
     "seed": 7
   },
@@ -344,18 +344,18 @@
     "seed": 11
   },
   {
-    "bracket_name": "High Point",
-    "espn_id": "2272",
-    "displayName": "High Point Panthers",
-    "location": "High Point",
-    "region": "Midwest",
-    "seed": 11
-  },
-  {
     "bracket_name": "Wright St",
     "espn_id": "2750",
     "displayName": "Wright State Raiders",
     "location": "Wright State",
+    "region": "Midwest",
+    "seed": 11
+  },
+  {
+    "bracket_name": "High Point",
+    "espn_id": "2272",
+    "displayName": "High Point Panthers",
+    "location": "High Point",
     "region": "Midwest",
     "seed": 12
   },
@@ -416,18 +416,18 @@
     "seed": 13
   },
   {
-    "bracket_name": "Montana St",
-    "espn_id": "147",
-    "displayName": "Montana State Bobcats",
-    "location": "Montana State",
-    "region": "Midwest",
-    "seed": 14
-  },
-  {
     "bracket_name": "Old Dominion",
     "espn_id": "295",
     "displayName": "Old Dominion Monarchs",
     "location": "Old Dominion",
+    "region": "Midwest",
+    "seed": 14
+  },
+  {
+    "bracket_name": "Montana St",
+    "espn_id": "147",
+    "displayName": "Montana State Bobcats",
+    "location": "Montana State",
     "region": "South",
     "seed": 14
   },
