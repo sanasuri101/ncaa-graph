@@ -1,10 +1,23 @@
 {
-  "generated_at": "2026-11-13T23:05:00.837515+00:00",
-  "flagged_teams": 3,
+  "generated_at": "2026-11-14T12:39:05.566439+00:00",
+  "flagged_teams": 4,
   "teams": {
+    "127": {
+      "bracket_name": "Michigan St",
+      "region": "Midwest",
+      "seed": 3,
+      "articles": [
+        {
+          "headline": "Michigan State's Jordan Scott injures right shoulder in win over Northern Iowa",
+          "description": "Jordan Scott injured his right shoulder as No. 5 Michigan State beat Northern Iowa 106-72 on Friday night.",
+          "published": "2026-11-14",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50476961/michigan-state-forward-jordan-scott-injures-right-shoulder-win-vs-northern-iowa"
+        }
+      ]
+    },
     "2305": {
       "bracket_name": "Kansas",
-      "region": "South",
+      "region": "Midwest",
       "seed": 1,
       "articles": [
         {
@@ -17,8 +30,8 @@
     },
     "356": {
       "bracket_name": "Illinois",
-      "region": "East",
-      "seed": 3,
+      "region": "West",
+      "seed": 2,
       "articles": [
         {
           "headline": "Illinois' David Mirkovic undergoes emergency appendectomy",
@@ -30,7 +43,7 @@
     },
     "41": {
       "bracket_name": "UConn",
-      "region": "East",
+      "region": "Midwest",
       "seed": 2,
       "articles": [
         {

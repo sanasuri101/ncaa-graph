@@ -1,47 +1,9 @@
 {
-  "generated_at": "2026-11-13T23:05:00.838078+00:00",
+  "generated_at": "2026-11-14T12:39:05.567042+00:00",
   "teams": {
-    "2305": {
-      "bracket_name": "Kansas",
-      "region": "South",
-      "seed": 1,
-      "adj_em_penalty": 0,
-      "players": [],
-      "notes": "",
-      "override_date": "",
-      "news_flags": [
-        {
-          "headline": "Kansas' Melvin Council Jr. suffers broken foot, might be out until January",
-          "description": "Kansas guard Melvin Council Jr. suffered a broken foot in practice Monday and could be out until the start of Big 12 conference play which begins in January.",
-          "published": "2026-11-09",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50435012/kansas-council-suffers-broken-foot-jan"
-        }
-      ],
-      "has_override": false,
-      "has_news_flag": true
-    },
-    "356": {
-      "bracket_name": "Illinois",
-      "region": "East",
-      "seed": 3,
-      "adj_em_penalty": 0,
-      "players": [],
-      "notes": "",
-      "override_date": "",
-      "news_flags": [
-        {
-          "headline": "Illinois' David Mirkovic undergoes emergency appendectomy",
-          "description": "David Mirkovic, who had offseason foot surgery that is expected to sideline him at the start of the season, underwent an emergency appendectomy Saturday night.",
-          "published": "2026-11-01",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50351006/illinois-david-mirkovic-emergency-appendectomy-setback"
-        }
-      ],
-      "has_override": false,
-      "has_news_flag": true
-    },
     "41": {
       "bracket_name": "UConn",
-      "region": "East",
+      "region": "Midwest",
       "seed": 2,
       "adj_em_penalty": 0,
       "players": [],
@@ -65,6 +27,63 @@
           "description": "UConn starting forward Nik Khamenia exited Monday's game against Wagner with a lower-body injury.",
           "published": "2026-11-10",
           "url": "https://www.espn.com/mens-college-basketball/story/_/id/50438114/nik-khamenia-exits-no-4-uconn-game-vs-wagner-injury"
+        }
+      ],
+      "has_override": false,
+      "has_news_flag": true
+    },
+    "127": {
+      "bracket_name": "Michigan St",
+      "region": "Midwest",
+      "seed": 3,
+      "adj_em_penalty": 0,
+      "players": [],
+      "notes": "",
+      "override_date": "",
+      "news_flags": [
+        {
+          "headline": "Michigan State's Jordan Scott injures right shoulder in win over Northern Iowa",
+          "description": "Jordan Scott injured his right shoulder as No. 5 Michigan State beat Northern Iowa 106-72 on Friday night.",
+          "published": "2026-11-14",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50476961/michigan-state-forward-jordan-scott-injures-right-shoulder-win-vs-northern-iowa"
+        }
+      ],
+      "has_override": false,
+      "has_news_flag": true
+    },
+    "2305": {
+      "bracket_name": "Kansas",
+      "region": "Midwest",
+      "seed": 1,
+      "adj_em_penalty": 0,
+      "players": [],
+      "notes": "",
+      "override_date": "",
+      "news_flags": [
+        {
+          "headline": "Kansas' Melvin Council Jr. suffers broken foot, might be out until January",
+          "description": "Kansas guard Melvin Council Jr. suffered a broken foot in practice Monday and could be out until the start of Big 12 conference play which begins in January.",
+          "published": "2026-11-09",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50435012/kansas-council-suffers-broken-foot-jan"
+        }
+      ],
+      "has_override": false,
+      "has_news_flag": true
+    },
+    "356": {
+      "bracket_name": "Illinois",
+      "region": "West",
+      "seed": 2,
+      "adj_em_penalty": 0,
+      "players": [],
+      "notes": "",
+      "override_date": "",
+      "news_flags": [
+        {
+          "headline": "Illinois' David Mirkovic undergoes emergency appendectomy",
+          "description": "David Mirkovic, who had offseason foot surgery that is expected to sideline him at the start of the season, underwent an emergency appendectomy Saturday night.",
+          "published": "2026-11-01",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50351006/illinois-david-mirkovic-emergency-appendectomy-setback"
         }
       ],
       "has_override": false,
