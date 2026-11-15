@@ -45,6 +45,21 @@
     "venue": "TD Garden"
   },
   {
+    "id": "401916316",
+    "date": "2026-11-14",
+    "name": "Ohio State Buckeyes at UConn Huskies",
+    "team1_id": "41",
+    "team1_name": "UConn Huskies",
+    "team1_score": "84",
+    "team1_winner": true,
+    "team2_id": "194",
+    "team2_name": "Ohio State Buckeyes",
+    "team2_score": "68",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "PeoplesBank Arena"
+  },
+  {
     "id": "401913526",
     "date": "2026-11-06",
     "name": "Pennsylvania Quakers at Illinois Fighting Illini",
@@ -120,19 +135,19 @@
     "venue": "Capital One Arena"
   },
   {
-    "id": "401919041",
-    "date": "2026-11-13",
-    "name": "Oklahoma State Cowboys at Texas A&M Aggies",
-    "team1_id": "245",
-    "team1_name": "Texas A&M Aggies",
-    "team1_score": "88",
+    "id": "401909532",
+    "date": "2026-11-08",
+    "name": "Providence Friars at Nebraska Cornhuskers",
+    "team1_id": "158",
+    "team1_name": "Nebraska Cornhuskers",
+    "team1_score": "67",
     "team1_winner": true,
-    "team2_id": "197",
-    "team2_name": "Oklahoma State Cowboys",
-    "team2_score": "69",
+    "team2_id": "2507",
+    "team2_name": "Providence Friars",
+    "team2_score": "58",
     "team2_winner": false,
-    "neutral": false,
-    "venue": "Reed Arena"
+    "neutral": true,
+    "venue": "Mohegan Sun Arena"
   },
   {
     "id": "401921689",
@@ -165,19 +180,19 @@
     "venue": "United Supermarkets Arena"
   },
   {
-    "id": "401909532",
-    "date": "2026-11-08",
-    "name": "Providence Friars at Nebraska Cornhuskers",
-    "team1_id": "158",
-    "team1_name": "Nebraska Cornhuskers",
-    "team1_score": "67",
+    "id": "401916313",
+    "date": "2026-11-03",
+    "name": "Ohio State Buckeyes at BYU Cougars",
+    "team1_id": "252",
+    "team1_name": "BYU Cougars",
+    "team1_score": "94",
     "team1_winner": true,
-    "team2_id": "2507",
-    "team2_name": "Providence Friars",
-    "team2_score": "58",
+    "team2_id": "194",
+    "team2_name": "Ohio State Buckeyes",
+    "team2_score": "83",
     "team2_winner": false,
     "neutral": true,
-    "venue": "Mohegan Sun Arena"
+    "venue": "Delta Center"
   },
   {
     "id": "401921741",
@@ -193,6 +208,21 @@
     "team2_winner": false,
     "neutral": false,
     "venue": "Marriott Center"
+  },
+  {
+    "id": "401909524",
+    "date": "2026-11-12",
+    "name": "Marquette Golden Eagles at Michigan Wolverines",
+    "team1_id": "130",
+    "team1_name": "Michigan Wolverines",
+    "team1_score": "84",
+    "team1_winner": true,
+    "team2_id": "269",
+    "team2_name": "Marquette Golden Eagles",
+    "team2_score": "70",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "Crisler Center"
   },
   {
     "id": "401920378",
@@ -225,6 +255,21 @@
     "venue": "The Sandy and John Black Pavilion at Ole Miss"
   },
   {
+    "id": "401909525",
+    "date": "2026-11-15",
+    "name": "Marquette Golden Eagles at Missouri Tigers",
+    "team1_id": "142",
+    "team1_name": "Missouri Tigers",
+    "team1_score": "69",
+    "team1_winner": true,
+    "team2_id": "269",
+    "team2_name": "Marquette Golden Eagles",
+    "team2_score": "64",
+    "team2_winner": false,
+    "neutral": true,
+    "venue": "United Center"
+  },
+  {
     "id": "401911249",
     "date": "2026-11-07",
     "name": "Saint Louis Billikens at Missouri Tigers",
@@ -240,21 +285,6 @@
     "venue": "Enterprise Center"
   },
   {
-    "id": "401909524",
-    "date": "2026-11-12",
-    "name": "Marquette Golden Eagles at Michigan Wolverines",
-    "team1_id": "130",
-    "team1_name": "Michigan Wolverines",
-    "team1_score": "84",
-    "team1_winner": true,
-    "team2_id": "269",
-    "team2_name": "Marquette Golden Eagles",
-    "team2_score": "70",
-    "team2_winner": false,
-    "neutral": false,
-    "venue": "Crisler Center"
-  },
-  {
     "id": "401917530",
     "date": "2026-11-15",
     "name": "New Mexico Lobos at Santa Clara Broncos",
@@ -268,6 +298,21 @@
     "team2_winner": false,
     "neutral": false,
     "venue": "Leavey Center"
+  },
+  {
+    "id": "401911251",
+    "date": "2026-11-15",
+    "name": "High Point Panthers at Saint Louis Billikens",
+    "team1_id": "139",
+    "team1_name": "Saint Louis Billikens",
+    "team1_score": "58",
+    "team1_winner": false,
+    "team2_id": "2272",
+    "team2_name": "High Point Panthers",
+    "team2_score": "68",
+    "team2_winner": true,
+    "neutral": false,
+    "venue": "Chaifetz Arena"
   },
   {
     "id": "401921424",
@@ -328,5 +373,20 @@
     "team2_winner": false,
     "neutral": false,
     "venue": "Stegeman Coliseum"
+  },
+  {
+    "id": "401909493",
+    "date": "2026-11-15",
+    "name": "Creighton Bluejays at Iowa Hawkeyes",
+    "team1_id": "2294",
+    "team1_name": "Iowa Hawkeyes",
+    "team1_score": "69",
+    "team1_winner": false,
+    "team2_id": "156",
+    "team2_name": "Creighton Bluejays",
+    "team2_score": "70",
+    "team2_winner": true,
+    "neutral": true,
+    "venue": "Casey's Center"
   }
 ]

@@ -1,7 +1,24 @@
 {
-  "generated_at": "2026-11-15T13:03:49.491459+00:00",
+  "generated_at": "2026-11-15T22:20:17.787230+00:00",
   "games": {},
   "futures": {
+    "new mexico": {
+      "espn_id": "167",
+      "markets": {
+        "mountain_west_conference_winner": {
+          "moneyline": "+180",
+          "implied_pct": 35.7
+        },
+        "ncaa(b)_-_to_make_the_final_4": {
+          "moneyline": "+15000",
+          "implied_pct": 0.7
+        },
+        "championship": {
+          "moneyline": "+50000",
+          "implied_pct": 0.2
+        }
+      }
+    },
     "western ky": {
       "espn_id": "98",
       "markets": {
@@ -104,8 +121,8 @@
           "implied_pct": 19.0
         },
         "big_12_conference_winner": {
-          "moneyline": "+175",
-          "implied_pct": 36.4
+          "moneyline": "+184",
+          "implied_pct": 35.2
         },
         "championship": {
           "moneyline": "+2000",
@@ -138,8 +155,8 @@
           "implied_pct": 16.7
         },
         "big_12_conference_winner": {
-          "moneyline": "+355",
-          "implied_pct": 22.0
+          "moneyline": "+360",
+          "implied_pct": 21.7
         },
         "championship": {
           "moneyline": "+2300",
@@ -181,23 +198,6 @@
         }
       }
     },
-    "louisville": {
-      "espn_id": "97",
-      "markets": {
-        "ncaa(b)_-_to_make_the_final_4": {
-          "moneyline": "+620",
-          "implied_pct": 13.9
-        },
-        "atlantic_coast_conference_winner": {
-          "moneyline": "+520",
-          "implied_pct": 16.1
-        },
-        "championship": {
-          "moneyline": "+2900",
-          "implied_pct": 3.3
-        }
-      }
-    },
     "texas tech": {
       "espn_id": "2641",
       "markets": {
@@ -206,8 +206,8 @@
           "implied_pct": 13.5
         },
         "big_12_conference_winner": {
-          "moneyline": "+750",
-          "implied_pct": 11.8
+          "moneyline": "+720",
+          "implied_pct": 12.2
         },
         "championship": {
           "moneyline": "+2500",
@@ -355,8 +355,8 @@
           "implied_pct": 6.7
         },
         "big_12_conference_winner": {
-          "moneyline": "+910",
-          "implied_pct": 9.9
+          "moneyline": "+970",
+          "implied_pct": 9.3
         },
         "championship": {
           "moneyline": "+5500",
@@ -602,6 +602,23 @@
         }
       }
     },
+    "west virginia": {
+      "espn_id": "277",
+      "markets": {
+        "ncaa(b)_-_to_make_the_final_4": {
+          "moneyline": "+6000",
+          "implied_pct": 1.6
+        },
+        "big_12_conference_winner": {
+          "moneyline": "+2900",
+          "implied_pct": 3.3
+        },
+        "championship": {
+          "moneyline": "+20000",
+          "implied_pct": 0.5
+        }
+      }
+    },
     "ole miss": {
       "espn_id": "145",
       "markets": {
@@ -640,8 +657,8 @@
           "implied_pct": 0.8
         },
         "championship": {
-          "moneyline": "+60000",
-          "implied_pct": 0.2
+          "moneyline": "+25000",
+          "implied_pct": 0.4
         }
       }
     },
@@ -675,25 +692,16 @@
         }
       }
     },
-    "new mexico": {
-      "espn_id": "167",
-      "markets": {
-        "ncaa(b)_-_to_make_the_final_4": {
-          "moneyline": "+15000",
-          "implied_pct": 0.7
-        },
-        "championship": {
-          "moneyline": "+50000",
-          "implied_pct": 0.2
-        }
-      }
-    },
     "santa clara": {
       "espn_id": "2541",
       "markets": {
         "ncaa(b)_-_to_make_the_final_4": {
           "moneyline": "+25000",
           "implied_pct": 0.4
+        },
+        "ncaa(b)_-_west_coast_conference_-_winner_(reg.season)": {
+          "moneyline": "+152",
+          "implied_pct": 39.7
         },
         "championship": {
           "moneyline": "+100000",
@@ -715,6 +723,15 @@
         "mid-american_conference_winner": {
           "moneyline": "+240",
           "implied_pct": 29.4
+        }
+      }
+    },
+    "south florida": {
+      "espn_id": "58",
+      "markets": {
+        "american_athletic_conference_winner": {
+          "moneyline": "+540",
+          "implied_pct": 15.6
         }
       }
     },
