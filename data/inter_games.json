@@ -45,6 +45,21 @@
     "venue": "TD Garden"
   },
   {
+    "id": "401913526",
+    "date": "2026-11-06",
+    "name": "Pennsylvania Quakers at Illinois Fighting Illini",
+    "team1_id": "356",
+    "team1_name": "Illinois Fighting Illini",
+    "team1_score": "112",
+    "team1_winner": true,
+    "team2_id": "219",
+    "team2_name": "Pennsylvania Quakers",
+    "team2_score": "70",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "State Farm Center"
+  },
+  {
     "id": "401913527",
     "date": "2026-11-11",
     "name": "Illinois Fighting Illini at Texas Tech Red Raiders",
@@ -58,21 +73,6 @@
     "team2_winner": false,
     "neutral": false,
     "venue": "United Supermarkets Arena"
-  },
-  {
-    "id": "401920424",
-    "date": "2026-11-08",
-    "name": "Arkansas Razorbacks at Virginia Cavaliers",
-    "team1_id": "258",
-    "team1_name": "Virginia Cavaliers",
-    "team1_score": "91",
-    "team1_winner": true,
-    "team2_id": "8",
-    "team2_name": "Arkansas Razorbacks",
-    "team2_score": "72",
-    "team2_winner": false,
-    "neutral": true,
-    "venue": "Capital One Arena"
   },
   {
     "id": "401909738",
@@ -105,6 +105,21 @@
     "venue": "Neville Arena"
   },
   {
+    "id": "401920424",
+    "date": "2026-11-08",
+    "name": "Arkansas Razorbacks at Virginia Cavaliers",
+    "team1_id": "258",
+    "team1_name": "Virginia Cavaliers",
+    "team1_score": "91",
+    "team1_winner": true,
+    "team2_id": "8",
+    "team2_name": "Arkansas Razorbacks",
+    "team2_score": "72",
+    "team2_winner": false,
+    "neutral": true,
+    "venue": "Capital One Arena"
+  },
+  {
     "id": "401919041",
     "date": "2026-11-13",
     "name": "Oklahoma State Cowboys at Texas A&M Aggies",
@@ -118,6 +133,21 @@
     "team2_winner": false,
     "neutral": false,
     "venue": "Reed Arena"
+  },
+  {
+    "id": "401921689",
+    "date": "2026-11-14",
+    "name": "LSU Tigers at Gonzaga Bulldogs",
+    "team1_id": "2250",
+    "team1_name": "Gonzaga Bulldogs",
+    "team1_score": "80",
+    "team1_winner": false,
+    "team2_id": "99",
+    "team2_name": "LSU Tigers",
+    "team2_score": "81",
+    "team2_winner": true,
+    "neutral": false,
+    "venue": "Spokane Numerica Veterans Arena"
   },
   {
     "id": "401921133",
@@ -135,21 +165,6 @@
     "venue": "United Supermarkets Arena"
   },
   {
-    "id": "401921741",
-    "date": "2026-11-13",
-    "name": "Montana State Bobcats at BYU Cougars",
-    "team1_id": "252",
-    "team1_name": "BYU Cougars",
-    "team1_score": "86",
-    "team1_winner": true,
-    "team2_id": "147",
-    "team2_name": "Montana State Bobcats",
-    "team2_score": "71",
-    "team2_winner": false,
-    "neutral": false,
-    "venue": "Marriott Center"
-  },
-  {
     "id": "401909532",
     "date": "2026-11-08",
     "name": "Providence Friars at Nebraska Cornhuskers",
@@ -163,6 +178,21 @@
     "team2_winner": false,
     "neutral": true,
     "venue": "Mohegan Sun Arena"
+  },
+  {
+    "id": "401921741",
+    "date": "2026-11-13",
+    "name": "Montana State Bobcats at BYU Cougars",
+    "team1_id": "252",
+    "team1_name": "BYU Cougars",
+    "team1_score": "86",
+    "team1_winner": true,
+    "team2_id": "147",
+    "team2_name": "Montana State Bobcats",
+    "team2_score": "71",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "Marriott Center"
   },
   {
     "id": "401920378",
@@ -180,49 +210,19 @@
     "venue": "Tyson Events Center"
   },
   {
-    "id": "401909524",
-    "date": "2026-11-12",
-    "name": "Marquette Golden Eagles at Michigan Wolverines",
-    "team1_id": "130",
-    "team1_name": "Michigan Wolverines",
-    "team1_score": "84",
+    "id": "401917914",
+    "date": "2026-11-07",
+    "name": "Central Arkansas Bears at Ole Miss Rebels",
+    "team1_id": "145",
+    "team1_name": "Ole Miss Rebels",
+    "team1_score": "92",
     "team1_winner": true,
-    "team2_id": "269",
-    "team2_name": "Marquette Golden Eagles",
-    "team2_score": "70",
+    "team2_id": "2110",
+    "team2_name": "Central Arkansas Bears",
+    "team2_score": "60",
     "team2_winner": false,
     "neutral": false,
-    "venue": "Crisler Center"
-  },
-  {
-    "id": "401909752",
-    "date": "2026-11-11",
-    "name": "Yale Bulldogs at Baylor Bears",
-    "team1_id": "239",
-    "team1_name": "Baylor Bears",
-    "team1_score": "90",
-    "team1_winner": true,
-    "team2_id": "43",
-    "team2_name": "Yale Bulldogs",
-    "team2_score": "61",
-    "team2_winner": false,
-    "neutral": false,
-    "venue": "Foster Pavilion"
-  },
-  {
-    "id": "401916305",
-    "date": "2026-11-10",
-    "name": "Minnesota Golden Gophers at Cincinnati Bearcats",
-    "team1_id": "2132",
-    "team1_name": "Cincinnati Bearcats",
-    "team1_score": "61",
-    "team1_winner": false,
-    "team2_id": "135",
-    "team2_name": "Minnesota Golden Gophers",
-    "team2_score": "63",
-    "team2_winner": true,
-    "neutral": false,
-    "venue": "Fifth Third Arena"
+    "venue": "The Sandy and John Black Pavilion at Ole Miss"
   },
   {
     "id": "401911249",
@@ -240,19 +240,34 @@
     "venue": "Enterprise Center"
   },
   {
-    "id": "401917914",
-    "date": "2026-11-07",
-    "name": "Central Arkansas Bears at Ole Miss Rebels",
-    "team1_id": "145",
-    "team1_name": "Ole Miss Rebels",
-    "team1_score": "92",
+    "id": "401909524",
+    "date": "2026-11-12",
+    "name": "Marquette Golden Eagles at Michigan Wolverines",
+    "team1_id": "130",
+    "team1_name": "Michigan Wolverines",
+    "team1_score": "84",
     "team1_winner": true,
-    "team2_id": "2110",
-    "team2_name": "Central Arkansas Bears",
-    "team2_score": "60",
+    "team2_id": "269",
+    "team2_name": "Marquette Golden Eagles",
+    "team2_score": "70",
     "team2_winner": false,
     "neutral": false,
-    "venue": "The Sandy and John Black Pavilion at Ole Miss"
+    "venue": "Crisler Center"
+  },
+  {
+    "id": "401917530",
+    "date": "2026-11-15",
+    "name": "New Mexico Lobos at Santa Clara Broncos",
+    "team1_id": "2541",
+    "team1_name": "Santa Clara Broncos",
+    "team1_score": "90",
+    "team1_winner": true,
+    "team2_id": "167",
+    "team2_name": "New Mexico Lobos",
+    "team2_score": "85",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "Leavey Center"
   },
   {
     "id": "401921424",
@@ -285,19 +300,19 @@
     "venue": "Bud Walton Arena"
   },
   {
-    "id": "401924743",
-    "date": "2026-11-03",
-    "name": "Howard Bison at Yale Bulldogs",
-    "team1_id": "43",
-    "team1_name": "Yale Bulldogs",
-    "team1_score": "72",
+    "id": "401921180",
+    "date": "2026-11-09",
+    "name": "Howard Bison at Pennsylvania Quakers",
+    "team1_id": "219",
+    "team1_name": "Pennsylvania Quakers",
+    "team1_score": "78",
     "team1_winner": true,
     "team2_id": "47",
     "team2_name": "Howard Bison",
-    "team2_score": "62",
+    "team2_score": "65",
     "team2_winner": false,
     "neutral": false,
-    "venue": "John J. Lee Amphitheater"
+    "venue": "The Palestra"
   },
   {
     "id": "401906781",

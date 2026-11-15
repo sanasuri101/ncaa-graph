@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-11-14T21:51:41.098654+00:00",
+  "generated_at": "2026-11-15T13:04:06.930372+00:00",
   "flagged_teams": 4,
   "teams": {
     "127": {
       "bracket_name": "Michigan St",
-      "region": "Midwest",
+      "region": "South",
       "seed": 3,
       "articles": [
         {
@@ -30,7 +30,7 @@
     },
     "356": {
       "bracket_name": "Illinois",
-      "region": "West",
+      "region": "South",
       "seed": 2,
       "articles": [
         {

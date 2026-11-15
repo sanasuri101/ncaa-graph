@@ -1,24 +1,7 @@
 {
-  "generated_at": "2026-11-14T21:51:19.913993+00:00",
+  "generated_at": "2026-11-15T13:03:49.491459+00:00",
   "games": {},
   "futures": {
-    "new mexico": {
-      "espn_id": "167",
-      "markets": {
-        "mountain_west_conference_winner": {
-          "moneyline": "+180",
-          "implied_pct": 35.7
-        },
-        "ncaa(b)_-_to_make_the_final_4": {
-          "moneyline": "+15000",
-          "implied_pct": 0.7
-        },
-        "championship": {
-          "moneyline": "+50000",
-          "implied_pct": 0.2
-        }
-      }
-    },
     "western ky": {
       "espn_id": "98",
       "markets": {
@@ -100,16 +83,16 @@
       "espn_id": "356",
       "markets": {
         "ncaa(b)_-_to_make_the_final_4": {
-          "moneyline": "+370",
-          "implied_pct": 21.3
+          "moneyline": "+390",
+          "implied_pct": 20.4
         },
         "big_ten_conference_winner": {
           "moneyline": "-112",
           "implied_pct": 52.8
         },
         "championship": {
-          "moneyline": "+1500",
-          "implied_pct": 6.2
+          "moneyline": "+1600",
+          "implied_pct": 5.9
         }
       }
     },
@@ -117,16 +100,16 @@
       "espn_id": "2305",
       "markets": {
         "ncaa(b)_-_to_make_the_final_4": {
-          "moneyline": "+450",
-          "implied_pct": 18.2
+          "moneyline": "+425",
+          "implied_pct": 19.0
         },
         "big_12_conference_winner": {
           "moneyline": "+175",
           "implied_pct": 36.4
         },
         "championship": {
-          "moneyline": "+2100",
-          "implied_pct": 4.5
+          "moneyline": "+2000",
+          "implied_pct": 4.8
         }
       }
     },
@@ -274,8 +257,8 @@
           "implied_pct": 3.8
         },
         "championship": {
-          "moneyline": "+4300",
-          "implied_pct": 2.3
+          "moneyline": "+4000",
+          "implied_pct": 2.4
         }
       }
     },
@@ -500,6 +483,23 @@
         }
       }
     },
+    "providence": {
+      "espn_id": "2507",
+      "markets": {
+        "ncaa(b)_-_to_make_the_final_4": {
+          "moneyline": "+2900",
+          "implied_pct": 3.3
+        },
+        "big_east_conference_winner": {
+          "moneyline": "+2600",
+          "implied_pct": 3.7
+        },
+        "championship": {
+          "moneyline": "+11000",
+          "implied_pct": 0.9
+        }
+      }
+    },
     "texas a&m": {
       "espn_id": "245",
       "markets": {
@@ -602,23 +602,6 @@
         }
       }
     },
-    "west virginia": {
-      "espn_id": "277",
-      "markets": {
-        "ncaa(b)_-_to_make_the_final_4": {
-          "moneyline": "+6000",
-          "implied_pct": 1.6
-        },
-        "big_12_conference_winner": {
-          "moneyline": "+2900",
-          "implied_pct": 3.3
-        },
-        "championship": {
-          "moneyline": "+20000",
-          "implied_pct": 0.5
-        }
-      }
-    },
     "ole miss": {
       "espn_id": "145",
       "markets": {
@@ -685,6 +668,19 @@
         "atlantic_coast_conference_winner": {
           "moneyline": "+2700",
           "implied_pct": 3.6
+        },
+        "championship": {
+          "moneyline": "+50000",
+          "implied_pct": 0.2
+        }
+      }
+    },
+    "new mexico": {
+      "espn_id": "167",
+      "markets": {
+        "ncaa(b)_-_to_make_the_final_4": {
+          "moneyline": "+15000",
+          "implied_pct": 0.7
         },
         "championship": {
           "moneyline": "+50000",
