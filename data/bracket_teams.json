@@ -56,34 +56,34 @@
     "seed": 2
   },
   {
-    "bracket_name": "Texas",
-    "espn_id": "251",
-    "displayName": "Texas Longhorns",
-    "location": "Texas",
-    "region": "East",
-    "seed": 2
-  },
-  {
-    "bracket_name": "Arizona",
-    "espn_id": "12",
-    "displayName": "Arizona Wildcats",
-    "location": "Arizona",
-    "region": "East",
-    "seed": 3
-  },
-  {
     "bracket_name": "Michigan St",
     "espn_id": "127",
     "displayName": "Michigan State Spartans",
     "location": "Michigan State",
-    "region": "West",
-    "seed": 3
+    "region": "East",
+    "seed": 2
   },
   {
     "bracket_name": "Virginia",
     "espn_id": "258",
     "displayName": "Virginia Cavaliers",
     "location": "Virginia",
+    "region": "East",
+    "seed": 3
+  },
+  {
+    "bracket_name": "Arizona",
+    "espn_id": "12",
+    "displayName": "Arizona Wildcats",
+    "location": "Arizona",
+    "region": "West",
+    "seed": 3
+  },
+  {
+    "bracket_name": "Texas",
+    "espn_id": "251",
+    "displayName": "Texas Longhorns",
+    "location": "Texas",
     "region": "South",
     "seed": 3
   },
@@ -112,18 +112,18 @@
     "seed": 4
   },
   {
-    "bracket_name": "UCLA",
-    "espn_id": "26",
-    "displayName": "UCLA Bruins",
-    "location": "UCLA",
-    "region": "West",
-    "seed": 4
-  },
-  {
     "bracket_name": "Xavier",
     "espn_id": "2752",
     "displayName": "Xavier Musketeers",
     "location": "Xavier",
+    "region": "West",
+    "seed": 4
+  },
+  {
+    "bracket_name": "UCLA",
+    "espn_id": "26",
+    "displayName": "UCLA Bruins",
+    "location": "UCLA",
     "region": "East",
     "seed": 4
   },
@@ -136,19 +136,11 @@
     "seed": 5
   },
   {
-    "bracket_name": "Texas Tech",
-    "espn_id": "2641",
-    "displayName": "Texas Tech Red Raiders",
-    "location": "Texas Tech",
+    "bracket_name": "St John's",
+    "espn_id": "2599",
+    "displayName": "St. John's Red Storm",
+    "location": "St. John's",
     "region": "West",
-    "seed": 5
-  },
-  {
-    "bracket_name": "Alabama",
-    "espn_id": "333",
-    "displayName": "Alabama Crimson Tide",
-    "location": "Alabama",
-    "region": "South",
     "seed": 5
   },
   {
@@ -156,31 +148,31 @@
     "espn_id": "252",
     "displayName": "BYU Cougars",
     "location": "BYU",
+    "region": "South",
+    "seed": 5
+  },
+  {
+    "bracket_name": "Texas Tech",
+    "espn_id": "2641",
+    "displayName": "Texas Tech Red Raiders",
+    "location": "Texas Tech",
     "region": "Midwest",
     "seed": 5
+  },
+  {
+    "bracket_name": "Alabama",
+    "espn_id": "333",
+    "displayName": "Alabama Crimson Tide",
+    "location": "Alabama",
+    "region": "Midwest",
+    "seed": 6
   },
   {
     "bracket_name": "Iowa State",
     "espn_id": "66",
     "displayName": "Iowa State Cyclones",
     "location": "Iowa State",
-    "region": "Midwest",
-    "seed": 6
-  },
-  {
-    "bracket_name": "St John's",
-    "espn_id": "2599",
-    "displayName": "St. John's Red Storm",
-    "location": "St. John's",
     "region": "South",
-    "seed": 6
-  },
-  {
-    "bracket_name": "Gonzaga",
-    "espn_id": "2250",
-    "displayName": "Gonzaga Bulldogs",
-    "location": "Gonzaga",
-    "region": "West",
     "seed": 6
   },
   {
@@ -188,6 +180,14 @@
     "espn_id": "30",
     "displayName": "USC Trojans",
     "location": "USC",
+    "region": "West",
+    "seed": 6
+  },
+  {
+    "bracket_name": "Gonzaga",
+    "espn_id": "2250",
+    "displayName": "Gonzaga Bulldogs",
+    "location": "Gonzaga",
     "region": "East",
     "seed": 6
   },
@@ -200,18 +200,18 @@
     "seed": 7
   },
   {
-    "bracket_name": "Indiana",
-    "espn_id": "84",
-    "displayName": "Indiana Hoosiers",
-    "location": "Indiana",
-    "region": "West",
-    "seed": 7
-  },
-  {
     "bracket_name": "Baylor",
     "espn_id": "239",
     "displayName": "Baylor Bears",
     "location": "Baylor",
+    "region": "West",
+    "seed": 7
+  },
+  {
+    "bracket_name": "Iowa",
+    "espn_id": "2294",
+    "displayName": "Iowa Hawkeyes",
+    "location": "Iowa",
     "region": "South",
     "seed": 7
   },
@@ -224,10 +224,10 @@
     "seed": 7
   },
   {
-    "bracket_name": "Iowa",
-    "espn_id": "2294",
-    "displayName": "Iowa Hawkeyes",
-    "location": "Iowa",
+    "bracket_name": "Indiana",
+    "espn_id": "84",
+    "displayName": "Indiana Hoosiers",
+    "location": "Indiana",
     "region": "Midwest",
     "seed": 8
   },
@@ -256,19 +256,11 @@
     "seed": 8
   },
   {
-    "bracket_name": "Ole Miss",
-    "espn_id": "145",
-    "displayName": "Ole Miss Rebels",
-    "location": "Ole Miss",
-    "region": "East",
-    "seed": 9
-  },
-  {
     "bracket_name": "Marquette",
     "espn_id": "269",
     "displayName": "Marquette Golden Eagles",
     "location": "Marquette",
-    "region": "West",
+    "region": "East",
     "seed": 9
   },
   {
@@ -276,6 +268,14 @@
     "espn_id": "259",
     "displayName": "Virginia Tech Hokies",
     "location": "Virginia Tech",
+    "region": "West",
+    "seed": 9
+  },
+  {
+    "bracket_name": "Ole Miss",
+    "espn_id": "145",
+    "displayName": "Ole Miss Rebels",
+    "location": "Ole Miss",
     "region": "South",
     "seed": 9
   },
@@ -400,26 +400,26 @@
     "seed": 13
   },
   {
-    "bracket_name": "Western KY",
-    "espn_id": "98",
-    "displayName": "Western Kentucky Hilltoppers",
-    "location": "Western Kentucky",
-    "region": "South",
-    "seed": 13
-  },
-  {
     "bracket_name": "Montana St",
     "espn_id": "147",
     "displayName": "Montana State Bobcats",
     "location": "Montana State",
+    "region": "South",
+    "seed": 13
+  },
+  {
+    "bracket_name": "Western KY",
+    "espn_id": "98",
+    "displayName": "Western Kentucky Hilltoppers",
+    "location": "Western Kentucky",
     "region": "Midwest",
     "seed": 13
   },
   {
-    "bracket_name": "Furman",
-    "espn_id": "231",
-    "displayName": "Furman Paladins",
-    "location": "Furman",
+    "bracket_name": "ETSU",
+    "espn_id": "2193",
+    "displayName": "East Tennessee State Buccaneers",
+    "location": "East Tennessee State",
     "region": "Midwest",
     "seed": 14
   },

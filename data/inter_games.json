@@ -90,6 +90,21 @@
     "venue": "United Supermarkets Arena"
   },
   {
+    "id": "401920424",
+    "date": "2026-11-08",
+    "name": "Arkansas Razorbacks at Virginia Cavaliers",
+    "team1_id": "258",
+    "team1_name": "Virginia Cavaliers",
+    "team1_score": "91",
+    "team1_winner": true,
+    "team2_id": "8",
+    "team2_name": "Arkansas Razorbacks",
+    "team2_score": "72",
+    "team2_winner": false,
+    "neutral": true,
+    "venue": "Capital One Arena"
+  },
+  {
     "id": "401909738",
     "date": "2026-11-03",
     "name": "Arizona Wildcats at UCLA Bruins",
@@ -120,19 +135,19 @@
     "venue": "Neville Arena"
   },
   {
-    "id": "401920424",
-    "date": "2026-11-08",
-    "name": "Arkansas Razorbacks at Virginia Cavaliers",
-    "team1_id": "258",
-    "team1_name": "Virginia Cavaliers",
-    "team1_score": "91",
+    "id": "401906866",
+    "date": "2026-11-15",
+    "name": "Baylor Bears at Texas Longhorns",
+    "team1_id": "251",
+    "team1_name": "Texas Longhorns",
+    "team1_score": "75",
     "team1_winner": true,
-    "team2_id": "8",
-    "team2_name": "Arkansas Razorbacks",
+    "team2_id": "239",
+    "team2_name": "Baylor Bears",
     "team2_score": "72",
     "team2_winner": false,
     "neutral": true,
-    "venue": "Capital One Arena"
+    "venue": "Frost Bank Center"
   },
   {
     "id": "401909532",
@@ -165,21 +180,6 @@
     "venue": "Spokane Numerica Veterans Arena"
   },
   {
-    "id": "401921133",
-    "date": "2026-11-06",
-    "name": "Bethune-Cookman Wildcats at Texas Tech Red Raiders",
-    "team1_id": "2641",
-    "team1_name": "Texas Tech Red Raiders",
-    "team1_score": "76",
-    "team1_winner": true,
-    "team2_id": "2065",
-    "team2_name": "Bethune-Cookman Wildcats",
-    "team2_score": "58",
-    "team2_winner": false,
-    "neutral": false,
-    "venue": "United Supermarkets Arena"
-  },
-  {
     "id": "401916313",
     "date": "2026-11-03",
     "name": "Ohio State Buckeyes at BYU Cougars",
@@ -208,6 +208,21 @@
     "team2_winner": false,
     "neutral": false,
     "venue": "Marriott Center"
+  },
+  {
+    "id": "401921133",
+    "date": "2026-11-06",
+    "name": "Bethune-Cookman Wildcats at Texas Tech Red Raiders",
+    "team1_id": "2641",
+    "team1_name": "Texas Tech Red Raiders",
+    "team1_score": "76",
+    "team1_winner": true,
+    "team2_id": "2065",
+    "team2_name": "Bethune-Cookman Wildcats",
+    "team2_score": "58",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "United Supermarkets Arena"
   },
   {
     "id": "401909524",
@@ -240,19 +255,19 @@
     "venue": "Tyson Events Center"
   },
   {
-    "id": "401917914",
-    "date": "2026-11-07",
-    "name": "Central Arkansas Bears at Ole Miss Rebels",
-    "team1_id": "145",
-    "team1_name": "Ole Miss Rebels",
-    "team1_score": "92",
-    "team1_winner": true,
-    "team2_id": "2110",
-    "team2_name": "Central Arkansas Bears",
-    "team2_score": "60",
-    "team2_winner": false,
-    "neutral": false,
-    "venue": "The Sandy and John Black Pavilion at Ole Miss"
+    "id": "401909493",
+    "date": "2026-11-15",
+    "name": "Creighton Bluejays at Iowa Hawkeyes",
+    "team1_id": "2294",
+    "team1_name": "Iowa Hawkeyes",
+    "team1_score": "69",
+    "team1_winner": false,
+    "team2_id": "156",
+    "team2_name": "Creighton Bluejays",
+    "team2_score": "70",
+    "team2_winner": true,
+    "neutral": true,
+    "venue": "Casey's Center"
   },
   {
     "id": "401909525",
@@ -268,6 +283,21 @@
     "team2_winner": false,
     "neutral": true,
     "venue": "United Center"
+  },
+  {
+    "id": "401917914",
+    "date": "2026-11-07",
+    "name": "Central Arkansas Bears at Ole Miss Rebels",
+    "team1_id": "145",
+    "team1_name": "Ole Miss Rebels",
+    "team1_score": "92",
+    "team1_winner": true,
+    "team2_id": "2110",
+    "team2_name": "Central Arkansas Bears",
+    "team2_score": "60",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "The Sandy and John Black Pavilion at Ole Miss"
   },
   {
     "id": "401911249",
@@ -315,19 +345,19 @@
     "venue": "Chaifetz Arena"
   },
   {
-    "id": "401921424",
+    "id": "401921731",
     "date": "2026-11-03",
-    "name": "Furman Paladins at Bethune-Cookman Wildcats",
-    "team1_id": "2065",
-    "team1_name": "Bethune-Cookman Wildcats",
-    "team1_score": "70",
-    "team1_winner": false,
-    "team2_id": "231",
-    "team2_name": "Furman Paladins",
-    "team2_score": "79",
-    "team2_winner": true,
-    "neutral": true,
-    "venue": "Sanford Pentagon"
+    "name": "East Tennessee State Buccaneers at Arizona State Sun Devils",
+    "team1_id": "9",
+    "team1_name": "Arizona State Sun Devils",
+    "team1_score": "75",
+    "team1_winner": true,
+    "team2_id": "2193",
+    "team2_name": "East Tennessee State Buccaneers",
+    "team2_score": "65",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "Desert Financial Arena"
   },
   {
     "id": "401917916",
@@ -373,20 +403,5 @@
     "team2_winner": false,
     "neutral": false,
     "venue": "Stegeman Coliseum"
-  },
-  {
-    "id": "401909493",
-    "date": "2026-11-15",
-    "name": "Creighton Bluejays at Iowa Hawkeyes",
-    "team1_id": "2294",
-    "team1_name": "Iowa Hawkeyes",
-    "team1_score": "69",
-    "team1_winner": false,
-    "team2_id": "156",
-    "team2_name": "Creighton Bluejays",
-    "team2_score": "70",
-    "team2_winner": true,
-    "neutral": true,
-    "venue": "Casey's Center"
   }
 ]
