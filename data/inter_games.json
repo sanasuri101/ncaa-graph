@@ -165,6 +165,21 @@
     "venue": "Mohegan Sun Arena"
   },
   {
+    "id": "401919041",
+    "date": "2026-11-13",
+    "name": "Oklahoma State Cowboys at Texas A&M Aggies",
+    "team1_id": "245",
+    "team1_name": "Texas A&M Aggies",
+    "team1_score": "88",
+    "team1_winner": true,
+    "team2_id": "197",
+    "team2_name": "Oklahoma State Cowboys",
+    "team2_score": "69",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "Reed Arena"
+  },
+  {
     "id": "401921689",
     "date": "2026-11-14",
     "name": "LSU Tigers at Gonzaga Bulldogs",
@@ -388,20 +403,5 @@
     "team2_winner": false,
     "neutral": false,
     "venue": "The Palestra"
-  },
-  {
-    "id": "401906781",
-    "date": "2026-11-10",
-    "name": "Florida Gulf Coast Eagles at Georgia Bulldogs",
-    "team1_id": "61",
-    "team1_name": "Georgia Bulldogs",
-    "team1_score": "80",
-    "team1_winner": true,
-    "team2_id": "526",
-    "team2_name": "Florida Gulf Coast Eagles",
-    "team2_score": "72",
-    "team2_winner": false,
-    "neutral": false,
-    "venue": "Stegeman Coliseum"
   }
 ]

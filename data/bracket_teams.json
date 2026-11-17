@@ -16,18 +16,18 @@
     "seed": 1
   },
   {
-    "bracket_name": "Kansas",
-    "espn_id": "2305",
-    "displayName": "Kansas Jayhawks",
-    "location": "Kansas",
-    "region": "South",
-    "seed": 1
-  },
-  {
     "bracket_name": "UConn",
     "espn_id": "41",
     "displayName": "UConn Huskies",
     "location": "UConn",
+    "region": "South",
+    "seed": 1
+  },
+  {
+    "bracket_name": "Kansas",
+    "espn_id": "2305",
+    "displayName": "Kansas Jayhawks",
+    "location": "Kansas",
     "region": "Midwest",
     "seed": 1
   },
@@ -56,18 +56,18 @@
     "seed": 2
   },
   {
-    "bracket_name": "Michigan St",
-    "espn_id": "127",
-    "displayName": "Michigan State Spartans",
-    "location": "Michigan State",
-    "region": "East",
-    "seed": 2
-  },
-  {
     "bracket_name": "Virginia",
     "espn_id": "258",
     "displayName": "Virginia Cavaliers",
     "location": "Virginia",
+    "region": "East",
+    "seed": 2
+  },
+  {
+    "bracket_name": "Michigan St",
+    "espn_id": "127",
+    "displayName": "Michigan State Spartans",
+    "location": "Michigan State",
     "region": "East",
     "seed": 3
   },
@@ -136,18 +136,18 @@
     "seed": 5
   },
   {
-    "bracket_name": "St John's",
-    "espn_id": "2599",
-    "displayName": "St. John's Red Storm",
-    "location": "St. John's",
-    "region": "West",
-    "seed": 5
-  },
-  {
     "bracket_name": "BYU",
     "espn_id": "252",
     "displayName": "BYU Cougars",
     "location": "BYU",
+    "region": "West",
+    "seed": 5
+  },
+  {
+    "bracket_name": "St John's",
+    "espn_id": "2599",
+    "displayName": "St. John's Red Storm",
+    "location": "St. John's",
     "region": "South",
     "seed": 5
   },
@@ -176,18 +176,18 @@
     "seed": 6
   },
   {
-    "bracket_name": "USC",
-    "espn_id": "30",
-    "displayName": "USC Trojans",
-    "location": "USC",
-    "region": "West",
-    "seed": 6
-  },
-  {
     "bracket_name": "Gonzaga",
     "espn_id": "2250",
     "displayName": "Gonzaga Bulldogs",
     "location": "Gonzaga",
+    "region": "West",
+    "seed": 6
+  },
+  {
+    "bracket_name": "USC",
+    "espn_id": "30",
+    "displayName": "USC Trojans",
+    "location": "USC",
     "region": "East",
     "seed": 6
   },
@@ -320,18 +320,18 @@
     "seed": 10
   },
   {
-    "bracket_name": "Murray St",
-    "espn_id": "93",
-    "displayName": "Murray State Racers",
-    "location": "Murray State",
-    "region": "East",
-    "seed": 11
-  },
-  {
     "bracket_name": "Santa Clara",
     "espn_id": "2541",
     "displayName": "Santa Clara Broncos",
     "location": "Santa Clara",
+    "region": "East",
+    "seed": 11
+  },
+  {
+    "bracket_name": "Murray St",
+    "espn_id": "93",
+    "displayName": "Murray State Racers",
+    "location": "Murray State",
     "region": "West",
     "seed": 11
   },
