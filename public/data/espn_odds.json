@@ -1,7 +1,24 @@
 {
-  "generated_at": "2026-11-17T01:21:21.373237+00:00",
+  "generated_at": "2026-11-17T15:02:13.179903+00:00",
   "games": {},
   "futures": {
+    "new mexico": {
+      "espn_id": "167",
+      "markets": {
+        "mountain_west_conference_winner": {
+          "moneyline": "+180",
+          "implied_pct": 35.7
+        },
+        "ncaa(b)_-_to_make_the_final_4": {
+          "moneyline": "+15000",
+          "implied_pct": 0.7
+        },
+        "championship": {
+          "moneyline": "+50000",
+          "implied_pct": 0.2
+        }
+      }
+    },
     "western ky": {
       "espn_id": "98",
       "markets": {
@@ -675,19 +692,6 @@
         }
       }
     },
-    "new mexico": {
-      "espn_id": "167",
-      "markets": {
-        "ncaa(b)_-_to_make_the_final_4": {
-          "moneyline": "+15000",
-          "implied_pct": 0.7
-        },
-        "championship": {
-          "moneyline": "+50000",
-          "implied_pct": 0.2
-        }
-      }
-    },
     "murray st": {
       "espn_id": "93",
       "markets": {
@@ -712,6 +716,10 @@
           "moneyline": "+25000",
           "implied_pct": 0.4
         },
+        "ncaa(b)_-_west_coast_conference_-_winner_(reg.season)": {
+          "moneyline": "+152",
+          "implied_pct": 39.7
+        },
         "championship": {
           "moneyline": "+100000",
           "implied_pct": 0.1
@@ -732,6 +740,15 @@
         "mid-american_conference_winner": {
           "moneyline": "+240",
           "implied_pct": 29.4
+        }
+      }
+    },
+    "south florida": {
+      "espn_id": "58",
+      "markets": {
+        "american_athletic_conference_winner": {
+          "moneyline": "+540",
+          "implied_pct": 15.6
         }
       }
     },

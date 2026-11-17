@@ -60,21 +60,6 @@
     "venue": "PeoplesBank Arena"
   },
   {
-    "id": "401913526",
-    "date": "2026-11-06",
-    "name": "Pennsylvania Quakers at Illinois Fighting Illini",
-    "team1_id": "356",
-    "team1_name": "Illinois Fighting Illini",
-    "team1_score": "112",
-    "team1_winner": true,
-    "team2_id": "219",
-    "team2_name": "Pennsylvania Quakers",
-    "team2_score": "70",
-    "team2_winner": false,
-    "neutral": false,
-    "venue": "State Farm Center"
-  },
-  {
     "id": "401913527",
     "date": "2026-11-11",
     "name": "Illinois Fighting Illini at Texas Tech Red Raiders",
@@ -88,21 +73,6 @@
     "team2_winner": false,
     "neutral": false,
     "venue": "United Supermarkets Arena"
-  },
-  {
-    "id": "401920424",
-    "date": "2026-11-08",
-    "name": "Arkansas Razorbacks at Virginia Cavaliers",
-    "team1_id": "258",
-    "team1_name": "Virginia Cavaliers",
-    "team1_score": "91",
-    "team1_winner": true,
-    "team2_id": "8",
-    "team2_name": "Arkansas Razorbacks",
-    "team2_score": "72",
-    "team2_winner": false,
-    "neutral": true,
-    "venue": "Capital One Arena"
   },
   {
     "id": "401909738",
@@ -135,19 +105,19 @@
     "venue": "Neville Arena"
   },
   {
-    "id": "401906866",
-    "date": "2026-11-15",
-    "name": "Baylor Bears at Texas Longhorns",
-    "team1_id": "251",
-    "team1_name": "Texas Longhorns",
-    "team1_score": "75",
+    "id": "401919041",
+    "date": "2026-11-13",
+    "name": "Oklahoma State Cowboys at Texas A&M Aggies",
+    "team1_id": "245",
+    "team1_name": "Texas A&M Aggies",
+    "team1_score": "88",
     "team1_winner": true,
-    "team2_id": "239",
-    "team2_name": "Baylor Bears",
-    "team2_score": "72",
+    "team2_id": "197",
+    "team2_name": "Oklahoma State Cowboys",
+    "team2_score": "69",
     "team2_winner": false,
-    "neutral": true,
-    "venue": "Frost Bank Center"
+    "neutral": false,
+    "venue": "Reed Arena"
   },
   {
     "id": "401909532",
@@ -165,19 +135,34 @@
     "venue": "Mohegan Sun Arena"
   },
   {
-    "id": "401919041",
-    "date": "2026-11-13",
-    "name": "Oklahoma State Cowboys at Texas A&M Aggies",
-    "team1_id": "245",
-    "team1_name": "Texas A&M Aggies",
-    "team1_score": "88",
+    "id": "401906866",
+    "date": "2026-11-15",
+    "name": "Baylor Bears at Texas Longhorns",
+    "team1_id": "251",
+    "team1_name": "Texas Longhorns",
+    "team1_score": "75",
     "team1_winner": true,
-    "team2_id": "197",
-    "team2_name": "Oklahoma State Cowboys",
-    "team2_score": "69",
+    "team2_id": "239",
+    "team2_name": "Baylor Bears",
+    "team2_score": "72",
+    "team2_winner": false,
+    "neutral": true,
+    "venue": "Frost Bank Center"
+  },
+  {
+    "id": "401921133",
+    "date": "2026-11-06",
+    "name": "Bethune-Cookman Wildcats at Texas Tech Red Raiders",
+    "team1_id": "2641",
+    "team1_name": "Texas Tech Red Raiders",
+    "team1_score": "76",
+    "team1_winner": true,
+    "team2_id": "2065",
+    "team2_name": "Bethune-Cookman Wildcats",
+    "team2_score": "58",
     "team2_winner": false,
     "neutral": false,
-    "venue": "Reed Arena"
+    "venue": "United Supermarkets Arena"
   },
   {
     "id": "401921689",
@@ -225,21 +210,6 @@
     "venue": "Marriott Center"
   },
   {
-    "id": "401921133",
-    "date": "2026-11-06",
-    "name": "Bethune-Cookman Wildcats at Texas Tech Red Raiders",
-    "team1_id": "2641",
-    "team1_name": "Texas Tech Red Raiders",
-    "team1_score": "76",
-    "team1_winner": true,
-    "team2_id": "2065",
-    "team2_name": "Bethune-Cookman Wildcats",
-    "team2_score": "58",
-    "team2_winner": false,
-    "neutral": false,
-    "venue": "United Supermarkets Arena"
-  },
-  {
     "id": "401909524",
     "date": "2026-11-12",
     "name": "Marquette Golden Eagles at Michigan Wolverines",
@@ -253,6 +223,36 @@
     "team2_winner": false,
     "neutral": false,
     "venue": "Crisler Center"
+  },
+  {
+    "id": "401912207",
+    "date": "2026-11-03",
+    "name": "American University Eagles at Cincinnati Bearcats",
+    "team1_id": "2132",
+    "team1_name": "Cincinnati Bearcats",
+    "team1_score": "79",
+    "team1_winner": true,
+    "team2_id": "44",
+    "team2_name": "American University Eagles",
+    "team2_score": "53",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "Fifth Third Arena (OH)"
+  },
+  {
+    "id": "401916305",
+    "date": "2026-11-10",
+    "name": "Minnesota Golden Gophers at Cincinnati Bearcats",
+    "team1_id": "2132",
+    "team1_name": "Cincinnati Bearcats",
+    "team1_score": "61",
+    "team1_winner": false,
+    "team2_id": "135",
+    "team2_name": "Minnesota Golden Gophers",
+    "team2_score": "63",
+    "team2_winner": true,
+    "neutral": false,
+    "venue": "Fifth Third Arena (OH)"
   },
   {
     "id": "401920378",
@@ -375,33 +375,33 @@
     "venue": "Desert Financial Arena"
   },
   {
-    "id": "401917916",
-    "date": "2026-11-14",
-    "name": "Central Arkansas Bears at Arkansas Razorbacks",
-    "team1_id": "8",
-    "team1_name": "Arkansas Razorbacks",
-    "team1_score": "79",
+    "id": "401917917",
+    "date": "2026-11-17",
+    "name": "Central Arkansas Bears at Oklahoma State Cowboys",
+    "team1_id": "197",
+    "team1_name": "Oklahoma State Cowboys",
+    "team1_score": "99",
     "team1_winner": true,
     "team2_id": "2110",
     "team2_name": "Central Arkansas Bears",
     "team2_score": "66",
     "team2_winner": false,
     "neutral": false,
-    "venue": "Bud Walton Arena"
+    "venue": "Gallagher-Iba Arena"
   },
   {
-    "id": "401921180",
-    "date": "2026-11-09",
-    "name": "Howard Bison at Pennsylvania Quakers",
-    "team1_id": "219",
-    "team1_name": "Pennsylvania Quakers",
-    "team1_score": "78",
+    "id": "401906781",
+    "date": "2026-11-10",
+    "name": "Florida Gulf Coast Eagles at Georgia Bulldogs",
+    "team1_id": "61",
+    "team1_name": "Georgia Bulldogs",
+    "team1_score": "80",
     "team1_winner": true,
-    "team2_id": "47",
-    "team2_name": "Howard Bison",
-    "team2_score": "65",
+    "team2_id": "526",
+    "team2_name": "Florida Gulf Coast Eagles",
+    "team2_score": "72",
     "team2_winner": false,
     "neutral": false,
-    "venue": "The Palestra"
+    "venue": "Stegeman Coliseum"
   }
 ]

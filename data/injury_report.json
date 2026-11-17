@@ -1,9 +1,28 @@
 {
-  "generated_at": "2026-11-17T01:21:42.367216+00:00",
+  "generated_at": "2026-11-17T15:02:49.513093+00:00",
   "teams": {
+    "2305": {
+      "bracket_name": "Kansas",
+      "region": "South",
+      "seed": 1,
+      "adj_em_penalty": 0,
+      "players": [],
+      "notes": "",
+      "override_date": "",
+      "news_flags": [
+        {
+          "headline": "Kansas' Melvin Council Jr. suffers broken foot, might be out until January",
+          "description": "Kansas guard Melvin Council Jr. suffered a broken foot in practice Monday and could be out until the start of Big 12 conference play which begins in January.",
+          "published": "2026-11-09",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50435012/kansas-council-suffers-broken-foot-jan"
+        }
+      ],
+      "has_override": false,
+      "has_news_flag": true
+    },
     "127": {
       "bracket_name": "Michigan St",
-      "region": "East",
+      "region": "West",
       "seed": 3,
       "adj_em_penalty": 0,
       "players": [],
@@ -22,37 +41,6 @@
     },
     "41": {
       "bracket_name": "UConn",
-      "region": "South",
-      "seed": 1,
-      "adj_em_penalty": 0,
-      "players": [],
-      "notes": "",
-      "override_date": "",
-      "news_flags": [
-        {
-          "headline": "UConn's Solo Ball nearing surprise return amid rehab from wrist surgery",
-          "description": "UConn guard Solo Ball has been cleared for a return to full-contact practice after offseason wrist surgery, with the expectation that he'll return to game action this season.",
-          "published": "2026-11-16",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50503592/uconn-ball-cleared-full-contact-practice-ahead-return"
-        },
-        {
-          "headline": "UConn's Solo Ball nearing surprise return amid rehab from wrist surgery",
-          "description": "UConn guard Solo Ball has been cleared for a return to full-contact practice after offseason wrist surgery, with the expectation that he'll return to game action this season.",
-          "published": "2026-11-16",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50503592/uconn-ball-cleared-full-contact-practice-ahead-return"
-        },
-        {
-          "headline": "UConn's Solo Ball nearing surprise return amid rehab from wrist surgery",
-          "description": "UConn guard Solo Ball has been cleared for a return to full-contact practice after offseason wrist surgery, with the expectation that he'll return to game action this season.",
-          "published": "2026-11-16",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50503592/uconn-ball-cleared-full-contact-practice-ahead-return"
-        }
-      ],
-      "has_override": false,
-      "has_news_flag": true
-    },
-    "2305": {
-      "bracket_name": "Kansas",
       "region": "Midwest",
       "seed": 1,
       "adj_em_penalty": 0,
@@ -61,10 +49,22 @@
       "override_date": "",
       "news_flags": [
         {
-          "headline": "Kansas' Melvin Council Jr. suffers broken foot, might be out until January",
-          "description": "Kansas guard Melvin Council Jr. suffered a broken foot in practice Monday and could be out until the start of Big 12 conference play which begins in January.",
-          "published": "2026-11-09",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50435012/kansas-council-suffers-broken-foot-jan"
+          "headline": "UConn's Solo Ball nearing surprise return amid rehab from wrist surgery",
+          "description": "UConn guard Solo Ball has been cleared for a return to full-contact practice after offseason wrist surgery, with the expectation that he'll return to game action this season.",
+          "published": "2026-11-16",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50503592/uconn-ball-cleared-full-contact-practice-ahead-return"
+        },
+        {
+          "headline": "UConn's Nik Khamenia to have foot surgery, be rechecked in 6-8 weeks",
+          "description": "UConn coach Dan Hurley said Thursday that starting forward Nik Khamenia will have surgery on his left foot and be reevaluated in six to eight weeks.",
+          "published": "2026-11-12",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50464962/uconn-nik-khamenia-foot-surgery"
+        },
+        {
+          "headline": "No. 4 UConn rolls past Wagner 83-41 but loses forward Nik Khamenia to injury",
+          "description": "\u2014 Silas Demary Jr. had 18 points and a career-high six steals to lead fourth-ranked UConn to a 83-41 win over Wagner on Monday night.",
+          "published": "2026-11-10",
+          "url": "http://www.espn.com/ncb/recap?gameId=401920686"
         }
       ],
       "has_override": false,
