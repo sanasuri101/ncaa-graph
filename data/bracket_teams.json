@@ -16,11 +16,19 @@
     "seed": 1
   },
   {
+    "bracket_name": "Houston",
+    "espn_id": "248",
+    "displayName": "Houston Cougars",
+    "location": "Houston",
+    "region": "South",
+    "seed": 1
+  },
+  {
     "bracket_name": "Kansas",
     "espn_id": "2305",
     "displayName": "Kansas Jayhawks",
     "location": "Kansas",
-    "region": "South",
+    "region": "Midwest",
     "seed": 1
   },
   {
@@ -28,14 +36,6 @@
     "espn_id": "41",
     "displayName": "UConn Huskies",
     "location": "UConn",
-    "region": "Midwest",
-    "seed": 1
-  },
-  {
-    "bracket_name": "Houston",
-    "espn_id": "248",
-    "displayName": "Houston Cougars",
-    "location": "Houston",
     "region": "Midwest",
     "seed": 2
   },
@@ -88,18 +88,18 @@
     "seed": 3
   },
   {
-    "bracket_name": "Nebraska",
-    "espn_id": "158",
-    "displayName": "Nebraska Cornhuskers",
-    "location": "Nebraska",
-    "region": "Midwest",
-    "seed": 3
-  },
-  {
     "bracket_name": "Texas",
     "espn_id": "251",
     "displayName": "Texas Longhorns",
     "location": "Texas",
+    "region": "Midwest",
+    "seed": 3
+  },
+  {
+    "bracket_name": "Nebraska",
+    "espn_id": "158",
+    "displayName": "Nebraska Cornhuskers",
+    "location": "Nebraska",
     "region": "Midwest",
     "seed": 4
   },
@@ -120,18 +120,18 @@
     "seed": 4
   },
   {
-    "bracket_name": "Texas Tech",
-    "espn_id": "2641",
-    "displayName": "Texas Tech Red Raiders",
-    "location": "Texas Tech",
-    "region": "East",
-    "seed": 4
-  },
-  {
     "bracket_name": "LSU",
     "espn_id": "99",
     "displayName": "LSU Tigers",
     "location": "LSU",
+    "region": "East",
+    "seed": 4
+  },
+  {
+    "bracket_name": "Texas Tech",
+    "espn_id": "2641",
+    "displayName": "Texas Tech Red Raiders",
+    "location": "Texas Tech",
     "region": "East",
     "seed": 5
   },
@@ -272,18 +272,18 @@
     "seed": 9
   },
   {
-    "bracket_name": "West Virginia",
-    "espn_id": "277",
-    "displayName": "West Virginia Mountaineers",
-    "location": "West Virginia",
-    "region": "South",
-    "seed": 9
-  },
-  {
     "bracket_name": "Ole Miss",
     "espn_id": "145",
     "displayName": "Ole Miss Rebels",
     "location": "Ole Miss",
+    "region": "South",
+    "seed": 9
+  },
+  {
+    "bracket_name": "West Virginia",
+    "espn_id": "277",
+    "displayName": "West Virginia Mountaineers",
+    "location": "West Virginia",
     "region": "Midwest",
     "seed": 9
   },

@@ -120,21 +120,6 @@
     "venue": "Reed Arena"
   },
   {
-    "id": "401909532",
-    "date": "2026-11-08",
-    "name": "Providence Friars at Nebraska Cornhuskers",
-    "team1_id": "158",
-    "team1_name": "Nebraska Cornhuskers",
-    "team1_score": "67",
-    "team1_winner": true,
-    "team2_id": "2507",
-    "team2_name": "Providence Friars",
-    "team2_score": "58",
-    "team2_winner": false,
-    "neutral": true,
-    "venue": "Mohegan Sun Arena"
-  },
-  {
     "id": "401906866",
     "date": "2026-11-15",
     "name": "Baylor Bears at Texas Longhorns",
@@ -150,19 +135,19 @@
     "venue": "Frost Bank Center"
   },
   {
-    "id": "401921133",
-    "date": "2026-11-06",
-    "name": "Bethune-Cookman Wildcats at Texas Tech Red Raiders",
-    "team1_id": "2641",
-    "team1_name": "Texas Tech Red Raiders",
-    "team1_score": "76",
+    "id": "401909532",
+    "date": "2026-11-08",
+    "name": "Providence Friars at Nebraska Cornhuskers",
+    "team1_id": "158",
+    "team1_name": "Nebraska Cornhuskers",
+    "team1_score": "67",
     "team1_winner": true,
-    "team2_id": "2065",
-    "team2_name": "Bethune-Cookman Wildcats",
+    "team2_id": "2507",
+    "team2_name": "Providence Friars",
     "team2_score": "58",
     "team2_winner": false,
-    "neutral": false,
-    "venue": "United Supermarkets Arena"
+    "neutral": true,
+    "venue": "Mohegan Sun Arena"
   },
   {
     "id": "401921689",
@@ -178,6 +163,21 @@
     "team2_winner": true,
     "neutral": false,
     "venue": "Spokane Numerica Veterans Arena"
+  },
+  {
+    "id": "401921133",
+    "date": "2026-11-06",
+    "name": "Bethune-Cookman Wildcats at Texas Tech Red Raiders",
+    "team1_id": "2641",
+    "team1_name": "Texas Tech Red Raiders",
+    "team1_score": "76",
+    "team1_winner": true,
+    "team2_id": "2065",
+    "team2_name": "Bethune-Cookman Wildcats",
+    "team2_score": "58",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "United Supermarkets Arena"
   },
   {
     "id": "401916313",

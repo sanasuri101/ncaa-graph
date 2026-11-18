@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-11-17T15:02:49.513093+00:00",
+  "generated_at": "2026-11-18T00:18:04.631423+00:00",
   "teams": {
     "2305": {
       "bracket_name": "Kansas",
-      "region": "South",
+      "region": "Midwest",
       "seed": 1,
       "adj_em_penalty": 0,
       "players": [],
@@ -42,7 +42,7 @@
     "41": {
       "bracket_name": "UConn",
       "region": "Midwest",
-      "seed": 1,
+      "seed": 2,
       "adj_em_penalty": 0,
       "players": [],
       "notes": "",
