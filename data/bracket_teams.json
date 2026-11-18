@@ -184,19 +184,27 @@
     "seed": 6
   },
   {
+    "bracket_name": "Baylor",
+    "espn_id": "239",
+    "displayName": "Baylor Bears",
+    "location": "Baylor",
+    "region": "East",
+    "seed": 6
+  },
+  {
     "bracket_name": "Xavier",
     "espn_id": "2752",
     "displayName": "Xavier Musketeers",
     "location": "Xavier",
     "region": "East",
-    "seed": 6
+    "seed": 7
   },
   {
     "bracket_name": "Michigan",
     "espn_id": "130",
     "displayName": "Michigan Wolverines",
     "location": "Michigan",
-    "region": "East",
+    "region": "West",
     "seed": 7
   },
   {
@@ -204,14 +212,6 @@
     "espn_id": "2132",
     "displayName": "Cincinnati Bearcats",
     "location": "Cincinnati",
-    "region": "West",
-    "seed": 7
-  },
-  {
-    "bracket_name": "Baylor",
-    "espn_id": "239",
-    "displayName": "Baylor Bears",
-    "location": "Baylor",
     "region": "South",
     "seed": 7
   },
@@ -272,18 +272,18 @@
     "seed": 9
   },
   {
-    "bracket_name": "West Virginia",
-    "espn_id": "277",
-    "displayName": "West Virginia Mountaineers",
-    "location": "West Virginia",
-    "region": "South",
-    "seed": 9
-  },
-  {
     "bracket_name": "Marquette",
     "espn_id": "269",
     "displayName": "Marquette Golden Eagles",
     "location": "Marquette",
+    "region": "South",
+    "seed": 9
+  },
+  {
+    "bracket_name": "West Virginia",
+    "espn_id": "277",
+    "displayName": "West Virginia Mountaineers",
+    "location": "West Virginia",
     "region": "Midwest",
     "seed": 9
   },

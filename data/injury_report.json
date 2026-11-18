@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-11-18T14:43:28.468511+00:00",
+  "generated_at": "2026-11-18T23:44:48.794563+00:00",
   "teams": {
-    "2305": {
-      "bracket_name": "Kansas",
-      "region": "South",
+    "248": {
+      "bracket_name": "Houston",
+      "region": "Midwest",
       "seed": 1,
       "adj_em_penalty": 0,
       "players": [],
@@ -11,10 +11,16 @@
       "override_date": "",
       "news_flags": [
         {
-          "headline": "Kansas' Melvin Council Jr. suffers broken foot, might be out until January",
-          "description": "Kansas guard Melvin Council Jr. suffered a broken foot in practice Monday and could be out until the start of Big 12 conference play which begins in January.",
-          "published": "2026-11-09",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50435012/kansas-council-suffers-broken-foot-jan"
+          "headline": "Gators' Boogie Fland aggravates shoulder injury, status vs. Houston in question",
+          "description": "Boogie Fland left the Gators' 86-78 win over Notre Dame after aggravating a right shoulder injury, and his availability for the Houston game is uncertain.",
+          "published": "2026-11-18",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50515779/gators-boogie-fland-aggravates-shoulder-injury"
+        },
+        {
+          "headline": "Gators' Boogie Fland aggravates shoulder injury, status vs. Houston in question",
+          "description": "Boogie Fland left the Gators' 86-78 win over Notre Dame after aggravating a right shoulder injury, and his availability for the Houston game is uncertain.",
+          "published": "2026-11-18",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50515779/gators-boogie-fland-aggravates-shoulder-injury"
         }
       ],
       "has_override": false,
@@ -51,6 +57,37 @@
       "has_override": false,
       "has_news_flag": true
     },
+    "2305": {
+      "bracket_name": "Kansas",
+      "region": "South",
+      "seed": 1,
+      "adj_em_penalty": 0,
+      "players": [],
+      "notes": "",
+      "override_date": "",
+      "news_flags": [
+        {
+          "headline": "Kansas says Tyran Stokes game-time call vs. West Virginia",
+          "description": "Kansas freshman Tyran Stokes, the projected No. 1 pick in the 2027 NBA draft, will be a game-time call Wednesday night against West Virginia after exiting the Jayhawks' game a night earlier with an in",
+          "published": "2026-11-18",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50524441/kansas-says-tyran-stokes-game-call-vs-west-virginia"
+        },
+        {
+          "headline": "Kansas says Tyran Stokes game-time call vs. West Virginia",
+          "description": "Kansas freshman Tyran Stokes, the projected No. 1 pick in the 2027 NBA draft, will be a game-time call Wednesday night against West Virginia after exiting the Jayhawks' game a night earlier with an in",
+          "published": "2026-11-18",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50524441/kansas-says-tyran-stokes-game-call-vs-west-virginia"
+        },
+        {
+          "headline": "Kansas says Tyran Stokes game-time call vs. West Virginia",
+          "description": "Kansas freshman Tyran Stokes, the projected No. 1 pick in the 2027 NBA draft, will be a game-time call Wednesday night against West Virginia after exiting the Jayhawks' game a night earlier with an in",
+          "published": "2026-11-18",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50524441/kansas-says-tyran-stokes-game-call-vs-west-virginia"
+        }
+      ],
+      "has_override": false,
+      "has_news_flag": true
+    },
     "57": {
       "bracket_name": "Florida",
       "region": "East",
@@ -61,16 +98,22 @@
       "override_date": "",
       "news_flags": [
         {
-          "headline": "Gators' Boogie Fland aggravates shoulder injury, status vs. Houston in question",
-          "description": "Boogie Fland left the Gators' 86-78 win over Notre Dame after aggravating a right shoulder injury and his availability for the Houston game is uncertain.",
+          "headline": "Gators PG Boogie Fland starts vs. Houston despite injury",
+          "description": "Florida guard Boogie Fland started against Houston on Wednesday despite being considered a game-time decision.",
           "published": "2026-11-18",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50515779/gators-boogie-fland-aggravates-shoulder-injury"
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50524333/gators-pg-boogie-fland-starts-vs-houston-injury"
         },
         {
-          "headline": "Gators' Boogie Fland aggravates shoulder injury, status vs. Houston in question",
-          "description": "Boogie Fland left the Gators' 86-78 win over Notre Dame after aggravating a right shoulder injury and his availability for the Houston game is uncertain.",
+          "headline": "Gators PG Boogie Fland starts vs. Houston despite injury",
+          "description": "Florida guard Boogie Fland started against Houston on Wednesday despite being considered a game-time decision.",
           "published": "2026-11-18",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50515779/gators-boogie-fland-aggravates-shoulder-injury"
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50524333/gators-pg-boogie-fland-starts-vs-houston-injury"
+        },
+        {
+          "headline": "Gators PG Boogie Fland starts vs. Houston despite injury",
+          "description": "Florida guard Boogie Fland started against Houston on Wednesday despite being considered a game-time decision.",
+          "published": "2026-11-18",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50524333/gators-pg-boogie-fland-starts-vs-houston-injury"
         }
       ],
       "has_override": false,
@@ -90,31 +133,6 @@
           "description": "Jordan Scott injured his right shoulder as No. 5 Michigan State beat Northern Iowa 106-72 on Friday night.",
           "published": "2026-11-14",
           "url": "https://www.espn.com/mens-college-basketball/story/_/id/50476961/michigan-state-forward-jordan-scott-injures-right-shoulder-win-vs-northern-iowa"
-        }
-      ],
-      "has_override": false,
-      "has_news_flag": true
-    },
-    "248": {
-      "bracket_name": "Houston",
-      "region": "Midwest",
-      "seed": 1,
-      "adj_em_penalty": 0,
-      "players": [],
-      "notes": "",
-      "override_date": "",
-      "news_flags": [
-        {
-          "headline": "Gators' Boogie Fland aggravates shoulder injury, status vs. Houston in question",
-          "description": "Boogie Fland left the Gators' 86-78 win over Notre Dame after aggravating a right shoulder injury and his availability for the Houston game is uncertain.",
-          "published": "2026-11-18",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50515779/gators-boogie-fland-aggravates-shoulder-injury"
-        },
-        {
-          "headline": "Gators' Boogie Fland aggravates shoulder injury, status vs. Houston in question",
-          "description": "Boogie Fland left the Gators' 86-78 win over Notre Dame after aggravating a right shoulder injury and his availability for the Houston game is uncertain.",
-          "published": "2026-11-18",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50515779/gators-boogie-fland-aggravates-shoulder-injury"
         }
       ],
       "has_override": false,

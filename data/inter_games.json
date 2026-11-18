@@ -90,21 +90,6 @@
     "venue": "United Center"
   },
   {
-    "id": "401920424",
-    "date": "2026-11-08",
-    "name": "Arkansas Razorbacks at Virginia Cavaliers",
-    "team1_id": "258",
-    "team1_name": "Virginia Cavaliers",
-    "team1_score": "91",
-    "team1_winner": true,
-    "team2_id": "8",
-    "team2_name": "Arkansas Razorbacks",
-    "team2_score": "72",
-    "team2_winner": false,
-    "neutral": true,
-    "venue": "Capital One Arena"
-  },
-  {
     "id": "401920426",
     "date": "2026-11-18",
     "name": "Old Dominion Monarchs at Virginia Cavaliers",
@@ -330,21 +315,6 @@
     "venue": "Fifth Third Arena (OH)"
   },
   {
-    "id": "401916289",
-    "date": "2026-11-18",
-    "name": "Arkansas Razorbacks at Indiana Hoosiers",
-    "team1_id": "84",
-    "team1_name": "Indiana Hoosiers",
-    "team1_score": "81",
-    "team1_winner": true,
-    "team2_id": "8",
-    "team2_name": "Arkansas Razorbacks",
-    "team2_score": "76",
-    "team2_winner": false,
-    "neutral": true,
-    "venue": "Madison Square Garden"
-  },
-  {
     "id": "401920378",
     "date": "2026-11-11",
     "name": "Virginia Tech Hokies at Iowa Hawkeyes",
@@ -493,21 +463,6 @@
     "team2_winner": true,
     "neutral": true,
     "venue": "Sanford Pentagon"
-  },
-  {
-    "id": "401917916",
-    "date": "2026-11-14",
-    "name": "Central Arkansas Bears at Arkansas Razorbacks",
-    "team1_id": "8",
-    "team1_name": "Arkansas Razorbacks",
-    "team1_score": "79",
-    "team1_winner": true,
-    "team2_id": "2110",
-    "team2_name": "Central Arkansas Bears",
-    "team2_score": "66",
-    "team2_winner": false,
-    "neutral": false,
-    "venue": "Bud Walton Arena"
   },
   {
     "id": "401906781",
