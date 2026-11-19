@@ -1,7 +1,20 @@
 {
-  "generated_at": "2026-11-18T23:44:28.253265+00:00",
+  "generated_at": "2026-11-19T14:50:04.227692+00:00",
   "games": {},
   "futures": {
+    "new mexico": {
+      "espn_id": "167",
+      "markets": {
+        "mountain_west_conference_winner": {
+          "moneyline": "+180",
+          "implied_pct": 35.7
+        },
+        "championship": {
+          "moneyline": "+50000",
+          "implied_pct": 0.2
+        }
+      }
+    },
     "western ky": {
       "espn_id": "98",
       "markets": {
@@ -32,8 +45,8 @@
           "implied_pct": 21.7
         },
         "championship": {
-          "moneyline": "+1950",
-          "implied_pct": 4.9
+          "moneyline": "+1500",
+          "implied_pct": 6.2
         }
       }
     },
@@ -45,8 +58,8 @@
           "implied_pct": 17.4
         },
         "championship": {
-          "moneyline": "+2600",
-          "implied_pct": 3.7
+          "moneyline": "+2200",
+          "implied_pct": 4.3
         }
       }
     },
@@ -97,8 +110,8 @@
           "implied_pct": 3.3
         },
         "championship": {
-          "moneyline": "+20000",
-          "implied_pct": 0.5
+          "moneyline": "+12000",
+          "implied_pct": 0.8
         }
       }
     },
@@ -128,19 +141,6 @@
         }
       }
     },
-    "oklahoma st": {
-      "espn_id": "197",
-      "markets": {
-        "big_12_conference_winner": {
-          "moneyline": "+3000",
-          "implied_pct": 3.2
-        },
-        "championship": {
-          "moneyline": "+25000",
-          "implied_pct": 0.4
-        }
-      }
-    },
     "duke": {
       "espn_id": "150",
       "markets": {
@@ -149,8 +149,8 @@
           "implied_pct": 55.6
         },
         "championship": {
-          "moneyline": "+800",
-          "implied_pct": 11.1
+          "moneyline": "+820",
+          "implied_pct": 10.9
         }
       }
     },
@@ -167,6 +167,19 @@
         }
       }
     },
+    "louisville": {
+      "espn_id": "97",
+      "markets": {
+        "atlantic_coast_conference_winner": {
+          "moneyline": "+520",
+          "implied_pct": 16.1
+        },
+        "championship": {
+          "moneyline": "+4500",
+          "implied_pct": 2.2
+        }
+      }
+    },
     "miami": {
       "espn_id": "2390",
       "markets": {
@@ -180,12 +193,16 @@
         }
       }
     },
-    "south florida": {
-      "espn_id": "58",
+    "wichita st": {
+      "espn_id": "2724",
       "markets": {
         "american_athletic_conference_winner": {
-          "moneyline": "+540",
-          "implied_pct": 15.6
+          "moneyline": "+255",
+          "implied_pct": 28.2
+        },
+        "championship": {
+          "moneyline": "+100000",
+          "implied_pct": 0.1
         }
       }
     },
@@ -197,8 +214,8 @@
           "implied_pct": 46.3
         },
         "championship": {
-          "moneyline": "+700",
-          "implied_pct": 12.5
+          "moneyline": "+750",
+          "implied_pct": 11.8
         }
       }
     },
@@ -275,8 +292,8 @@
           "implied_pct": 4.3
         },
         "championship": {
-          "moneyline": "+10000",
-          "implied_pct": 1.0
+          "moneyline": "+13000",
+          "implied_pct": 0.8
         }
       }
     },
@@ -431,8 +448,8 @@
           "implied_pct": 52.4
         },
         "championship": {
-          "moneyline": "+950",
-          "implied_pct": 9.5
+          "moneyline": "+1050",
+          "implied_pct": 8.7
         }
       }
     },
@@ -524,15 +541,6 @@
         }
       }
     },
-    "new mexico": {
-      "espn_id": "167",
-      "markets": {
-        "championship": {
-          "moneyline": "+50000",
-          "implied_pct": 0.2
-        }
-      }
-    },
     "santa clara": {
       "espn_id": "2541",
       "markets": {
@@ -568,12 +576,12 @@
         }
       }
     },
-    "uc irvine": {
-      "espn_id": "300",
+    "santa barbara": {
+      "espn_id": "2540",
       "markets": {
         "big_west_conference_winner": {
-          "moneyline": "+325",
-          "implied_pct": 23.5
+          "moneyline": "+168",
+          "implied_pct": 37.3
         }
       }
     }
