@@ -1,17 +1,17 @@
 [
   {
-    "bracket_name": "Houston",
-    "espn_id": "248",
-    "displayName": "Houston Cougars",
-    "location": "Houston",
-    "region": "East",
-    "seed": 1
-  },
-  {
     "bracket_name": "Florida",
     "espn_id": "57",
     "displayName": "Florida Gators",
     "location": "Florida",
+    "region": "East",
+    "seed": 1
+  },
+  {
+    "bracket_name": "Houston",
+    "espn_id": "248",
+    "displayName": "Houston Cougars",
+    "location": "Houston",
     "region": "West",
     "seed": 1
   },
@@ -32,18 +32,18 @@
     "seed": 1
   },
   {
-    "bracket_name": "Duke",
-    "espn_id": "150",
-    "displayName": "Duke Blue Devils",
-    "location": "Duke",
-    "region": "Midwest",
-    "seed": 2
-  },
-  {
     "bracket_name": "Vanderbilt",
     "espn_id": "238",
     "displayName": "Vanderbilt Commodores",
     "location": "Vanderbilt",
+    "region": "Midwest",
+    "seed": 2
+  },
+  {
+    "bracket_name": "Duke",
+    "espn_id": "150",
+    "displayName": "Duke Blue Devils",
+    "location": "Duke",
     "region": "South",
     "seed": 2
   },
@@ -264,19 +264,11 @@
     "seed": 9
   },
   {
-    "bracket_name": "West Virginia",
-    "espn_id": "277",
-    "displayName": "West Virginia Mountaineers",
-    "location": "West Virginia",
-    "region": "West",
-    "seed": 9
-  },
-  {
     "bracket_name": "Louisville",
     "espn_id": "97",
     "displayName": "Louisville Cardinals",
     "location": "Louisville",
-    "region": "South",
+    "region": "West",
     "seed": 9
   },
   {
@@ -284,7 +276,7 @@
     "espn_id": "2507",
     "displayName": "Providence Friars",
     "location": "Providence",
-    "region": "Midwest",
+    "region": "South",
     "seed": 9
   },
   {
@@ -293,13 +285,21 @@
     "displayName": "Utah State Aggies",
     "location": "Utah State",
     "region": "Midwest",
-    "seed": 10
+    "seed": 9
   },
   {
     "bracket_name": "Marquette",
     "espn_id": "269",
     "displayName": "Marquette Golden Eagles",
     "location": "Marquette",
+    "region": "Midwest",
+    "seed": 10
+  },
+  {
+    "bracket_name": "West Virginia",
+    "espn_id": "277",
+    "displayName": "West Virginia Mountaineers",
+    "location": "West Virginia",
     "region": "South",
     "seed": 10
   },
