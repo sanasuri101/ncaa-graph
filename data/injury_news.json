@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-11-20T00:04:55.550508+00:00",
+  "generated_at": "2026-11-20T14:31:29.837276+00:00",
   "flagged_teams": 5,
   "teams": {
     "127": {
       "bracket_name": "Michigan St",
-      "region": "Midwest",
+      "region": "West",
       "seed": 4,
       "articles": [
         {
@@ -25,18 +25,12 @@
           "description": "Kansas freshman Tyran Stokes suffered a bone bruise in his knee during the Jayhawks' game a night earlier and is day-to-day.",
           "published": "2026-11-19",
           "url": "https://www.espn.com/mens-college-basketball/story/_/id/50524441/kansas-says-tyran-stokes-game-call-vs-west-virginia"
-        },
-        {
-          "headline": "Kansas' Melvin Council Jr. suffers broken foot, might be out until January",
-          "description": "Kansas guard Melvin Council Jr. suffered a broken foot in practice Monday and could be out until the start of Big 12 conference play which begins in January.",
-          "published": "2026-11-09",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50435012/kansas-council-suffers-broken-foot-jan"
         }
       ]
     },
     "57": {
       "bracket_name": "Florida",
-      "region": "East",
+      "region": "West",
       "seed": 1,
       "articles": [
         {
@@ -67,7 +61,7 @@
     },
     "248": {
       "bracket_name": "Houston",
-      "region": "West",
+      "region": "East",
       "seed": 1,
       "articles": [
         {
