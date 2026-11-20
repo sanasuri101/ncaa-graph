@@ -525,34 +525,19 @@
     "venue": "The Sandy and John Black Pavilion at Ole Miss"
   },
   {
-    "id": "401920512",
-    "date": "2026-11-18",
-    "name": "West Virginia Mountaineers at Auburn Tigers",
-    "team1_id": "2",
-    "team1_name": "Auburn Tigers",
-    "team1_score": "70",
-    "team1_winner": false,
-    "team2_id": "277",
-    "team2_name": "West Virginia Mountaineers",
-    "team2_score": "76",
-    "team2_winner": true,
-    "neutral": true,
-    "venue": "Michelob ULTRA Arena"
-  },
-  {
-    "id": "401917917",
-    "date": "2026-11-17",
-    "name": "Central Arkansas Bears at Oklahoma State Cowboys",
-    "team1_id": "197",
-    "team1_name": "Oklahoma State Cowboys",
-    "team1_score": "99",
+    "id": "401921418",
+    "date": "2026-11-20",
+    "name": "Oklahoma State Cowboys at Minnesota Golden Gophers",
+    "team1_id": "135",
+    "team1_name": "Minnesota Golden Gophers",
+    "team1_score": "85",
     "team1_winner": true,
-    "team2_id": "2110",
-    "team2_name": "Central Arkansas Bears",
-    "team2_score": "66",
+    "team2_id": "197",
+    "team2_name": "Oklahoma State Cowboys",
+    "team2_score": "70",
     "team2_winner": false,
-    "neutral": false,
-    "venue": "Gallagher-Iba Arena"
+    "neutral": true,
+    "venue": "TD Arena"
   },
   {
     "id": "401917530",
@@ -615,21 +600,6 @@
     "venue": "Atlantic Union Bank Center"
   },
   {
-    "id": "401919808",
-    "date": "2026-11-19",
-    "name": "UNC Wilmington Seahawks at Long Island University Sharks",
-    "team1_id": "112358",
-    "team1_name": "Long Island University Sharks",
-    "team1_score": "115",
-    "team1_winner": true,
-    "team2_id": "350",
-    "team2_name": "UNC Wilmington Seahawks",
-    "team2_score": "114",
-    "team2_winner": false,
-    "neutral": false,
-    "venue": "Brooklyn Athletic Center"
-  },
-  {
     "id": "401917916",
     "date": "2026-11-14",
     "name": "Central Arkansas Bears at Arkansas Razorbacks",
@@ -643,6 +613,21 @@
     "team2_winner": false,
     "neutral": false,
     "venue": "Bud Walton Arena"
+  },
+  {
+    "id": "401917917",
+    "date": "2026-11-17",
+    "name": "Central Arkansas Bears at Oklahoma State Cowboys",
+    "team1_id": "197",
+    "team1_name": "Oklahoma State Cowboys",
+    "team1_score": "99",
+    "team1_winner": true,
+    "team2_id": "2110",
+    "team2_name": "Central Arkansas Bears",
+    "team2_score": "66",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "Gallagher-Iba Arena"
   },
   {
     "id": "401906781",
@@ -673,5 +658,20 @@
     "team2_winner": false,
     "neutral": false,
     "venue": "CHI Health Center Omaha"
+  },
+  {
+    "id": "401920512",
+    "date": "2026-11-18",
+    "name": "West Virginia Mountaineers at Auburn Tigers",
+    "team1_id": "2",
+    "team1_name": "Auburn Tigers",
+    "team1_score": "70",
+    "team1_winner": false,
+    "team2_id": "277",
+    "team2_name": "West Virginia Mountaineers",
+    "team2_score": "76",
+    "team2_winner": true,
+    "neutral": true,
+    "venue": "Michelob ULTRA Arena"
   }
 ]
