@@ -120,6 +120,21 @@
     "venue": "United Center"
   },
   {
+    "id": "401920424",
+    "date": "2026-11-08",
+    "name": "Arkansas Razorbacks at Virginia Cavaliers",
+    "team1_id": "258",
+    "team1_name": "Virginia Cavaliers",
+    "team1_score": "91",
+    "team1_winner": true,
+    "team2_id": "8",
+    "team2_name": "Arkansas Razorbacks",
+    "team2_score": "72",
+    "team2_winner": false,
+    "neutral": true,
+    "venue": "Capital One Arena"
+  },
+  {
     "id": "401920685",
     "date": "2026-11-07",
     "name": "UConn Huskies at Michigan Wolverines",
@@ -165,36 +180,6 @@
     "venue": "McKale Center at ALKEME Arena"
   },
   {
-    "id": "401920424",
-    "date": "2026-11-08",
-    "name": "Arkansas Razorbacks at Virginia Cavaliers",
-    "team1_id": "258",
-    "team1_name": "Virginia Cavaliers",
-    "team1_score": "91",
-    "team1_winner": true,
-    "team2_id": "8",
-    "team2_name": "Arkansas Razorbacks",
-    "team2_score": "72",
-    "team2_winner": false,
-    "neutral": true,
-    "venue": "Capital One Arena"
-  },
-  {
-    "id": "401919041",
-    "date": "2026-11-13",
-    "name": "Oklahoma State Cowboys at Texas A&M Aggies",
-    "team1_id": "245",
-    "team1_name": "Texas A&M Aggies",
-    "team1_score": "88",
-    "team1_winner": true,
-    "team2_id": "197",
-    "team2_name": "Oklahoma State Cowboys",
-    "team2_score": "69",
-    "team2_winner": false,
-    "neutral": false,
-    "venue": "Reed Arena"
-  },
-  {
     "id": "401909738",
     "date": "2026-11-03",
     "name": "Arizona Wildcats at UCLA Bruins",
@@ -225,19 +210,19 @@
     "venue": "Neville Arena"
   },
   {
-    "id": "401909532",
-    "date": "2026-11-08",
-    "name": "Providence Friars at Nebraska Cornhuskers",
-    "team1_id": "158",
-    "team1_name": "Nebraska Cornhuskers",
-    "team1_score": "67",
+    "id": "401919041",
+    "date": "2026-11-13",
+    "name": "Oklahoma State Cowboys at Texas A&M Aggies",
+    "team1_id": "245",
+    "team1_name": "Texas A&M Aggies",
+    "team1_score": "88",
     "team1_winner": true,
-    "team2_id": "2507",
-    "team2_name": "Providence Friars",
-    "team2_score": "58",
+    "team2_id": "197",
+    "team2_name": "Oklahoma State Cowboys",
+    "team2_score": "69",
     "team2_winner": false,
-    "neutral": true,
-    "venue": "Mohegan Sun Arena"
+    "neutral": false,
+    "venue": "Reed Arena"
   },
   {
     "id": "401906866",
@@ -255,21 +240,6 @@
     "venue": "Frost Bank Center"
   },
   {
-    "id": "401920682",
-    "date": "2026-11-19",
-    "name": "Siena Saints at St. John's Red Storm",
-    "team1_id": "2599",
-    "team1_name": "St. John's Red Storm",
-    "team1_score": "119",
-    "team1_winner": true,
-    "team2_id": "2561",
-    "team2_name": "Siena Saints",
-    "team2_score": "72",
-    "team2_winner": false,
-    "neutral": false,
-    "venue": "Carnesecca Arena"
-  },
-  {
     "id": "401921133",
     "date": "2026-11-06",
     "name": "Bethune-Cookman Wildcats at Texas Tech Red Raiders",
@@ -283,6 +253,21 @@
     "team2_winner": false,
     "neutral": false,
     "venue": "United Supermarkets Arena"
+  },
+  {
+    "id": "401920682",
+    "date": "2026-11-19",
+    "name": "Siena Saints at St. John's Red Storm",
+    "team1_id": "2599",
+    "team1_name": "St. John's Red Storm",
+    "team1_score": "119",
+    "team1_winner": true,
+    "team2_id": "2561",
+    "team2_name": "Siena Saints",
+    "team2_score": "72",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "Carnesecca Arena"
   },
   {
     "id": "401906851",
@@ -300,6 +285,21 @@
     "venue": "Food City Center"
   },
   {
+    "id": "401909532",
+    "date": "2026-11-08",
+    "name": "Providence Friars at Nebraska Cornhuskers",
+    "team1_id": "158",
+    "team1_name": "Nebraska Cornhuskers",
+    "team1_score": "67",
+    "team1_winner": true,
+    "team2_id": "2507",
+    "team2_name": "Providence Friars",
+    "team2_score": "58",
+    "team2_winner": false,
+    "neutral": true,
+    "venue": "Mohegan Sun Arena"
+  },
+  {
     "id": "401919029",
     "date": "2026-11-09",
     "name": "Wichita State Shockers at USC Trojans",
@@ -313,36 +313,6 @@
     "team2_winner": false,
     "neutral": true,
     "venue": "Tahoe Blue Event Center"
-  },
-  {
-    "id": "401916313",
-    "date": "2026-11-03",
-    "name": "Ohio State Buckeyes at BYU Cougars",
-    "team1_id": "252",
-    "team1_name": "BYU Cougars",
-    "team1_score": "94",
-    "team1_winner": true,
-    "team2_id": "194",
-    "team2_name": "Ohio State Buckeyes",
-    "team2_score": "83",
-    "team2_winner": false,
-    "neutral": true,
-    "venue": "Delta Center"
-  },
-  {
-    "id": "401921741",
-    "date": "2026-11-13",
-    "name": "Montana State Bobcats at BYU Cougars",
-    "team1_id": "252",
-    "team1_name": "BYU Cougars",
-    "team1_score": "86",
-    "team1_winner": true,
-    "team2_id": "147",
-    "team2_name": "Montana State Bobcats",
-    "team2_score": "71",
-    "team2_winner": false,
-    "neutral": false,
-    "venue": "Marriott Center"
   },
   {
     "id": "401912207",
@@ -375,6 +345,36 @@
     "venue": "Fifth Third Arena (OH)"
   },
   {
+    "id": "401916313",
+    "date": "2026-11-03",
+    "name": "Ohio State Buckeyes at BYU Cougars",
+    "team1_id": "252",
+    "team1_name": "BYU Cougars",
+    "team1_score": "94",
+    "team1_winner": true,
+    "team2_id": "194",
+    "team2_name": "Ohio State Buckeyes",
+    "team2_score": "83",
+    "team2_winner": false,
+    "neutral": true,
+    "venue": "Delta Center"
+  },
+  {
+    "id": "401921741",
+    "date": "2026-11-13",
+    "name": "Montana State Bobcats at BYU Cougars",
+    "team1_id": "252",
+    "team1_name": "BYU Cougars",
+    "team1_score": "86",
+    "team1_winner": true,
+    "team2_id": "147",
+    "team2_name": "Montana State Bobcats",
+    "team2_score": "71",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "Marriott Center"
+  },
+  {
     "id": "401921689",
     "date": "2026-11-14",
     "name": "LSU Tigers at Gonzaga Bulldogs",
@@ -388,6 +388,51 @@
     "team2_winner": true,
     "neutral": false,
     "venue": "Spokane Numerica Veterans Arena"
+  },
+  {
+    "id": "401916289",
+    "date": "2026-11-18",
+    "name": "Arkansas Razorbacks at Indiana Hoosiers",
+    "team1_id": "84",
+    "team1_name": "Indiana Hoosiers",
+    "team1_score": "81",
+    "team1_winner": true,
+    "team2_id": "8",
+    "team2_name": "Arkansas Razorbacks",
+    "team2_score": "76",
+    "team2_winner": false,
+    "neutral": true,
+    "venue": "Madison Square Garden"
+  },
+  {
+    "id": "401920378",
+    "date": "2026-11-11",
+    "name": "Virginia Tech Hokies at Iowa Hawkeyes",
+    "team1_id": "2294",
+    "team1_name": "Iowa Hawkeyes",
+    "team1_score": "88",
+    "team1_winner": false,
+    "team2_id": "259",
+    "team2_name": "Virginia Tech Hokies",
+    "team2_score": "93",
+    "team2_winner": true,
+    "neutral": true,
+    "venue": "Tyson Events Center"
+  },
+  {
+    "id": "401909545",
+    "date": "2026-11-21",
+    "name": "Iowa Hawkeyes at Xavier Musketeers",
+    "team1_id": "2752",
+    "team1_name": "Xavier Musketeers",
+    "team1_score": "65",
+    "team1_winner": false,
+    "team2_id": "2294",
+    "team2_name": "Iowa Hawkeyes",
+    "team2_score": "83",
+    "team2_winner": true,
+    "neutral": false,
+    "venue": "Cintas Center"
   },
   {
     "id": "401925879",
@@ -420,21 +465,6 @@
     "venue": "Crisler Center"
   },
   {
-    "id": "401916289",
-    "date": "2026-11-18",
-    "name": "Arkansas Razorbacks at Indiana Hoosiers",
-    "team1_id": "84",
-    "team1_name": "Indiana Hoosiers",
-    "team1_score": "81",
-    "team1_winner": true,
-    "team2_id": "8",
-    "team2_name": "Arkansas Razorbacks",
-    "team2_score": "76",
-    "team2_winner": false,
-    "neutral": true,
-    "venue": "Madison Square Garden"
-  },
-  {
     "id": "401911249",
     "date": "2026-11-07",
     "name": "Saint Louis Billikens at Missouri Tigers",
@@ -463,36 +493,6 @@
     "team2_winner": false,
     "neutral": true,
     "venue": "United Center"
-  },
-  {
-    "id": "401920378",
-    "date": "2026-11-11",
-    "name": "Virginia Tech Hokies at Iowa Hawkeyes",
-    "team1_id": "2294",
-    "team1_name": "Iowa Hawkeyes",
-    "team1_score": "88",
-    "team1_winner": false,
-    "team2_id": "259",
-    "team2_name": "Virginia Tech Hokies",
-    "team2_score": "93",
-    "team2_winner": true,
-    "neutral": true,
-    "venue": "Tyson Events Center"
-  },
-  {
-    "id": "401909493",
-    "date": "2026-11-15",
-    "name": "Creighton Bluejays at Iowa Hawkeyes",
-    "team1_id": "2294",
-    "team1_name": "Iowa Hawkeyes",
-    "team1_score": "69",
-    "team1_winner": false,
-    "team2_id": "156",
-    "team2_name": "Creighton Bluejays",
-    "team2_score": "70",
-    "team2_winner": true,
-    "neutral": true,
-    "venue": "Casey's Center"
   },
   {
     "id": "401918947",
@@ -540,21 +540,6 @@
     "venue": "TD Arena"
   },
   {
-    "id": "401917530",
-    "date": "2026-11-15",
-    "name": "New Mexico Lobos at Santa Clara Broncos",
-    "team1_id": "2541",
-    "team1_name": "Santa Clara Broncos",
-    "team1_score": "90",
-    "team1_winner": true,
-    "team2_id": "167",
-    "team2_name": "New Mexico Lobos",
-    "team2_score": "85",
-    "team2_winner": false,
-    "neutral": false,
-    "venue": "Leavey Center"
-  },
-  {
     "id": "401911251",
     "date": "2026-11-15",
     "name": "High Point Panthers at Saint Louis Billikens",
@@ -568,6 +553,21 @@
     "team2_winner": true,
     "neutral": false,
     "venue": "Chaifetz Arena"
+  },
+  {
+    "id": "401911252",
+    "date": "2026-11-21",
+    "name": "Saint Louis Billikens at Saint Mary's Gaels",
+    "team1_id": "2608",
+    "team1_name": "Saint Mary's Gaels",
+    "team1_score": "95",
+    "team1_winner": true,
+    "team2_id": "139",
+    "team2_name": "Saint Louis Billikens",
+    "team2_score": "78",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "University Credit Union Pavilion"
   },
   {
     "id": "401920413",
@@ -645,21 +645,6 @@
     "venue": "Stegeman Coliseum"
   },
   {
-    "id": "401909494",
-    "date": "2026-11-19",
-    "name": "Bethune-Cookman Wildcats at Creighton Bluejays",
-    "team1_id": "156",
-    "team1_name": "Creighton Bluejays",
-    "team1_score": "88",
-    "team1_winner": true,
-    "team2_id": "2065",
-    "team2_name": "Bethune-Cookman Wildcats",
-    "team2_score": "65",
-    "team2_winner": false,
-    "neutral": false,
-    "venue": "CHI Health Center Omaha"
-  },
-  {
     "id": "401920512",
     "date": "2026-11-18",
     "name": "West Virginia Mountaineers at Auburn Tigers",
@@ -673,5 +658,20 @@
     "team2_winner": true,
     "neutral": true,
     "venue": "Michelob ULTRA Arena"
+  },
+  {
+    "id": "401909708",
+    "date": "2026-11-18",
+    "name": "Villanova Wildcats at Pittsburgh Panthers",
+    "team1_id": "221",
+    "team1_name": "Pittsburgh Panthers",
+    "team1_score": "81",
+    "team1_winner": true,
+    "team2_id": "222",
+    "team2_name": "Villanova Wildcats",
+    "team2_score": "61",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "Petersen Events Center"
   }
 ]

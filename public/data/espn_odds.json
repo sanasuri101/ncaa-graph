@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-20T23:31:35.930639+00:00",
+  "generated_at": "2026-11-21T13:49:45.267059+00:00",
   "games": {},
   "futures": {
     "new mexico": {
@@ -49,8 +49,8 @@
       "espn_id": "356",
       "markets": {
         "ncaa(b)_-_to_make_the_final_4": {
-          "moneyline": "+230",
-          "implied_pct": 30.3
+          "moneyline": "+220",
+          "implied_pct": 31.2
         },
         "championship": {
           "moneyline": "+850",
@@ -426,23 +426,6 @@
         }
       }
     },
-    "missouri": {
-      "espn_id": "142",
-      "markets": {
-        "ncaa(b)_-_to_make_the_final_4": {
-          "moneyline": "+2100",
-          "implied_pct": 4.5
-        },
-        "southeastern_conference_winner": {
-          "moneyline": "+1500",
-          "implied_pct": 6.2
-        },
-        "championship": {
-          "moneyline": "+8400",
-          "implied_pct": 1.2
-        }
-      }
-    },
     "texas a&m": {
       "espn_id": "245",
       "markets": {
@@ -457,6 +440,23 @@
         "championship": {
           "moneyline": "+9000",
           "implied_pct": 1.1
+        }
+      }
+    },
+    "missouri": {
+      "espn_id": "142",
+      "markets": {
+        "ncaa(b)_-_to_make_the_final_4": {
+          "moneyline": "+2100",
+          "implied_pct": 4.5
+        },
+        "southeastern_conference_winner": {
+          "moneyline": "+1500",
+          "implied_pct": 6.2
+        },
+        "championship": {
+          "moneyline": "+8400",
+          "implied_pct": 1.2
         }
       }
     },
@@ -494,8 +494,8 @@
       "espn_id": "2294",
       "markets": {
         "ncaa(b)_-_to_make_the_final_4": {
-          "moneyline": "+3600",
-          "implied_pct": 2.7
+          "moneyline": "+3000",
+          "implied_pct": 3.2
         },
         "championship": {
           "moneyline": "+15000",
@@ -597,6 +597,23 @@
         }
       }
     },
+    "saint mary's": {
+      "espn_id": "2608",
+      "markets": {
+        "ncaa(b)_-_to_make_the_final_4": {
+          "moneyline": "+12500",
+          "implied_pct": 0.8
+        },
+        "ncaa(b)_-_west_coast_conference_-_winner_(reg.season)": {
+          "moneyline": "+104",
+          "implied_pct": 49.0
+        },
+        "championship": {
+          "moneyline": "+60000",
+          "implied_pct": 0.2
+        }
+      }
+    },
     "high point": {
       "espn_id": "2272",
       "markets": {
@@ -663,23 +680,6 @@
         "american_athletic_conference_winner": {
           "moneyline": "+192",
           "implied_pct": 34.2
-        },
-        "championship": {
-          "moneyline": "+100000",
-          "implied_pct": 0.1
-        }
-      }
-    },
-    "santa clara": {
-      "espn_id": "2541",
-      "markets": {
-        "ncaa(b)_-_to_make_the_final_4": {
-          "moneyline": "+25000",
-          "implied_pct": 0.4
-        },
-        "ncaa(b)_-_west_coast_conference_-_winner_(reg.season)": {
-          "moneyline": "+142",
-          "implied_pct": 41.3
         },
         "championship": {
           "moneyline": "+100000",
