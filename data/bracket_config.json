@@ -3,7 +3,7 @@
   "_season": 2027,
   "_season_str": "2026-27",
   "_projected": true,
-  "_last_updated": "2026-11-21",
+  "_last_updated": "2026-11-22",
   "bracket": [
     {
       "bracket_name": "Houston",
@@ -14,18 +14,18 @@
       "seed": 1
     },
     {
-      "bracket_name": "Florida",
-      "espn_id": "57",
-      "displayName": "Florida Gators",
-      "location": "Florida",
-      "region": "West",
-      "seed": 1
-    },
-    {
       "bracket_name": "Illinois",
       "espn_id": "356",
       "displayName": "Illinois Fighting Illini",
       "location": "Illinois",
+      "region": "West",
+      "seed": 1
+    },
+    {
+      "bracket_name": "Florida",
+      "espn_id": "57",
+      "displayName": "Florida Gators",
+      "location": "Florida",
       "region": "South",
       "seed": 1
     },
@@ -46,11 +46,19 @@
       "seed": 2
     },
     {
+      "bracket_name": "UConn",
+      "espn_id": "41",
+      "displayName": "UConn Huskies",
+      "location": "UConn",
+      "region": "South",
+      "seed": 2
+    },
+    {
       "bracket_name": "Virginia",
       "espn_id": "258",
       "displayName": "Virginia Cavaliers",
       "location": "Virginia",
-      "region": "South",
+      "region": "West",
       "seed": 2
     },
     {
@@ -58,14 +66,6 @@
       "espn_id": "150",
       "displayName": "Duke Blue Devils",
       "location": "Duke",
-      "region": "West",
-      "seed": 2
-    },
-    {
-      "bracket_name": "UConn",
-      "espn_id": "41",
-      "displayName": "UConn Huskies",
-      "location": "UConn",
       "region": "East",
       "seed": 2
     },
@@ -142,18 +142,18 @@
       "seed": 5
     },
     {
-      "bracket_name": "UCLA",
-      "espn_id": "26",
-      "displayName": "UCLA Bruins",
-      "location": "UCLA",
-      "region": "West",
-      "seed": 5
-    },
-    {
       "bracket_name": "USC",
       "espn_id": "30",
       "displayName": "USC Trojans",
       "location": "USC",
+      "region": "West",
+      "seed": 5
+    },
+    {
+      "bracket_name": "UCLA",
+      "espn_id": "26",
+      "displayName": "UCLA Bruins",
+      "location": "UCLA",
       "region": "South",
       "seed": 5
     },
@@ -182,18 +182,18 @@
       "seed": 6
     },
     {
-      "bracket_name": "BYU",
-      "espn_id": "252",
-      "displayName": "BYU Cougars",
-      "location": "BYU",
-      "region": "West",
-      "seed": 6
-    },
-    {
       "bracket_name": "Indiana",
       "espn_id": "84",
       "displayName": "Indiana Hoosiers",
       "location": "Indiana",
+      "region": "West",
+      "seed": 6
+    },
+    {
+      "bracket_name": "BYU",
+      "espn_id": "252",
+      "displayName": "BYU Cougars",
+      "location": "BYU",
       "region": "East",
       "seed": 6
     },
@@ -222,18 +222,18 @@
       "seed": 7
     },
     {
-      "bracket_name": "Baylor",
-      "espn_id": "239",
-      "displayName": "Baylor Bears",
-      "location": "Baylor",
-      "region": "Midwest",
-      "seed": 7
-    },
-    {
       "bracket_name": "Tennessee",
       "espn_id": "2633",
       "displayName": "Tennessee Volunteers",
       "location": "Tennessee",
+      "region": "Midwest",
+      "seed": 7
+    },
+    {
+      "bracket_name": "Baylor",
+      "espn_id": "239",
+      "displayName": "Baylor Bears",
+      "location": "Baylor",
       "region": "Midwest",
       "seed": 8
     },
@@ -246,18 +246,18 @@
       "seed": 8
     },
     {
-      "bracket_name": "Louisville",
-      "espn_id": "97",
-      "displayName": "Louisville Cardinals",
-      "location": "Louisville",
-      "region": "West",
-      "seed": 8
-    },
-    {
       "bracket_name": "Utah State",
       "espn_id": "328",
       "displayName": "Utah State Aggies",
       "location": "Utah State",
+      "region": "West",
+      "seed": 8
+    },
+    {
+      "bracket_name": "Ole Miss",
+      "espn_id": "145",
+      "displayName": "Ole Miss Rebels",
+      "location": "Ole Miss",
       "region": "East",
       "seed": 8
     },
@@ -270,26 +270,26 @@
       "seed": 9
     },
     {
-      "bracket_name": "Virginia Tech",
-      "espn_id": "259",
-      "displayName": "Virginia Tech Hokies",
-      "location": "Virginia Tech",
-      "region": "West",
-      "seed": 9
-    },
-    {
       "bracket_name": "Marquette",
       "espn_id": "269",
       "displayName": "Marquette Golden Eagles",
       "location": "Marquette",
+      "region": "West",
+      "seed": 9
+    },
+    {
+      "bracket_name": "Louisville",
+      "espn_id": "97",
+      "displayName": "Louisville Cardinals",
+      "location": "Louisville",
       "region": "South",
       "seed": 9
     },
     {
-      "bracket_name": "Providence",
-      "espn_id": "2507",
-      "displayName": "Providence Friars",
-      "location": "Providence",
+      "bracket_name": "Virginia Tech",
+      "espn_id": "259",
+      "displayName": "Virginia Tech Hokies",
+      "location": "Virginia Tech",
       "region": "Midwest",
       "seed": 9
     },
@@ -302,10 +302,10 @@
       "seed": 10
     },
     {
-      "bracket_name": "Ole Miss",
-      "espn_id": "145",
-      "displayName": "Ole Miss Rebels",
-      "location": "Ole Miss",
+      "bracket_name": "Providence",
+      "espn_id": "2507",
+      "displayName": "Providence Friars",
+      "location": "Providence",
       "region": "South",
       "seed": 10
     },
@@ -342,18 +342,18 @@
       "seed": 11
     },
     {
-      "bracket_name": "Saint Mary's",
-      "espn_id": "2608",
-      "displayName": "Saint Mary's Gaels",
-      "location": "Saint Mary's",
-      "region": "South",
-      "seed": 11
-    },
-    {
       "bracket_name": "High Point",
       "espn_id": "2272",
       "displayName": "High Point Panthers",
       "location": "High Point",
+      "region": "South",
+      "seed": 11
+    },
+    {
+      "bracket_name": "Saint Mary's",
+      "espn_id": "2608",
+      "displayName": "Saint Mary's Gaels",
+      "location": "Saint Mary's",
       "region": "Midwest",
       "seed": 11
     },
@@ -390,18 +390,18 @@
       "seed": 12
     },
     {
-      "bracket_name": "UNC Wilmington",
-      "espn_id": "350",
-      "displayName": "UNC Wilmington Seahawks",
-      "location": "UNC Wilmington",
-      "region": "East",
-      "seed": 13
-    },
-    {
       "bracket_name": "McNeese",
       "espn_id": "2377",
       "displayName": "McNeese Cowboys",
       "location": "McNeese",
+      "region": "East",
+      "seed": 13
+    },
+    {
+      "bracket_name": "Charleston",
+      "espn_id": "232",
+      "displayName": "Charleston Cougars",
+      "location": "Charleston",
       "region": "West",
       "seed": 13
     },
@@ -422,26 +422,26 @@
       "seed": 13
     },
     {
-      "bracket_name": "St Thomas",
-      "espn_id": "2900",
-      "displayName": "St. Thomas Tommies",
-      "location": "St. Thomas",
-      "region": "Midwest",
-      "seed": 14
-    },
-    {
-      "bracket_name": "Chattanooga",
-      "espn_id": "236",
-      "displayName": "Chattanooga Mocs",
-      "location": "Chattanooga",
-      "region": "South",
-      "seed": 14
-    },
-    {
       "bracket_name": "James Madison",
       "espn_id": "256",
       "displayName": "James Madison Dukes",
       "location": "James Madison",
+      "region": "Midwest",
+      "seed": 14
+    },
+    {
+      "bracket_name": "Furman",
+      "espn_id": "231",
+      "displayName": "Furman Paladins",
+      "location": "Furman",
+      "region": "South",
+      "seed": 14
+    },
+    {
+      "bracket_name": "St Thomas",
+      "espn_id": "2900",
+      "displayName": "St. Thomas Tommies",
+      "location": "St. Thomas",
       "region": "West",
       "seed": 14
     },
@@ -486,18 +486,18 @@
       "seed": 15
     },
     {
-      "bracket_name": "Howard",
-      "espn_id": "47",
-      "displayName": "Howard Bison",
-      "location": "Howard",
-      "region": "Midwest",
-      "seed": 16
-    },
-    {
       "bracket_name": "Vermont",
       "espn_id": "261",
       "displayName": "Vermont Catamounts",
       "location": "Vermont",
+      "region": "Midwest",
+      "seed": 16
+    },
+    {
+      "bracket_name": "Howard",
+      "espn_id": "47",
+      "displayName": "Howard Bison",
+      "location": "Howard",
       "region": "South",
       "seed": 16
     },
@@ -520,14 +520,6 @@
   ],
   "bubble": [
     {
-      "bracket_name": "West Virginia",
-      "espn_id": "277",
-      "displayName": "West Virginia Mountaineers",
-      "location": "West Virginia",
-      "region": "bubble",
-      "seed": null
-    },
-    {
       "bracket_name": "Auburn",
       "espn_id": "2",
       "displayName": "Auburn Tigers",
@@ -536,10 +528,10 @@
       "seed": null
     },
     {
-      "bracket_name": "Georgia",
-      "espn_id": "61",
-      "displayName": "Georgia Bulldogs",
-      "location": "Georgia",
+      "bracket_name": "West Virginia",
+      "espn_id": "277",
+      "displayName": "West Virginia Mountaineers",
+      "location": "West Virginia",
       "region": "bubble",
       "seed": null
     },
@@ -552,18 +544,10 @@
       "seed": null
     },
     {
-      "bracket_name": "Villanova",
-      "espn_id": "222",
-      "displayName": "Villanova Wildcats",
-      "location": "Villanova",
-      "region": "bubble",
-      "seed": null
-    },
-    {
-      "bracket_name": "Pitt",
-      "espn_id": "221",
-      "displayName": "Pittsburgh Panthers",
-      "location": "Pittsburgh",
+      "bracket_name": "Georgia",
+      "espn_id": "61",
+      "displayName": "Georgia Bulldogs",
+      "location": "Georgia",
       "region": "bubble",
       "seed": null
     },
@@ -576,10 +560,26 @@
       "seed": null
     },
     {
-      "bracket_name": "Creighton",
-      "espn_id": "156",
-      "displayName": "Creighton Bluejays",
-      "location": "Creighton",
+      "bracket_name": "Pitt",
+      "espn_id": "221",
+      "displayName": "Pittsburgh Panthers",
+      "location": "Pittsburgh",
+      "region": "bubble",
+      "seed": null
+    },
+    {
+      "bracket_name": "Villanova",
+      "espn_id": "222",
+      "displayName": "Villanova Wildcats",
+      "location": "Villanova",
+      "region": "bubble",
+      "seed": null
+    },
+    {
+      "bracket_name": "Oklahoma St",
+      "espn_id": "197",
+      "displayName": "Oklahoma State Cowboys",
+      "location": "Oklahoma State",
       "region": "bubble",
       "seed": null
     }

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-21T22:39:50.382107+00:00",
+  "generated_at": "2026-11-22T13:42:58.553880+00:00",
   "flagged_teams": 5,
   "teams": {
     "127": {
@@ -49,7 +49,7 @@
     },
     "57": {
       "bracket_name": "Florida",
-      "region": "West",
+      "region": "South",
       "seed": 1,
       "articles": [
         {
@@ -80,7 +80,7 @@
     },
     "41": {
       "bracket_name": "UConn",
-      "region": "East",
+      "region": "South",
       "seed": 2,
       "articles": [
         {
