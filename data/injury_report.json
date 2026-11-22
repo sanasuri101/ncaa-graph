@@ -1,6 +1,37 @@
 {
-  "generated_at": "2026-11-22T13:42:58.554474+00:00",
+  "generated_at": "2026-11-22T23:02:16.651473+00:00",
   "teams": {
+    "57": {
+      "bracket_name": "Florida",
+      "region": "South",
+      "seed": 1,
+      "adj_em_penalty": 0,
+      "players": [],
+      "notes": "",
+      "override_date": "",
+      "news_flags": [
+        {
+          "headline": "Gators' Boogie Fland aggravates shoulder injury, status vs. Houston in question",
+          "description": "Boogie Fland left the Gators' 86-78 win over Notre Dame after aggravating a right shoulder injury, and his availability for the Houston game is uncertain.",
+          "published": "2026-11-18",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50515779/gators-boogie-fland-aggravates-shoulder-injury"
+        },
+        {
+          "headline": "Gators PG Boogie Fland starts vs. Houston despite injury",
+          "description": "Florida guard Boogie Fland started against Houston on Wednesday despite being considered a game-time decision.",
+          "published": "2026-11-18",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50524333/gators-pg-boogie-fland-starts-vs-houston-injury"
+        },
+        {
+          "headline": "Top-ranked Florida tops Notre Dame 86-78 despite losing star point guard Boogie Fland",
+          "description": "\u2014 Urban Klavzar scored 24 points off the bench and No. 1 Florida beat Notre Dame 86-78 on Tuesday in the opening round of the Players Era 8 tournament despite losing Boogie Fland to an injury in the f",
+          "published": "2026-11-18",
+          "url": "http://www.espn.com/ncb/recap?gameId=401906773"
+        }
+      ],
+      "has_override": false,
+      "has_news_flag": true
+    },
     "248": {
       "bracket_name": "Houston",
       "region": "East",
@@ -45,6 +76,25 @@
       "has_override": false,
       "has_news_flag": true
     },
+    "127": {
+      "bracket_name": "Michigan St",
+      "region": "East",
+      "seed": 4,
+      "adj_em_penalty": 0,
+      "players": [],
+      "notes": "",
+      "override_date": "",
+      "news_flags": [
+        {
+          "headline": "Michigan State's Jordan Scott injures right shoulder in win over Northern Iowa",
+          "description": "Jordan Scott injured his right shoulder as No. 5 Michigan State beat Northern Iowa 106-72 on Friday night.",
+          "published": "2026-11-14",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50476961/michigan-state-forward-jordan-scott-injures-right-shoulder-win-vs-northern-iowa"
+        }
+      ],
+      "has_override": false,
+      "has_news_flag": true
+    },
     "41": {
       "bracket_name": "UConn",
       "region": "South",
@@ -71,56 +121,6 @@
           "description": "\u2014 Silas Demary Jr. had 18 points and a career-high six steals to lead fourth-ranked UConn to a 83-41 win over Wagner on Monday night.",
           "published": "2026-11-10",
           "url": "http://www.espn.com/ncb/recap?gameId=401920686"
-        }
-      ],
-      "has_override": false,
-      "has_news_flag": true
-    },
-    "127": {
-      "bracket_name": "Michigan St",
-      "region": "East",
-      "seed": 4,
-      "adj_em_penalty": 0,
-      "players": [],
-      "notes": "",
-      "override_date": "",
-      "news_flags": [
-        {
-          "headline": "Michigan State's Jordan Scott injures right shoulder in win over Northern Iowa",
-          "description": "Jordan Scott injured his right shoulder as No. 5 Michigan State beat Northern Iowa 106-72 on Friday night.",
-          "published": "2026-11-14",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50476961/michigan-state-forward-jordan-scott-injures-right-shoulder-win-vs-northern-iowa"
-        }
-      ],
-      "has_override": false,
-      "has_news_flag": true
-    },
-    "57": {
-      "bracket_name": "Florida",
-      "region": "South",
-      "seed": 1,
-      "adj_em_penalty": 0,
-      "players": [],
-      "notes": "",
-      "override_date": "",
-      "news_flags": [
-        {
-          "headline": "Gators' Boogie Fland aggravates shoulder injury, status vs. Houston in question",
-          "description": "Boogie Fland left the Gators' 86-78 win over Notre Dame after aggravating a right shoulder injury, and his availability for the Houston game is uncertain.",
-          "published": "2026-11-18",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50515779/gators-boogie-fland-aggravates-shoulder-injury"
-        },
-        {
-          "headline": "Gators PG Boogie Fland starts vs. Houston despite injury",
-          "description": "Florida guard Boogie Fland started against Houston on Wednesday despite being considered a game-time decision.",
-          "published": "2026-11-18",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50524333/gators-pg-boogie-fland-starts-vs-houston-injury"
-        },
-        {
-          "headline": "Top-ranked Florida tops Notre Dame 86-78 despite losing star point guard Boogie Fland",
-          "description": "\u2014 Urban Klavzar scored 24 points off the bench and No. 1 Florida beat Notre Dame 86-78 on Tuesday in the opening round of the Players Era 8 tournament despite losing Boogie Fland to an injury in the f",
-          "published": "2026-11-18",
-          "url": "http://www.espn.com/ncb/recap?gameId=401906773"
         }
       ],
       "has_override": false,

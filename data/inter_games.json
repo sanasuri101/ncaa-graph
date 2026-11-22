@@ -180,6 +180,21 @@
     "venue": "United Center"
   },
   {
+    "id": "401919041",
+    "date": "2026-11-13",
+    "name": "Oklahoma State Cowboys at Texas A&M Aggies",
+    "team1_id": "245",
+    "team1_name": "Texas A&M Aggies",
+    "team1_score": "88",
+    "team1_winner": true,
+    "team2_id": "197",
+    "team2_name": "Oklahoma State Cowboys",
+    "team2_score": "69",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "Reed Arena"
+  },
+  {
     "id": "401909738",
     "date": "2026-11-03",
     "name": "Arizona Wildcats at UCLA Bruins",
@@ -208,21 +223,6 @@
     "team2_winner": true,
     "neutral": false,
     "venue": "Neville Arena"
-  },
-  {
-    "id": "401919041",
-    "date": "2026-11-13",
-    "name": "Oklahoma State Cowboys at Texas A&M Aggies",
-    "team1_id": "245",
-    "team1_name": "Texas A&M Aggies",
-    "team1_score": "88",
-    "team1_winner": true,
-    "team2_id": "197",
-    "team2_name": "Oklahoma State Cowboys",
-    "team2_score": "69",
-    "team2_winner": false,
-    "neutral": false,
-    "venue": "Reed Arena"
   },
   {
     "id": "401906866",
@@ -315,36 +315,6 @@
     "venue": "Tahoe Blue Event Center"
   },
   {
-    "id": "401912207",
-    "date": "2026-11-03",
-    "name": "American University Eagles at Cincinnati Bearcats",
-    "team1_id": "2132",
-    "team1_name": "Cincinnati Bearcats",
-    "team1_score": "79",
-    "team1_winner": true,
-    "team2_id": "44",
-    "team2_name": "American University Eagles",
-    "team2_score": "53",
-    "team2_winner": false,
-    "neutral": false,
-    "venue": "Fifth Third Arena (OH)"
-  },
-  {
-    "id": "401916305",
-    "date": "2026-11-10",
-    "name": "Minnesota Golden Gophers at Cincinnati Bearcats",
-    "team1_id": "2132",
-    "team1_name": "Cincinnati Bearcats",
-    "team1_score": "61",
-    "team1_winner": false,
-    "team2_id": "135",
-    "team2_name": "Minnesota Golden Gophers",
-    "team2_score": "63",
-    "team2_winner": true,
-    "neutral": false,
-    "venue": "Fifth Third Arena (OH)"
-  },
-  {
     "id": "401921689",
     "date": "2026-11-14",
     "name": "LSU Tigers at Gonzaga Bulldogs",
@@ -358,6 +328,21 @@
     "team2_winner": true,
     "neutral": false,
     "venue": "Spokane Numerica Veterans Arena"
+  },
+  {
+    "id": "401916288",
+    "date": "2026-11-12",
+    "name": "Tennessee Tech Golden Eagles at Indiana Hoosiers",
+    "team1_id": "84",
+    "team1_name": "Indiana Hoosiers",
+    "team1_score": "90",
+    "team1_winner": true,
+    "team2_id": "2635",
+    "team2_name": "Tennessee Tech Golden Eagles",
+    "team2_score": "66",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "Simon Skjodt Assembly Hall"
   },
   {
     "id": "401916289",
@@ -435,19 +420,34 @@
     "venue": "Cintas Center"
   },
   {
-    "id": "401925879",
-    "date": "2026-11-18",
-    "name": "Montana State Bobcats at Gonzaga Bulldogs",
-    "team1_id": "2250",
-    "team1_name": "Gonzaga Bulldogs",
-    "team1_score": "74",
+    "id": "401912207",
+    "date": "2026-11-03",
+    "name": "American University Eagles at Cincinnati Bearcats",
+    "team1_id": "2132",
+    "team1_name": "Cincinnati Bearcats",
+    "team1_score": "79",
     "team1_winner": true,
-    "team2_id": "147",
-    "team2_name": "Montana State Bobcats",
-    "team2_score": "62",
+    "team2_id": "44",
+    "team2_name": "American University Eagles",
+    "team2_score": "53",
     "team2_winner": false,
     "neutral": false,
-    "venue": "McCarthey Athletic Center"
+    "venue": "Fifth Third Arena (OH)"
+  },
+  {
+    "id": "401916305",
+    "date": "2026-11-10",
+    "name": "Minnesota Golden Gophers at Cincinnati Bearcats",
+    "team1_id": "2132",
+    "team1_name": "Cincinnati Bearcats",
+    "team1_score": "61",
+    "team1_winner": false,
+    "team2_id": "135",
+    "team2_name": "Minnesota Golden Gophers",
+    "team2_score": "63",
+    "team2_winner": true,
+    "neutral": false,
+    "venue": "Fifth Third Arena (OH)"
   },
   {
     "id": "401909524",
@@ -480,6 +480,21 @@
     "venue": "Xfinity Mobile Arena"
   },
   {
+    "id": "401925879",
+    "date": "2026-11-18",
+    "name": "Montana State Bobcats at Gonzaga Bulldogs",
+    "team1_id": "2250",
+    "team1_name": "Gonzaga Bulldogs",
+    "team1_score": "74",
+    "team1_winner": true,
+    "team2_id": "147",
+    "team2_name": "Montana State Bobcats",
+    "team2_score": "62",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "McCarthey Athletic Center"
+  },
+  {
     "id": "401911249",
     "date": "2026-11-07",
     "name": "Saint Louis Billikens at Missouri Tigers",
@@ -510,21 +525,6 @@
     "venue": "United Center"
   },
   {
-    "id": "401917914",
-    "date": "2026-11-07",
-    "name": "Central Arkansas Bears at Ole Miss Rebels",
-    "team1_id": "145",
-    "team1_name": "Ole Miss Rebels",
-    "team1_score": "92",
-    "team1_winner": true,
-    "team2_id": "2110",
-    "team2_name": "Central Arkansas Bears",
-    "team2_score": "60",
-    "team2_winner": false,
-    "neutral": false,
-    "venue": "The Sandy and John Black Pavilion at Ole Miss"
-  },
-  {
     "id": "401916304",
     "date": "2026-11-07",
     "name": "St. Thomas Tommies at Minnesota Golden Gophers",
@@ -553,6 +553,51 @@
     "team2_winner": false,
     "neutral": true,
     "venue": "TD Arena"
+  },
+  {
+    "id": "401917917",
+    "date": "2026-11-17",
+    "name": "Central Arkansas Bears at Oklahoma State Cowboys",
+    "team1_id": "197",
+    "team1_name": "Oklahoma State Cowboys",
+    "team1_score": "99",
+    "team1_winner": true,
+    "team2_id": "2110",
+    "team2_name": "Central Arkansas Bears",
+    "team2_score": "66",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "Gallagher-Iba Arena"
+  },
+  {
+    "id": "401920381",
+    "date": "2026-11-22",
+    "name": "Virginia Tech Hokies at Oklahoma State Cowboys",
+    "team1_id": "197",
+    "team1_name": "Oklahoma State Cowboys",
+    "team1_score": "106",
+    "team1_winner": true,
+    "team2_id": "259",
+    "team2_name": "Virginia Tech Hokies",
+    "team2_score": "80",
+    "team2_winner": false,
+    "neutral": true,
+    "venue": "TD Arena"
+  },
+  {
+    "id": "401917914",
+    "date": "2026-11-07",
+    "name": "Central Arkansas Bears at Ole Miss Rebels",
+    "team1_id": "145",
+    "team1_name": "Ole Miss Rebels",
+    "team1_score": "92",
+    "team1_winner": true,
+    "team2_id": "2110",
+    "team2_name": "Central Arkansas Bears",
+    "team2_score": "60",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "The Sandy and John Black Pavilion at Ole Miss"
   },
   {
     "id": "401911345",
@@ -615,6 +660,21 @@
     "venue": "Qubein Center"
   },
   {
+    "id": "401926215",
+    "date": "2026-11-08",
+    "name": "Western Kentucky Hilltoppers at Tennessee Tech Golden Eagles",
+    "team1_id": "2635",
+    "team1_name": "Tennessee Tech Golden Eagles",
+    "team1_score": "97",
+    "team1_winner": true,
+    "team2_id": "98",
+    "team2_name": "Western Kentucky Hilltoppers",
+    "team2_score": "94",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "Hooper Eblen Center"
+  },
+  {
     "id": "401911002",
     "date": "2026-11-03",
     "name": "Miami (OH) RedHawks at James Madison Dukes",
@@ -628,21 +688,6 @@
     "team2_winner": true,
     "neutral": false,
     "venue": "Atlantic Union Bank Center"
-  },
-  {
-    "id": "401921424",
-    "date": "2026-11-03",
-    "name": "Furman Paladins at Bethune-Cookman Wildcats",
-    "team1_id": "2065",
-    "team1_name": "Bethune-Cookman Wildcats",
-    "team1_score": "70",
-    "team1_winner": false,
-    "team2_id": "231",
-    "team2_name": "Furman Paladins",
-    "team2_score": "79",
-    "team2_winner": true,
-    "neutral": true,
-    "venue": "Sanford Pentagon"
   },
   {
     "id": "401919807",
@@ -673,21 +718,6 @@
     "team2_winner": false,
     "neutral": false,
     "venue": "Bud Walton Arena"
-  },
-  {
-    "id": "401917917",
-    "date": "2026-11-17",
-    "name": "Central Arkansas Bears at Oklahoma State Cowboys",
-    "team1_id": "197",
-    "team1_name": "Oklahoma State Cowboys",
-    "team1_score": "99",
-    "team1_winner": true,
-    "team2_id": "2110",
-    "team2_name": "Central Arkansas Bears",
-    "team2_score": "66",
-    "team2_winner": false,
-    "neutral": false,
-    "venue": "Gallagher-Iba Arena"
   },
   {
     "id": "401906781",
