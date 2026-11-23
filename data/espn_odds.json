@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-22T23:01:51.012434+00:00",
+  "generated_at": "2026-11-23T16:42:53.754362+00:00",
   "games": {},
   "futures": {
     "western ky": {
@@ -585,6 +585,23 @@
         }
       }
     },
+    "minnesota": {
+      "espn_id": "135",
+      "markets": {
+        "ncaa(b)_-_to_make_the_final_4": {
+          "moneyline": "+6500",
+          "implied_pct": 1.5
+        },
+        "big_ten_conference_winner": {
+          "moneyline": "+6600",
+          "implied_pct": 1.5
+        },
+        "championship": {
+          "moneyline": "+25000",
+          "implied_pct": 0.4
+        }
+      }
+    },
     "oklahoma st": {
       "espn_id": "197",
       "markets": {
@@ -629,23 +646,6 @@
         "championship": {
           "moneyline": "+25000",
           "implied_pct": 0.4
-        }
-      }
-    },
-    "minnesota": {
-      "espn_id": "135",
-      "markets": {
-        "ncaa(b)_-_to_make_the_final_4": {
-          "moneyline": "+9000",
-          "implied_pct": 1.1
-        },
-        "big_ten_conference_winner": {
-          "moneyline": "+6600",
-          "implied_pct": 1.5
-        },
-        "championship": {
-          "moneyline": "+35000",
-          "implied_pct": 0.3
         }
       }
     },

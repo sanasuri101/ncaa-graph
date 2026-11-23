@@ -24,18 +24,18 @@
     "seed": 1
   },
   {
-    "bracket_name": "Kansas",
-    "espn_id": "2305",
-    "displayName": "Kansas Jayhawks",
-    "location": "Kansas",
-    "region": "Midwest",
-    "seed": 1
-  },
-  {
     "bracket_name": "Vanderbilt",
     "espn_id": "238",
     "displayName": "Vanderbilt Commodores",
     "location": "Vanderbilt",
+    "region": "Midwest",
+    "seed": 1
+  },
+  {
+    "bracket_name": "Kansas",
+    "espn_id": "2305",
+    "displayName": "Kansas Jayhawks",
+    "location": "Kansas",
     "region": "Midwest",
     "seed": 2
   },
@@ -104,11 +104,19 @@
     "seed": 4
   },
   {
+    "bracket_name": "UCLA",
+    "espn_id": "26",
+    "displayName": "UCLA Bruins",
+    "location": "UCLA",
+    "region": "South",
+    "seed": 4
+  },
+  {
     "bracket_name": "St John's",
     "espn_id": "2599",
     "displayName": "St. John's Red Storm",
     "location": "St. John's",
-    "region": "South",
+    "region": "West",
     "seed": 4
   },
   {
@@ -116,7 +124,7 @@
     "espn_id": "158",
     "displayName": "Nebraska Cornhuskers",
     "location": "Nebraska",
-    "region": "West",
+    "region": "East",
     "seed": 4
   },
   {
@@ -125,14 +133,14 @@
     "displayName": "Michigan State Spartans",
     "location": "Michigan State",
     "region": "East",
-    "seed": 4
+    "seed": 5
   },
   {
     "bracket_name": "Miami",
     "espn_id": "2390",
     "displayName": "Miami Hurricanes",
     "location": "Miami",
-    "region": "East",
+    "region": "West",
     "seed": 5
   },
   {
@@ -140,14 +148,6 @@
     "espn_id": "30",
     "displayName": "USC Trojans",
     "location": "USC",
-    "region": "West",
-    "seed": 5
-  },
-  {
-    "bracket_name": "UCLA",
-    "espn_id": "26",
-    "displayName": "UCLA Bruins",
-    "location": "UCLA",
     "region": "South",
     "seed": 5
   },
@@ -184,18 +184,18 @@
     "seed": 6
   },
   {
-    "bracket_name": "Iowa",
-    "espn_id": "2294",
-    "displayName": "Iowa Hawkeyes",
-    "location": "Iowa",
-    "region": "East",
-    "seed": 6
-  },
-  {
     "bracket_name": "Cincinnati",
     "espn_id": "2132",
     "displayName": "Cincinnati Bearcats",
     "location": "Cincinnati",
+    "region": "East",
+    "seed": 6
+  },
+  {
+    "bracket_name": "Iowa",
+    "espn_id": "2294",
+    "displayName": "Iowa Hawkeyes",
+    "location": "Iowa",
     "region": "East",
     "seed": 7
   },
@@ -248,27 +248,19 @@
     "seed": 8
   },
   {
-    "bracket_name": "Utah State",
-    "espn_id": "328",
-    "displayName": "Utah State Aggies",
-    "location": "Utah State",
-    "region": "East",
-    "seed": 8
-  },
-  {
     "bracket_name": "Marquette",
     "espn_id": "269",
     "displayName": "Marquette Golden Eagles",
     "location": "Marquette",
     "region": "East",
-    "seed": 9
+    "seed": 8
   },
   {
     "bracket_name": "Oklahoma St",
     "espn_id": "197",
     "displayName": "Oklahoma State Cowboys",
     "location": "Oklahoma State",
-    "region": "West",
+    "region": "East",
     "seed": 9
   },
   {
@@ -276,7 +268,7 @@
     "espn_id": "145",
     "displayName": "Ole Miss Rebels",
     "location": "Ole Miss",
-    "region": "South",
+    "region": "West",
     "seed": 9
   },
   {
@@ -284,6 +276,14 @@
     "espn_id": "97",
     "displayName": "Louisville Cardinals",
     "location": "Louisville",
+    "region": "South",
+    "seed": 9
+  },
+  {
+    "bracket_name": "Utah State",
+    "espn_id": "328",
+    "displayName": "Utah State Aggies",
+    "location": "Utah State",
     "region": "Midwest",
     "seed": 9
   },

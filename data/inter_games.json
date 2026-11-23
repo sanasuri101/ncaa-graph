@@ -390,36 +390,6 @@
     "venue": "Marriott Center"
   },
   {
-    "id": "401920378",
-    "date": "2026-11-11",
-    "name": "Virginia Tech Hokies at Iowa Hawkeyes",
-    "team1_id": "2294",
-    "team1_name": "Iowa Hawkeyes",
-    "team1_score": "88",
-    "team1_winner": false,
-    "team2_id": "259",
-    "team2_name": "Virginia Tech Hokies",
-    "team2_score": "93",
-    "team2_winner": true,
-    "neutral": true,
-    "venue": "Tyson Events Center"
-  },
-  {
-    "id": "401909545",
-    "date": "2026-11-21",
-    "name": "Iowa Hawkeyes at Xavier Musketeers",
-    "team1_id": "2752",
-    "team1_name": "Xavier Musketeers",
-    "team1_score": "65",
-    "team1_winner": false,
-    "team2_id": "2294",
-    "team2_name": "Iowa Hawkeyes",
-    "team2_score": "83",
-    "team2_winner": true,
-    "neutral": false,
-    "venue": "Cintas Center"
-  },
-  {
     "id": "401912207",
     "date": "2026-11-03",
     "name": "American University Eagles at Cincinnati Bearcats",
@@ -448,6 +418,36 @@
     "team2_winner": true,
     "neutral": false,
     "venue": "Fifth Third Arena (OH)"
+  },
+  {
+    "id": "401920378",
+    "date": "2026-11-11",
+    "name": "Virginia Tech Hokies at Iowa Hawkeyes",
+    "team1_id": "2294",
+    "team1_name": "Iowa Hawkeyes",
+    "team1_score": "88",
+    "team1_winner": false,
+    "team2_id": "259",
+    "team2_name": "Virginia Tech Hokies",
+    "team2_score": "93",
+    "team2_winner": true,
+    "neutral": true,
+    "venue": "Tyson Events Center"
+  },
+  {
+    "id": "401909545",
+    "date": "2026-11-21",
+    "name": "Iowa Hawkeyes at Xavier Musketeers",
+    "team1_id": "2752",
+    "team1_name": "Xavier Musketeers",
+    "team1_score": "65",
+    "team1_winner": false,
+    "team2_id": "2294",
+    "team2_name": "Iowa Hawkeyes",
+    "team2_score": "83",
+    "team2_winner": true,
+    "neutral": false,
+    "venue": "Cintas Center"
   },
   {
     "id": "401909524",
