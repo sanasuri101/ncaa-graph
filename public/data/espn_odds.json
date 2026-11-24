@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-24T03:40:48.022844+00:00",
+  "generated_at": "2026-11-24T16:38:43.022065+00:00",
   "games": {},
   "futures": {
     "western ky": {
@@ -347,6 +347,23 @@
         }
       }
     },
+    "arkansas": {
+      "espn_id": "8",
+      "markets": {
+        "ncaa(b)_-_to_make_the_final_4": {
+          "moneyline": "+1300",
+          "implied_pct": 7.1
+        },
+        "southeastern_conference_winner": {
+          "moneyline": "+4900",
+          "implied_pct": 2.0
+        },
+        "championship": {
+          "moneyline": "+6000",
+          "implied_pct": 1.6
+        }
+      }
+    },
     "alabama": {
       "espn_id": "333",
       "markets": {
@@ -497,23 +514,6 @@
         "championship": {
           "moneyline": "+8000",
           "implied_pct": 1.2
-        }
-      }
-    },
-    "providence": {
-      "espn_id": "2507",
-      "markets": {
-        "ncaa(b)_-_to_make_the_final_4": {
-          "moneyline": "+2900",
-          "implied_pct": 3.3
-        },
-        "big_east_conference_winner": {
-          "moneyline": "+2000",
-          "implied_pct": 4.8
-        },
-        "championship": {
-          "moneyline": "+13000",
-          "implied_pct": 0.8
         }
       }
     },

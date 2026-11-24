@@ -78,18 +78,18 @@
       "seed": 3
     },
     {
-      "bracket_name": "Texas A&M",
-      "espn_id": "245",
-      "displayName": "Texas A&M Aggies",
-      "location": "Texas A&M",
-      "region": "West",
-      "seed": 3
-    },
-    {
       "bracket_name": "Texas",
       "espn_id": "251",
       "displayName": "Texas Longhorns",
       "location": "Texas",
+      "region": "West",
+      "seed": 3
+    },
+    {
+      "bracket_name": "Texas A&M",
+      "espn_id": "245",
+      "displayName": "Texas A&M Aggies",
+      "location": "Texas A&M",
       "region": "South",
       "seed": 3
     },
@@ -302,10 +302,10 @@
       "seed": 10
     },
     {
-      "bracket_name": "Providence",
-      "espn_id": "2507",
-      "displayName": "Providence Friars",
-      "location": "Providence",
+      "bracket_name": "Arkansas",
+      "espn_id": "8",
+      "displayName": "Arkansas Razorbacks",
+      "location": "Arkansas",
       "region": "South",
       "seed": 10
     },
@@ -520,10 +520,10 @@
   ],
   "bubble": [
     {
-      "bracket_name": "Arkansas",
-      "espn_id": "8",
-      "displayName": "Arkansas Razorbacks",
-      "location": "Arkansas",
+      "bracket_name": "Providence",
+      "espn_id": "2507",
+      "displayName": "Providence Friars",
+      "location": "Providence",
       "region": "bubble",
       "seed": null
     },

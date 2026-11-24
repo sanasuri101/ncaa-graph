@@ -225,21 +225,6 @@
     "venue": "Neville Arena"
   },
   {
-    "id": "401919041",
-    "date": "2026-11-13",
-    "name": "Oklahoma State Cowboys at Texas A&M Aggies",
-    "team1_id": "245",
-    "team1_name": "Texas A&M Aggies",
-    "team1_score": "88",
-    "team1_winner": true,
-    "team2_id": "197",
-    "team2_name": "Oklahoma State Cowboys",
-    "team2_score": "69",
-    "team2_winner": false,
-    "neutral": false,
-    "venue": "Reed Arena"
-  },
-  {
     "id": "401906866",
     "date": "2026-11-15",
     "name": "Baylor Bears at Texas Longhorns",
@@ -253,6 +238,21 @@
     "team2_winner": false,
     "neutral": true,
     "venue": "Frost Bank Center"
+  },
+  {
+    "id": "401919041",
+    "date": "2026-11-13",
+    "name": "Oklahoma State Cowboys at Texas A&M Aggies",
+    "team1_id": "245",
+    "team1_name": "Texas A&M Aggies",
+    "team1_score": "88",
+    "team1_winner": true,
+    "team2_id": "197",
+    "team2_name": "Oklahoma State Cowboys",
+    "team2_score": "69",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "Reed Arena"
   },
   {
     "id": "401921133",
@@ -660,6 +660,21 @@
     "venue": "TD Arena"
   },
   {
+    "id": "401917916",
+    "date": "2026-11-14",
+    "name": "Central Arkansas Bears at Arkansas Razorbacks",
+    "team1_id": "8",
+    "team1_name": "Arkansas Razorbacks",
+    "team1_score": "79",
+    "team1_winner": true,
+    "team2_id": "2110",
+    "team2_name": "Central Arkansas Bears",
+    "team2_score": "66",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "Bud Walton Arena"
+  },
+  {
     "id": "401911345",
     "date": "2026-11-08",
     "name": "Bethune-Cookman Wildcats at Grand Canyon Lopes",
@@ -733,21 +748,6 @@
     "team2_winner": false,
     "neutral": false,
     "venue": "Hooper Eblen Center"
-  },
-  {
-    "id": "401917916",
-    "date": "2026-11-14",
-    "name": "Central Arkansas Bears at Arkansas Razorbacks",
-    "team1_id": "8",
-    "team1_name": "Arkansas Razorbacks",
-    "team1_score": "79",
-    "team1_winner": true,
-    "team2_id": "2110",
-    "team2_name": "Central Arkansas Bears",
-    "team2_score": "66",
-    "team2_winner": false,
-    "neutral": false,
-    "venue": "Bud Walton Arena"
   },
   {
     "id": "401919807",
