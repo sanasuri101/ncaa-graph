@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-24T16:38:43.022065+00:00",
+  "generated_at": "2026-11-25T01:47:13.630458+00:00",
   "games": {},
   "futures": {
     "western ky": {
@@ -130,6 +130,23 @@
         }
       }
     },
+    "arizona": {
+      "espn_id": "12",
+      "markets": {
+        "ncaa(b)_-_to_make_the_final_4": {
+          "moneyline": "+425",
+          "implied_pct": 19.0
+        },
+        "big_12_conference_winner": {
+          "moneyline": "+510",
+          "implied_pct": 16.4
+        },
+        "championship": {
+          "moneyline": "+2000",
+          "implied_pct": 4.8
+        }
+      }
+    },
     "texas": {
       "espn_id": "251",
       "markets": {
@@ -144,23 +161,6 @@
         "championship": {
           "moneyline": "+2500",
           "implied_pct": 3.8
-        }
-      }
-    },
-    "arizona": {
-      "espn_id": "12",
-      "markets": {
-        "ncaa(b)_-_to_make_the_final_4": {
-          "moneyline": "+500",
-          "implied_pct": 16.7
-        },
-        "big_12_conference_winner": {
-          "moneyline": "+510",
-          "implied_pct": 16.4
-        },
-        "championship": {
-          "moneyline": "+2200",
-          "implied_pct": 4.3
         }
       }
     },
@@ -279,6 +279,23 @@
         }
       }
     },
+    "iowa state": {
+      "espn_id": "66",
+      "markets": {
+        "ncaa(b)_-_to_make_the_final_4": {
+          "moneyline": "+900",
+          "implied_pct": 10.0
+        },
+        "big_12_conference_winner": {
+          "moneyline": "+1200",
+          "implied_pct": 7.7
+        },
+        "championship": {
+          "moneyline": "+3600",
+          "implied_pct": 2.7
+        }
+      }
+    },
     "ucla": {
       "espn_id": "26",
       "markets": {
@@ -327,40 +344,6 @@
         "championship": {
           "moneyline": "+4400",
           "implied_pct": 2.2
-        }
-      }
-    },
-    "iowa state": {
-      "espn_id": "66",
-      "markets": {
-        "ncaa(b)_-_to_make_the_final_4": {
-          "moneyline": "+1200",
-          "implied_pct": 7.7
-        },
-        "big_12_conference_winner": {
-          "moneyline": "+1200",
-          "implied_pct": 7.7
-        },
-        "championship": {
-          "moneyline": "+5000",
-          "implied_pct": 2.0
-        }
-      }
-    },
-    "arkansas": {
-      "espn_id": "8",
-      "markets": {
-        "ncaa(b)_-_to_make_the_final_4": {
-          "moneyline": "+1300",
-          "implied_pct": 7.1
-        },
-        "southeastern_conference_winner": {
-          "moneyline": "+4900",
-          "implied_pct": 2.0
-        },
-        "championship": {
-          "moneyline": "+6000",
-          "implied_pct": 1.6
         }
       }
     },
@@ -534,6 +517,40 @@
         }
       }
     },
+    "ole miss": {
+      "espn_id": "145",
+      "markets": {
+        "ncaa(b)_-_to_make_the_final_4": {
+          "moneyline": "+4000",
+          "implied_pct": 2.4
+        },
+        "southeastern_conference_winner": {
+          "moneyline": "+2400",
+          "implied_pct": 4.0
+        },
+        "championship": {
+          "moneyline": "+18000",
+          "implied_pct": 0.6
+        }
+      }
+    },
+    "auburn": {
+      "espn_id": "2",
+      "markets": {
+        "ncaa(b)_-_to_make_the_final_4": {
+          "moneyline": "+4500",
+          "implied_pct": 2.2
+        },
+        "southeastern_conference_winner": {
+          "moneyline": "+3700",
+          "implied_pct": 2.6
+        },
+        "championship": {
+          "moneyline": "+13000",
+          "implied_pct": 0.8
+        }
+      }
+    },
     "cincinnati": {
       "espn_id": "2132",
       "markets": {
@@ -582,23 +599,6 @@
         "championship": {
           "moneyline": "+16500",
           "implied_pct": 0.6
-        }
-      }
-    },
-    "ole miss": {
-      "espn_id": "145",
-      "markets": {
-        "ncaa(b)_-_to_make_the_final_4": {
-          "moneyline": "+5500",
-          "implied_pct": 1.8
-        },
-        "southeastern_conference_winner": {
-          "moneyline": "+2400",
-          "implied_pct": 4.0
-        },
-        "championship": {
-          "moneyline": "+22000",
-          "implied_pct": 0.5
         }
       }
     },
