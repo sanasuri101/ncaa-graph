@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-25T01:47:34.165158+00:00",
+  "generated_at": "2026-11-25T16:21:32.436117+00:00",
   "flagged_teams": 5,
   "teams": {
     "127": {
@@ -25,25 +25,6 @@
           "description": "Kansas freshman Tyran Stokes suffered a bone bruise in his knee during the Jayhawks' game a night earlier and is day-to-day.",
           "published": "2026-11-19",
           "url": "https://www.espn.com/mens-college-basketball/story/_/id/50524441/kansas-says-tyran-stokes-game-call-vs-west-virginia"
-        }
-      ]
-    },
-    "248": {
-      "bracket_name": "Houston",
-      "region": "East",
-      "seed": 1,
-      "articles": [
-        {
-          "headline": "Gators' Boogie Fland aggravates shoulder injury, status vs. Houston in question",
-          "description": "Boogie Fland left the Gators' 86-78 win over Notre Dame after aggravating a right shoulder injury, and his availability for the Houston game is uncertain.",
-          "published": "2026-11-18",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50515779/gators-boogie-fland-aggravates-shoulder-injury"
-        },
-        {
-          "headline": "Gators' Boogie Fland aggravates shoulder injury, status vs. Houston in question",
-          "description": "Boogie Fland left the Gators' 86-78 win over Notre Dame after aggravating a right shoulder injury, and his availability for the Houston game is uncertain.",
-          "published": "2026-11-18",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50515779/gators-boogie-fland-aggravates-shoulder-injury"
         }
       ]
     },
@@ -78,11 +59,36 @@
         }
       ]
     },
+    "248": {
+      "bracket_name": "Houston",
+      "region": "East",
+      "seed": 1,
+      "articles": [
+        {
+          "headline": "Gators' Boogie Fland aggravates shoulder injury, status vs. Houston in question",
+          "description": "Boogie Fland left the Gators' 86-78 win over Notre Dame after aggravating a right shoulder injury, and his availability for the Houston game is uncertain.",
+          "published": "2026-11-18",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50515779/gators-boogie-fland-aggravates-shoulder-injury"
+        },
+        {
+          "headline": "Gators' Boogie Fland aggravates shoulder injury, status vs. Houston in question",
+          "description": "Boogie Fland left the Gators' 86-78 win over Notre Dame after aggravating a right shoulder injury, and his availability for the Houston game is uncertain.",
+          "published": "2026-11-18",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50515779/gators-boogie-fland-aggravates-shoulder-injury"
+        }
+      ]
+    },
     "41": {
       "bracket_name": "UConn",
       "region": "East",
       "seed": 3,
       "articles": [
+        {
+          "headline": "Solo Ball is ahead of schedule just in time for UConn",
+          "description": "Solo Ball was thought to be out for the season, but his injury recovery has progressed faster than expected.",
+          "published": "2026-11-25",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50592508/uconn-solo-ball-injury-return"
+        },
         {
           "headline": "UConn's Solo Ball nearing surprise return amid rehab from wrist surgery",
           "description": "UConn guard Solo Ball has been cleared for a return to full-contact practice after offseason wrist surgery, with the expectation that he'll return to game action this season.",
@@ -94,12 +100,6 @@
           "description": "UConn coach Dan Hurley said Thursday that starting forward Nik Khamenia will have surgery on his left foot and be reevaluated in six to eight weeks.",
           "published": "2026-11-12",
           "url": "https://www.espn.com/mens-college-basketball/story/_/id/50464962/uconn-nik-khamenia-foot-surgery"
-        },
-        {
-          "headline": "No. 4 UConn rolls past Wagner 83-41 but loses forward Nik Khamenia to injury",
-          "description": "\u2014 Silas Demary Jr. had 18 points and a career-high six steals to lead fourth-ranked UConn to a 83-41 win over Wagner on Monday night.",
-          "published": "2026-11-10",
-          "url": "http://www.espn.com/ncb/recap?gameId=401920686"
         }
       ]
     }
