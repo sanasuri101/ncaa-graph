@@ -1,45 +1,45 @@
 {
-  "generated_at": "2026-11-26T01:23:18.866348+00:00",
+  "generated_at": "2026-11-26T15:56:54.994994+00:00",
   "teams": {
-    "2305": {
-      "bracket_name": "Kansas",
-      "region": "South",
-      "seed": 2,
+    "127": {
+      "bracket_name": "Michigan St",
+      "region": "West",
+      "seed": 5,
       "adj_em_penalty": 0,
       "players": [],
       "notes": "",
       "override_date": "",
       "news_flags": [
         {
-          "headline": "Jayhawks' Tyran Stokes sits due to bone bruise; status vs. Houston up in air",
-          "description": "Kansas freshman Tyran Stokes suffered a bone bruise in his knee during the Jayhawks' game a night earlier and is day-to-day.",
-          "published": "2026-11-19",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50524441/kansas-says-tyran-stokes-game-call-vs-west-virginia"
+          "headline": "Michigan State's Jordan Scott injures right shoulder in win over Northern Iowa",
+          "description": "Jordan Scott injured his right shoulder as No. 5 Michigan State beat Northern Iowa 106-72 on Friday night.",
+          "published": "2026-11-14",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50476961/michigan-state-forward-jordan-scott-injures-right-shoulder-win-vs-northern-iowa"
         }
       ],
       "has_override": false,
       "has_news_flag": true
     },
-    "248": {
-      "bracket_name": "Houston",
+    "41": {
+      "bracket_name": "UConn",
       "region": "East",
-      "seed": 1,
+      "seed": 3,
       "adj_em_penalty": 0,
       "players": [],
       "notes": "",
       "override_date": "",
       "news_flags": [
         {
-          "headline": "Gators' Boogie Fland aggravates shoulder injury, status vs. Houston in question",
-          "description": "Boogie Fland left the Gators' 86-78 win over Notre Dame after aggravating a right shoulder injury, and his availability for the Houston game is uncertain.",
-          "published": "2026-11-18",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50515779/gators-boogie-fland-aggravates-shoulder-injury"
+          "headline": "Solo Ball is ahead of schedule just in time for UConn",
+          "description": "Solo Ball was thought to be out for the season, but his injury recovery has progressed faster than expected.",
+          "published": "2026-11-25",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50592508/uconn-solo-ball-injury-return"
         },
         {
-          "headline": "Gators' Boogie Fland aggravates shoulder injury, status vs. Houston in question",
-          "description": "Boogie Fland left the Gators' 86-78 win over Notre Dame after aggravating a right shoulder injury, and his availability for the Houston game is uncertain.",
-          "published": "2026-11-18",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50515779/gators-boogie-fland-aggravates-shoulder-injury"
+          "headline": "UConn's Solo Ball nearing surprise return amid rehab from wrist surgery",
+          "description": "UConn guard Solo Ball has been cleared for a return to full-contact practice after offseason wrist surgery, with the expectation that he'll return to game action this season.",
+          "published": "2026-11-16",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50503592/uconn-ball-cleared-full-contact-practice-ahead-return"
         }
       ],
       "has_override": false,
@@ -76,9 +76,9 @@
       "has_override": false,
       "has_news_flag": true
     },
-    "41": {
-      "bracket_name": "UConn",
-      "region": "East",
+    "2305": {
+      "bracket_name": "Kansas",
+      "region": "West",
       "seed": 2,
       "adj_em_penalty": 0,
       "players": [],
@@ -86,41 +86,35 @@
       "override_date": "",
       "news_flags": [
         {
-          "headline": "Solo Ball is ahead of schedule just in time for UConn",
-          "description": "Solo Ball was thought to be out for the season, but his injury recovery has progressed faster than expected.",
-          "published": "2026-11-25",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50592508/uconn-solo-ball-injury-return"
-        },
-        {
-          "headline": "UConn's Solo Ball nearing surprise return amid rehab from wrist surgery",
-          "description": "UConn guard Solo Ball has been cleared for a return to full-contact practice after offseason wrist surgery, with the expectation that he'll return to game action this season.",
-          "published": "2026-11-16",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50503592/uconn-ball-cleared-full-contact-practice-ahead-return"
-        },
-        {
-          "headline": "UConn's Nik Khamenia to have foot surgery, be rechecked in 6-8 weeks",
-          "description": "UConn coach Dan Hurley said Thursday that starting forward Nik Khamenia will have surgery on his left foot and be reevaluated in six to eight weeks.",
-          "published": "2026-11-12",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50464962/uconn-nik-khamenia-foot-surgery"
+          "headline": "Jayhawks' Tyran Stokes sits due to bone bruise; status vs. Houston up in air",
+          "description": "Kansas freshman Tyran Stokes suffered a bone bruise in his knee during the Jayhawks' game a night earlier and is day-to-day.",
+          "published": "2026-11-19",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50524441/kansas-says-tyran-stokes-game-call-vs-west-virginia"
         }
       ],
       "has_override": false,
       "has_news_flag": true
     },
-    "127": {
-      "bracket_name": "Michigan St",
-      "region": "West",
-      "seed": 5,
+    "248": {
+      "bracket_name": "Houston",
+      "region": "East",
+      "seed": 1,
       "adj_em_penalty": 0,
       "players": [],
       "notes": "",
       "override_date": "",
       "news_flags": [
         {
-          "headline": "Michigan State's Jordan Scott injures right shoulder in win over Northern Iowa",
-          "description": "Jordan Scott injured his right shoulder as No. 5 Michigan State beat Northern Iowa 106-72 on Friday night.",
-          "published": "2026-11-14",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50476961/michigan-state-forward-jordan-scott-injures-right-shoulder-win-vs-northern-iowa"
+          "headline": "Gators' Boogie Fland aggravates shoulder injury, status vs. Houston in question",
+          "description": "Boogie Fland left the Gators' 86-78 win over Notre Dame after aggravating a right shoulder injury, and his availability for the Houston game is uncertain.",
+          "published": "2026-11-18",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50515779/gators-boogie-fland-aggravates-shoulder-injury"
+        },
+        {
+          "headline": "Gators' Boogie Fland aggravates shoulder injury, status vs. Houston in question",
+          "description": "Boogie Fland left the Gators' 86-78 win over Notre Dame after aggravating a right shoulder injury, and his availability for the Houston game is uncertain.",
+          "published": "2026-11-18",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50515779/gators-boogie-fland-aggravates-shoulder-injury"
         }
       ],
       "has_override": false,

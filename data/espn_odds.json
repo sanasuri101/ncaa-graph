@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-26T01:22:43.638361+00:00",
+  "generated_at": "2026-11-26T15:56:28.005429+00:00",
   "games": {},
   "futures": {
     "western ky": {
@@ -649,6 +649,23 @@
         }
       }
     },
+    "memphis": {
+      "espn_id": "235",
+      "markets": {
+        "ncaa(b)_-_to_make_the_final_4": {
+          "moneyline": "+9000",
+          "implied_pct": 1.1
+        },
+        "american_athletic_conference_winner": {
+          "moneyline": "+215",
+          "implied_pct": 31.7
+        },
+        "championship": {
+          "moneyline": "+30000",
+          "implied_pct": 0.3
+        }
+      }
+    },
     "saint mary's": {
       "espn_id": "2608",
       "markets": {
@@ -719,23 +736,6 @@
         "missouri_valley_conference_winner": {
           "moneyline": "-115",
           "implied_pct": 53.5
-        }
-      }
-    },
-    "wichita st": {
-      "espn_id": "2724",
-      "markets": {
-        "ncaa(b)_-_to_make_the_final_4": {
-          "moneyline": "+25000",
-          "implied_pct": 0.4
-        },
-        "american_athletic_conference_winner": {
-          "moneyline": "+192",
-          "implied_pct": 34.2
-        },
-        "championship": {
-          "moneyline": "+100000",
-          "implied_pct": 0.1
         }
       }
     },

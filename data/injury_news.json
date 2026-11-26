@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-26T01:23:18.865719+00:00",
+  "generated_at": "2026-11-26T15:56:54.994360+00:00",
   "flagged_teams": 5,
   "teams": {
     "127": {
@@ -17,7 +17,7 @@
     },
     "2305": {
       "bracket_name": "Kansas",
-      "region": "South",
+      "region": "West",
       "seed": 2,
       "articles": [
         {
@@ -81,7 +81,7 @@
     "41": {
       "bracket_name": "UConn",
       "region": "East",
-      "seed": 2,
+      "seed": 3,
       "articles": [
         {
           "headline": "Solo Ball is ahead of schedule just in time for UConn",
@@ -94,12 +94,6 @@
           "description": "UConn guard Solo Ball has been cleared for a return to full-contact practice after offseason wrist surgery, with the expectation that he'll return to game action this season.",
           "published": "2026-11-16",
           "url": "https://www.espn.com/mens-college-basketball/story/_/id/50503592/uconn-ball-cleared-full-contact-practice-ahead-return"
-        },
-        {
-          "headline": "UConn's Nik Khamenia to have foot surgery, be rechecked in 6-8 weeks",
-          "description": "UConn coach Dan Hurley said Thursday that starting forward Nik Khamenia will have surgery on his left foot and be reevaluated in six to eight weeks.",
-          "published": "2026-11-12",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50464962/uconn-nik-khamenia-foot-surgery"
         }
       ]
     }

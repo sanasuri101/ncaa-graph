@@ -90,6 +90,21 @@
     "venue": "Michelob ULTRA Arena"
   },
   {
+    "id": "401918987",
+    "date": "2026-11-11",
+    "name": "Memphis Tigers at Vanderbilt Commodores",
+    "team1_id": "238",
+    "team1_name": "Vanderbilt Commodores",
+    "team1_score": "105",
+    "team1_winner": true,
+    "team2_id": "235",
+    "team2_name": "Memphis Tigers",
+    "team2_score": "81",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "Memorial Gymnasium (TN)"
+  },
+  {
     "id": "401909738",
     "date": "2026-11-03",
     "name": "Arizona Wildcats at UCLA Bruins",
@@ -165,6 +180,36 @@
     "venue": "Lahaina Civic Center"
   },
   {
+    "id": "401909564",
+    "date": "2026-11-11",
+    "name": "Michigan State Spartans at Duke Blue Devils",
+    "team1_id": "150",
+    "team1_name": "Duke Blue Devils",
+    "team1_score": "73",
+    "team1_winner": false,
+    "team2_id": "127",
+    "team2_name": "Michigan State Spartans",
+    "team2_score": "79",
+    "team2_winner": true,
+    "neutral": true,
+    "venue": "United Center"
+  },
+  {
+    "id": "401909568",
+    "date": "2026-11-26",
+    "name": "Duke Blue Devils at UConn Huskies",
+    "team1_id": "41",
+    "team1_name": "UConn Huskies",
+    "team1_score": "63",
+    "team1_winner": false,
+    "team2_id": "150",
+    "team2_name": "Duke Blue Devils",
+    "team2_score": "77",
+    "team2_winner": true,
+    "neutral": true,
+    "venue": "T-Mobile Arena"
+  },
+  {
     "id": "401920515",
     "date": "2026-11-19",
     "name": "Kansas Jayhawks at West Virginia Mountaineers",
@@ -223,21 +268,6 @@
     "team2_winner": true,
     "neutral": true,
     "venue": "TD Garden"
-  },
-  {
-    "id": "401909564",
-    "date": "2026-11-11",
-    "name": "Michigan State Spartans at Duke Blue Devils",
-    "team1_id": "150",
-    "team1_name": "Duke Blue Devils",
-    "team1_score": "73",
-    "team1_winner": false,
-    "team2_id": "127",
-    "team2_name": "Michigan State Spartans",
-    "team2_score": "79",
-    "team2_winner": true,
-    "neutral": true,
-    "venue": "United Center"
   },
   {
     "id": "401906866",
@@ -345,6 +375,21 @@
     "venue": "Mohegan Sun Arena"
   },
   {
+    "id": "401909771",
+    "date": "2026-11-03",
+    "name": "Memphis Tigers at Iowa State Cyclones",
+    "team1_id": "66",
+    "team1_name": "Iowa State Cyclones",
+    "team1_score": "76",
+    "team1_winner": false,
+    "team2_id": "235",
+    "team2_name": "Memphis Tigers",
+    "team2_score": "80",
+    "team2_winner": true,
+    "neutral": true,
+    "venue": "Sanford Pentagon"
+  },
+  {
     "id": "401921133",
     "date": "2026-11-06",
     "name": "Bethune-Cookman Wildcats at Texas Tech Red Raiders",
@@ -418,21 +463,6 @@
     "team2_winner": false,
     "neutral": false,
     "venue": "McCarthey Athletic Center"
-  },
-  {
-    "id": "401919029",
-    "date": "2026-11-09",
-    "name": "Wichita State Shockers at USC Trojans",
-    "team1_id": "30",
-    "team1_name": "USC Trojans",
-    "team1_score": "93",
-    "team1_winner": true,
-    "team2_id": "2724",
-    "team2_name": "Wichita State Shockers",
-    "team2_score": "86",
-    "team2_winner": false,
-    "neutral": true,
-    "venue": "Tahoe Blue Event Center"
   },
   {
     "id": "401916289",
@@ -598,6 +628,21 @@
     "team2_winner": true,
     "neutral": true,
     "venue": "Lahaina Civic Center"
+  },
+  {
+    "id": "401918949",
+    "date": "2026-11-15",
+    "name": "Louisville Cardinals at Memphis Tigers",
+    "team1_id": "235",
+    "team1_name": "Memphis Tigers",
+    "team1_score": "98",
+    "team1_winner": true,
+    "team2_id": "97",
+    "team2_name": "Louisville Cardinals",
+    "team2_score": "78",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "FedExForum"
   },
   {
     "id": "401917917",
@@ -823,6 +868,36 @@
     "team2_winner": true,
     "neutral": false,
     "venue": "Atlantic Union Bank Center"
+  },
+  {
+    "id": "401919808",
+    "date": "2026-11-19",
+    "name": "UNC Wilmington Seahawks at Long Island University Sharks",
+    "team1_id": "112358",
+    "team1_name": "Long Island University Sharks",
+    "team1_score": "115",
+    "team1_winner": true,
+    "team2_id": "350",
+    "team2_name": "UNC Wilmington Seahawks",
+    "team2_score": "114",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "Brooklyn Athletic Center"
+  },
+  {
+    "id": "401920847",
+    "date": "2026-11-26",
+    "name": "St. Thomas Tommies at UNC Wilmington Seahawks",
+    "team1_id": "350",
+    "team1_name": "UNC Wilmington Seahawks",
+    "team1_score": "86",
+    "team1_winner": true,
+    "team2_id": "2900",
+    "team2_name": "St. Thomas Tommies",
+    "team2_score": "77",
+    "team2_winner": false,
+    "neutral": false,
+    "venue": "Trask Coliseum"
   },
   {
     "id": "401921424",
