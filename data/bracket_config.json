@@ -70,18 +70,18 @@
       "seed": 2
     },
     {
-      "bracket_name": "Texas",
-      "espn_id": "251",
-      "displayName": "Texas Longhorns",
-      "location": "Texas",
-      "region": "East",
-      "seed": 3
-    },
-    {
       "bracket_name": "UConn",
       "espn_id": "41",
       "displayName": "UConn Huskies",
       "location": "UConn",
+      "region": "East",
+      "seed": 3
+    },
+    {
+      "bracket_name": "Texas",
+      "espn_id": "251",
+      "displayName": "Texas Longhorns",
+      "location": "Texas",
       "region": "West",
       "seed": 3
     },
@@ -94,43 +94,35 @@
       "seed": 3
     },
     {
-      "bracket_name": "St John's",
-      "espn_id": "2599",
-      "displayName": "St. John's Red Storm",
-      "location": "St. John's",
-      "region": "Midwest",
-      "seed": 3
-    },
-    {
       "bracket_name": "Alabama",
       "espn_id": "333",
       "displayName": "Alabama Crimson Tide",
       "location": "Alabama",
       "region": "Midwest",
-      "seed": 4
+      "seed": 3
     },
     {
       "bracket_name": "Nebraska",
       "espn_id": "158",
       "displayName": "Nebraska Cornhuskers",
       "location": "Nebraska",
+      "region": "Midwest",
+      "seed": 4
+    },
+    {
+      "bracket_name": "St John's",
+      "espn_id": "2599",
+      "displayName": "St. John's Red Storm",
+      "location": "St. John's",
       "region": "South",
       "seed": 4
     },
     {
-      "bracket_name": "Michigan St",
-      "espn_id": "127",
-      "displayName": "Michigan State Spartans",
-      "location": "Michigan State",
+      "bracket_name": "Gonzaga",
+      "espn_id": "2250",
+      "displayName": "Gonzaga Bulldogs",
+      "location": "Gonzaga",
       "region": "West",
-      "seed": 4
-    },
-    {
-      "bracket_name": "Iowa State",
-      "espn_id": "66",
-      "displayName": "Iowa State Cyclones",
-      "location": "Iowa State",
-      "region": "East",
       "seed": 4
     },
     {
@@ -139,13 +131,21 @@
       "displayName": "Texas Tech Red Raiders",
       "location": "Texas Tech",
       "region": "East",
+      "seed": 4
+    },
+    {
+      "bracket_name": "Michigan St",
+      "espn_id": "127",
+      "displayName": "Michigan State Spartans",
+      "location": "Michigan State",
+      "region": "East",
       "seed": 5
     },
     {
-      "bracket_name": "Gonzaga",
-      "espn_id": "2250",
-      "displayName": "Gonzaga Bulldogs",
-      "location": "Gonzaga",
+      "bracket_name": "Iowa State",
+      "espn_id": "66",
+      "displayName": "Iowa State Cyclones",
+      "location": "Iowa State",
       "region": "West",
       "seed": 5
     },
@@ -158,18 +158,18 @@
       "seed": 5
     },
     {
-      "bracket_name": "USC",
-      "espn_id": "30",
-      "displayName": "USC Trojans",
-      "location": "USC",
-      "region": "Midwest",
-      "seed": 5
-    },
-    {
       "bracket_name": "LSU",
       "espn_id": "99",
       "displayName": "LSU Tigers",
       "location": "LSU",
+      "region": "Midwest",
+      "seed": 5
+    },
+    {
+      "bracket_name": "USC",
+      "espn_id": "30",
+      "displayName": "USC Trojans",
+      "location": "USC",
       "region": "Midwest",
       "seed": 6
     },
@@ -206,19 +206,27 @@
       "seed": 7
     },
     {
-      "bracket_name": "Cincinnati",
-      "espn_id": "2132",
-      "displayName": "Cincinnati Bearcats",
-      "location": "Cincinnati",
-      "region": "West",
-      "seed": 7
-    },
-    {
       "bracket_name": "Ole Miss",
       "espn_id": "145",
       "displayName": "Ole Miss Rebels",
       "location": "Ole Miss",
+      "region": "West",
+      "seed": 7
+    },
+    {
+      "bracket_name": "Louisville",
+      "espn_id": "97",
+      "displayName": "Louisville Cardinals",
+      "location": "Louisville",
       "region": "South",
+      "seed": 7
+    },
+    {
+      "bracket_name": "Cincinnati",
+      "espn_id": "2132",
+      "displayName": "Cincinnati Bearcats",
+      "location": "Cincinnati",
+      "region": "Midwest",
       "seed": 7
     },
     {
@@ -226,14 +234,6 @@
       "espn_id": "2294",
       "displayName": "Iowa Hawkeyes",
       "location": "Iowa",
-      "region": "Midwest",
-      "seed": 7
-    },
-    {
-      "bracket_name": "Baylor",
-      "espn_id": "239",
-      "displayName": "Baylor Bears",
-      "location": "Baylor",
       "region": "Midwest",
       "seed": 8
     },
@@ -246,10 +246,10 @@
       "seed": 8
     },
     {
-      "bracket_name": "Louisville",
-      "espn_id": "97",
-      "displayName": "Louisville Cardinals",
-      "location": "Louisville",
+      "bracket_name": "Baylor",
+      "espn_id": "239",
+      "displayName": "Baylor Bears",
+      "location": "Baylor",
       "region": "West",
       "seed": 8
     },
@@ -302,10 +302,10 @@
       "seed": 10
     },
     {
-      "bracket_name": "West Virginia",
-      "espn_id": "277",
-      "displayName": "West Virginia Mountaineers",
-      "location": "West Virginia",
+      "bracket_name": "Creighton",
+      "espn_id": "156",
+      "displayName": "Creighton Bluejays",
+      "location": "Creighton",
       "region": "South",
       "seed": 10
     },
@@ -520,10 +520,10 @@
   ],
   "bubble": [
     {
-      "bracket_name": "Creighton",
-      "espn_id": "156",
-      "displayName": "Creighton Bluejays",
-      "location": "Creighton",
+      "bracket_name": "West Virginia",
+      "espn_id": "277",
+      "displayName": "West Virginia Mountaineers",
+      "location": "West Virginia",
       "region": "bubble",
       "seed": null
     },
@@ -568,18 +568,18 @@
       "seed": null
     },
     {
-      "bracket_name": "TCU",
-      "espn_id": "2628",
-      "displayName": "TCU Horned Frogs",
-      "location": "TCU",
-      "region": "bubble",
-      "seed": null
-    },
-    {
       "bracket_name": "Pitt",
       "espn_id": "221",
       "displayName": "Pittsburgh Panthers",
       "location": "Pittsburgh",
+      "region": "bubble",
+      "seed": null
+    },
+    {
+      "bracket_name": "Florida St",
+      "espn_id": "52",
+      "displayName": "Florida State Seminoles",
+      "location": "Florida State",
       "region": "bubble",
       "seed": null
     }

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-27T01:21:15.518264+00:00",
+  "generated_at": "2026-11-27T15:44:53.258982+00:00",
   "games": {},
   "futures": {
     "western ky": {
@@ -19,8 +19,8 @@
           "implied_pct": 37.0
         },
         "southeastern_conference_winner": {
-          "moneyline": "+168",
-          "implied_pct": 37.3
+          "moneyline": "+200",
+          "implied_pct": 33.3
         },
         "championship": {
           "moneyline": "+750",
@@ -53,8 +53,8 @@
           "implied_pct": 31.2
         },
         "big_12_conference_winner": {
-          "moneyline": "+198",
-          "implied_pct": 33.6
+          "moneyline": "+180",
+          "implied_pct": 35.7
         },
         "championship": {
           "moneyline": "+850",
@@ -70,8 +70,8 @@
           "implied_pct": 28.6
         },
         "atlantic_coast_conference_winner": {
-          "moneyline": "+110",
-          "implied_pct": 47.6
+          "moneyline": "+134",
+          "implied_pct": 42.7
         },
         "championship": {
           "moneyline": "+1100",
@@ -87,8 +87,8 @@
           "implied_pct": 26.3
         },
         "big_east_conference_winner": {
-          "moneyline": "-115",
-          "implied_pct": 53.5
+          "moneyline": "+105",
+          "implied_pct": 48.8
         },
         "championship": {
           "moneyline": "+1150",
@@ -121,8 +121,8 @@
           "implied_pct": 22.2
         },
         "big_12_conference_winner": {
-          "moneyline": "+230",
-          "implied_pct": 30.3
+          "moneyline": "+270",
+          "implied_pct": 27.0
         },
         "championship": {
           "moneyline": "+1350",
@@ -138,8 +138,8 @@
           "implied_pct": 19.0
         },
         "big_12_conference_winner": {
-          "moneyline": "+510",
-          "implied_pct": 16.4
+          "moneyline": "+400",
+          "implied_pct": 20.0
         },
         "championship": {
           "moneyline": "+2000",
@@ -151,12 +151,12 @@
       "espn_id": "251",
       "markets": {
         "ncaa(b)_-_to_make_the_final_4": {
-          "moneyline": "+475",
-          "implied_pct": 17.4
+          "moneyline": "+500",
+          "implied_pct": 16.7
         },
         "southeastern_conference_winner": {
-          "moneyline": "+600",
-          "implied_pct": 14.3
+          "moneyline": "+650",
+          "implied_pct": 13.3
         },
         "championship": {
           "moneyline": "+2500",
@@ -172,8 +172,8 @@
           "implied_pct": 15.4
         },
         "big_12_conference_winner": {
-          "moneyline": "+720",
-          "implied_pct": 12.2
+          "moneyline": "+970",
+          "implied_pct": 9.3
         },
         "championship": {
           "moneyline": "+2100",
@@ -185,16 +185,16 @@
       "espn_id": "2599",
       "markets": {
         "ncaa(b)_-_to_make_the_final_4": {
-          "moneyline": "+650",
-          "implied_pct": 13.3
+          "moneyline": "+700",
+          "implied_pct": 12.5
         },
         "big_east_conference_winner": {
-          "moneyline": "+260",
-          "implied_pct": 27.8
+          "moneyline": "+240",
+          "implied_pct": 29.4
         },
         "championship": {
-          "moneyline": "+2900",
-          "implied_pct": 3.3
+          "moneyline": "+3500",
+          "implied_pct": 2.8
         }
       }
     },
@@ -206,12 +206,29 @@
           "implied_pct": 12.5
         },
         "atlantic_coast_conference_winner": {
-          "moneyline": "+280",
-          "implied_pct": 26.3
+          "moneyline": "+345",
+          "implied_pct": 22.5
         },
         "championship": {
           "moneyline": "+2800",
           "implied_pct": 3.4
+        }
+      }
+    },
+    "louisville": {
+      "espn_id": "97",
+      "markets": {
+        "ncaa(b)_-_to_make_the_final_4": {
+          "moneyline": "+700",
+          "implied_pct": 12.5
+        },
+        "atlantic_coast_conference_winner": {
+          "moneyline": "+740",
+          "implied_pct": 11.9
+        },
+        "championship": {
+          "moneyline": "+3500",
+          "implied_pct": 2.8
         }
       }
     },
@@ -223,8 +240,8 @@
           "implied_pct": 11.8
         },
         "southeastern_conference_winner": {
-          "moneyline": "+620",
-          "implied_pct": 13.9
+          "moneyline": "+480",
+          "implied_pct": 17.2
         },
         "championship": {
           "moneyline": "+3200",
@@ -240,8 +257,8 @@
           "implied_pct": 11.8
         },
         "southeastern_conference_winner": {
-          "moneyline": "+1500",
-          "implied_pct": 6.2
+          "moneyline": "+1300",
+          "implied_pct": 7.1
         },
         "championship": {
           "moneyline": "+3800",
@@ -270,8 +287,8 @@
           "implied_pct": 10.0
         },
         "atlantic_coast_conference_winner": {
-          "moneyline": "+500",
-          "implied_pct": 16.7
+          "moneyline": "+435",
+          "implied_pct": 18.7
         },
         "championship": {
           "moneyline": "+4200",
@@ -287,8 +304,8 @@
           "implied_pct": 10.0
         },
         "big_12_conference_winner": {
-          "moneyline": "+1200",
-          "implied_pct": 7.7
+          "moneyline": "+1375",
+          "implied_pct": 6.8
         },
         "championship": {
           "moneyline": "+3600",
@@ -321,8 +338,8 @@
           "implied_pct": 8.3
         },
         "southeastern_conference_winner": {
-          "moneyline": "+1100",
-          "implied_pct": 8.3
+          "moneyline": "+800",
+          "implied_pct": 11.1
         },
         "championship": {
           "moneyline": "+3600",
@@ -347,23 +364,6 @@
         }
       }
     },
-    "louisville": {
-      "espn_id": "97",
-      "markets": {
-        "ncaa(b)_-_to_make_the_final_4": {
-          "moneyline": "+1200",
-          "implied_pct": 7.7
-        },
-        "atlantic_coast_conference_winner": {
-          "moneyline": "+1200",
-          "implied_pct": 7.7
-        },
-        "championship": {
-          "moneyline": "+4800",
-          "implied_pct": 2.0
-        }
-      }
-    },
     "alabama": {
       "espn_id": "333",
       "markets": {
@@ -372,8 +372,8 @@
           "implied_pct": 6.7
         },
         "southeastern_conference_winner": {
-          "moneyline": "+880",
-          "implied_pct": 10.2
+          "moneyline": "+1150",
+          "implied_pct": 8.0
         },
         "championship": {
           "moneyline": "+5400",
@@ -406,8 +406,8 @@
           "implied_pct": 5.6
         },
         "big_12_conference_winner": {
-          "moneyline": "+3000",
-          "implied_pct": 3.2
+          "moneyline": "+2000",
+          "implied_pct": 4.8
         },
         "championship": {
           "moneyline": "+6500",
@@ -423,8 +423,8 @@
           "implied_pct": 4.8
         },
         "big_12_conference_winner": {
-          "moneyline": "+2200",
-          "implied_pct": 4.3
+          "moneyline": "+3400",
+          "implied_pct": 2.9
         },
         "championship": {
           "moneyline": "+7600",
@@ -457,8 +457,8 @@
           "implied_pct": 4.5
         },
         "southeastern_conference_winner": {
-          "moneyline": "+1300",
-          "implied_pct": 7.1
+          "moneyline": "+1700",
+          "implied_pct": 5.6
         },
         "championship": {
           "moneyline": "+9000",
@@ -474,8 +474,8 @@
           "implied_pct": 4.5
         },
         "southeastern_conference_winner": {
-          "moneyline": "+1500",
-          "implied_pct": 6.2
+          "moneyline": "+2250",
+          "implied_pct": 4.3
         },
         "championship": {
           "moneyline": "+8400",
@@ -491,8 +491,8 @@
           "implied_pct": 3.4
         },
         "southeastern_conference_winner": {
-          "moneyline": "+1800",
-          "implied_pct": 5.3
+          "moneyline": "+1200",
+          "implied_pct": 7.7
         },
         "championship": {
           "moneyline": "+11000",
@@ -517,23 +517,6 @@
         }
       }
     },
-    "west virginia": {
-      "espn_id": "277",
-      "markets": {
-        "ncaa(b)_-_to_make_the_final_4": {
-          "moneyline": "+3200",
-          "implied_pct": 3.0
-        },
-        "big_12_conference_winner": {
-          "moneyline": "+4500",
-          "implied_pct": 2.2
-        },
-        "championship": {
-          "moneyline": "+12000",
-          "implied_pct": 0.8
-        }
-      }
-    },
     "cincinnati": {
       "espn_id": "2132",
       "markets": {
@@ -542,8 +525,8 @@
           "implied_pct": 2.4
         },
         "big_12_conference_winner": {
-          "moneyline": "+2600",
-          "implied_pct": 3.7
+          "moneyline": "+3300",
+          "implied_pct": 2.9
         },
         "championship": {
           "moneyline": "+15000",
@@ -559,8 +542,8 @@
           "implied_pct": 2.2
         },
         "southeastern_conference_winner": {
-          "moneyline": "+3700",
-          "implied_pct": 2.6
+          "moneyline": "+3200",
+          "implied_pct": 3.0
         },
         "championship": {
           "moneyline": "+13000",
@@ -576,8 +559,8 @@
           "implied_pct": 2.0
         },
         "big_east_conference_winner": {
-          "moneyline": "+1300",
-          "implied_pct": 7.1
+          "moneyline": "+1600",
+          "implied_pct": 5.9
         },
         "championship": {
           "moneyline": "+18000",
@@ -593,8 +576,8 @@
           "implied_pct": 2.0
         },
         "big_east_conference_winner": {
-          "moneyline": "+1500",
-          "implied_pct": 6.2
+          "moneyline": "+1200",
+          "implied_pct": 7.7
         },
         "championship": {
           "moneyline": "+16500",
@@ -627,8 +610,25 @@
           "implied_pct": 1.3
         },
         "big_12_conference_winner": {
-          "moneyline": "+5500",
-          "implied_pct": 1.8
+          "moneyline": "+3000",
+          "implied_pct": 3.2
+        },
+        "championship": {
+          "moneyline": "+25000",
+          "implied_pct": 0.4
+        }
+      }
+    },
+    "creighton": {
+      "espn_id": "156",
+      "markets": {
+        "ncaa(b)_-_to_make_the_final_4": {
+          "moneyline": "+7400",
+          "implied_pct": 1.3
+        },
+        "big_east_conference_winner": {
+          "moneyline": "+1200",
+          "implied_pct": 7.7
         },
         "championship": {
           "moneyline": "+25000",
