@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-11-27T15:45:26.154998+00:00",
+  "generated_at": "2026-11-28T00:55:06.540000+00:00",
   "flagged_teams": 5,
   "teams": {
     "127": {
       "bracket_name": "Michigan St",
       "region": "East",
-      "seed": 5,
+      "seed": 4,
       "articles": [
         {
           "headline": "Michigan State's Jordan Scott injures right shoulder in win over Northern Iowa",
@@ -25,6 +25,25 @@
           "description": "Kansas freshman Tyran Stokes suffered a bone bruise in his knee during the Jayhawks' game a night earlier and is day-to-day.",
           "published": "2026-11-19",
           "url": "https://www.espn.com/mens-college-basketball/story/_/id/50524441/kansas-says-tyran-stokes-game-call-vs-west-virginia"
+        }
+      ]
+    },
+    "248": {
+      "bracket_name": "Houston",
+      "region": "East",
+      "seed": 1,
+      "articles": [
+        {
+          "headline": "Gators' Boogie Fland aggravates shoulder injury, status vs. Houston in question",
+          "description": "Boogie Fland left the Gators' 86-78 win over Notre Dame after aggravating a right shoulder injury, and his availability for the Houston game is uncertain.",
+          "published": "2026-11-18",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50515779/gators-boogie-fland-aggravates-shoulder-injury"
+        },
+        {
+          "headline": "Gators' Boogie Fland aggravates shoulder injury, status vs. Houston in question",
+          "description": "Boogie Fland left the Gators' 86-78 win over Notre Dame after aggravating a right shoulder injury, and his availability for the Houston game is uncertain.",
+          "published": "2026-11-18",
+          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50515779/gators-boogie-fland-aggravates-shoulder-injury"
         }
       ]
     },
@@ -50,25 +69,6 @@
           "description": "\u2014 Urban Klavzar scored 24 points off the bench and No. 1 Florida beat Notre Dame 86-78 on Tuesday in the opening round of the Players Era 8 tournament despite losing Boogie Fland to an injury in the f",
           "published": "2026-11-18",
           "url": "http://www.espn.com/ncb/recap?gameId=401906773"
-        },
-        {
-          "headline": "Gators' Boogie Fland aggravates shoulder injury, status vs. Houston in question",
-          "description": "Boogie Fland left the Gators' 86-78 win over Notre Dame after aggravating a right shoulder injury, and his availability for the Houston game is uncertain.",
-          "published": "2026-11-18",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50515779/gators-boogie-fland-aggravates-shoulder-injury"
-        }
-      ]
-    },
-    "248": {
-      "bracket_name": "Houston",
-      "region": "East",
-      "seed": 1,
-      "articles": [
-        {
-          "headline": "Gators' Boogie Fland aggravates shoulder injury, status vs. Houston in question",
-          "description": "Boogie Fland left the Gators' 86-78 win over Notre Dame after aggravating a right shoulder injury, and his availability for the Houston game is uncertain.",
-          "published": "2026-11-18",
-          "url": "https://www.espn.com/mens-college-basketball/story/_/id/50515779/gators-boogie-fland-aggravates-shoulder-injury"
         },
         {
           "headline": "Gators' Boogie Fland aggravates shoulder injury, status vs. Houston in question",
